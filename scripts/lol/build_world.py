@@ -25,15 +25,17 @@
                 LEAGUE_BASE 定：一级赛区之间用国际赛交手记录拟合（Bradley-Terry），
                 二级联赛按母赛区下调。
 
-指挥是怎么来的（docs/调研-选手数值与年龄曲线.md）
-------------------------------------------------
-数据里没有「指挥」这个字段，但它留下了痕迹：按 15 分钟的局面你该赢多少、你实际赢了多少。
-个人能力随年龄掉，这一项掉得慢得多——2023 年 Faker 个人数据全线为负，他缺阵的 18 场 T1 胜率 22%，
-他在场 69%。所以指挥由三样合成，每一样都是算出来的，没有一样是手填的：
+「运营」是怎么来的（docs/调研-选手数值与年龄曲线.md）
+----------------------------------------------------
+这一项说的是「这个人在场上，队伍 15 分钟之后多赢多少」，不说他是不是喊话的那个人。
+英雄联盟的决策是分散的（前期节奏在打野、视野在辅助、边线在中上），固定五人组里谁在指挥，
+比赛数据原理上分不出来，本作也不去指定——没有「指挥」这个身份，只有每个人身上的这个数。
+个人能力随年龄掉，这一项掉得慢得多：2023 年 Faker 个人数据全线为负，他缺阵的 18 场 T1 胜率 22%，
+他在场 69%。它由三样合成，每一样都是算出来的，没有一样是手填的：
     40%  运营 RAPM     每局「实际胜负 − 15 分钟局面预示的胜率」对场上十人做岭回归（三年窗口，国际赛 ×3）
     20%  队伍运营残差  他所在的队的同一个量：和队友分不开的那部分，全队共享
     40%  资历          此前打过的场次（大赛区 1、其他 0.3、国际赛 3），取平方根，在进入这个世界的选手内部标准化。
-                       RAPM 在固定队友之间分不开，队内谁是指挥主要靠这一项区分
+                       RAPM 在固定队友之间分不开，同队的人之间主要靠这一项区分
 
 哪些是量出来的、哪些是推出来的，写在输出的 meta.derived 里。
 """
@@ -47,16 +49,16 @@ DATA = os.environ.get('LOL_DATA_DIR') or os.path.join(os.path.dirname(REPO), 'lo
 
 POS = ('top', 'jng', 'mid', 'bot', 'sup')
 ROLE_CN = {'top': '上单', 'jng': '打野', 'mid': '中单', 'bot': '下路', 'sup': '辅助'}
-ATTRS = ('laning', 'mechanics', 'teamfight', 'farming', 'awareness', 'clutch', 'teamwork', 'igl')
+ATTRS = ('laning', 'mechanics', 'teamfight', 'farming', 'awareness', 'clutch', 'teamwork', 'macro')
 
 # 总评的位置权重。engine/player.ts 的 ROLE_WEIGHT 必须和这里逐项一致，
 # 输出的 meta.roleWeight 就是给核验脚本对账用的。
 ROLE_WEIGHT = {
-    'top': dict(laning=.24, mechanics=.20, teamfight=.16, farming=.12, awareness=.10, clutch=.08, teamwork=.07, igl=.03),
-    'jng': dict(laning=.10, mechanics=.16, teamfight=.18, farming=.08, awareness=.22, clutch=.08, teamwork=.12, igl=.06),
-    'mid': dict(laning=.20, mechanics=.24, teamfight=.16, farming=.12, awareness=.10, clutch=.09, teamwork=.06, igl=.03),
-    'bot': dict(laning=.16, mechanics=.26, teamfight=.18, farming=.18, awareness=.06, clutch=.09, teamwork=.05, igl=.02),
-    'sup': dict(laning=.12, mechanics=.08, teamfight=.16, farming=.06, awareness=.24, clutch=.06, teamwork=.20, igl=.08),
+    'top': dict(laning=.24, mechanics=.20, teamfight=.16, farming=.12, awareness=.10, clutch=.08, teamwork=.07, macro=.03),
+    'jng': dict(laning=.10, mechanics=.16, teamfight=.18, farming=.08, awareness=.22, clutch=.08, teamwork=.12, macro=.06),
+    'mid': dict(laning=.20, mechanics=.24, teamfight=.16, farming=.12, awareness=.10, clutch=.09, teamwork=.06, macro=.03),
+    'bot': dict(laning=.16, mechanics=.26, teamfight=.18, farming=.18, awareness=.06, clutch=.09, teamwork=.05, macro=.02),
+    'sup': dict(laning=.12, mechanics=.08, teamfight=.16, farming=.06, awareness=.24, clutch=.06, teamwork=.20, macro=.08),
 }
 
 # ---------------------------------------------------------------- 世界里有哪些联赛
@@ -88,7 +90,7 @@ RAPM_WINDOW = {0: 1.0, 1: .7, 2: .45}   # 距开局年几年 -> 权重
 RAPM_INTL_W = 3.0
 RAPM_LAMBDA = 45.0
 RAPM_MIN_GAMES = 40
-IGL_MIX = dict(rapm=.40, team=.20, exp=.40)
+MACRO_MIX = dict(rapm=.40, team=.20, exp=.40)
 
 SHRINK_K = 25          # 场次收缩
 SPREAD = 7.5           # 一个标准差值多少点
@@ -442,7 +444,7 @@ def main():
                 recs.append(dict(name=nm, pos=pos, league=lg, year=y, n=a['n'], z=z, agg=a))
         print(f'  {y}: 选手行 {len(players)}，有效 (选手,位置,联赛) 记录 {sum(len(m) for m in groups.values())}', file=sys.stderr)
 
-    # ---- 指挥的三样原料
+    # ---- 运营的三样原料
     rapm, team_macro, rapm_info = macro_value(rows_by_year, Y, args.history)
     exp_raw = experience(Y)
     e_mu = e_sd = None        # 在下面拿到「这个世界里有谁」之后再定尺子
@@ -455,7 +457,7 @@ def main():
         by_player[(r['name'], r['pos'])].append(r)
 
     derived_lane, derived_aware = set(), set()
-    igl_parts = {}
+    macro_parts = {}
     # 两把尺子都只拿「最近一年在一级联赛打球的人」来量。拿全部一万四千人量，或者把二级联赛的人
     # 混进来量，一线选手人人都是 +3 个标准差，顶尖的几个人之间就分不出高下了。
     # 二级联赛的人用同一把尺子，自然落在负值区。
@@ -495,16 +497,16 @@ def main():
                 acc += z * w; wsum += w
             z = (acc / wsum) if wsum else 0.0
             out[attr] = level + SPREAD * z * shrink * 1.35       # 合成会把方差压小，1.35 把它补回来
-        # 指挥：运营 RAPM + 队伍运营残差 + 资历（见文件头）。队伍取他最近一年出场最多的那支
+        # 运营：运营 RAPM + 队伍运营残差 + 资历（见文件头）。队伍取他最近一年出场最多的那支
         latest = max(rows, key=lambda r: (r['year'], r['n']))
         my_team = latest['agg']['teams'].most_common(1)[0][0]
         ex_z = (math.sqrt(exp_raw.get((name, pos), 0.0)) - e_mu) / e_sd
         ra_z = (rapm[(name, pos)] - r_mu) / r_sd if (name, pos) in rapm else 0.0
-        igl_z = IGL_MIX['rapm'] * ra_z + IGL_MIX['team'] * team_macro.get(my_team, 0.0) + IGL_MIX['exp'] * ex_z
-        out['igl'] = 62 + 15.0 * igl_z + (level - 75) * .35
-        igl_parts[(name, pos)] = (round(ra_z, 2), round(team_macro.get(my_team, 0.0), 2), round(ex_z, 2))
+        macro_z = MACRO_MIX['rapm'] * ra_z + MACRO_MIX['team'] * team_macro.get(my_team, 0.0) + MACRO_MIX['exp'] * ex_z
+        out['macro'] = 62 + 15.0 * macro_z + (level - 75) * .35
+        macro_parts[(name, pos)] = (round(ra_z, 2), round(team_macro.get(my_team, 0.0), 2), round(ex_z, 2))
         eff_total = eff
-        out['igl'] = max(35, min(97, out['igl']))
+        out['macro'] = max(35, min(97, out['macro']))
         return {k: int(round(max(30, min(99, v)))) for k, v in out.items()}, eff_total
 
     # ---- 名单：每支队开季窗口内每个位置出场最多的人
@@ -554,9 +556,6 @@ def main():
         for t in (raw.get('data', {}).get('teams') or []):
             if t.get('code') and t.get('status') == 'active':
                 tags.setdefault(norm_name(t['name']), t['code'])
-
-    cpath = os.path.join(HERE, 'callers.json')
-    verified_callers = (json.load(open(cpath, encoding='utf-8')).get(str(Y), {}) if os.path.exists(cpath) else {})
 
     # ---- 组装
     teams_out, players_out, used = [], [], set()
@@ -620,7 +619,7 @@ def main():
                     residency=RESIDENCY_KEY.get((b or {}).get('residency')),
                     realName=((b or {}).get('name_cn') or (b or {}).get('real_name') or None),
                     birth=birth, age=est_age, ageEstimated=age is None,
-                    role=ROLE_CN[pos], roles=[ROLE_CN[pos]], isIgl=False,
+                    role=ROLE_CN[pos], roles=[ROLE_CN[pos]], isCaptain=False,
                     games=int(round(eff)), attrs=attrs, overall=overall, potential=potential,
                     form=60 + rng.randrange(25), morale=65 + rng.randrange(25), fatigue=rng.randrange(6),
                     salary=salary, value=value, contractYears=1 + rng.randrange(3),
@@ -628,7 +627,7 @@ def main():
                     champPool=[c for c, _ in champs.most_common(6)],
                     champUse=dict(champs.most_common(30)),
                     champWr={c: round(champ_w[c] / n, 2) for c, n in champs.most_common(30) if n >= 5},
-                    iglFrom=dict(zip(('rapm', 'team', 'exp'), igl_parts.get((nm, pos), (0, 0, 0)))),
+                    macroFrom=dict(zip(('rapm', 'team', 'exp'), macro_parts.get((nm, pos), (0, 0, 0)))),
                     oe=dict(games=a['n'], kda=round((a['k'] + a['a']) / max(1, a['d']), 2),
                             dpm=round(mean(a['dpm']) or 0), gd15=round(mean(a['gd15']) or 0) if a['gd15'] else None),
                 ))
@@ -644,11 +643,11 @@ def main():
         mine = [p for p in players_out if p['teamId'] == tid]
         starters = sorted(mine, key=lambda p: -p['overall'])[:5]
         rating = int(round(sum(p['overall'] for p in starters) / max(1, len(starters))))
-        # 队里是谁在指挥：先看已核实的名单（callers.json），没有才取指挥值最高的人并标成推断的
+        # 队长：开局时每队运营最高的首发。这只是游戏里的一个职务（经理可以改任），
+        # 不是在说现实里谁是指挥——那件事数据分不出来，本作不去指定。
         if mine:
-            named = next((p for p in mine if p['ign'] == verified_callers.get(tname)), None)
-            caller = named or max(mine[:5] if len(mine) >= 5 else mine, key=lambda p: p['attrs']['igl'])
-            caller['isIgl'] = True; caller['iglSource'] = 'verified' if named else 'inferred'
+            first_five = [next(p for p in mine if p['role'] == ROLE_CN[q]) for q in POS]
+            max(first_five, key=lambda p: p['attrs']['macro'])['isCaptain'] = True
         wage = sum(p['salary'] for p in mine)
         teams_out.append(dict(
             id=tid, name=tname, tag=TAG_ALIAS.get(tname) or tags.get(norm_name(tname)) or ''.join(w[0] for w in re.findall(r"[A-Za-z0-9']+", tname))[:4].upper(),
@@ -686,7 +685,7 @@ def main():
             id=f'P{len(players_out) + 1}', ign=nm, teamId=None, region=region,
             nat=COUNTRY_ISO.get(b.get('country')), residency=RESIDENCY_KEY.get(b.get('residency')),
             realName=(b.get('name_cn') or b.get('real_name') or None), birth=birth, age=age, ageEstimated=birth is None,
-            role=ROLE_CN[pos], roles=[ROLE_CN[pos]], isIgl=False, games=int(round(eff)), attrs=attrs, overall=overall,
+            role=ROLE_CN[pos], roles=[ROLE_CN[pos]], isCaptain=False, games=int(round(eff)), attrs=attrs, overall=overall,
             potential=min(99, overall + int(max(0, 24 - age) * 2.2 + rng.random() * 4)),
             form=55 + rng.randrange(20), morale=55 + rng.randrange(20), fatigue=0,
             salary=int(round(33000 * math.exp((overall - 55) / 12) * 2.5 * .8, -3)),
@@ -703,7 +702,7 @@ def main():
                      'Riot esports API': '战队简称'},
             derived=dict(
                 measured=['laning', 'mechanics', 'teamfight', 'farming', 'awareness', 'clutch', 'teamwork'],
-                inferred=dict(igl='数据里没有指挥字段；= 40% 运营 RAPM + 20% 队伍运营残差 + 40% 资历，每人的三项分量在 iglFrom 里。每队最高者标为推断指挥',
+                inferred=dict(macro='运营 = 40% 运营 RAPM + 20% 队伍运营残差 + 40% 资历，每人的三项分量在 macroFrom 里。说的是他在场时队伍 15 分钟之后多赢多少，不指定谁是指挥；isCaptain 只是开局时运营最高的首发',
                               laning_fallback=f'{len(derived_lane)} 人没有 15 分钟数据，对线由分均经济与补刀反推',
                               awareness_fallback=f'{len(derived_aware)} 人没有视野数据，意识由阵亡占比与一血参与反推'),
                 estimated='合同、薪资、身价、预算、设施、潜力、士气；没有生日的年龄',
