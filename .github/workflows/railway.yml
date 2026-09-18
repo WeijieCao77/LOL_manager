@@ -1,0 +1,70 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    # Read the secret once at job level so the deploy step can test for it — a
+    # secret cannot be referenced directly from an `if:` expression.
+    #
+    # Railway has two kinds of token and they authenticate differently: a
+    # *project* token via RAILWAY_TOKEN, an *account* token via
+    # RAILWAY_API_TOKEN. The CLI prefers RAILWAY_TOKEN when both are set, so
+    # supplying an account token under both names fails as a bad project token.
+    # The deploy step therefore tries each path rather than guessing which kind
+    # the secret is.
+    env:
+      HAS_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_PROJECT: ff7eb0ac-af07-4854-8d7f-420e20a48504
+      RAILWAY_ENVIRONMENT: production
+    steps:
+      - uses: actions/checkout@v4
+
+      # typecheck and build here so a broken commit never reaches production
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsc -b --noEmit
+      - run: npm run build
+      # The game's own logic audit: every check_*.ts, the data audit, the
+      # concurrency and market cases. A commit that fails any of them does
+      # not deploy. Slow, deliberately — it was not here before, and two
+      # checks had been failing for days with nothing to say so.
+      - run: npm run audit
+        timeout-minutes: 30
+
+      - name: Deploy
+        if: env.HAS_TOKEN != ''
+        env:
+          TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          npm i -g @railway/cli
+          # A project token already knows its project; an account token does not
+          # and has to be told. Try the project-token path, then the account one.
+          if RAILWAY_TOKEN="$TOKEN" railway up --service val-manager --detach; then
+            exit 0
+          fi
+          echo "::warning::project-token path failed, retrying as an account token"
+          RAILWAY_API_TOKEN="$TOKEN" railway up --service val-manager \
+            --project "$RAILWAY_PROJECT" --environment "$RAILWAY_ENVIRONMENT" --detach
+
+      - name: Verify live frontend and match engine
+        if: env.HAS_TOKEN != ''
+        run: node scripts/verify_deployment.mjs https://www.vctgames.com
+        timeout-minutes: 10
+
+      # Without the secret this workflow used to fail on every single push and
+      # mail a failure notice each time. The build above is worth running on its
+      # own, so a missing token now skips the deploy instead of failing the run.
+      - name: Deploy skipped
+        if: env.HAS_TOKEN == ''
+        run: |
+          echo "::notice::RAILWAY_TOKEN is not set — build verified, deploy skipped."
+          echo "Add it under Settings → Secrets and variables → Actions to deploy automatically."

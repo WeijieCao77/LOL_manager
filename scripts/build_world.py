@@ -1,0 +1,1814 @@
+#!/usr/bin/env python3
+"""
+Build the game world from real VCT 2026 data.
+
+Sources
+  data-raw/vlr_vct2026_players.txt    vlr.gg — team, nationality, role and the
+                                      full performance line for every player
+  data-raw/liquipedia_players.json    Liquipedia — real birthdates / real names
+  data-raw/liquipedia_coaches.json    Liquipedia — real head coaches
+
+Every person in the generated world is a real person. Nobody is invented: if a
+fact is unknown it is left null and marked, never filled in with a plausible
+substitute.
+
+Attributes are derived from the real numbers by percentile — aim comes from a
+player's actual ACS/ADR/HS%, awareness from their actual KAST and first-death
+rate — so in-game ratings track how these players really perform.
+
+Output  src/data/world.json
+"""
+import json, math, os, re, sys
+
+# The build has to come out the same twice. It did not: two runs of the same
+# script on the same caches disagreed on 313 players' overall by a point,
+# because set iteration order follows Python's per-process hash seed and a
+# handful of draws downstream follow that order. Pin the seed and re-exec
+# before anything else is imported or computed.
+if os.environ.get("PYTHONHASHSEED") != "0":
+    os.execve(sys.executable, [sys.executable, *sys.argv], {**os.environ, "PYTHONHASHSEED": "0"})
+from collections import defaultdict
+from datetime import date
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+RAW = os.path.join(ROOT, "data-raw")
+SRC = os.path.join(RAW, "vlr_vct2026_players.txt")
+BIRTHS = os.path.join(RAW, "liquipedia_players.json")
+# birthdates read off a player page by hand (号角 / The Spike), when Liquipedia
+# has none or names a different person — these win over everything
+VERIFIED = os.path.join(RAW, "births_verified.json")
+COACHES = os.path.join(RAW, "liquipedia_coaches.json")
+VLRAPI = os.path.join(RAW, "vlrapi_teams.json")
+AGENTS_F = os.path.join(RAW, "parsebot_agents.json")
+# every agent a player has played and for how many rounds (scripts/fetch_vlr_agents.py)
+VLR_AGENTS = os.path.join(ROOT, "scripts", "cache", "vlr_agents.json")
+OVERRIDES = os.path.join(RAW, "overrides.json")
+HAND = os.path.join(RAW, "haojiao_players.json")
+# so a hand-entered player's passport agrees with the identity check below
+NAT_NAME = {"cn": "China", "tw": "Taiwan", "hk": "Hong Kong", "kr": "South Korea",
+            "jp": "Japan", "sg": "Singapore", "my": "Malaysia", "th": "Thailand",
+            "id": "Indonesia", "ph": "Philippines", "vn": "Vietnam", "ru": "Russia"}
+
+# which role each agent belongs to, so a real agent pool yields a real role set
+AGENT_ROLE = {}
+for _role, _names in {
+    "决斗者": ["Jett", "Raze", "Phoenix", "Reyna", "Yoru", "Neon", "Iso", "Waylay"],
+    "先锋": ["Sova", "Breach", "Skye", "KAY/O", "Kayo", "Fade", "Gekko", "Tejo"],
+    "控场": ["Brimstone", "Viper", "Omen", "Astra", "Harbor", "Clove"],
+    "哨卫": ["Sage", "Cypher", "Killjoy", "Chamber", "Deadlock", "Vyse"],
+}.items():
+    for _n in _names:
+        AGENT_ROLE[_n.lower()] = _role
+
+
+# ---------------------------------------------------------------- traits
+# Character, read straight off the real numbers. Each entry is
+#   (key, label, positive?, predicate over a player's percentile dict)
+# Percentiles are within the whole scraped population, so a trait always means
+# "top/bottom of the professional field", never an invented flourish.
+TRAITS = [
+    ("entry", "突破手", True, lambda g: g("fkpr") >= 0.86),
+    ("carry", "核心火力", True, lambda g: g("acs") >= 0.88),
+    ("headshot", "爆头机器", True, lambda g: g("hs") >= 0.88),
+    ("anchor", "定海神针", True, lambda g: g("kast") >= 0.88),
+    ("survivor", "生存大师", True, lambda g: g("fdpr") >= 0.88),
+    ("enabler", "串联核心", True, lambda g: g("apr") >= 0.86),
+    ("clutch", "残局王", True, lambda g: g("clutch_pct") >= 0.88),
+    ("consistent", "稳定输出", True,
+     lambda g: g("kast") >= 0.7 and g("fdpr") >= 0.7 and g("acs") >= 0.6),
+    # negatives — shown in amber, and just as honest
+    ("baiter", "苟", False,
+     lambda g: g("fkpr") <= 0.2 and g("fdpr") >= 0.75 and g("acs") <= 0.45),
+    ("glass", "玻璃大炮", False,
+     lambda g: g("acs") >= 0.72 and g("fdpr") <= 0.15),
+]
+
+
+def traits_for(get_pct):
+    out = []
+    for key, label, good, pred in TRAITS:
+        try:
+            if pred(get_pct):
+                out.append({"key": key, "label": label, "good": good})
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
+# Liquipedia is keyed by handle, and handles collide. Fetching the page called
+# "Neon" returns a Filipino player; the Neon in VCT Americas is Bruno Rodríguez,
+# Argentine, born 2008. We took the wrong man's page and published his empty
+# birthdate, so the game aged an 18-year-old to a guessed 27 — and did the same
+# for 19 others. vlr records a nationality for every player and so does
+# Liquipedia, which makes the mismatch detectable without fetching anything new:
+# when the two disagree, it is not the same person and the page is discarded.
+COUNTRY_OF = {
+    "ar": "argentina", "br": "brazil", "us": "united states", "ca": "canada",
+    "cl": "chile", "mx": "mexico", "co": "colombia", "pe": "peru", "uy": "uruguay",
+    "kr": "south korea", "jp": "japan", "cn": "china", "tw": "taiwan",
+    "hk": "hong kong", "sg": "singapore", "ph": "philippines", "id": "indonesia",
+    "th": "thailand", "my": "malaysia", "vn": "vietnam", "in": "india",
+    "tr": "turkey", "ru": "russia", "ua": "ukraine", "pl": "poland",
+    "de": "germany", "fr": "france", "es": "spain", "pt": "portugal",
+    "it": "italy", "gb": "united kingdom", "uk": "united kingdom",
+    "se": "sweden", "fi": "finland", "no": "norway", "dk": "denmark",
+    "nl": "netherlands", "be": "belgium", "cz": "czech republic",
+    "au": "australia", "nz": "new zealand", "il": "israel", "sa": "saudi arabia",
+    "ma": "morocco", "lv": "latvia", "ee": "estonia", "lt": "lithuania",
+    "at": "austria", "ch": "switzerland", "rs": "serbia", "ro": "romania",
+    "bg": "bulgaria", "gr": "greece", "hu": "hungary", "sk": "slovakia",
+    "si": "slovenia", "hr": "croatia", "ie": "ireland", "is": "iceland",
+}
+
+
+def _name_key(name):
+    """A real name reduced to what two sources can agree on."""
+    return re.sub(r"[^0-9a-z\u4e00-\u9fff\uac00-\ud7af\u3040-\u30ff\u0400-\u04ff]", "",
+                  str(name or "").lower())
+
+
+def same_person(lp_entry, nat, real=None):
+    """Does this Liquipedia page describe the player vlr says it does?
+
+    A flag is weak evidence. vlr shows a residence or a second passport for a
+    good many players — a Turkish-Dutch caller under NL, a Hong Kong player
+    under CN, a Korean-American under KR — and a strict country match threw
+    fourteen real birthdates away for a draw from the age distribution (the
+    group's 「年轻队员年龄推算错误」). A real name both sites agree on
+    outranks the flag; a record verified by hand (births_verified.json)
+    outranks everything.
+    """
+    if not lp_entry:
+        return False
+    if lp_entry.get("verified"):
+        return True
+    lc = str(lp_entry.get("country") or "").strip().lower()
+    want = COUNTRY_OF.get(str(nat or "").strip().lower())
+    # unknown on either side is not evidence of a mismatch, only of ignorance
+    if not lc or not want:
+        return True
+    if lc == want:
+        return True
+    a = _name_key(lp_entry.get("real"))
+    b = _name_key(real)
+    return bool(a and b and len(a) >= 4 and (a in b or b in a))
+
+
+def deal_contract_years(squad):
+    """Hand a club's contracts out 1-4 years, staggered across the squad.
+
+    Rolling each deal independently put a third of the league out of contract
+    in the same window and left FURIA with five of six expiring at once — a
+    cliff no real club would walk into, and one the manager cannot do anything
+    about because every renewal costs an action point.
+
+    So the lengths are dealt across the club instead of rolled per player: the
+    four lengths in rotation, handed out in the order a club would actually
+    want to tie someone down — young with a ceiling first, veterans last. A
+    seven-man squad therefore never has more than two deals ending together,
+    and the longest one belongs to someone worth keeping.
+    """
+    # its own rng, not the club's: contract lengths are the last thing decided
+    # and must not shift the draws that pick roles and the IGL
+    jitter = Rng(seed_of("y:" + squad[0]["ign"]))
+
+    def tie_down(p):
+        # a 19-year-old with room to grow is who you sign for four years; a
+        # 28-year-old at his peak is who you re-sign one year at a time
+        return max(0, 27 - p["age"]) + (p["potential"] - p["overall"]) * 0.8 \
+            + p["overall"] * 0.1 + jitter.range(-2, 2)
+
+    # The four lengths in rotation spread a squad evenly whichever length the
+    # rotation starts on, so each club starts somewhere different and squads do
+    # not all end up the same shape. Sorting the pool back into descending
+    # order stops the wrap-around handing the longest deal to the player the
+    # club least wants to keep.
+    start = jitter.int(0, 3)
+    pool = sorted(([4, 3, 2, 1] * 3)[start:start + len(squad)], reverse=True)
+    for p, years in zip(sorted(squad, key=tie_down, reverse=True), pool):
+        p["contractYears"] = years
+
+
+def roles_from_agents(agents):
+    """Ordered role set implied by the agents a player actually used."""
+    out = []
+    for a in agents or []:
+        r = AGENT_ROLE.get(str(a).strip().lower())
+        if r and r not in out:
+            out.append(r)
+    return out
+OUT = os.path.join(ROOT, "src", "data", "world.json")
+
+SEASON_YEAR = 2026
+
+# The 12 partner teams per league, verified against vlr.gg's region filter and
+# its VCT 2026 event pages.
+TIER1 = {
+    "Americas": [
+        ("LEV", "Leviatán"), ("NRG", "NRG Esports"), ("G2", "G2 Esports"), ("MIBR", "MIBR"),
+        ("SEN", "Sentinels"), ("FUR", "FURIA"), ("100T", "100 Thieves"), ("KRÜ", "KRÜ Esports"),
+        ("LOUD", "LOUD"), ("C9", "Cloud9"), ("EG", "Evil Geniuses"), ("ENVY", "Envy"),
+    ],
+    "EMEA": [
+        ("VIT", "Team Vitality"), ("TH", "Team Heretics"), ("FNC", "FNATIC"), ("FUT", "FUT Esports"),
+        ("GX", "GIANTX"), ("BBL", "BBL Esports"), ("TL", "Team Liquid"), ("EF", "Eternal Fire"),
+        ("PCF", "PCIFIC Esports"), ("M8", "Gentle Mates"), ("NAVI", "Natus Vincere"),
+        ("KC", "Karmine Corp"),
+    ],
+    "Pacific": [
+        ("PRX", "Paper Rex"), ("T1", "T1"), ("NS", "Nongshim RedForce"), ("GEN", "Gen.G"),
+        ("KRX", "KIWOOM DRX"), ("ZETA", "ZETA DIVISION"), ("TS", "Team Secret"),
+        ("DFM", "DetonatioN FocusMe"), ("RRQ", "Rex Regum Qeon"), ("FS", "FULL SENSE"),
+        ("GE", "Global Esports"), ("VL", "VARREL"),
+    ],
+    "China": [
+        ("EDG", "EDward Gaming"), ("XLG", "Xi Lai Gaming"), ("TYL", "TYLOO"),
+        ("WOL", "Wolves Esports"), ("FPX", "FunPlus Phoenix"), ("NOVA", "Nova Esports"),
+        ("BLG", "Bilibili Gaming"), ("AG", "All Gamers"), ("TE", "Trace Esports"),
+        ("JDG", "JD Gaming"), ("DRG", "Dragon Ranger Gaming"), ("TEC", "Titan Esports Club"),
+    ],
+}
+
+# Challengers sides, scraped from the 2026 national Challengers leagues on
+# vlr.gg (see scripts/fetch_vlr_challengers.py). Every one is a real club with
+# a real roster; regions with fewer clubs simply have a smaller league.
+#
+# China has no Challengers league to scrape — Riot runs no VCL there. Its
+# second tier is the domestic circuit: 全国大赛 (VCNT) feeds 进化者杯 (CN ES),
+# whose points decide who plays the promotion series, and the twelve VCT CN
+# clubs enter CN ES from the other side. So the eight here are the top eight
+# non-league sides of VCNT 2026 第七届 全国大赛专业选拔赛, in finishing order —
+# KBG, AT and AQ went on to CN ES 第三幕 with UR as the fourth qualifier.
+# Weibo Gaming, which used to sit here on a judgement call, finished 10th-11th
+# and is out; UR, 4th and a CN ES qualifier, takes the place it earned.
+TIER2 = {
+    'Americas': [('M80', 'M80'), ('SRB', 'Shopify Rebellion Black'), ('SE', 'SaD Esports'), ('NA', 'NRG Academy'), ('QOR', 'QoR'), ('NG', 'Nightblood Gaming'), ('YFT', 'YFT'), ('LM', 'LA MASIA')],
+    'EMEA': [('EIN', 'Eintracht Frankfurt'), ('ILEK', 'Çilekler'), ('CE', 'CGN Esports'), ('MAND', 'Mandatory'), ('PL', 'Pixel Lumina'), ('FFE', 'Fire Flux Esports'), ('BE', 'Barça eSports'), ('EP', 'Eastern Pandas'), ('SGE', 'Sangal Esports'), ('JL', 'Joblife')],
+    'Pacific': [('REJE', 'REJECT'), ('QD', 'QT DIG∞'), ('RO', 'RIDDLE ORDER'), ('FENN', 'FENNEL'), ('IGZI', 'IGZIST'), ('AGEL', 'AGELITE'), ('INSO', 'Insomnia'), ('OG', 'ONSIDE GAMING')],
+    'China': [('KBG', 'KeepBest Gaming'), ('AT', 'A Team'), ('AQ', 'Any Questions Gaming'), ('UR', 'Unsettled Resentment'), ('RA', 'Rare Atom'), ('ODG', 'Octagonal Disposition Gaming'), ('VLG', 'Victory No Limits Gaming'), ('WSIG', 'World Sports Invictus Gaming')],
+}
+
+ROLE_CN = {"d": "决斗者", "i": "先锋", "c": "控场", "s": "哨卫", "": "自由人"}
+ATTRS = ["aim", "reaction", "awareness", "utility", "clutch", "teamwork", "communication", "igl"]
+ATTR_WEIGHT = {"aim": 0.20, "reaction": 0.15, "awareness": 0.17, "utility": 0.14,
+               "clutch": 0.12, "teamwork": 0.10, "communication": 0.08, "igl": 0.04}
+
+# What each role is actually judged on.
+#
+# One weighting for everyone marked a duelist down for the things duelists do
+# not do: 41% of it sat on awareness, utility and teamwork, which are derived
+# from KAST and assists. ZmjjKK enters sites for a living — 85 aim, 91 reaction,
+# 247 ACS across three years — and was rated below players he outguns, because
+# he does not hand out assists. Entry is not a support role and should not be
+# scored like one.
+ROLE_WEIGHT = {
+    "决斗者": {"aim": 0.28, "reaction": 0.22, "clutch": 0.16, "awareness": 0.12,
+             "utility": 0.08, "teamwork": 0.07, "communication": 0.05, "igl": 0.02},
+    "先锋":  {"aim": 0.17, "reaction": 0.15, "awareness": 0.20, "utility": 0.20,
+             "clutch": 0.09, "teamwork": 0.10, "communication": 0.07, "igl": 0.02},
+    "控场":  {"aim": 0.15, "reaction": 0.11, "awareness": 0.20, "utility": 0.22,
+             "clutch": 0.09, "teamwork": 0.13, "communication": 0.08, "igl": 0.02},
+    "哨卫":  {"aim": 0.19, "reaction": 0.12, "awareness": 0.22, "utility": 0.15,
+             "clutch": 0.15, "teamwork": 0.10, "communication": 0.05, "igl": 0.02},
+    "自由人": dict(ATTR_WEIGHT),
+}
+
+
+def seed_of(s):
+    h = 2166136261
+    for ch in s:
+        h ^= ord(ch)
+        h = (h * 16777619) & 0xFFFFFFFF
+    return h
+
+
+class Rng:
+    def __init__(self, seed):
+        self.s = (seed & 0xFFFFFFFF) or 0x9E3779B9
+
+    def next(self):
+        x = self.s
+        x ^= (x << 13) & 0xFFFFFFFF
+        x ^= x >> 17
+        x ^= (x << 5) & 0xFFFFFFFF
+        self.s = x & 0xFFFFFFFF
+        return self.s / 0x100000000
+
+    def range(self, a, b):
+        return a + (b - a) * self.next()
+
+    def int(self, a, b):
+        return int(math.floor(self.range(a, b + 1 - 1e-9)))
+
+    def norm(self, mean, sd):
+        u1 = max(self.next(), 1e-9)
+        u2 = self.next()
+        return mean + sd * math.sqrt(-2 * math.log(u1)) * math.cos(2 * math.pi * u2)
+
+
+def clamp(v, lo, hi):
+    return max(lo, min(hi, v))
+
+
+class CiDict(dict):
+    """An ign-keyed map that can be looked up regardless of case.
+
+    vlr writes a player's handle two ways: the display alias on a team page
+    ("Krst1Ng") and the lowercased URL slug in the same page's href
+    ("krst1ng"). A cache filled under one spelling and read under the other
+    silently loses that player's entire history — no career line, no birthday,
+    no club tenure — and the build reports nothing, because a missing key is
+    indistinguishable from a player we simply know nothing about. Matching
+    case-insensitively removes the whole failure mode.
+    """
+
+    def __init__(self, d=None):
+        super().__init__(d or {})
+        self._ci = {str(k).lower(): k for k in self}
+
+    def get(self, k, default=None):
+        if dict.__contains__(self, k):
+            return self[k]
+        real = self._ci.get(str(k).lower())
+        return self[real] if real is not None else default
+
+    def __contains__(self, k):
+        return dict.__contains__(self, k) or str(k).lower() in self._ci
+
+
+def ci_alias(d):
+    return CiDict(d)
+
+
+def load_json(path):
+    if os.path.exists(path):
+        try:
+            return json.load(open(path, encoding="utf-8"))
+        except (ValueError, OSError):
+            return {}
+    return {}
+
+
+# Two real people behind one handle (overrides.json `homonyms`). Every cache
+# here is keyed by handle, so without this the Canadian zeek at Nightblood
+# Gaming wore the Polish world champion's photo, birthdate, agent pool and
+# club history.
+HOMONYMS = {str(k).lower(): v for k, v in (load_json(OVERRIDES).get("homonyms") or {}).items()}
+
+
+def homonym(ign):
+    return HOMONYMS.get(str(ign or "").lower())
+
+
+def not_him(ign, vlr_id):
+    """True when a record found under this handle is about the other person:
+    it names a different vlr id, or names none at all and so cannot be told."""
+    h = homonym(ign)
+    return bool(h) and str(vlr_id or "") != str(h["vlr"])
+
+
+def parse_rows():
+    rows = []
+    with open(SRC, encoding="utf-8") as f:
+        for line in f:
+            p = line.rstrip("\n").split("|")
+            if len(p) < 15 or not p[0]:
+                continue
+
+            def num(x):
+                try:
+                    return float(x)
+                except (TypeError, ValueError):
+                    return None
+
+            rows.append({
+                "ign": p[0], "tag": p[1], "nat": p[2], "role": ROLE_CN.get(p[3], "自由人"),
+                "rnd": num(p[4]) or 0, "R": num(p[5]), "acs": num(p[6]), "kd": num(p[7]),
+                "kast": num(p[8]), "adr": num(p[9]), "kpr": num(p[10]), "apr": num(p[11]),
+                "fkpr": num(p[12]), "fdpr": num(p[13]), "hs": num(p[14]),
+            })
+    best = {}
+    for r in rows:
+        if r["ign"] not in best or r["rnd"] > best[r["ign"]]["rnd"]:
+            best[r["ign"]] = r
+    return list(best.values())
+
+
+CHALLENGERS_CACHE = os.path.join(ROOT, "scripts", "cache", "vlr_challengers.json")
+TENURE_CACHE = os.path.join(ROOT, "scripts", "cache", "liquipedia_tenure.json")
+CAREER_CACHE = os.path.join(ROOT, "scripts", "cache", "vlr_career.json")
+SEASONS_CACHE = os.path.join(ROOT, "scripts", "cache", "vlr_seasons.json")
+PROFILES_CACHE = os.path.join(ROOT, "scripts", "cache", "vlr_profiles.json")
+TITLES_CACHE = os.path.join(ROOT, "scripts", "cache", "lp_titles.json")
+VLR_STATS_2026 = os.path.join(ROOT, "scripts", "cache", "vlr_stats2026.json")
+VLR_STATS_ALL = os.path.join(ROOT, "scripts", "cache", "vlr_stats_all.json")
+RIB_CLUTCH = os.path.join(ROOT, "scripts", "cache", "rib_clutch.json")
+
+# Recent form is what a player IS; older form is what he was. The owner's rule
+# (2026-09-03): the last three splits — a year to a year and a half — carry
+# the weight, and everything older fades fast. Weighted by how long ago the
+# event was played, not by calendar year, so in September a Stage 2 split
+# from this year and a Champions from last year both count in full, while a
+# Kickoff from two and a half years back is a footnote.
+SEASON_NOW = SEASON_YEAR + 8.5 / 12          # early September of the season year
+
+# when in its year each kind of event is played (fractional months)
+STAGE_MONTH = {"kickoff": 1.5, "stage-1": 4.0, "stage-2": 7.5, "champions": 9.5, "league": 5.0}
+MASTERS_MONTH = {"madrid": 3.5, "shanghai": 6.0, "bangkok": 2.5, "toronto": 6.0, "santiago": 3.5, "london": 6.5}
+
+
+def event_time(ev):
+    """Fractional year an event was played, off its slug."""
+    slug = str(ev.get("slug") or "")
+    year = float(ev.get("year") or SEASON_YEAR)
+    tier = ev.get("tier")
+    if tier == "masters":
+        city = next((c for c in MASTERS_MONTH if c in slug), None)
+        return year + (MASTERS_MONTH[city] if city else 5.0) / 12
+    if "stage-2" in slug:
+        return year + STAGE_MONTH["stage-2"] / 12
+    if "stage-1" in slug:
+        return year + STAGE_MONTH["stage-1"] / 12
+    return year + STAGE_MONTH.get(tier, 5.0) / 12
+
+
+def recency(age_years):
+    """Weight for evidence this old: full for a year, gone to a fifth by two and a half."""
+    if age_years <= 1.0:
+        return 1.0
+    if age_years <= 1.5:
+        return 1.0 - (age_years - 1.0) * 0.8        # 1.0 -> 0.6
+    if age_years <= 2.5:
+        return 0.6 - (age_years - 1.5) * 0.4        # 0.6 -> 0.2
+    return 0.15
+# What a player does when the stage is biggest, relative to their own baseline.
+TIER_WEIGHT = {"champions": 1.0, "masters": 0.75, "league": 0.0, "kickoff": 0.0}
+
+# Columns that describe how a player performs, as opposed to who they are.
+STAT_KEYS = ("R", "acs", "kd", "kast", "adr", "kpr", "apr", "fkpr", "fdpr")
+
+# What a career line earned outside VCT is worth in VCT.
+#
+# Ranking everyone in one pool assumed 250 ACS is 250 ACS wherever it was
+# earned, and it is not — a Challengers roster earns its numbers against
+# Challengers opposition. Unchecked, that put NRG Academy at 90, above every
+# club in VCT Americas.
+#
+# These are not chosen numbers. scripts/calibrate_tier.py measures them twice
+# over, each time comparing players to themselves: 72 players appear in both
+# the VCT and the Challengers event tables (Challengers -> VCT), and 336 who
+# have never played VCT have both a Challengers-only line and a whole-career
+# line (career -> Challengers, because a career also holds open qualifiers and
+# tier-3 brackets). The product is below. Re-run it and paste the block if
+# either scrape grows.
+#
+# They err low: the players who get called up are the ones who translate best,
+# so the gap for an average Challengers player is wider than this.
+SUBTIER_TO_VCT = {
+    "R": 0.831, "acs": 0.850, "kd": 0.773, "kast": 0.938,
+    "adr": 0.867, "kpr": 0.844, "apr": 0.981, "fdpr": 1.119,
+}
+# Rounds of tier-1 play after which a player is being measured against tier-1
+# opposition and the correction no longer applies. One VCT split plus playoffs
+# is around 600; the median tier-1 starter has 1991 and the median Challengers
+# player has none, so almost everyone sits at one end or the other.
+TIER1_SAMPLE = 600.0
+
+
+# Where a player belongs when their club is not one of the modelled leagues.
+# Free agents were all being stamped "Americas" because the region lookup only
+# consulted TIER1, and a free agent's club is by definition not in it.
+NAT_REGION = {
+    "us": "Americas", "ca": "Americas", "br": "Americas", "ar": "Americas",
+    "cl": "Americas", "mx": "Americas", "pe": "Americas", "co": "Americas",
+    "uy": "Americas", "do": "Americas", "ec": "Americas", "bo": "Americas",
+    "cn": "China", "hk": "China", "mo": "China", "tw": "China",
+    "kr": "Pacific", "jp": "Pacific", "id": "Pacific", "th": "Pacific",
+    "ph": "Pacific", "sg": "Pacific", "my": "Pacific", "vn": "Pacific",
+    "in": "Pacific", "au": "Pacific", "nz": "Pacific",
+    "gb": "EMEA", "fr": "EMEA", "de": "EMEA", "es": "EMEA", "tr": "EMEA",
+    "ru": "EMEA", "pl": "EMEA", "se": "EMEA", "dk": "EMEA", "ua": "EMEA",
+    "it": "EMEA", "nl": "EMEA", "be": "EMEA", "fi": "EMEA", "no": "EMEA",
+    "pt": "EMEA", "cz": "EMEA", "ro": "EMEA", "gr": "EMEA", "il": "EMEA",
+    "ch": "EMEA", "at": "EMEA", "hu": "EMEA", "rs": "EMEA", "bg": "EMEA",
+    "kg": "EMEA", "kz": "EMEA", "az": "EMEA", "ma": "EMEA", "sa": "EMEA",
+}
+
+
+# tags already spoken for by a VCT club; a Challengers side must not collide
+# with one — "Eintracht Frankfurt" and "Eternal Fire" both reduce to EF, which
+# put one club's roster on the other and left the second with nobody.
+TIER1_TAGS = {t for lst in TIER1.values() for t, _ in lst}
+
+
+# Clubs whose real abbreviation is not their initials. Derived tags are a
+# fallback, not a naming authority: "Any Questions Gaming" initialises to AQG,
+# but everyone including the org calls it AQ. The TIER2 table and the roster
+# join both go through here, so the two cannot drift apart — changing the tag
+# in one place alone silently drops the club for want of a matching roster.
+VCL_TAG_FIX = {
+    "any questions gaming": "AQ",
+    "weibo gaming": "WBG",
+    # initialises to VNLG, but the org — and its own crest — says VLG
+    "victory no limits gaming": "VLG",
+}
+
+
+def vcl_tag(name):
+    """A short, stable tag for a Challengers club, derived from its real name."""
+    fixed = VCL_TAG_FIX.get(name.strip().lower())
+    if fixed:
+        return fixed
+    cleaned = re.sub(r"[^A-Za-z0-9 ]", "", name).split()
+    if not cleaned:
+        base = name[:4].upper()
+    elif len(cleaned) == 1:
+        base = cleaned[0][:4].upper()
+    else:
+        base = "".join(w[0] for w in cleaned)[:4].upper()
+    if base not in TIER1_TAGS:
+        return base
+    # lengthen until it is its own tag
+    letters = re.sub(r"[^A-Za-z0-9]", "", name).upper()
+    for n in range(len(base) + 1, len(letters) + 1):
+        if letters[:n] not in TIER1_TAGS:
+            return letters[:n]
+    return base + "2"
+
+
+def season_profiles():
+    """Recency-weighted stat lines, plus how each player does on the big stage.
+
+    A flat career average cannot tell three steady years from a decline. ZmjjKK
+    has held 238+ ACS every year and peaks at Champions; Lysoar has climbed from
+    0.82 to 0.99 and is not the player his average says he is. Weighting recent
+    seasons higher separates them.
+    """
+    cache = load_json(SEASONS_CACHE)
+    events, stats = cache.get("events") or {}, cache.get("stats") or {}
+    if not stats:
+        return {}, {}, {}, {}
+
+    COLS = {"rating2": "R", "acs": "acs", "kd": "kd", "kast": "kast",
+            "adr": "adr", "kpr": "kpr", "apr": "apr", "fkpr": "fkpr",
+            "fdpr": "fdpr", "hs": "hs"}
+    weighted, big, base = {}, {}, {}
+    # rounds played at tier 1, weighted by how long ago — how much CURRENT
+    # VCT evidence there is. Unweighted, 190 rounds from two years back were
+    # enough to make a Challengers player half a VCT player today, which is
+    # how the tier-two table came to hold 88s and 90s above the tier-one
+    # median (2026-09-03). Evidence that old proves what he was, not is.
+    t1_rounds: dict[str, float] = {}
+    # and this season's alone, unweighted: the question "is he a tier-one
+    # player NOW" is answered by this year's rounds, not last year's
+    t1_now: dict[str, float] = {}
+    for eid, rows in stats.items():
+        ev = events.get(eid)
+        if not ev:
+            continue
+        yw = recency(SEASON_NOW - event_time(ev))
+        tw = TIER_WEIGHT.get(ev.get("tier"), 0.0)
+        for r in rows:
+            rnd = r.get("rnd") or 0
+            if not rnd:
+                continue
+            ign = r["ign"]
+            t1_rounds[ign] = t1_rounds.get(ign, 0.0) + rnd * yw
+            if ev.get("year") == SEASON_YEAR:
+                t1_now[ign] = t1_now.get(ign, 0.0) + rnd
+            acc = weighted.setdefault(ign, {"w": 0.0})
+            acc["w"] += rnd * yw
+            for src, dst in COLS.items():
+                v = r.get(src)
+                if v is None:
+                    continue
+                if dst == "kast" and v > 1:
+                    v /= 100
+                acc[dst] = acc.get(dst, 0.0) + v * rnd * yw
+                acc[f"{dst}_w"] = acc.get(f"{dst}_w", 0.0) + rnd * yw
+            # a separate tally for the international stage, and for everything,
+            # so the two can be compared on the same footing
+            rating = r.get("rating2")
+            if rating is not None:
+                base[ign] = base.get(ign, [0.0, 0.0])
+                base[ign][0] += rating * rnd
+                base[ign][1] += rnd
+                if tw > 0:
+                    big[ign] = big.get(ign, [0.0, 0.0])
+                    big[ign][0] += rating * rnd * tw
+                    big[ign][1] += rnd * tw
+
+    out = {}
+    for ign, acc in weighted.items():
+        if acc["w"] <= 0:
+            continue
+        line = {"rnd": round(acc["w"])}
+        for dst in COLS.values():
+            w = acc.get(f"{dst}_w") or 0
+            if w > 0:
+                line[dst] = acc[dst] / w
+        out[ign] = line
+
+    # how much better (or worse) they are when it matters, as a ratio
+    # ratio and the tier-weighted rounds behind it: 232 rounds as a stand-in
+    # two years ago is evidence of something, but not of 3.5 points
+    stage = {}
+    for ign, (bs, bw) in big.items():
+        tot, tw = base.get(ign, [0, 0])
+        if bw > 0 and tw > 0 and tot > 0:
+            stage[ign] = ((bs / bw) / (tot / tw), bw)
+    return out, stage, t1_rounds, t1_now
+
+
+def challengers_real_names():
+    """Real names off the vlr team pages, for players Liquipedia has no page for.
+
+    vlr writes them as "Cha Il-hwan (차일환)". The rest of the world file gives a
+    CJK/Hangul name in its own script and everyone else in Latin, so follow that:
+    take the parenthesised native spelling when there is one, the Latin name
+    when there is not. Nothing is transliterated or guessed.
+    """
+    out = {}
+    for t in (load_json(CHALLENGERS_CACHE).get("teams") or {}).values():
+        for p in t.get("roster", []):
+            name = (p.get("name") or "").strip()
+            if not name or p.get("role") != "player":
+                continue
+            m = re.search(r"\(([^)]+)\)", name)
+            if m and re.search(r"[\u3040-\u30ff\u4e00-\u9fff\uac00-\ud7af]", m.group(1)):
+                name = m.group(1).strip()
+            else:
+                name = re.sub(r"\s*\([^)]*\)", "", name).strip()
+            if name and name.lower() != p["ign"].lower():
+                out[p["ign"]] = name
+    return CiDict(out)
+
+
+def parse_challengers_rows():
+    """Challengers players, in the same shape parse_rows() produces.
+
+    They are appended to the tier-1 pool *before* percentiles are computed, on
+    purpose: ability is then ranked across the whole scraped population, so a
+    Challengers player lands in the lower percentiles by measurement rather than
+    by a hand-applied penalty. Nothing here is invented — every line is a real
+    vlr.gg event stat line.
+    """
+    cache = load_json(CHALLENGERS_CACHE)
+    if not cache:
+        return [], {}, {}
+
+    # club abbreviation as it appears in the stats table -> our team tag
+    roster_of, tag_of_region = {}, {}
+    for t in cache.get("teams", {}).values():
+        roster_of[t["name"]] = {p["ign"].lower() for p in t["roster"] if p["role"] == "player"}
+        tag_of_region[t["name"]] = t.get("region", "")
+
+    def num(x):
+        try:
+            return float(str(x).replace("%", ""))
+        except (TypeError, ValueError):
+            return None
+
+    rows, agents, tag_region = [], {}, {}
+    for lines in cache.get("stats", {}).values():
+        for r in lines:
+            if not_him(r["ign"], r.get("vlrId")):
+                continue
+            club = r.get("club") or ""
+            # the stats table abbreviates; match it back to a scraped club
+            tag = next(
+                (name for name in roster_of
+                 if name == club or r["ign"].lower() in roster_of[name]),
+                None,
+            )
+            if not tag:
+                continue
+            kast = num(r.get("kast"))
+            rows.append({
+                "ign": r["ign"], "tag": vcl_tag(tag), "nat": (homonym(r["ign"]) or {}).get("nat", ""),
+                "role": (roles_from_agents(r.get("agents")) or ["自由人"])[0],
+                "rnd": num(r.get("maps")) or 0, "R": num(r.get("rating2")),
+                "acs": num(r.get("acs")), "kd": num(r.get("kd")),
+                "kast": kast / 100 if kast and kast > 1 else kast,
+                "adr": num(r.get("adr")), "kpr": num(r.get("kpr")), "apr": num(r.get("apr")),
+                "fkpr": num(r.get("fkpr")), "fdpr": num(r.get("fdpr")),
+                "hs": num(r.get("hs")),
+            })
+            agents[r["ign"]] = r.get("agents") or []
+            tag_region[vcl_tag(tag)] = tag_of_region.get(tag, "")
+
+    # leagues with no stats tab were filled in from each player's own page
+    for r in cache.get("players", {}).values():
+        club = r.get("club")
+        if not club or club not in roster_of:
+            continue
+        if not_him(r["ign"], r.get("vlrId")):
+            continue
+        rows.append({
+            "ign": r["ign"], "tag": vcl_tag(club), "nat": (homonym(r["ign"]) or {}).get("nat", ""),
+            "role": (roles_from_agents(r.get("agents")) or ["自由人"])[0],
+            "rnd": r.get("rnd") or 0, "R": r.get("R"), "acs": r.get("acs"),
+            "kd": r.get("kd"), "kast": r.get("kast"), "adr": r.get("adr"),
+            "kpr": r.get("kpr"), "apr": r.get("apr"),
+            "fkpr": r.get("fkpr"), "fdpr": r.get("fdpr"), "hs": None,
+        })
+        agents[r["ign"]] = r.get("agents") or []
+        tag_region[vcl_tag(club)] = tag_of_region.get(club, "")
+
+    best = {}
+    for r in rows:
+        if r["ign"] not in best or (r["rnd"] or 0) > (best[r["ign"]]["rnd"] or 0):
+            best[r["ign"]] = r
+    return list(best.values()), agents, tag_region
+
+
+def pctiles(rows, key, invert=False):
+    vals = sorted(r[key] for r in rows if r.get(key) is not None)
+    out = {}
+    if not vals:
+        return out
+    n = len(vals)
+    for r in rows:
+        v = r.get(key)
+        if v is None:
+            out[r["ign"]] = 0.5
+            continue
+        lo, hi = 0, n
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if vals[mid] < v:
+                lo = mid + 1
+            else:
+                hi = mid
+        p = lo / max(1, n - 1)
+        out[r["ign"]] = (1 - p) if invert else p
+    return out
+
+
+def age_from(birth):
+    """Exact age at the start of the in-game season."""
+    if not birth:
+        return None
+    try:
+        y, m, d = (int(x) for x in birth.split("-")[:3])
+    except (ValueError, AttributeError):
+        return None
+    ref = date(SEASON_YEAR, 1, 1)
+    return ref.year - y - ((ref.month, ref.day) < (m, d))
+
+
+# What a player of this ability costs per year.
+#
+# Kept identical to expectedSalary() in src/engine/player.ts, which is the
+# player's own asking price at every negotiation — if the two drift apart, a
+# squad's wage bill stops matching what re-signing it would cost.
+#
+# The base used to be 15000, which put wages at 22% of a tier-1 club's sponsor
+# income. Nothing was ever unaffordable: the average VCT club netted +$1.71M a
+# season, only 3 of 48 could lose money at all, and one year's surplus bought
+# four marquee players. At 33000 wages are ~49% of income — the largest single
+# line, as they are for a real org — a quarter of the league runs close to the
+# red, and a season's surplus buys about one signing.
+#
+# The tier-2 factor drops from 0.30 to 0.14 in the same move, which holds
+# Challengers wages where they already were. Without that the Challengers
+# insolvency this was meant to fix comes straight back (20 of 29 clubs under
+# water), and it is the more truthful number anyway: a Challengers salary is a
+# fraction of a VCT one, not a third of it.
+SALARY_BASE = 33000
+TIER2_WAGE = 0.14
+
+
+def salary_for(ovr, tier):
+    base = SALARY_BASE * math.exp((ovr - 55) / 12.0)
+    if tier == 2:
+        base *= TIER2_WAGE
+    return int(round(base / 1000.0) * 1000)
+
+
+def value_for(ovr, age, pot):
+    v = 20000 * math.exp((ovr - 55) / 10.5)
+    if age is not None:
+        if age <= 21:
+            v *= 1.45
+        elif age <= 24:
+            v *= 1.15
+        elif age >= 28:
+            v *= 0.55
+        elif age >= 26:
+            v *= 0.8
+    v *= 1 + (pot - ovr) / 100.0
+    return int(round(v / 1000.0) * 1000)
+
+
+def main():
+    rows = parse_rows()
+    tenure = ci_alias(load_json(TENURE_CACHE))
+    if tenure:
+        dated = sum(1 for v in tenure.values() if any(not x.get("to") for x in v))
+        print(f"tenure: club histories for {len(tenure)} players, {dated} currently signed")
+    known = {r["ign"] for r in rows}
+    vcl_rows, vcl_agents, vcl_regions = parse_challengers_rows()
+    # a Challengers player who has since moved up is already in the tier-1 pull
+    vcl_rows = [r for r in vcl_rows if r["ign"] not in known]
+    rows += vcl_rows
+    print(f"challengers: +{len(vcl_rows)} real players from vlr.gg event stats")
+    # People entered by hand from 号角 (data-raw/haojiao_players.json): a CN
+    # roster move can land there weeks before vlr.gg or Liquipedia carry the
+    # player, and a domestic player may never appear on either. Each becomes
+    # a stat row like any other; what 号角 does not publish stays None and
+    # falls to the population median like any other missing stat.
+    hand = load_json(HAND).get("players") or {}
+    hand_births = {}
+    known_now = {r["ign"].lower() for r in rows}
+    added = 0
+    for ign, rec in hand.items():
+        if ign.lower() in known_now:
+            continue                     # vlr has him now; that line wins
+        st = rec.get("stats") or {}
+        rnd = float(st.get("rounds") or 0)
+        agents = sorted(rec.get("agents") or [], key=lambda a: -(a.get("rounds") or 0))
+        role = AGENT_ROLE.get(agents[0]["en"].lower(), "自由人") if agents else "自由人"
+        rows.append({
+            "ign": ign, "tag": rec.get("team") or "", "nat": rec.get("nat") or "",
+            "role": role, "rnd": rnd, "R": st.get("rating"), "acs": st.get("acs"),
+            "kd": st.get("kd"), "kast": st.get("kast"), "adr": st.get("adr"),
+            "kpr": (st["kills"] / rnd) if rnd and st.get("kills") is not None else None,
+            "apr": (st["assists"] / rnd) if rnd and st.get("assists") is not None else None,
+            "fkpr": st.get("fkpr"), "fdpr": st.get("fdpr"), "hs": st.get("hs"),
+            "hand_agents": [a["en"] for a in agents],
+            "hand_use": {a["en"].lower(): a["rounds"] for a in agents if a.get("rounds")},
+        })
+        if rec.get("realName") or rec.get("birth"):
+            hand_births[ign] = {"real": rec.get("realName"), "birth": rec.get("birth"),
+                                "country": NAT_NAME.get((rec.get("nat") or "").lower())}
+        added += 1
+    if added:
+        print(f"号角: +{added} players entered by hand ({', '.join(hand)})")
+    raw_births = load_json(BIRTHS)
+    raw_births.update(hand_births)
+    verified = load_json(VERIFIED).get("players") or {}
+    for ign, rec in verified.items():
+        raw_births[ign] = {"birth": rec.get("birth"), "real": rec.get("realName") or rec.get("real"),
+                           "country": rec.get("country"), "verified": True}
+    if verified:
+        print(f"verified: {len(verified)} birthdates entered by hand")
+    births = ci_alias(raw_births)
+    # The year a player first shows up in vlr's event record. When nobody
+    # publishes a birthdate this is the best guess there is: players with a
+    # known birthdate were a median 18 at their first recorded event (n=403,
+    # per-year medians below; 2020 is where vlr's record starts, so that
+    # cohort is older than it looks). Against the known players it misses by
+    # 1.8 years on average where a draw from the age distribution missed by
+    # 2.3 — and, which is the point, it never makes a 2025 debutant 26.
+    DEBUT_AGE = {2020: 19, 2021: 18, 2022: 17, 2023: 17, 2024: 18, 2025: 19, 2026: 20}
+    first_event = {}
+    for ign_p, prof in (load_json(PROFILES_CACHE) or {}).items():
+        years = [e.get("year") for e in (prof.get("events") or []) if e.get("year")]
+        if years:
+            first_event[ign_p.lower()] = min(years)
+    wrong_person = []
+    vlr_names = challengers_real_names()
+    coaches = load_json(COACHES)
+    # the community VLR API fills clubs whose Liquipedia infobox omits a coach
+    for tag, rec in load_json(VLRAPI).items():
+        if not rec.get("coach"):
+            continue
+        cur = coaches.setdefault(tag, {})
+        if not cur.get("name"):
+            cur["name"] = rec["coach"]
+            cur["assistants"] = rec.get("assistants") or []
+    agent_pools = load_json(AGENTS_F)
+    ov = load_json(OVERRIDES)
+    ov_igl = ov.get("igl", {})
+    # players the owner has struck from the database, by ign: left out of the
+    # world entirely, not made free agents (KovaQ came back that way once)
+    dropped = {str(n).lower() for n in (ov.get("drop") or [])}
+    ov_roles = ov.get("roles", {})
+    for key, fixed in (ov.get("coaches") or {}).items():
+        coaches[key] = {**coaches.get(key, {}), **fixed}
+
+    # Every agent pool we have, most-played first, one source per player: vlr's
+    # 2026 table (the three agents he has played most this season) wins, then
+    # the parsebot snapshot, then vlr's all-time table for whoever the season
+    # has not seen. The role letter in the txt was the most-played agent's role
+    # on the day the file was first written and is never refreshed — S1Mon kept
+    # 「控场」 from an Omen season long after Breach and KAY/O became his agents,
+    # which the group noticed — so it is the fallback now, not the source.
+    # Applied here, before rating, because a player is rated against the peers
+    # of his own role.
+    pools = {}
+    for path, via in ((VLR_STATS_ALL, "vlr all-time"), (AGENTS_F, "parsebot"), (VLR_STATS_2026, "vlr 2026")):
+        src = load_json(path)
+        for ign, rec in (src.get("players") if "players" in src else src).items():
+            if rec.get("agents") and not not_him(ign, rec.get("vlrId")):
+                pools[ign.lower()] = {"agents": list(rec["agents"]), "via": via}
+
+    def pool_of(ign):
+        return pools.get(ign.lower())
+
+    def roles_for(ign, current):
+        """The ordered role set for a player, and where it came from."""
+        fixed = ov_roles.get(ign)
+        if fixed:
+            return list(fixed), "verified"
+        pool = pool_of(ign) or {}
+        derived = roles_from_agents(pool.get("agents"))
+        if not derived:
+            return [current or "自由人"], "vlr-primary"
+        if pool.get("via") == "vlr all-time" and current and current != "自由人":
+            # The all-time table is what he has EVER played, most first, and a
+            # veteran's lifetime leader is not necessarily his position today:
+            # Kada's is Jett, and he has been an initiator for two seasons. For
+            # the players this season's table has not seen, the role letter —
+            # the most recent most-played agent we recorded — stays in front,
+            # and the lifetime pool only says what else he covers.
+            return [current] + [x for x in derived if x != current], "agents"
+        return derived, "agents"
+
+    retagged = []
+    for r in rows:
+        roles, _via = roles_for(r["ign"], r["role"])
+        if roles[0] != r["role"]:
+            retagged.append((r["ign"], r["role"], roles[0]))
+        r["role"] = roles[0]
+        r["roles"] = roles
+    print(f"roles: agent pools for {sum(1 for r in rows if pool_of(r['ign']))}/{len(rows)} players, "
+          f"{len(retagged)} primary roles corrected from the stale role letter")
+
+    # ---- ability from a career, form from this season ------------------
+    #
+    # Deriving attributes from one season modelled a player having a bad year
+    # as a worse player: ZmjjKK won in 2024 and has been good throughout, but
+    # 2026 alone put his ceiling below his level. Ability now ranks on career
+    # numbers; the current season becomes his starting form instead, so a
+    # veteran in a slump reads as high ability and low form rather than as
+    # someone who simply got worse.
+    career = CiDict({k: v for k, v in load_json(CAREER_CACHE).items()
+                     if not k.startswith("_") and not v.get("miss")})
+    # three seasons broken out by year and stage beats one flattened average
+    profiles, stage, t1_rounds, t1_now = season_profiles()
+    t1_now = CiDict(t1_now)
+    # The event tables only hold VCT events, so a player whose whole 2026 was
+    # China Evolution Series has no 2026 in his profile at all and is rated
+    # on the seasons before — S1Mon on his EDG years, with nothing said about
+    # the tier-two season he is actually playing. His line from vlr's 2026
+    # table IS that season; it goes into the profile with this year's weight,
+    # translated like any other sub-tier line unless the club is a partner.
+    T1_TAGS = {tag for lst in TIER1.values() for tag, _ in lst}
+    sc = load_json(SEASONS_CACHE)
+    covered = set()
+    # Clubs that played their way into a VCT event this season — EP, FF, JL in
+    # EMEA's Stage 2, 2G and BST in Americas' — are tier-one strength for
+    # the rating even though the manager's leagues keep them in Challengers:
+    # 「打入了 VCT 的队伍可以算一级实力」(the owner, 2026-09-03). A hundred
+    # rounds by anyone on the roster is the bar, so a single sub's map does
+    # not promote a club.
+    vct_rounds = {}
+    for eid, rws in (sc.get("stats") or {}).items():
+        e = (sc.get("events") or {}).get(eid, {})
+        if e.get("year") == SEASON_YEAR:
+            covered.update(x["ign"].lower() for x in rws)
+            if e.get("tier") in ("league", "kickoff"):
+                for x in rws:
+                    if x.get("club"):
+                        vct_rounds[x["club"]] = vct_rounds.get(x["club"], 0) + (x.get("rnd") or 0)
+    VCT_NOW = {tag for tag, n in vct_rounds.items() if n >= 100}
+    # vlr's event pages and its team pages do not always spell a club the same
+    # way (FF on the Stage 2 page, FFE on the roster): a club whose event tag
+    # matches nothing in the txt is matched by its people instead — three or
+    # more of the same names under the event tag and the txt tag is the same
+    # club. Kachoww came out compressed for the spelling alone.
+    txt_tags = {r["tag"] for r in rows if r.get("tag")}
+    for tag in list(VCT_NOW):
+        if tag in txt_tags:
+            continue
+        names = set()
+        for eid, rws in (sc.get("stats") or {}).items():
+            e = (sc.get("events") or {}).get(eid, {})
+            if e.get("year") == SEASON_YEAR and e.get("tier") in ("league", "kickoff"):
+                names.update(x["ign"].lower() for x in rws if x.get("club") == tag)
+        best = max(txt_tags, key=lambda t: len(names & {r["ign"].lower() for r in rows if r.get("tag") == t}), default=None)
+        if best and len(names & {r["ign"].lower() for r in rows if r.get("tag") == best}) >= 3:
+            VCT_NOW.add(best)
+    promoted = sorted(VCT_NOW - T1_TAGS)
+    if promoted:
+        print(f"tier: {len(promoted)} clubs outside the partner lists played VCT {SEASON_YEAR} and rate as tier one: {', '.join(promoted)}")
+    # vlr publishes no Rating for the China Evolution Series rows, and Rating
+    # carries 0.42 of every attribute, so without it that season would enter
+    # the profile with nothing said about how the player actually fragged.
+    # It is estimated from what the same table does publish — K/D, KPR, APR,
+    # ACS — by least squares over every 2026 row that has a Rating, and the
+    # fit is printed so a bad one is visible.
+    fit_rows = [r for r in rows if r["ign"] in known and r.get("R") is not None
+                and all(r.get(k) is not None for k in ("kd", "kpr", "apr", "acs"))]
+    R_FIT = None
+    if len(fit_rows) >= 50:
+        X = [[1.0, r["kd"], r["kpr"], r["apr"], r["acs"] / 100] for r in fit_rows]
+        y = [r["R"] for r in fit_rows]
+        n = len(X[0])
+        A = [[sum(X[i][a] * X[i][b] for i in range(len(X))) for b in range(n)] for a in range(n)]
+        v = [sum(X[i][a] * y[i] for i in range(len(X))) for a in range(n)]
+        for c in range(n):                       # Gaussian elimination
+            piv = max(range(c, n), key=lambda i: abs(A[i][c]))
+            A[c], A[piv], v[c], v[piv] = A[piv], A[c], v[piv], v[c]
+            for i in range(n):
+                if i != c and A[c][c]:
+                    f = A[i][c] / A[c][c]
+                    A[i] = [a - f * b for a, b in zip(A[i], A[c])]
+                    v[i] -= f * v[c]
+        R_FIT = [v[i] / A[i][i] for i in range(n)]
+        pred = [sum(c * x for c, x in zip(R_FIT, xi)) for xi in X]
+        ss = sum((a - b) ** 2 for a, b in zip(y, pred))
+        tot = sum((a - sum(y) / len(y)) ** 2 for a in y)
+        print(f"rating fit: R ~ {R_FIT[0]:.2f} + {R_FIT[1]:.2f} K/D + {R_FIT[2]:.2f} KPR + {R_FIT[3]:.2f} APR "
+              f"+ {R_FIT[4]:.2f} ACS/100  (R² {1 - ss / tot:.2f}, {len(fit_rows)} rows)")
+
+    def r_estimate(r):
+        if R_FIT is None or any(r.get(k) is None for k in ("kd", "kpr", "apr", "acs")):
+            return None
+        return sum(c * x for c, x in zip(R_FIT, [1.0, r["kd"], r["kpr"], r["apr"], r["acs"] / 100]))
+
+    folded = []
+    for r in rows:
+        if r["ign"] not in known or r["ign"].lower() in covered or not r.get("rnd"):
+            continue
+        sub_tier = r["tag"] not in T1_TAGS
+        line = profiles.get(r["ign"])
+        # Only a player with a rated VCT profile to fold INTO. A profile that
+        # never had a Rating would get its only one from this handful of
+        # rounds and then outrank a six-thousand-round career (coldfish went
+        # 73 -> 60 that way); a player with no profile at all is rated on his
+        # career already, and 45 sub-tier rounds are no reason to change that.
+        if not line or line.get("R") is None:
+            continue
+        if r.get("R") is None:
+            est = r_estimate(r)
+            if est is not None:
+                r = {**r, "R": round(est, 3)}
+        w_old = line.get("rnd") or 0
+        w_new = r["rnd"] * recency(SEASON_NOW - (SEASON_YEAR + STAGE_MONTH["stage-2"] / 12))
+        for k in STAT_KEYS:
+            v = r.get(k)
+            if v is None or line.get(k) is None:
+                continue          # each stat keeps to the rounds that carry it
+            if k == "kast" and v > 1:
+                v /= 100
+            if sub_tier and k in SUBTIER_TO_VCT:
+                v *= SUBTIER_TO_VCT[k]
+            line[k] = (line[k] * w_old + v * w_new) / (w_old + w_new)
+        line["rnd"] = w_old + w_new
+        profiles[r["ign"]] = line
+        folded.append((r["ign"], "sub" if sub_tier else "t1", int(r["rnd"]), r.get("R")))
+    if folded:
+        print(f"seasons: {len(folded)} players' {SEASON_YEAR} came only from the season table and was folded in: "
+              + ", ".join(f"{i}({t},{n},R{rr})" for i, t, n, rr in sorted(folded, key=lambda x: -x[2])[:6]))
+    profiles, stage, t1_rounds = CiDict(profiles), CiDict(stage), CiDict(t1_rounds)
+    if profiles:
+        print(f"seasons: recency-weighted profiles for {len(profiles)} players, "
+              f"{len(stage)} with an international record")
+    # what a player's own numbers look like across everything we have, which is
+    # what this season's numbers get compared against to produce form
+    baseline = {ign: {**career.get(ign, {}), **line} for ign, line in profiles.items()}
+    for ign, c in career.items():
+        baseline.setdefault(ign, c)
+    season = {r["ign"]: dict(r) for r in rows}
+
+    # Small samples must not rank like large ones. Sharks played 119 rounds as a
+    # stand-in and came out above a team-mate with 8031, purely because one good
+    # night is easy and a career is not. Every stat is pulled toward the league
+    # mean by how little we have seen: at 400 rounds it counts half, at 4000 it
+    # counts ninety percent. This is why he was starting ahead of Lysoar.
+    SHRINK_ROUNDS = 400
+
+    def vct_weight(ign):
+        """How far to trust the VCT-only line over the whole career, 0 to 1.
+
+        Two things are known about most players: a recency-weighted line from
+        VCT events, measured against tier-1 opposition, and a career line that
+        is everything vlr has ever recorded — Challengers, open qualifiers, the
+        lot. Letting the VCT line simply win produced hezacoil: 190 VCT rounds
+        treated as settled fact and trusted like the 2754 behind him. Letting
+        the career line win loses the trend the profile exists to show. So they
+        are blended by how much VCT there is to go on.
+        """
+        return clamp(t1_rounds.get(ign, 0.0) / TIER1_SAMPLE, 0.0, 1.0)
+
+    # ---- 冠军底蕴 --------------------------------------------------------
+    #
+    # A title is the one thing about a player the stat line cannot carry:
+    # five men won Champions 2024 and a sixth held the roster together, and
+    # none of that is in anyone's ACS. So a Champions winner carries +3 and a
+    # Masters winner +2 for the two seasons after the title, two thirds of it
+    # in the third season, a third in the fourth, capped at +5 for the ones
+    # who keep winning. Champions rosters come from Liquipedia's infobox,
+    # which names every registered member (vlr's placements list only the
+    # ones who played, and so leave Haodong out); Masters winners come from
+    # vlr's placements, which is where those records are. A page about a
+    # different person with the same handle is refused on nationality.
+    # Champions 3, Masters 2, a regional split or Kickoff 1, an Ascension
+    # (the tier-two title that earns promotion) half — 赛区内冠军 count as
+    # well as the international ones, at the owner's request (2026-09-03).
+    TITLE_VALUE = {"champions": 3.0, "masters": 2.0, "league": 1.0, "ascension": 0.5}
+    TITLE_FADE = {0: 1.0, 1: 1.0, 2: 0.67, 3: 0.33}
+    TITLE_CAP = 6.0
+    REGIONAL = re.compile(r"^Champions Tour \d{4}: (Americas|EMEA|Pacific|China) (Stage \d|Kickoff|League)$")
+    ASCENSION = re.compile(r"^Champions Tour \d{4} (Americas|EMEA|Pacific|China): Ascension$")
+    lp_titles = CiDict(load_json(TITLES_CACHE))
+    vlr_prof = CiDict(load_json(PROFILES_CACHE))
+    INTL_MASTERS = re.compile(r"^(Champions Tour \d{4}: (Masters|LOCK//IN) \S+"
+                              r"|Valorant Masters \S+ \d{4}"
+                              r"|Valorant Champions Tour Stage \d: Masters \S+)")
+    titled = {}
+
+    def titles_for(ign, nat):
+        won = {}
+        # a homonym's Liquipedia page is the other man's trophy cabinet
+        rec = {} if homonym(ign) else (lp_titles.get(ign) or {})
+        if rec.get("titles") and same_person({"country": rec.get("country")}, nat):
+            for t in rec["titles"]:
+                won[(t["year"], t["kind"], t["event"])] = t["event"]
+        for e in (vlr_prof.get(ign) or {}).get("events") or []:
+            if e.get("place") != "1st" or not e.get("year"):
+                continue
+            name = str(e.get("event") or "")
+            kind = ("champions" if re.match(r"^Valorant Champions \d{4}$", name)
+                    else "masters" if INTL_MASTERS.match(name)
+                    else "league" if REGIONAL.match(name)
+                    else "ascension" if ASCENSION.match(name) else None)
+            if kind:
+                # one entry per title, not per kind: two regional titles in a
+                # year are two titles
+                won.setdefault((int(e["year"]), kind, name), name)
+        return won
+
+    def title_credit(ign, nat):
+        won = titles_for(ign, nat)
+        # the same trophy can come from both sources under slightly different
+        # names; count each (year, kind) once for the international ones
+        seen = set()
+        total = 0.0
+        for (y, k, name) in won:
+            key = (y, k) if k in ("champions", "masters") else (y, k, name)
+            if key in seen:
+                continue
+            seen.add(key)
+            total += TITLE_VALUE[k] * TITLE_FADE.get(SEASON_YEAR - y, 0.0)
+        total = min(TITLE_CAP, total)
+        if won:
+            titled[ign] = (round(total, 2), sorted(won.values()))
+        return total
+
+    # First translate, then rank. Doing it the other way round would leave the
+    # 30th-percentile anchor below drawn from a pool that is itself inflated.
+    lines = {}
+    for r in rows:
+        c, prof = career.get(r["ign"]), profiles.get(r["ign"])
+        kp = vct_weight(r["ign"])
+        merged = dict(r)
+        for k in STAT_KEYS:
+            # the career half is what needs translating; the VCT half was
+            # already measured against the opposition it is being ranked with
+            sub = c.get(k) if c else None
+            if sub is not None:
+                f = SUBTIER_TO_VCT.get(k)
+                if f is not None:
+                    sub *= f
+            top = prof.get(k) if prof else None
+            if top is not None and sub is not None:
+                merged[k] = top * kp + sub * (1 - kp)
+            elif top is not None:
+                merged[k] = top
+            elif sub is not None:
+                merged[k] = sub
+        merged["rnd"] = max(c.get("rnd") or 0 if c else 0, r.get("rnd") or 0)
+        lines[r["ign"]] = merged
+    adj = sum(1 for r in rows if vct_weight(r["ign"]) < 0.5)
+    print(f"tier: {adj} players are measured mostly below VCT; the sub-tier half "
+          f"of every line is translated (R x{SUBTIER_TO_VCT['R']}, "
+          f"ACS x{SUBTIER_TO_VCT['acs']}, K/D x{SUBTIER_TO_VCT['kd']})")
+
+    # Shrink toward a below-average anchor, not the mean. A player we have
+    # barely seen is not an average professional — he is unproven, and the
+    # league mean is drawn from people who have held a starting place. Sharks
+    # played 119 rounds as a stand-in and landed at the median, which read as
+    # "solid" and kept him in the five.
+    pool = {}
+    for k in STAT_KEYS:
+        vals = sorted(c[k] for c in lines.values() if c.get(k) is not None)
+        pool[k] = vals[int(len(vals) * 0.3)] if vals else None
+
+    stat_rows = []
+    for r in rows:
+        # a copy per row: two sources can spell the same player twice, and
+        # shrinking one shared dict twice would halve him
+        merged = dict(lines[r["ign"]])
+        rnd = merged["rnd"]
+        trust = rnd / (rnd + SHRINK_ROUNDS)
+        for k in STAT_KEYS:
+            mean = pool.get(k)
+            if merged.get(k) is None or mean is None:
+                continue
+            merged[k] = merged[k] * trust + mean * (1 - trust)
+        stat_rows.append(merged)
+    thin = sum(1 for r in stat_rows if (r.get("rnd") or 0) < SHRINK_ROUNDS)
+    print(f"shrinkage: {thin} players have under {SHRINK_ROUNDS} rounds and are pulled toward the 30th percentile")
+    have = sum(1 for r in rows if r["ign"] in career or r["ign"] in profiles)
+    print(f"career: ability derived from career stats for {have}/{len(rows)} players")
+
+    stat_by_ign = {r["ign"]: r for r in stat_rows}
+    P = {k: pctiles(stat_rows, k) for k in ("acs", "adr", "hs", "kpr", "fkpr", "kast", "apr", "R", "kd")}
+    P["fdpr"] = pctiles(stat_rows, "fdpr", invert=True)
+
+    # Rating is scored within role, not against the whole league. It carries
+    # 0.42 of every attribute, and the roles do not rate alike — duelists sit at
+    # 0.975 and sentinels at 1.017, because dying is part of entering. Judged
+    # league-wide, a duelist putting up 247 ACS reads as ordinary.
+    P["R"] = {}
+    for role in set(r["role"] for r in stat_rows):
+        peers = [r for r in stat_rows if r["role"] == role]
+        if len(peers) >= 12:
+            P["R"].update(pctiles(peers, "R"))
+        else:
+            P["R"].update(pctiles(stat_rows, "R"))
+
+    def form_for(ign, rng):
+        """This season against the player's own career, as 30-99 form."""
+        c, sea = baseline.get(ign), season.get(ign)
+        if not c or not sea or not c.get("R") or not sea.get("R"):
+            return int(clamp(round(rng.norm(70, 8)), 45, 95))
+        # a season 15% above a career average is a genuine purple patch
+        ratio = sea["R"] / c["R"]
+        return int(clamp(round(70 + (ratio - 1) * 130 + rng.range(-4, 4)), 30, 99))
+
+    # Clutches — won over played, one against several — from vlr's VCT-tier
+    # tables: the all-time table first (a career's worth), this season's
+    # where that is all there is. The rate is pulled toward the league mean
+    # by how few situations back it (twenty count as much as the prior), so
+    # 3/5 does not outrank 40/150. The parse.bot snapshot remains the
+    # fallback for anyone vlr has no clutch line for.
+    cl_rows = []
+    have_cl = set()
+    cl_src = {}
+    for path in (VLR_STATS_ALL, VLR_STATS_2026):
+        for ign, r in (load_json(path).get("players") or {}).items():
+            if r.get("clt") and ign not in cl_src and not not_him(ign, r.get("vlrId")):
+                cl_src[ign] = (r["clw"], r["clt"])
+    # rib.gg, for the events vlr has no round data for (VCT China 2026): the
+    # same two numbers, won and faced, added on top of what vlr has. The
+    # event list is chosen so the two never cover the same match — see
+    # scripts/fetch_rib_clutch.py — so adding is the right operation.
+    rib = load_json(RIB_CLUTCH).get("players") or {}
+    rib_ci = {k.lower(): v for k, v in rib.items()}
+    rib_added = 0
+    for ign in list(cl_src) + [k for k in rib if k.lower() not in {x.lower() for x in cl_src}]:
+        r = rib_ci.get(ign.lower())
+        if not r or not r.get("clt"):
+            continue
+        w0, t0 = cl_src.get(ign, (0, 0))
+        cl_src[ign] = (w0 + r["clw"], t0 + r["clt"])
+        rib_added += 1
+    if cl_src:
+        tot_w = sum(w for w, _ in cl_src.values())
+        tot_t = sum(t for _, t in cl_src.values())
+        mean = tot_w / tot_t if tot_t else 0.15
+        PRIOR = 20
+        for ign, (w_, t_) in cl_src.items():
+            cl_rows.append({"ign": ign, "clutch_pct": (w_ + PRIOR * mean) / (t_ + PRIOR)})
+            have_cl.add(ign.lower())
+    cl_rows_ci = {r["ign"].lower() for r in cl_rows}
+    for ign, rec in agent_pools.items():
+        if ign.lower() in cl_rows_ci:
+            continue
+        v = str(rec.get("clutch_pct") or "").replace("%", "").strip()
+        try:
+            cl_rows.append({"ign": ign, "clutch_pct": float(v) / 100})
+            have_cl.add(ign.lower())
+        except ValueError:
+            continue
+    P["clutch_pct"] = CiDict(pctiles(cl_rows, "clutch_pct")) if cl_rows else {}
+    print(f"clutch: real rates for {len(cl_src)} players ({rib_added} with rib.gg rounds added), "
+          f"{len(cl_rows) - len(cl_src)} from the parse.bot snapshot")
+
+    ROLE_UTIL = {"控场": 1.0, "先锋": 0.95, "哨卫": 0.7, "自由人": 0.55, "决斗者": 0.25}
+    ROLE_COMM = {"控场": 0.8, "先锋": 0.85, "哨卫": 0.6, "自由人": 0.7, "决斗者": 0.4}
+
+    def scale(p, lo=44, hi=98):
+        return int(round(clamp(lo + (hi - lo) * p, 20, 99)))
+
+    # Averaging eight independent percentiles collapses everyone toward the
+    # middle, which would leave the best players in the world rated ~80. Real
+    # ability is correlated across axes — an elite player is good at most things
+    # — so each axis is blended with the player's overall rating percentile
+    # before scaling. That restores a lifelike spread without inventing numbers.
+    def axis(specific, quality):
+        return 0.58 * specific + 0.42 * quality
+
+    # 「所有选手的所有英雄都是0%熟练度」: the agent pool was three names, so
+    # everything else was unknown. The career table says how much of each agent
+    # a man has actually played, and that is what proficiency is seeded from.
+    agent_use = {}
+    for ign, rec in load_json(VLR_AGENTS).items():
+        if not_him(ign, rec.get("vlrId")):
+            continue
+        rows_ = rec.get("agents") or []
+        if rows_:
+            agent_use[ign.lower()] = {
+                "use": {x["a"]: x["rnd"] for x in rows_ if x.get("rnd")},
+                "R": {x["a"]: x["R"] for x in rows_ if x.get("R") is not None} or None,
+            }
+    built = {}
+    by_tag = defaultdict(list)
+    ages_known = 0
+
+    for r in rows:
+        ign = r["ign"]
+        rng = Rng(seed_of("p:" + ign))
+        g = lambda k: P[k].get(ign, 0.5)  # noqa: E731
+
+        traits = traits_for(g)
+        q = g("R")  # overall quality percentile, from the player's real rating
+        a = {
+            "aim": scale(axis(0.5 * g("acs") + 0.3 * g("adr") + 0.2 * g("hs"), q)),
+            "reaction": scale(axis(0.55 * g("fkpr") + 0.3 * g("kpr") + 0.15 * g("acs"), q)),
+            "awareness": scale(axis(0.5 * g("kast") + 0.35 * g("fdpr") + 0.15 * q, q)),
+            "utility": scale(axis(0.55 * g("apr") + 0.45 * ROLE_UTIL[r["role"]], q)),
+            # measured where it can be: a clutch rate is what the attribute
+            # claims to be, and the rating percentile only steadies it
+            "clutch": scale(axis(0.5 * g("clutch_pct") + 0.3 * q + 0.2 * g("kd"), q))
+            if ign.lower() in have_cl else scale(axis(0.6 * q + 0.4 * g("kd"), q)),
+            "teamwork": scale(axis(0.5 * g("kast") + 0.5 * g("apr"), q)),
+            "communication": scale(axis(0.55 * g("kast") + 0.45 * ROLE_COMM[r["role"]], q)),
+            "igl": scale(axis(0.4 * g("apr") + 0.3 * g("kast") + 0.3 * ROLE_COMM[r["role"]], q),
+                         35, 84),
+        }
+        # 次级和一级有差距. The sub-tier translation (R x0.831 and friends)
+        # is measured on the players who got called up, so it errs low, and
+        # ranked in one pool a Challengers star on a translated 1.00 sat
+        # level with a VCT starter on 1.00 — the tier-two table held 88s and
+        # 90s above the tier-one median. A player at a tier-two club with no
+        # recent tier-one evidence (fewer than 300 recency-weighted VCT
+        # rounds) has every attribute pulled toward 60 by a quarter: 89
+        # becomes 82, 67 becomes 65. On the attributes, not the overall, so
+        # the in-game recompute cannot undo it. "Recent" means this season:
+        # a full split at tier one this year (600 rounds) and the numbers
+        # speak for themselves; a play-in's worth, or last year's, and the
+        # club he is at now is the better witness — unless that club itself
+        # played VCT this season (VCT_NOW), which is tier-one strength.
+        if r["tag"] not in T1_TAGS and r["tag"] not in VCT_NOW and t1_now.get(ign, 0.0) < 600:
+            a = {k: int(clamp(round(60 + (v - 60) * 0.75), 20, 99)) for k, v in a.items()}
+        w = ROLE_WEIGHT.get(r["role"], ATTR_WEIGHT)
+        ovr = sum(a[k] * w.get(k, ATTR_WEIGHT[k]) for k in ATTRS)
+        # Turning up at Champions is the hardest thing to fake, and a career
+        # average buries it: ZmjjKK's best ACS comes at the biggest events.
+        # Turning up at Champions is real but it is not any single attribute,
+        # so it is carried as its own term rather than folded into `overall` —
+        # otherwise the first recompute in-game (training, ageing, covering a
+        # second role) silently threw it away.
+        lift, big_rounds = stage.get(ign) or (None, 0.0)
+        # the same shrink every other stat gets: half weight at 400 rounds,
+        # so a small international sample nudges rather than decides
+        stage_w = big_rounds / (big_rounds + SHRINK_ROUNDS)
+        stage_bonus = round(clamp((lift - 1) * 26 * stage_w, -4, 5), 2) if lift is not None else 0.0
+        # and the titles ride in the same term, for the same reason
+        stage_bonus = round(stage_bonus + title_credit(ign, r["nat"]), 2)
+        ovr = int(round(clamp(ovr + stage_bonus, 30, 97)))
+
+        lp = births.get(ign) or {}
+        if homonym(ign):
+            # the page under this handle is about the other man; the name vlr
+            # gives is all that is known, and the age stays a guess
+            lp = {"real": homonym(ign).get("real")}
+        if lp and not same_person(lp, r["nat"], (vlr_prof.get(ign) or {}).get("real") or vlr_names.get(ign)):
+            # a real page about a different real person is worse than no page
+            wrong_person.append((ign, r["nat"], lp.get("country")))
+            lp = {}
+        raw_birth = lp.get("birth")
+        age = age_from(raw_birth)
+        estimated = age is None
+        if estimated:
+            # Some infoboxes give a year and nothing else ("1999-??-??"). That
+            # is real knowledge and beats a draw from the age distribution — but
+            # it is not a date, so it must not be published as one.
+            # The draw is taken whether or not it is used, so the rolls after
+            # it (headroom, form, morale, loyalty) stay where every save has
+            # them; a player with a real birthdate never drew, and still does not.
+            drawn = int(clamp(round(rng.norm(23.2, 2.7)), 17, 33))
+            m = re.match(r"^(\d{4})", str(raw_birth or ""))
+            debut = first_event.get(ign.lower())
+            age = (SEASON_YEAR - int(m.group(1)) if m
+                   else DEBUT_AGE.get(debut, 18) + (SEASON_YEAR - debut) if debut
+                   else drawn)
+        else:
+            ages_known += 1
+        age = int(clamp(age, 15, 40))
+        # only a full date is a birthdate; a partial one is dropped rather than
+        # shown to the player as "1999-??-??"
+        birth = raw_birth if not estimated else None
+
+        head = (rng.range(7, 16) if age <= 20 else rng.range(3, 10) if age <= 23
+                else rng.range(1, 5) if age <= 26 else rng.range(0, 2))
+
+        # how long they have been at their club, for team-mate chemistry.
+        # Liquipedia gives the whole history; the open-ended stint is current.
+        stints = [] if homonym(ign) else (tenure.get(ign) or [])
+        current = [x for x in stints if not x.get("to")]
+        joined = current[0]["from"][:7] if current else None
+
+        built[ign] = {
+            "ign": ign, "tag": r["tag"], "nat": r["nat"], "role": r["role"],
+            "joined": joined,
+            "traits": traits,
+            # Liquipedia sometimes fills the name field with the handle when no
+            # real name is public (Neon). Repeating it back reads as "Neon
+            # (Neon)"; not knowing is the honest answer.
+            "realName": (lp.get("real") or vlr_names.get(ign) or None)
+            if str(lp.get("real") or "").lower() != ign.lower() else None,
+            "birth": birth,
+            "age": age, "ageEstimated": estimated,
+            "attrs": a, "overall": ovr, "stageBonus": stage_bonus,
+            "agentUse": (agent_use.get(ign.lower()) or r.get("hand_use") or {}).get("use") if ign.lower() in agent_use else (r.get("hand_use") or None),
+            "agentR": (agent_use.get(ign.lower()) or {}).get("R") or None,
+            "potential": int(clamp(round(ovr + head), ovr, 99)),
+            "form": form_for(ign, rng),
+            "morale": int(clamp(round(rng.norm(75, 8)), 45, 98)),
+            "fatigue": int(clamp(round(rng.range(0, 20)), 0, 100)),
+            "loyalty": int(clamp(round(rng.norm(60, 16)), 15, 95)),
+            "ambition": int(clamp(round(rng.norm(62, 15)), 15, 98)),
+            "rounds": int(stat_by_ign.get(ign, {}).get("rnd") or 0),
+            "vlr": {"rating": r["R"], "acs": r["acs"], "rounds": r["rnd"]},
+        }
+        by_tag[r["tag"]].append(built[ign])
+
+    out_players, out_teams = [], []
+    stale_igl, guessed_igl = [], []
+    # every alias already given a club, lowercased: the same person must not
+    # appear twice because two sources spelled them Juicy and juicy
+    placed = set()
+    used_tags = set()
+
+    # Ids survive a rebuild. Card collections are keyed p:P<n>, career saves
+    # hold teamIds, and the market escrows by card id — renumbering on every
+    # build would turn every one of those into a different person. So a
+    # player keeps the id the last world gave him (by handle), a club keeps
+    # its id (by tag and name), and only someone new gets a fresh number
+    # above everything ever issued.
+    prev = load_json(OUT) if os.path.exists(OUT) else {}
+    prev_pid = {p["ign"].lower(): p["id"] for p in prev.get("players") or []}
+    prev_tid = {(t["tag"], t["name"]): t["id"] for t in prev.get("teams") or []}
+    prev_tid_tag = {}
+    for t in prev.get("teams") or []:
+        prev_tid_tag.setdefault(t["tag"], t["id"])
+
+    def _next(prefix, taken):
+        n = max([int(x[1:]) for x in taken if x[1:].isdigit()] + [-1]) + 1
+        while f"{prefix}{n}" in taken:
+            n += 1
+        return f"{prefix}{n}"
+    issued_p = set(prev_pid.values())
+    issued_t = set(prev_tid.values())
+    kept_ids = 0
+
+    def emit(p, team_id, tier, region):
+        nonlocal kept_ids
+        if p["ign"].lower() in dropped:
+            return
+        pid = prev_pid.get(p["ign"].lower())
+        if pid and pid in issued_p and pid not in {r["id"] for r in out_players}:
+            kept_ids += 1
+        else:
+            pid = _next("P", issued_p | {r["id"] for r in out_players})
+        issued_p.add(pid)
+        rec = {
+            "id": pid, "ign": p["ign"], "teamId": team_id, "region": region,
+            "nat": p["nat"], "realName": p["realName"], "birth": p["birth"],
+            "joined": p.get("joined"),
+            "rounds": p.get("rounds") or 0,
+            "role": p["role"], "roles": [p["role"]], "flex": False,
+            "traits": p.get("traits") or [],
+            "agentPool": [], "roleSource": "vlr-primary",
+            "age": p["age"], "ageEstimated": p["ageEstimated"],
+            "isIgl": False, "attrs": dict(p["attrs"]), "overall": p["overall"],
+            "stageBonus": p.get("stageBonus", 0.0),
+            "potential": p["potential"], "form": p["form"], "morale": p["morale"],
+            "fatigue": p["fatigue"], "salary": salary_for(p["overall"], tier),
+            "value": value_for(p["overall"], p["age"], p["potential"]),
+            "contractYears": 0,   # dealt across the squad in deal_contract_years
+            "loyalty": p["loyalty"], "ambition": p["ambition"], "vlr": p["vlr"],
+        }
+        if p.get("agentUse"):
+            rec["agentUse"] = p["agentUse"]
+            if p.get("agentR"):
+                rec["agentR"] = p["agentR"]
+        out_players.append(rec)
+        return rec
+
+    # Clubs whose five is named by hand rather than read off a club tag.
+    #
+    # vlr.gg carries the Chinese second tier badly: it has no Challengers China
+    # to scrape, so a club's page is whatever somebody last edited. Victory No
+    # Limits' page lists the club's Game Changers side, which is how five women
+    # who have never played the men's circuit ended up as VLG's VCT roster;
+    # ODG's page is four names old; Rare Atom's counts its manager as a player.
+    # 号角 (web.haojiao.cc) has all three right, so the five is named here and
+    # the players are found by handle across the whole pool — a man whose
+    # scraped club tag says otherwise still lines up where he actually plays.
+    # Anyone the override drops is not deleted: he falls through to free
+    # agency like everybody else the tables do not place.
+    ov_rosters = {k.upper(): [str(n).lower() for n in v]
+                  for k, v in (load_json(OVERRIDES).get("rosters") or {}).items()}
+    by_ign = {}
+    for _grp in by_tag.values():
+        for _p in _grp:
+            by_ign.setdefault(_p["ign"].lower(), _p)
+
+    def add_team(tag, display, region, tier):
+        # A tag is not unique across tiers — Eternal Fire and Eintracht Frankfurt
+        # are both "EF" — so indexing squads by tag alone put one roster on two
+        # clubs. Anyone already placed is skipped.
+        squad_src, seen_here = [], set()
+        named = ov_rosters.get(tag.upper())
+        pool = [by_ign[n] for n in named if n in by_ign] if named else by_tag.get(tag, [])
+        if named:
+            missing = [n for n in named if n not in by_ign]
+            if missing:
+                print(f"  ! {tag}: named roster is missing {', '.join(missing)}")
+        for p in pool:
+            low = p["ign"].lower()
+            if low in placed or low in seen_here:
+                continue
+            seen_here.add(low)
+            squad_src.append(p)
+        if not named:
+            squad_src.sort(key=lambda x: -(x["vlr"]["rating"] or 0))
+        if len(squad_src) < 5:
+            return False
+        team_id = prev_tid.get((tag, display)) or prev_tid_tag.get(tag)
+        if not team_id or team_id in {t["id"] for t in out_teams}:
+            team_id = _next("T", issued_t | {t["id"] for t in out_teams})
+        issued_t.add(team_id)
+        used_tags.add(tag)
+        for p in squad_src[:7]:
+            placed.add(p["ign"].lower())
+        rng = Rng(seed_of("t:" + display))
+        squad = [emit(p, team_id, tier, region) for p in squad_src[:7]]
+        deal_contract_years(squad)
+
+        # vlr reports a player's most-played agent role, so a real squad can come
+        # back with two controllers and no sentinel — which is not a data error,
+        # it is how modern VALORANT works: players cover more than one role
+        # (smokes + sentinel being the classic pairing).
+        #
+        # So instead of overwriting anyone's real role, the duplicate keeps it and
+        # additionally covers whichever core role the squad is short of. Both are
+        # recorded in `roles`, and the engine treats every listed role as covered.
+        CORE = ["决斗者", "先锋", "控场", "哨卫"]
+        for p in squad:
+            p["roles"] = [p["role"]]
+
+        # Evidence first: a player's real agent pool tells us exactly which
+        # roles they cover, which neither vlr's single "most-played role" nor
+        # Liquipedia can express.
+        # (hand-verified sets win inside roles_for, for the players no table
+        # describes well)
+        pinned = set()
+        for p in squad:
+            roles, via = roles_for(p["ign"], p["role"])
+            if via == "vlr-primary":
+                continue              # nothing known beyond the role letter
+            p["agentPool"] = (pool_of(p["ign"]) or {}).get("agents") or []
+            p["roles"] = roles
+            p["role"] = roles[0]
+            p["flex"] = len(roles) > 1
+            p["roleSource"] = via
+            pinned.add(p["ign"])
+
+        seen = {}
+        dupes = []
+        for p in sorted(squad[:5], key=lambda x: -x["overall"]):
+            for r in p["roles"]:
+                seen.setdefault(r, p)
+            if p["ign"] in pinned:
+                continue
+            if seen.get(p["role"]) is not p:
+                dupes.append(p)
+        gaps = [r for r in CORE if r not in seen]
+        for p, gap in zip(dupes, gaps):
+            p["roles"] = [p["role"], gap]
+            p["flex"] = True
+            # covering a second role is a real skill: nudge the axes it leans on
+            if gap in ("控场", "哨卫"):
+                p["attrs"]["utility"] = int(clamp(p["attrs"]["utility"] + 3, 20, 99))
+            if gap == "哨卫":
+                p["attrs"]["awareness"] = int(clamp(p["attrs"]["awareness"] + 2, 20, 99))
+            p["overall"] = int(round(clamp(
+                sum(p["attrs"][k] * ROLE_WEIGHT.get(p["role"], ATTR_WEIGHT)[k] for k in ATTRS)
+            + p.get("stageBonus", 0.0), 30, 97)))
+
+        # The same nudge for a second role the data actually shows. Until the
+        # agent pools covered everyone, only a GUESSED second role earned it,
+        # so a real Cypher-and-Omen flex was rated as if he covered nothing
+        # and lost two points the day his pool was read.
+        for p in squad:
+            if p["ign"] not in pinned or len(p["roles"]) < 2:
+                continue
+            extra = [r for r in p["roles"][1:] if r in ("控场", "哨卫")]
+            if not extra:
+                continue
+            p["attrs"]["utility"] = int(clamp(p["attrs"]["utility"] + 3, 20, 99))
+            if "哨卫" in extra:
+                p["attrs"]["awareness"] = int(clamp(p["attrs"]["awareness"] + 2, 20, 99))
+            p["overall"] = int(round(clamp(
+                sum(p["attrs"][k] * ROLE_WEIGHT.get(p["role"], ATTR_WEIGHT)[k] for k in ATTRS)
+            + p.get("stageBonus", 0.0), 30, 97)))
+
+        # Who calls, in order of trust: a hand-verified override, then the
+        # `igl=` field on the club's Liquipedia infobox, then — only if neither
+        # exists — the most support-shaped player on the roster.
+        lp = coaches.get(tag) or coaches.get(display) or {}
+        override_key = tag if tag in ov_igl else display if display in ov_igl else None
+        named = ov_igl.get(override_key) if override_key else lp.get("igl")
+        explicitly_unknown = override_key is not None and not named
+        # an override may name two callers (TEC: Haodong and lucas); every
+        # name that is on the roster is flagged
+        names = named if isinstance(named, list) else [named] if named else []
+        igls = []
+        for name in names:
+            found = next((p for p in squad if p["ign"].lower() == str(name).lower()), None)
+            if found is not None:
+                igls.append(found)
+            else:
+                # The infobox named someone this club does not field. That is a
+                # conflict between two scraped facts, not an absence, and the
+                # build used to resolve it by quietly guessing — which is how
+                # JDG ended up calling through jkuro when Liquipedia said
+                # coconut (who plays elsewhere) and BerLIN actually calls.
+                stale_igl.append((tag, str(name)))
+        if not igls and not explicitly_unknown:
+            igls = [max(squad, key=lambda p: p["attrs"]["igl"] +
+                        (7 if p["role"] in ("控场", "哨卫", "先锋") else 0))]
+            guessed_igl.append(tag)
+        for igl in igls:
+            igl["isIgl"] = True
+            igl["iglSource"] = "verified" if named else "inferred"
+            igl["attrs"]["igl"] = int(clamp(igl["attrs"]["igl"] + 12, 40, 99))
+            # A club's trusted caller calls at the club's level. The attribute is
+            # derived from APR/KAST, and a real IGL's value is precisely what those
+            # numbers cannot see — Boaster's whole style is sacrificing his own
+            # line to run the team, which priced the FNATIC and EDG title-winning
+            # callers (Boaster 71, nobody 77) below mid-table fraggers. So the
+            # designated caller's igl is floored at his squad's strength: strong
+            # sides keep strong callers, weak sides keep modest ones, and nobody
+            # is lowered — a caller already rated above his club stays there.
+            top5 = sorted((q["overall"] for q in squad), reverse=True)[:5]
+            squad_level = sum(top5) / max(1, len(top5))
+            igl["attrs"]["igl"] = int(clamp(max(igl["attrs"]["igl"], round(squad_level)), 40, 96))
+            igl["attrs"]["communication"] = int(clamp(igl["attrs"]["communication"] + 4, 25, 99))
+            igl["overall"] = int(round(clamp(
+                sum(igl["attrs"][k] * ROLE_WEIGHT.get(igl["role"], ATTR_WEIGHT)[k] for k in ATTRS)
+                + igl.get("stageBonus", 0.0), 30, 97)))
+
+        # Potential was fixed before these bumps, so covering a second role or
+        # taking the armband could push a player above his own ceiling — four
+        # ended up there, which reads as "cannot improve" and draws a backwards
+        # bar. A ceiling is a floor of at least where you already are.
+        for p in squad:
+            p["potential"] = int(clamp(max(p["potential"], p["overall"]), 30, 99))
+
+        top5 = sorted(squad, key=lambda p: -p["overall"])[:5]
+        rating = int(round(sum(p["overall"] for p in top5) / len(top5)))
+
+        # a real coach if Liquipedia gave us one, otherwise no named coach at all
+        c = lp
+        coach = None
+        if c.get("name"):
+            coach = {
+                "name": c["name"],
+                "assistants": c.get("assistants") or [],
+                "tactics": int(clamp(round(rng.norm(rating - 6, 6)), 35, 95)),
+                "development": int(clamp(round(rng.norm(rating - 8, 7)), 30, 95)),
+                "motivation": int(clamp(round(rng.norm(rating - 7, 7)), 30, 95)),
+            }
+
+        out_teams.append({
+            "id": team_id, "name": display, "tag": tag, "region": region, "tier": tier,
+            "league": (f"VCT {region}" if tier == 1 else f"Challengers {region}"),
+            "rating": rating,
+            "budget": int(rng.range(2_000_000, 8_500_000) if tier == 1
+                          else rng.range(240_000, 900_000)),
+            "reputation": int(clamp(round(rating * (1.0 if tier == 1 else 0.72)), 20, 99)),
+            "roster": [p["id"] for p in squad],
+            "coach": coach,
+            # 94, not 95: 95 is the ceiling the 顶级设施 achievement is for,
+            # and a club that opens there has been handed it (T1 did, at 86)
+            "facilities": int(clamp(round(rng.norm(rating - (5 if tier == 1 else 18), 8)), 20, 94)),
+        })
+        return True
+
+    missing = []
+    for region, lst in TIER1.items():
+        for tag, full in lst:
+            if not add_team(tag, full, region, 1):
+                missing.append(f"{full} ({tag})")
+    for region, lst in TIER2.items():
+        for tag, full in lst:
+            add_team(tag, full, region, 2)
+
+    # every remaining real player becomes a free agent — nobody is invented
+    #
+    # A club whose five was named by hand is the exception to "the club is
+    # done, skip its group": the people the override left out have not been
+    # dealt with, and dropping them would delete real players from the world —
+    # VLG's Game Changers side has cards in people's collections. They fall
+    # through here like anybody else the tables do not place.
+    fa = 0
+    for tag, group in by_tag.items():
+        if tag in used_tags and tag.upper() not in ov_rosters:
+            continue
+        for p in group:
+            if p["ign"].lower() in placed:
+                continue
+            placed.add(p["ign"].lower())
+            # a free agent belongs to the region their club or passport says,
+            # not to whichever region happens to be first in the table
+            region = (
+                next((r for r, l in TIER1.items() if any(t == tag for t, _ in l)), None)
+                or next((r for r, l in TIER2.items() if any(t == tag for t, _ in l)), None)
+                or vcl_regions.get(tag)
+                or NAT_REGION.get((p.get("nat") or "").lower())
+            )
+            emit(p, None, 2, region or "Americas")
+            out_players[-1]["contractYears"] = 0
+            fa += 1
+
+    # analysts are a separate, genuinely scarce profession: Liquipedia records
+    # only a handful league-wide, and we do not invent the rest
+    # There are only a handful in the whole world, so rather than five rows that
+    # differ by a couple of points, each gets a distinct specialty and is worth
+    # hiring for a different reason.
+    SPECS = ["maps", "opponent", "potential", "economy", "review"]
+    analysts = []
+    for tag, rec in coaches.items():
+        for name in rec.get("analysts") or []:
+            rng = Rng(seed_of("an:" + name))
+            analysts.append({
+                "name": name,
+                "from": rec.get("team") or tag,
+                "tactics": int(clamp(round(rng.norm(72, 7)), 45, 90)),
+                "development": int(clamp(round(rng.norm(58, 8)), 35, 82)),
+                "motivation": int(clamp(round(rng.norm(56, 8)), 35, 80)),
+            })
+    # deterministic, and distinct: no two share a specialty while any are left
+    analysts.sort(key=lambda a: a["name"])
+    for i, a in enumerate(analysts):
+        a["spec"] = SPECS[i % len(SPECS)]
+
+    coached = sum(1 for t in out_teams if t["coach"])
+    world = {
+        "meta": {
+            "season": SEASON_YEAR,
+            "analysts": analysts,
+            "sources": {
+                "vlr.gg": "teams, rosters, nationalities, roles and all performance stats",
+                "liquipedia": "birthdates, real names, head coaches",
+            },
+            "derived": "attributes percentile-mapped from real per-round statistics",
+            "estimated": "contracts, salaries, budgets, facilities; ages where Liquipedia "
+                         "has no birthdate (flagged per player via ageEstimated)",
+            "everyoneReal": True,
+            "regions": list(TIER1.keys()),
+        },
+        "teams": out_teams,
+        "players": out_players,
+    }
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    json.dump(world, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+
+    t1 = [t for t in out_teams if t["tier"] == 1]
+    print(f"teams {len(out_teams)} (T1 {len(t1)}, T2 {len(out_teams) - len(t1)})")
+    print(f"players {len(out_players)} — all real, {fa} free agents, "
+          f"{kept_ids} ids kept from the previous world")
+    print(f"real birthdates {ages_known}/{len(rows)}   real coaches {coached}/{len(out_teams)}")
+    if wrong_person:
+        print(f"identity: dropped {len(wrong_person)} Liquipedia pages whose "
+              f"nationality contradicts vlr — same handle, different person: "
+              + ", ".join(f"{n}({v}!={c})" for n, v, c in wrong_person[:8]))
+    if stale_igl:
+        print(f"igl CONFLICT: {len(stale_igl)} clubs name an IGL who is not on "
+              f"their roster — guessed instead: "
+              + ", ".join(f"{t}({n})" for t, n in stale_igl))
+    print(f"igl: {len(out_teams) - len(guessed_igl)}/{len(out_teams)} named by a "
+          f"source, {len(guessed_igl)} inferred from the roster")
+    ov = sorted(p["overall"] for p in out_players)
+    print(f"overall min/med/max {ov[0]}/{ov[len(ov)//2]}/{ov[-1]}")
+    for region in TIER1:
+        rs = sorted([t for t in t1 if t["region"] == region], key=lambda x: -x["rating"])
+        print(f"  {region:9s} " + ", ".join(f"{t['tag']}({t['rating']})" for t in rs))
+    if missing:
+        print("MISSING tier-1 rosters:", missing)
+    print(f"size {os.path.getsize(OUT)/1024:.0f} KB")
+
+
+if __name__ == "__main__":
+    sys.exit(main())

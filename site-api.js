@@ -1,0 +1,734 @@
+/**
+ * The handful of things the owner changes without a deploy.
+ *
+ * Right now that is one thing: the WeChat group's QR code. WeChat's group
+ * codes expire after seven days — the image itself says so — so a QR checked
+ * into the repo is a QR that is wrong most of the time, and the only version
+ * that works is one the owner can swap from the admin page on a Monday.
+ *
+ * Stored in Postgres rather than on disk because Railway's filesystem is
+ * ephemeral: a file written by the running container is gone on the next
+ * deploy, which is exactly when nobody would notice it had vanished.
+ */
+import { createHash, timingSafeEqual } from 'node:crypto'
+import { battleCode, STAMINA_MAX, STAMINA_POINT_SEC } from './cards-api.js'
+
+/**
+ * Every pack the game has. A grant naming anything else is refused rather than
+ * written — a row holding a pack kind that does not exist would sit in
+ * somebody's inbox forever, collected and then silently dropped.
+ */
+export const PACK_KINDS = ['scout', 'elite', 'ten', 'coach', 'cn', 'pac', 'ame', 'emea', 'seoul2024', 'legend']
+
+export const SITE_SCHEMA = `
+create table if not exists site_config (
+  key      text primary key,
+  value    jsonb not null,
+  updated  timestamptz not null default now()
+);
+`
+
+/** A QR is a few tens of kilobytes; this is the point of refusing to look. */
+export const MAX_IMAGE = 600 * 1024
+
+const TYPES = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }
+
+/**
+ * Read a data: URL into bytes, or refuse.
+ *
+ * The admin page sends the file the owner picked as a data URL, because this
+ * server has no multipart parser and adding one for a single upload would be
+ * more code than the feature. Everything about the string is checked: the
+ * prefix, the declared type, the base64 alphabet, and the decoded size.
+ */
+export function readDataUrl(raw) {
+  const s = String(raw ?? '')
+  const m = /^data:([a-z/+-]+);base64,([A-Za-z0-9+/=]+)$/.exec(s)
+  if (!m) return null
+  const ext = TYPES[m[1]]
+  if (!ext) return null
+  let buf
+  try { buf = Buffer.from(m[2], 'base64') } catch { return null }
+  if (!buf.length || buf.length > MAX_IMAGE) return null
+  return { mime: m[1], ext, buf }
+}
+
+const same = (a, b) => {
+  const x = Buffer.from(String(a ?? ''))
+  const y = Buffer.from(String(b ?? ''))
+  return x.length > 0 && x.length === y.length && timingSafeEqual(x, y)
+}
+
+const hash = (id) => createHash('sha256').update(String(id)).digest('hex')
+
+export function makeSiteApi(sql, { readBody, json, token, normalizeId, displayName, engine, tokenFrom }) {
+  /** Cached in the process: the front page asks for this on every visit. */
+  let cache = null
+  let cachedAt = 0
+  const TTL = 30_000
+
+  async function read() {
+    if (!sql) return null
+    if (cache && Date.now() - cachedAt < TTL) return cache
+    const rows = await sql`select value, updated from site_config where key = 'wechat'`
+    cache = rows.length
+      ? { ...rows[0].value, updated: new Date(rows[0].updated).getTime() }
+      : { on: false, img: null, note: null, updated: 0 }
+    cachedAt = Date.now()
+    return cache
+  }
+
+  /** Everything the front page needs, and not one byte of image. */
+  async function status(res) {
+    const c = await read()
+    if (!c) { json(res, 200, { on: false }); return }
+    // `v` busts the image cache when the owner swaps the code, and is the only
+    // reason the front page needs to know when it was updated
+    json(res, 200, { on: !!c.on && !!c.img, note: c.note || null, v: c.updated || 0 })
+  }
+
+  /**
+   * The image itself, at its own URL.
+   *
+   * Deliberately not inlined into the status JSON: the front page asks for the
+   * status on every visit and opens the panel almost never, and a hundred
+   * kilobytes of base64 on every visit to a page that was just cut in half
+   * would be a poor trade.
+   */
+  async function image(res) {
+    const c = await read()
+    const data = c?.img ? readDataUrl(c.img) : null
+    if (!data) { res.writeHead(404, { 'Content-Type': 'text/plain' }).end('Not found'); return }
+    res.writeHead(200, {
+      'Content-Type': data.mime,
+      'Content-Length': data.buf.length,
+      // immutable against `?v=`, which changes whenever the owner uploads
+      'Cache-Control': 'public, max-age=604800',
+    })
+    res.end(data.buf)
+  }
+
+  /** Read it back for the admin page, image and all. */
+  async function adminRead(res) {
+    const c = await read()
+    json(res, 200, { ok: true, config: c ?? { on: false, img: null, note: null } })
+  }
+
+  async function write(req, res) {
+    if (!sql) { json(res, 503, { ok: false, why: 'no database' }); return }
+    let body
+    try { body = JSON.parse(await readBody(req, MAX_IMAGE + 8192)) } catch {
+      json(res, 400, { ok: false, why: '图太大或者格式不对' })
+      return
+    }
+    const cur = (await read()) ?? {}
+    const on = typeof body?.on === 'boolean' ? body.on : !!cur.on
+    const note = typeof body?.note === 'string' ? body.note.slice(0, 120) : (cur.note ?? null)
+    // an absent img means "leave the picture alone"; null means "remove it"
+    let img = cur.img ?? null
+    if (body?.img === null) img = null
+    else if (typeof body?.img === 'string') {
+      if (!readDataUrl(body.img)) {
+        json(res, 400, { ok: false, why: '只收 PNG / JPG / WebP，且不超过 600KB' })
+        return
+      }
+      img = body.img
+    }
+    const value = { on, img, note }
+    await sql`
+      insert into site_config (key, value, updated) values ('wechat', ${sql.json(value)}, now())
+      on conflict (key) do update set value = excluded.value, updated = now()`
+    cache = null
+    json(res, 200, { ok: true, config: { ...value, updated: Date.now() } })
+  }
+
+  /**
+   * Send a player something: a pack, some coins, or a card.
+   *
+   * The owner needs this for the ordinary reasons — an apology after a bug ate
+   * somebody's evening, a giveaway in the group — and doing it by hand in the
+   * database is both awkward and the sort of thing that goes wrong at 2am.
+   *
+   * It writes a row in card_mail rather than into the player's save, for the
+   * same reason everything else does: his client is the only thing allowed to
+   * edit his collection, and it collects the mail next time he opens the game.
+   *
+   * Addressed by 对战码 for preference. The full account id works too, because
+   * a player asking for help will usually paste that — but the id is the whole
+   * of his login, and the eight-character code is enough to find him.
+   *
+   * `who` can also be a list — a giveaway's winners pasted from a chat, or a
+   * file — one per line or split by commas and spaces. A list is all or
+   * nothing: one entry that finds nobody sends to nobody, so fixing it and
+   * sending again cannot hand anybody a second copy. The same account twice
+   * gets it once.
+   */
+  const GRANT_MAX = 200
+  async function findAccount(who) {
+    if (/^[0-9A-Fa-f]{8}$/.test(who)) {
+      const r = await sql`
+        select id_hash, name from card_accounts where left(id_hash, 8) = ${who.toLowerCase()} limit 2`
+      if (r.length > 1) return { why: '这个对战码对上了不止一个账号' }
+      return r[0] ? { target: r[0] } : { why: '找不到这个账号' }
+    }
+    if (who.toUpperCase().replace(/[^0-9A-Z]/g, '').length >= 20) {
+      const id = normalizeId(who)
+      if (!id) return { why: '账号 ID 格式不对' }
+      const r = await sql`select id_hash, name from card_accounts where id_hash = ${hash(id)}`
+      return r[0] ? { target: r[0] } : { why: '找不到这个账号' }
+    }
+    return { why: '填 8 位对战码，或者完整的账号 ID' }
+  }
+
+  /**
+   * findAccount for a whole list at once: the same answers, entry by entry,
+   * from one query over the 对战码 and one over the full ids.
+   */
+  async function findAccounts(list) {
+    const isCode = (w) => /^[0-9A-Fa-f]{8}$/.test(w)
+    const isId = (w) => !isCode(w) && w.toUpperCase().replace(/[^0-9A-Z]/g, '').length >= 20
+    const codes = [...new Set(list.filter(isCode).map((w) => w.toLowerCase()))]
+    const hashes = [...new Set(list.filter(isId).map((w) => normalizeId(w)).filter(Boolean).map((id) => hash(id)))]
+    const byCode = new Map()
+    if (codes.length) {
+      for (const r of await sql`
+        select id_hash, name, left(id_hash, 8) as code from card_accounts
+        where left(id_hash, 8) = any(${codes}::text[])`) {
+        byCode.set(r.code, [...(byCode.get(r.code) ?? []), { id_hash: r.id_hash, name: r.name }])
+      }
+    }
+    const byHash = new Map()
+    if (hashes.length) {
+      for (const r of await sql`select id_hash, name from card_accounts where id_hash = any(${hashes}::text[])`) {
+        byHash.set(r.id_hash, r)
+      }
+    }
+    return (who) => {
+      if (isCode(who)) {
+        const r = byCode.get(who.toLowerCase()) ?? []
+        if (r.length > 1) return { why: '这个对战码对上了不止一个账号' }
+        return r[0] ? { target: r[0] } : { why: '找不到这个账号' }
+      }
+      if (isId(who)) {
+        const id = normalizeId(who)
+        if (!id) return { why: '账号 ID 格式不对' }
+        const r = byHash.get(hash(id))
+        return r ? { target: r } : { why: '找不到这个账号' }
+      }
+      return { why: '填 8 位对战码，或者完整的账号 ID' }
+    }
+  }
+
+  async function grant(req, res) {
+    if (!sql) { json(res, 503, { ok: false, why: 'no database' }); return }
+    let body
+    try { body = JSON.parse(await readBody(req, 32_768)) } catch { json(res, 400, { ok: false }); return }
+
+    const whole = String(body?.who ?? '').trim()
+    // a field holding one id is one id, spaces and all: 「VM-4444 4444-…」 —
+    // unless a piece of it is a whole 对战码, which makes it a list
+    const parts = whole.split(/[\s,，;；、|]+/).filter(Boolean)
+    const list = normalizeId(whole) && !/[\n,，;；、|]/.test(whole) && !parts.some((t) => /^[0-9A-Fa-f]{8}$/.test(t))
+      ? [whole]
+      : parts
+    if (!list.length) { json(res, 200, { ok: false, why: '填 8 位对战码，或者完整的账号 ID' }); return }
+    if (list.length > GRANT_MAX) {
+      json(res, 200, { ok: false, why: `一次最多 ${GRANT_MAX} 个号，这里有 ${list.length} 个` })
+      return
+    }
+
+    const pack = body?.pack ? String(body.pack) : null
+    const count = Math.max(1, Math.min(50, Math.round(Number(body?.count) || 1)))
+    const coins = Math.max(0, Math.min(1_000_000, Math.round(Number(body?.coins) || 0)))
+    const cardId = body?.cardId ? String(body.cardId).slice(0, 40) : null
+    const note = typeof body?.note === 'string' ? body.note.slice(0, 80) : null
+    if (pack && !PACK_KINDS.includes(pack)) {
+      json(res, 200, { ok: false, why: `没有这种卡包（${PACK_KINDS.join(' / ')}）` })
+      return
+    }
+    // a card id that is not in the set would sit in the account as a card
+    // nothing can draw; refused here, and refused again when mail is applied
+    if (cardId && engine && !engine.cardById(cardId)) {
+      json(res, 200, { ok: false, why: `没有这张卡（${cardId}）——卡的 ID 是 p:P123 这种` })
+      return
+    }
+    if (!pack && !coins && !cardId) { json(res, 200, { ok: false, why: '什么都没填' }); return }
+
+    // Every entry resolved in two queries, not one each. One query per entry
+    // meant 35 turns in a four-connection pool's queue; on 2026-09-17, with
+    // the market sweeps holding it, that ran past the gateway's limit and the
+    // page was handed the gateway's HTML error instead of an answer.
+    const found = await findAccounts(list)
+    const targets = new Map()
+    const missed = []
+    for (const who of list) {
+      const f = found(who)
+      if (f.target) targets.set(f.target.id_hash, f.target)
+      // an id is the whole login: only its head goes back into the page
+      else missed.push({ who: who.length > 8 ? `${who.slice(0, 7)}…` : who, why: f.why })
+    }
+    if (list.length === 1 && missed.length) { json(res, 200, { ok: false, why: missed[0].why }); return }
+    if (missed.length) {
+      json(res, 200, {
+        ok: false,
+        why: `有 ${missed.length} 个号对不上，一个都没发：`
+          + missed.slice(0, 10).map((m) => `${m.who}（${m.why}）`).join('、')
+          + (missed.length > 10 ? ` 等` : ''),
+        missed,
+      })
+      return
+    }
+
+    await sql.begin(async (tx) => {
+      for (const t of targets.values()) {
+        await tx`
+          insert into card_mail (to_h, kind, card_id, coins, pack, count, body)
+          values (${t.id_hash}, 'grant', ${cardId}, ${coins}, ${pack}, ${count},
+                  ${sql.json({ note })})`
+      }
+    })
+    const names = [...targets.values()].map((t) => {
+      const shown = displayName(t.name, t.id_hash)
+      return `${shown.name} #${shown.tag}`
+    })
+    json(res, 200, {
+      ok: true,
+      to: names.length === 1 ? names[0] : `${names.length} 个号`,
+      accounts: names.length,
+      repeats: list.length - names.length,
+      names,
+      sent: { pack, count: pack ? count : undefined, coins: coins || undefined, cardId },
+    })
+  }
+
+  /**
+   * Take back the copies of a grant that went out more than once.
+   *
+   * 2026-09-17: a grant to 35 accounts timed out at the gateway while the
+   * market sweeps held the pool, the page said 「没发出去」, and every retry
+   * was in fact delivered — eight identical grants an account, none collected
+   * yet. Within the window given, grant mail to one account with the same
+   * contents is one grant: the copy already collected is the one kept (if a
+   * player opened one), otherwise the earliest, and only uncollected extras
+   * are deleted. `apply` false (the default) only counts.
+   */
+  async function grantDedupe(req, res) {
+    if (!sql) { json(res, 503, { ok: false, why: 'no database' }); return }
+    let body
+    try { body = JSON.parse(await readBody(req, 4096)) } catch { json(res, 400, { ok: false }); return }
+    const from = new Date(String(body?.from ?? ''))
+    const to = new Date(String(body?.to ?? ''))
+    if (!Number.isFinite(from.getTime()) || !Number.isFinite(to.getTime()) || to <= from) {
+      json(res, 200, { ok: false, why: '填起止时间（ISO）' })
+      return
+    }
+    if (to.getTime() - from.getTime() > 6 * 3600_000) {
+      json(res, 200, { ok: false, why: '窗口最多 6 小时' })
+      return
+    }
+    const apply = body?.apply === true
+    const out = await sql.begin(async (db) => {
+      const rows = await db`
+        select id, to_h, pack, count, coins, card_id, coalesce(body::text, '') as b, made, taken
+        from card_mail
+        where kind = 'grant' and made >= ${from.toISOString()} and made <= ${to.toISOString()}
+        order by made asc, id asc
+        for update`
+      const groups = new Map()
+      for (const r of rows) {
+        const k = [r.to_h, r.pack, r.count, r.coins, r.card_id, r.b].join('\u0000')
+        groups.set(k, [...(groups.get(k) ?? []), r])
+      }
+      const extra = []
+      const accounts = new Set()
+      const contents = new Map()
+      for (const g of groups.values()) {
+        if (g.length < 2) continue
+        const keep = g.find((r) => r.taken) ?? g[0]
+        const drop = g.filter((r) => r !== keep && !r.taken)
+        if (!drop.length) continue
+        accounts.add(g[0].to_h)
+        extra.push(...drop.map((r) => String(r.id)))
+        const what = `${g[0].pack ?? '-'}×${g[0].count} coins ${g[0].coins} card ${g[0].card_id ?? '-'}`
+        contents.set(what, (contents.get(what) ?? 0) + drop.length)
+      }
+      let removed = 0
+      if (apply && extra.length) {
+        const gone = await db`delete from card_mail where id = any(${extra}::bigint[]) and taken is null returning id`
+        removed = gone.length
+      }
+      return {
+        rows: rows.length, accounts: accounts.size, extra: extra.length, removed,
+        contents: Object.fromEntries(contents),
+        collectedCopies: rows.filter((r) => r.taken).length,
+      }
+    })
+    json(res, 200, { ok: true, apply, ...out })
+  }
+
+  /**
+   * Who the 体力 clock has caught, and second thoughts about it.
+   *
+   * GET lists them. POST with { who, clear: true } puts one back on the
+   * leaderboard, because the check is arithmetic and arithmetic has no idea
+   * whether somebody spent a weekend playing against a server that was down.
+   * A flag is a claim about a record, not about a person, and the owner has to
+   * be able to withdraw one — otherwise the honest answer to an appeal is
+   * editing the database by hand, which is how mistakes happen.
+   */
+  async function flagged(req, res) {
+    if (!sql) { json(res, 503, { ok: false, why: 'no database' }); return }
+
+    if (req.method === 'GET') {
+      const rows = await sql`
+        select id_hash, name, created, ladder_seen,
+               coalesce((state->'ladder'->>'wins')::int, 0) as wins,
+               coalesce((state->'ladder'->>'losses')::int, 0) as losses,
+               floor((${STAMINA_MAX}::int + extract(epoch from (now() - created)) / ${STAMINA_POINT_SEC}::int) / 2) as ceiling
+        from card_accounts
+        where suspect
+          and state->'ladder'->>'wins' ~ '^[0-9]{1,7}$'
+          and state->'ladder'->>'losses' ~ '^[0-9]{1,7}$'
+        order by (coalesce((state->'ladder'->>'wins')::int, 0)
+                + coalesce((state->'ladder'->>'losses')::int, 0))
+               - floor((${STAMINA_MAX}::int + extract(epoch from (now() - created)) / ${STAMINA_POINT_SEC}::int) / 2) desc
+        limit 100`
+      json(res, 200, {
+        ok: true,
+        flagged: rows.map((r) => {
+          const shown = displayName(r.name, r.id_hash)
+          const played = r.wins + r.losses
+          return {
+            who: battleCode(r.id_hash),
+            name: `${shown.name} #${shown.tag}`,
+            played, ceiling: Number(r.ceiling), over: played - Number(r.ceiling),
+            created: r.created,
+          }
+        }),
+      })
+      return
+    }
+
+    let body
+    try { body = JSON.parse(await readBody(req, 4096)) } catch { json(res, 400, { ok: false }); return }
+    const who = String(body?.who ?? '').trim()
+    if (!/^[0-9A-Fa-f]{8}$/.test(who)) { json(res, 200, { ok: false, why: '填 8 位对战码' }); return }
+    const on = body?.clear ? false : true
+    // Look before writing: eight hex characters can collide, and the update
+    // used to run against the prefix first and count the matches after, so
+    // a collision flagged (or pardoned) two accounts and then reported an
+    // error. Resolve the code to exactly one account, then write by its id.
+    const hits = await sql`
+      select id_hash, name from card_accounts where left(id_hash, 8) = ${who.toLowerCase()} limit 2`
+    if (!hits.length) { json(res, 200, { ok: false, why: '找不到这个账号' }); return }
+    if (hits.length > 1) { json(res, 200, { ok: false, why: '这个对战码对上了不止一个账号' }); return }
+    const target = hits[0].id_hash
+    // Clearing is a pardon, and a pardon has to move the origin the save
+    // check measures from — otherwise the very next save re-derives the same
+    // flag from the same record. Flagging by hand withdraws any pardon.
+    const r = on
+      ? await sql`
+          update card_accounts set suspect = true, pardon_seen = null, pardon_at = null
+          where id_hash = ${target}
+          returning id_hash, name`
+      : await sql`
+          update card_accounts
+             set suspect = false,
+                 pardon_seen = case when state->'ladder'->>'wins' ~ '^[0-9]{1,7}$'
+                                     and state->'ladder'->>'losses' ~ '^[0-9]{1,7}$'
+                                    then (state->'ladder'->>'wins')::int + (state->'ladder'->>'losses')::int
+                                    else 0 end,
+                 pardon_at = now()
+          where id_hash = ${target}
+          returning id_hash, name`
+    if (!r.length) { json(res, 200, { ok: false, why: '找不到这个账号' }); return }
+    const shown = displayName(r[0].name, r[0].id_hash)
+    json(res, 200, { ok: true, to: `${shown.name} #${shown.tag}`, suspect: on })
+  }
+
+  /**
+   * One account, as support needs to see it: what the player holds, what
+   * is on the shelf in their name, what has closed, what waits in the
+   * inbox. Read-only, by 对战码, behind the token like everything else
+   * here. Written for 「挂了一张金卡消失了」 — the answer was in three
+   * tables and there was no way to read them but a database console.
+   */
+  /**
+   * Search the card set by what the owner knows — an in-game ID, a real
+   * name, a club tag — so a card can be sent without knowing that ZmjjKK is
+   * p:P200. Twenty at most, strongest first.
+   */
+  let mythicList = null
+  const mythicIds = () => (mythicList ??= [...(engine?.PLAYER_CARDS ?? []), ...(engine?.COACH_CARDS ?? [])]
+    .filter((c) => c.rarity === 'mythic').map((c) => c.id))
+
+  async function cards(res, url) {
+    const q = String(url.searchParams.get('q') ?? '').trim().toLowerCase()
+    if (!q) { json(res, 200, { ok: true, cards: [] }); return }
+    const all = [...(engine?.PLAYER_CARDS ?? []), ...(engine?.COACH_CARDS ?? [])]
+    const text = (c) => [c.ign ?? c.name, c.realName, c.clubTag, c.id, c.legend?.title]
+      .filter(Boolean).join(' ').toLowerCase()
+    const hits = all.filter((c) => text(c).includes(q)).sort((a, b) => b.rating - a.rating).slice(0, 20)
+    json(res, 200, {
+      ok: true,
+      cards: hits.map((c) => ({
+        id: c.id, name: c.ign ?? c.name, real: c.realName ?? null, club: c.clubTag ?? null,
+        rating: c.rating, rarity: c.rarity, rarityCn: engine?.RARITY_CN?.[c.rarity] ?? c.rarity,
+        kind: c.kind, legend: c.legend?.title ?? null,
+      })),
+    })
+  }
+
+  async function account(res, url) {
+    const code = String(url.searchParams.get('code') ?? '').trim().toLowerCase()
+    if (!/^[0-9a-f]{8}$/.test(code)) { json(res, 200, { ok: false, why: '填 8 位对战码' }); return }
+    // The ladder and the account's own log ride along: the first question
+    // the owner gets asked about an account is 「段位怎么变了」, and the
+    // server's copy of the ladder — with its best division and the last
+    // sixty things that happened — is the only thing that can answer it.
+    const acc = await sql`
+      select id_hash, name, suspect, rev, created, seen, saved, ladder_seen, ladder_at,
+             (state->>'coins')::int as coins, (state->>'pulls')::int as pulls,
+             (state->>'mythicDry')::int as mythic_dry,
+             (select count(*)::int from jsonb_object_keys(coalesce(state->'cards', '{}'::jsonb))) as cards,
+             state->'ladder' as ladder,
+             state->'cards' as owned,
+             case when jsonb_typeof(state->'log') = 'array' then state->'log' else null end as log
+      from card_accounts where left(id_hash, 8) = ${code} limit 2`
+    if (!acc.length) { json(res, 200, { ok: false, why: '找不到这个账号' }); return }
+    if (acc.length > 1) { json(res, 200, { ok: false, why: '这个对战码对上了不止一个账号' }); return }
+    const a = acc[0]
+    const h = a.id_hash
+    const ign = (cardId) => (engine?.cardById?.(cardId)?.ign ?? engine?.cardById?.(cardId)?.name ?? cardId)
+    const rarityOf = (cardId) => engine?.cardById?.(cardId)?.rarity ?? null
+    // `other` is the account on the far side: who bought a listing that sold,
+    // who listed the card an offer was made on
+    const listings = await sql`
+      select l.id, l.card_id, l.level, l.ask, l.buyout, l.status, l.created, l.closed, l.ignored,
+             (select count(*)::int from card_offers o where o.listing = l.id and o.status = 'open') as offers,
+             (select count(*)::int from card_listings x where x.status = 'open' and x.created > l.created) as newer,
+             (select o.buyer_h from card_offers o where o.listing = l.id and o.status = 'accepted' limit 1) as other
+      from card_listings l where l.seller_h = ${h}
+      order by l.created desc limit 20`
+    const offers = await sql`
+      select o.id, o.listing, o.price, o.status, o.made, o.settled, l.card_id, l.seller_h as other
+      from card_offers o join card_listings l on l.id = o.listing
+      where o.buyer_h = ${h} order by o.made desc limit 20`
+    // Every sale this account stood on either side of. The twenty rows above
+    // could not say where a collection came from: the day this was written,
+    // six of one account's ten 彩卡 were older than the window, and a mail
+    // names the other side only by what that person typed into a box.
+    // One past the cap is read so the reply can say the list was cut. The
+    // first cap, 500, was passed by the very account this was written for, and
+    // its two oldest 彩卡 read 「应是开包开的」 because their trades were
+    // simply further back than the list went.
+    const TRADES_SHOWN = 2000
+    const tradeRows = await sql`
+      select 'sell' as side, l.card_id, l.level, l.ask, l.buyout, l.created as listed,
+             o.settled as at, o.price, o.buyer_h as other
+      from card_listings l join card_offers o on o.listing = l.id and o.status = 'accepted'
+      where l.seller_h = ${h}
+      union all
+      select 'buy' as side, l.card_id, l.level, l.ask, l.buyout, l.created as listed,
+             o.settled as at, o.price, l.seller_h as other
+      from card_offers o join card_listings l on l.id = o.listing
+      where o.buyer_h = ${h} and o.status = 'accepted'
+      order by at desc nulls last limit ${TRADES_SHOWN + 1}`
+    const tradesCapped = tradeRows.length > TRADES_SHOWN
+    const trades = tradesCapped ? tradeRows.slice(0, TRADES_SHOWN) : tradeRows
+    const mail = await sql`
+      select id, kind, card_id, coins, made, taken from card_mail
+      where to_h = ${h} order by made desc limit 20`
+    // the two other ways a card leaves an account: handed to a friend, or
+    // swapped — 「我抽到过他，现在没了」 is answered here or nowhere
+    const gifts = await sql`
+      select id, card_id, claimed, sent as at, from_h = ${h} as outgoing,
+             case when from_h = ${h} then to_h else from_h end as other
+      from card_gifts where from_h = ${h} or to_h = ${h} order by sent desc limit 20`
+    const swaps = await sql`
+      select id, give_id, give_level, want_id, status, made, settled, from_h = ${h} as mine,
+             case when from_h = ${h} then to_h else from_h end as other
+      from card_swaps where from_h = ${h} or to_h = ${h} order by made desc limit 20`
+    const grants = await sql`
+      select card_id, made from card_mail
+      where to_h = ${h} and kind = 'grant' and card_id is not null order by made desc limit 50`
+    // The people on the far side, each with enough of their own account to
+    // tell a stranger from a second account of the same person: how old it
+    // is, whether it plays, what it holds, and whether it trades with anybody
+    // else at all.
+    const hashes = [...new Set([...listings, ...offers, ...trades, ...gifts, ...swaps]
+      .map((r) => r.other).filter(Boolean))]
+    const people = hashes.length ? await sql`
+      select a.id_hash, a.name, a.suspect, a.created, a.seen,
+             (a.state->>'coins')::int as coins, (a.state->>'pulls')::int as pulls,
+             a.state->'ladder' as ladder,
+             (select count(*)::int from jsonb_object_keys(coalesce(a.state->'cards', '{}'::jsonb)) k
+               where k = any(${mythicIds()})) as mythics,
+             (select count(*)::int from card_listings l
+                join card_offers o on o.listing = l.id and o.status = 'accepted'
+               where l.seller_h = a.id_hash)
+             + (select count(*)::int from card_offers o
+               where o.buyer_h = a.id_hash and o.status = 'accepted') as deals
+      from card_accounts a where a.id_hash = any(${hashes})` : []
+    const byHash = new Map(people.map((p) => [p.id_hash, p]))
+    const who = (other) => {
+      if (!other) return null
+      const them = displayName(byHash.get(other)?.name, other)
+      return { code: battleCode(other), name: `${them.name} #${them.tag}` }
+    }
+    const partners = new Map()
+    const partner = (other) => {
+      if (!partners.has(other)) {
+        partners.set(other, { buys: 0, sells: 0, paid: 0, received: 0, mythicIn: 0, mythicOut: 0, swaps: 0, gifts: 0 })
+      }
+      return partners.get(other)
+    }
+    for (const t of trades) {
+      const p = partner(t.other)
+      const mythic = rarityOf(t.card_id) === 'mythic'
+      if (t.side === 'buy') { p.buys++; p.paid += t.price; if (mythic) p.mythicIn++ }
+      else { p.sells++; p.received += t.price; if (mythic) p.mythicOut++ }
+    }
+    for (const w of swaps) if (w.status === 'done') partner(w.other).swaps++
+    for (const g of gifts) partner(g.other).gifts++
+    // Where each 彩卡 came from: the newest delivery of that card on record.
+    // One with none came out of a pack, and mythicDry — the server's own count
+    // of draws since the last 彩卡 — says whether that can have been recent.
+    const arrivals = [
+      ...trades.filter((t) => t.side === 'buy')
+        .map((t) => ({ cardId: t.card_id, how: 'buy', at: t.at, price: t.price, other: t.other })),
+      ...swaps.filter((w) => w.status === 'done')
+        .map((w) => ({ cardId: w.mine ? w.want_id : w.give_id, how: 'swap', at: w.settled, other: w.other })),
+      ...gifts.filter((g) => !g.outgoing && g.claimed)
+        .map((g) => ({ cardId: g.card_id, how: 'gift', at: g.claimed, other: g.other })),
+      ...grants.map((m) => ({ cardId: m.card_id, how: 'grant', at: m.made, other: null })),
+    ].sort((x, y) => new Date(y.at).getTime() - new Date(x.at).getTime())
+    const cameFrom = (cardId) => {
+      const r = arrivals.find((x) => x.cardId === cardId)
+      return r ? { how: r.how, at: r.at, price: r.price ?? null, who: who(r.other) } : null
+    }
+    const shown = displayName(a.name, h)
+    json(res, 200, {
+      ok: true,
+      who: `${shown.name} #${shown.tag}`, code: code.toUpperCase(), suspect: !!a.suspect,
+      coins: a.coins, pulls: a.pulls, cards: a.cards, mythicDry: a.mythic_dry ?? null,
+      rev: a.rev, created: a.created, seen: a.seen, saved: a.saved,
+      ladderSeen: a.ladder_seen, ladderAt: a.ladder_at,
+      ladder: a.ladder ?? null,
+      ladderName: a.ladder && engine?.rankName
+        ? engine.rankName(Number(a.ladder.div) || 0, Number(a.ladder.stars) || 0, Number(a.ladder.points) || 0)
+        : null,
+      wins: Number(a.ladder?.wins) || 0, losses: Number(a.ladder?.losses) || 0,
+      log: Array.isArray(a.log) ? a.log : [],
+      owned: Object.entries(a.owned ?? {}).map(([cardId, v]) => ({
+        cardId, card: ign(cardId), level: v?.level ?? 0, dupes: v?.dupes ?? 0,
+        rarity: rarityOf(cardId), got: v?.got ?? null,
+        ...(rarityOf(cardId) === 'mythic' ? { from: cameFrom(cardId) } : {}),
+      })),
+      gifts: gifts.map((g) => ({
+        id: String(g.id), card: ign(g.card_id), cardId: g.card_id, outgoing: g.outgoing, sent: g.at, claimed: g.claimed,
+        who: who(g.other),
+      })),
+      swaps: swaps.map((w) => ({
+        id: String(w.id), mine: w.mine, give: ign(w.give_id), giveLevel: w.give_level, want: ign(w.want_id),
+        status: w.status, made: w.made, settled: w.settled, who: who(w.other),
+      })),
+      listings: listings.map((l) => ({
+        id: String(l.id), card: ign(l.card_id), cardId: l.card_id, level: l.level, ask: l.ask, buyout: l.buyout ?? null,
+        status: l.status, created: l.created, closed: l.closed, ignored: l.ignored,
+        offers: l.offers, newerOpen: l.newer, who: who(l.other),
+      })),
+      offers: offers.map((o) => ({
+        id: String(o.id), listing: String(o.listing), card: ign(o.card_id), price: o.price,
+        status: o.status, made: o.made, settled: o.settled, who: who(o.other),
+      })),
+      tradesCapped,
+      trades: trades.map((t) => ({
+        side: t.side, cardId: t.card_id, card: ign(t.card_id), rarity: rarityOf(t.card_id),
+        rarityCn: engine?.RARITY_CN?.[rarityOf(t.card_id)] ?? null, level: t.level,
+        ask: t.ask, buyout: t.buyout ?? null, price: t.price, listed: t.listed, at: t.at, who: who(t.other),
+      })),
+      partners: [...partners].map(([other, p]) => {
+        const o = byHash.get(other)
+        return {
+          ...who(other), ...p,
+          account: o ? {
+            created: o.created, seen: o.seen, coins: o.coins, pulls: o.pulls, mythics: o.mythics,
+            matches: (Number(o.ladder?.wins) || 0) + (Number(o.ladder?.losses) || 0),
+            deals: o.deals, suspect: !!o.suspect,
+          } : null,
+        }
+      }).sort((x, y) => (y.paid + y.received) - (x.paid + x.received) || (y.buys + y.sells) - (x.buys + x.sells)),
+      mail: mail.map((m) => ({
+        id: String(m.id), kind: m.kind, card: m.card_id ? ign(m.card_id) : null, coins: m.coins,
+        made: m.made, taken: m.taken,
+      })),
+      untaken: mail.filter((m) => !m.taken).length,
+    })
+  }
+
+  return {
+    /** Returns true when it handled the request. */
+    async route(req, res, path, url) {
+      if (path === '/api/admin/account') {
+        if (!same(tokenFrom ? tokenFrom(req, url) : url.searchParams.get('token'), token) || !token) {
+          res.writeHead(404, { 'Content-Type': 'text/plain' }).end('Not found')
+          return true
+        }
+        if (req.method !== 'GET') { json(res, 405, { ok: false }); return true }
+        await account(res, url)
+        return true
+      }
+      if (path === '/api/admin/cards') {
+        if (!same(tokenFrom ? tokenFrom(req, url) : url.searchParams.get('token'), token) || !token) {
+          res.writeHead(404, { 'Content-Type': 'text/plain' }).end('Not found')
+          return true
+        }
+        if (req.method !== 'GET') { json(res, 405, { ok: false }); return true }
+        await cards(res, url)
+        return true
+      }
+      if (path === '/api/site/wechat') { await status(res); return true }
+      if (path === '/api/site/wechat.img') { await image(res); return true }
+      if (path === '/api/admin/flag') {
+        if (!same(tokenFrom ? tokenFrom(req, url) : url.searchParams.get('token'), token) || !token) {
+          res.writeHead(404, { 'Content-Type': 'text/plain' }).end('Not found')
+          return true
+        }
+        if (req.method !== 'GET' && req.method !== 'POST') { json(res, 405, { ok: false }); return true }
+        await flagged(req, res)
+        return true
+      }
+      if (path === '/api/admin/grant') {
+        if (!same(tokenFrom ? tokenFrom(req, url) : url.searchParams.get('token'), token) || !token) {
+          res.writeHead(404, { 'Content-Type': 'text/plain' }).end('Not found')
+          return true
+        }
+        if (req.method !== 'POST') { json(res, 405, { ok: false }); return true }
+        await grant(req, res)
+        return true
+      }
+      if (path === '/api/admin/grant_dedupe') {
+        if (!same(tokenFrom ? tokenFrom(req, url) : url.searchParams.get('token'), token) || !token) {
+          res.writeHead(404, { 'Content-Type': 'text/plain' }).end('Not found')
+          return true
+        }
+        if (req.method !== 'POST') { json(res, 405, { ok: false }); return true }
+        await grantDedupe(req, res)
+        return true
+      }
+      if (path === '/api/admin/wechat') {
+        // 404 rather than 401, like every other admin route here: an endpoint
+        // that admits it exists is an endpoint somebody comes back to
+        if (!same(tokenFrom ? tokenFrom(req, url) : url.searchParams.get('token'), token) || !token) {
+          res.writeHead(404, { 'Content-Type': 'text/plain' }).end('Not found')
+          return true
+        }
+        if (req.method === 'POST') await write(req, res)
+        else await adminRead(res)
+        return true
+      }
+      return false
+    },
+  }
+}

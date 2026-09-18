@@ -1,0 +1,15 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "// note": "Nixpacks installs dependencies in its own phase with a cache mount on node_modules/.cache. Running `npm ci` here as well fails with EBUSY trying to remove that mount, so this only builds.",
+    "buildCommand": "npm run build"
+  },
+  "deploy": {
+    "startCommand": "npm start",
+    "healthcheckPath": "/healthz",
+    "healthcheckTimeout": 300,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 3
+  }
+}

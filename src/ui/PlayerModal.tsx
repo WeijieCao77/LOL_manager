@@ -1,0 +1,430 @@
+import { useState } from 'react'
+import { natName } from '../engine/nat'
+import { AgentIcon, Bar, Face, Modal, OvrBadge, Radar, Roles, Traits, money, moneyFull, Potential } from './common'
+import ContractTerms, { OfferVerdict } from './ContractTerms'
+import { renewContract, renewalBlock } from '../engine/transfer'
+import { loyaltyOnListed } from '../engine/loyalty'
+import { SQUAD_ROLE_CN, defaultContract } from '../engine/types'
+import type { Contract } from '../engine/types'
+import { useGame } from './ctx'
+import { NO_ACTIONS_LEFT, spendAction } from '../engine/actions'
+import { logActivity } from '../engine/agenda'
+import { persuadeStay } from '../engine/season'
+import { useAction } from './useAction'
+import { appointIgl } from '../engine/world'
+import { callerOf } from '../engine/roster'
+import { ratingOf } from '../engine/match'
+import { expectedSalary, statLine } from '../engine/player'
+import { askingPrice } from '../engine/transfer'
+import { ATTR_CN, ATTR_KEYS, REGION_CN } from '../engine/types'
+import { agentCn } from '../engine/content'
+import { byPro, proLabel } from '../engine/agents'
+import { titleClub } from '../engine/history'
+import { BIRTHDAY, BIRTHDAY_CHOICE_CN, birthdayBlock, birthdayFor, handleBirthday } from '../engine/birthdays'
+import type { BirthdayChoice } from '../engine/birthdays'
+import type { Stats } from '../engine/types'
+
+export default function PlayerModal(
+  { playerId, onClose, startRenewing = false }:
+  { playerId: string; onClose: () => void; startRenewing?: boolean },
+) {
+  const { game, commit, toast } = useGame()
+  const act = useAction()
+  const p = game.players[playerId]
+  if (!p) return null
+  const team = p.teamId ? game.teams[p.teamId] : null
+  const mine = p.teamId === game.myTeam
+  // the club's named caller, and the IGLs by trade who back him up
+  const teamCaller = p.teamId ? callerOf(game, p.teamId) : undefined
+  const isMain = p.isIgl && teamCaller?.id === p.id
+  const isDeputy = p.isIgl && !!teamCaller && teamCaller.id !== p.id
+  const me = game.teams[game.myTeam]
+
+  const want = expectedSalary(p, me.tier)
+  const [renewing, setRenewing] = useState(startRenewing)
+  const [terms, setTerms] = useState<Contract>(() => ({
+    ...(p.contract ?? defaultContract(p.salary || want, 2)),
+    salary: Math.round((p.salary || want) * 1.08),
+    years: 2,
+  }))
+
+  const submitRenewal = () => {
+    const result = renewContract(game, p.id, terms)
+    if (!result.ok) {
+      toast(result.text)
+      return
+    }
+    setRenewing(false)
+    logActivity(game, 'transfer', `与 ${p.ign} 续约 ${terms.years} 年（年薪 ${money(terms.salary)}）`)
+    commit()
+    toast(result.text)
+  }
+
+  const toggleList = () => {
+    if (!spendAction(game, 'list')) { toast(NO_ACTIONS_LEFT); return }
+    p.listed = !p.listed
+    // Being put up for sale is the club telling him what he is worth to it,
+    // and taking him off the list afterwards does not unsay it.
+    // read before the charge, which is what sets the flag
+    const firstThisYear = p.loyaltyHitYear !== game.year
+    if (p.listed) loyaltyOnListed(game, p)
+    commit()
+    logActivity(game, 'transfer', p.listed ? `将 ${p.ign} 挂牌出售` : `取消 ${p.ign} 的挂牌`)
+    toast(p.listed
+      ? `${p.ign} 已挂牌，等其他俱乐部来问价。${firstThisYear ? '他的归属感掉了一截。' : ''}`
+      : `已取消 ${p.ign} 的挂牌。`)
+  }
+
+  return (
+    <Modal
+      wide
+      title={
+        <span className="row" style={{ gap: 10 }}>
+          <Face id={p.id} size={36} />
+          <span>{p.ign}</span>
+          <Roles p={p} />
+          <OvrBadge value={p.overall} />
+          {p.isIgl && (
+            <span className="tag" title={p.iglSource === 'inferred' ? '真实指挥未确认，暂由他代行'
+              : isMain ? '主指挥：在场上就由他喊话' : isDeputy ? '副指挥：主指挥不在场上时由他喊话' : '已确认的队内指挥'}>
+              {p.iglSource === 'inferred' ? '推定 IGL' : isMain ? '主指挥' : isDeputy ? '副指挥' : 'IGL'}
+            </span>
+          )}
+        </span>
+      }
+      onClose={onClose}
+    >
+      <div className="grid c2" style={{ marginBottom: 14 }}>
+        <div>
+          {(p.realName || p.nat) && (
+            <div className="small muted" style={{ marginBottom: 8 }}>
+              {p.realName}
+              {p.realName && p.nat ? ' · ' : ''}
+              {p.nat ? natName(p.nat) : ''}
+            </div>
+          )}
+          <div className="row wrap" style={{ gap: 7, marginBottom: 12 }}>
+            <span className="tag">{team?.name ?? '自由人'}</span>
+            <span className="tag">{REGION_CN[p.region]}</span>
+            <span className="tag" title={p.birth ? `生日 ${p.birth}` : '未收录生日，年龄为推算值'}>
+              {p.age} 岁{p.ageEstimated ? '（推算）' : ''}
+            </span>
+            <span className="tag">潜力 <Potential p={p} game={game} /></span>
+            {p.injuredUntil > game.day && (
+              <span className="tag warn">⚕ {p.injuryNote}（{p.injuredUntil - game.day} 天）</span>
+            )}
+            {p.listed && <span className="tag warn">已挂牌</span>}
+            {p.retiring && <span className="tag warn">📢 本赛季后退役</span>}
+          </div>
+          {mine && birthdayFor(game, p.id) && (() => {
+            const e = birthdayFor(game, p.id)!
+            const opts: [BirthdayChoice, string, string][] = [
+              ['wish', BIRTHDAY_CHOICE_CN.wish, `免费 · 士气 +${BIRTHDAY.wish.morale}，信任 +${BIRTHDAY.wish.trust}`],
+              ['gift', BIRTHDAY_CHOICE_CN.gift, `经理个人掏 $${BIRTHDAY.gift.price} · 士气 +${BIRTHDAY.gift.morale}，信任 +${BIRTHDAY.gift.trust}`],
+              ['party', BIRTHDAY_CHOICE_CN.party, `俱乐部经费 $${BIRTHDAY.party.cost.toLocaleString('en-US')} + 1 行动力 · 他士气 +${BIRTHDAY.party.morale}、信任 +${BIRTHDAY.party.trust}，全队士气 +${BIRTHDAY.party.squadMorale}，和他关系 +${BIRTHDAY.party.bond}`],
+              ['skip', BIRTHDAY_CHOICE_CN.skip, '什么也不发生'],
+            ]
+            const run = (c: BirthdayChoice) => {
+              const why = birthdayBlock(game, e.id, c)
+              if (why) { toast(why); return }
+              const go = () => {
+                const r = handleBirthday(game, e.id, c)
+                toast(r.text)
+                if (r.ok && c !== 'skip') logActivity(game, 'locker', `${p.ign} 生日：${BIRTHDAY_CHOICE_CN[c]}`)
+              }
+              if (c === 'party') act('venture', go)
+              else { go(); commit() }
+            }
+            const left = BIRTHDAY.WINDOW_DAYS - (game.day - e.day)
+            return (
+              <div className="panel own" style={{ marginBottom: 10 }}>
+                <div className="panel-head"><h2>🎂 {p.ign} {e.day === game.day ? '今天' : `${game.day - e.day} 天前`}过 {e.age} 岁生日</h2></div>
+                <div className="panel-body">
+                  <p className="small muted" style={{ marginTop: 0 }}>
+                    还有 {Math.max(0, left)} 天可以表示。礼物从经理个人钱包出，庆祝走俱乐部财务并花 1 行动力，钱不够就不会扣。
+                  </p>
+                  <div className="row wrap" style={{ gap: 6 }}>
+                    {opts.map(([key, label, hint]) => {
+                      const why = birthdayBlock(game, e.id, key)
+                      return (
+                        <button key={key} className="sm" title={why ?? hint} disabled={!!why && key !== 'skip'} onClick={() => run(key)}>
+                          {label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <div className="tiny faint" style={{ marginTop: 6 }}>{opts.map(([, l, h]) => `${l}：${h}`).join(' ｜ ')}</div>
+                </div>
+              </div>
+            )
+          })()}
+          {p.retiring && (
+            <div className="panel own" style={{ marginBottom: 12 }}>
+              <div className="panel-body">
+                <p className="small" style={{ margin: 0 }}>
+                  {p.ign} 已宣布本赛季结束后退役。
+                  {p.teamId === game.myTeam && !p.persuaded
+                    ? '只能谈一次，想清楚再选。'
+                    : p.teamId === game.myTeam
+                      ? '你已经和他谈过了。'
+                      : ''}
+                </p>
+                {p.teamId === game.myTeam && !p.persuaded && (
+                  <div className="row wrap" style={{ gap: 6, marginTop: 10 }}>
+                    {([
+                      ['heart', '动之以情', '不花钱，看交情和士气'],
+                      ['raise', `涨薪再战一年`, `年薪提到 ${money(Math.round(p.salary * 1.3))}，最容易点头`],
+                      ['bench', '转替补带新人', '让出首发位，带新人'],
+                      ['transfer', '成全他，挂牌转会', '必成，能收转会费'],
+                      ['accept', '同意退役', '必成，赛季末办退役仪式'],
+                    ] as const).map(([key, label, hint]) => (
+                      <button
+                        key={key}
+                        className={`sm${key === 'accept' || key === 'transfer' ? ' ghost' : ''}`}
+                        title={hint}
+                        onClick={() => act('persuade', () => {
+                          toast(persuadeStay(game, p.id, key))
+                          logActivity(game, 'squad', `与 ${p.ign} 谈退役：${label}`)
+                        })}
+                      >
+                        {label}
+                        <span className="tiny faint" style={{ display: 'block' }}>{hint}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          {p.traits?.length ? (
+            <div style={{ marginBottom: 12 }}>
+              <Traits traits={p.traits} />
+            </div>
+          ) : null}
+
+          {ATTR_KEYS.map((k) => (
+            <div key={k} className="row" style={{ gap: 10, marginBottom: 5 }}>
+              <span className="small muted" style={{ width: 34 }}>{ATTR_CN[k]}</span>
+              <Bar
+                value={p.attrs[k]}
+                color={p.attrs[k] >= 85 ? 'var(--accent)' : p.attrs[k] >= 72 ? 'var(--warn)' : 'var(--loss)'}
+              />
+              <span className="mono small" style={{ width: 22, textAlign: 'right' }}>{p.attrs[k]}</span>
+            </div>
+          ))}
+
+          <div className="grid c3" style={{ marginTop: 14, gap: 10 }}>
+            <Meter label="状态" v={p.form} />
+            <Meter label="士气" v={p.morale} />
+            <Meter label="体能" v={100 - p.fatigue} />
+          </div>
+        </div>
+
+        <div className="radar-wrap" style={{ flexDirection: 'column', gap: 10 }}>
+          <Radar
+            values={ATTR_KEYS.map((k) => p.attrs[k])}
+            labels={ATTR_KEYS.map((k) => ATTR_CN[k])}
+            size={236}
+          />
+          {/* 他练过哪些英雄、各练到多少——和训练页、各图预案里写的是同一个数 */}
+          {(() => {
+            const known = byPro(p, Object.keys(p.agentPro ?? {}).filter((a) => (p.agentPro?.[a] ?? 0) > 0))
+            return known.length > 0 && (
+              <div className="row wrap tiny muted" style={{ gap: 6, justifyContent: 'center', alignItems: 'center' }}>
+                <span>英雄熟练度：</span>
+                {known.map((a) => (
+                  <span key={a} className="row" style={{ gap: 3, alignItems: 'center' }}>
+                    <AgentIcon name={a} size={18} />{agentCn(a)} {proLabel(p, a)}
+                  </span>
+                ))}
+              </div>
+            )
+          })()}
+          {p.vlr?.rating != null && (
+            <div className="tiny faint center" style={{ lineHeight: 1.7 }}>
+              属性来源 · vlr.gg 2026 赛季<br />
+              Rating {p.vlr.rating.toFixed(2)}
+              {p.vlr.acs != null && <> · ACS {p.vlr.acs.toFixed(0)}</>}
+              {' '}· {p.vlr.rounds} 回合
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="grid c2">
+        <StatBlock title="本赛季" s={p.season} />
+        <StatBlock title="生涯" s={p.career} />
+      </div>
+
+      {/* What happened to him HERE — the titles the champion's roster was
+          credited with as they were won, at the club that won them, and the
+          clubs he has served since 2026. Separate from the real-world record
+          the 资料库 keeps; nothing from that page is mixed in, and an old
+          save's title that never recorded its club says so instead of
+          borrowing the club he is at today. */}
+      {(() => {
+        const titles = (p.titles ?? []).slice().reverse()
+        const stints = (p.clubHist ?? [])
+        return (
+          <div className="panel">
+            <div className="panel-head">
+              <h2>本存档荣誉 · 游戏内履历</h2>
+              <div className="spacer" />
+              <span className="tiny faint">2026 起在这个存档里发生的事，现实生涯在资料库</span>
+            </div>
+            <div className="panel-body">
+              {titles.length === 0 && stints.length === 0 && (
+                <p className="small muted" style={{ margin: 0 }}>还没有记录。</p>
+              )}
+              {titles.length > 0 && (
+                <div style={{ marginBottom: stints.length ? 10 : 0 }}>
+                  <div className="small muted" style={{ marginBottom: 4 }}>冠军 · {titles.length} 座{titles.some((t) => t.intl) && `，其中国际赛 ${titles.filter((t) => t.intl).length} 座`}</div>
+                  {titles.map((t, i) => (
+                    <div key={t.key ? `${t.key}-${t.year}` : i} className="small" style={{ padding: '2px 0' }}>
+                      🏆 {t.year} · {t.title}
+                      <span className="faint"> · {titleClub(game, t)}</span>
+                      {t.part === 'squad' && <span className="tag" style={{ marginLeft: 6 }}>替补席</span>}
+                      {!t.team && <span className="tiny faint">（早期存档，未记俱乐部）</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
+              {stints.length > 0 && (
+                <div>
+                  <div className="small muted" style={{ marginBottom: 4 }}>效力经历</div>
+                  <div className="row wrap" style={{ gap: 6 }}>
+                    {stints.map((s, i) => (
+                      <span key={i} className="chiplet">
+                        {game.teams[s.team]?.name ?? s.team}
+                        <span className="faint"> {s.from === s.to ? s.from : `${s.from}–${s.to}`}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      })()}
+
+      <div className="panel">
+        <div className="panel-head"><h2>合同</h2></div>
+        <div className="panel-body">
+          <div className="grid c4" style={{ gap: 12 }}>
+            <div className="stat"><span className="k">年薪</span><span className="v sm">{money(p.salary)}</span></div>
+            <div className="stat">
+              <span className="k">剩余年限</span>
+              <span className="v sm">{p.contractYears > 0 ? `${p.contractYears} 年` : '已到期'}</span>
+            </div>
+            <div className="stat"><span className="k">身价</span><span className="v sm">{money(p.value)}</span></div>
+            <div className="stat">
+              <span className="k">{mine ? '外队报价参考' : '要价'}</span>
+              <span className="v sm">{p.teamId ? money(askingPrice(p)) : '免签'}</span>
+            </div>
+          </div>
+          <div className="row wrap" style={{ gap: 8, marginTop: 14 }}>
+            <span className="tag">忠诚 {p.loyalty}</span>
+            <span className="tag">野心 {p.ambition}</span>
+            {p.contract && (
+              <>
+                <span className="tag">月薪 {money(Math.round(p.contract.salary / 12))}</span>
+                <span className="tag">奖金分成 {p.contract.bonusShare}%</span>
+                <span className="tag">承诺 {SQUAD_ROLE_CN[p.contract.promisedRole]}</span>
+                {!!p.contract.releaseClause && (
+                  <span className="tag warn">解约金 {money(p.contract.releaseClause)}</span>
+                )}
+                {p.contract.noPoach && <span className="tag">转会限制</span>}
+              </>
+            )}
+            {!!p.grievance && p.grievance > 15 && (
+              <span className="tag warn">不满 {Math.round(p.grievance)}</span>
+            )}
+          </div>
+          {renewing && mine && (
+            <div className="panel own" style={{ marginTop: 14 }}>
+              <div className="panel-head"><h2>续约谈判</h2></div>
+              <div className="panel-body">
+                <ContractTerms terms={terms} onChange={setTerms} want={want} />
+                <OfferVerdict state={game} player={p} team={me} terms={terms} />
+                <div className="row" style={{ gap: 10, marginTop: 16 }}>
+                  <button className="primary" disabled={!!renewalBlock(game, p.id, terms)} onClick={submitRenewal}>提交</button>
+                  <button onClick={() => setRenewing(false)}>取消</button>
+                  <span className="right tiny muted">
+                    立即支付 {moneyFull(terms.signingBonus)} · 合同总额 {moneyFull(terms.salary * terms.years)}
+                  </span>
+                </div>
+                {renewalBlock(game, p.id, terms) && <div className="tiny neg" style={{ marginTop: 8 }}>{renewalBlock(game, p.id, terms)}</div>}
+              </div>
+            </div>
+          )}
+          {mine && (
+            <div className="row wrap" data-tut="player-actions" style={{ gap: 8, marginTop: 14 }}>
+              <button className="primary sm" onClick={() => setRenewing(true)}>续约 / 谈条件</button>
+              <button className="sm" onClick={toggleList}>
+                {p.listed ? '取消挂牌' : '挂牌出售'}
+              </button>
+              {/* a deputy can be made the main caller too — with two IGLs
+                  by trade the button used to vanish for both of them */}
+              {!isMain && (
+                <button className="sm" title={`他的指挥属性 ${p.attrs.igl}`} onClick={() => {
+                  const msg = appointIgl(game, p.id)
+                  commit()
+                  logActivity(game, 'squad', `任命 ${p.ign} 为主指挥`)
+                  toast(msg)
+                }}>
+                  {p.isIgl ? '任命为主指挥' : '任命为指挥'}
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </Modal>
+  )
+}
+
+function Meter({ label, v }: { label: string; v: number }) {
+  return (
+    <div>
+      <div className="row" style={{ justifyContent: 'space-between' }}>
+        <span className="tiny muted">{label}</span>
+        <span className="tiny mono">{Math.round(v)}</span>
+      </div>
+      <Bar value={v} />
+    </div>
+  )
+}
+
+function StatBlock({ title, s }: { title: string; s: Stats }) {
+  const l = statLine(s)
+  if (!s.maps) {
+    return (
+      <div className="panel">
+        <div className="panel-head"><h2>{title}</h2></div>
+        <div className="empty">暂无出场记录。</div>
+      </div>
+    )
+  }
+  return (
+    <div className="panel">
+      <div className="panel-head"><h2>{title}</h2></div>
+      <div className="panel-body">
+        <div className="grid c4" style={{ gap: 10 }}>
+          <div className="stat"><span className="k">评分</span><span className="v sm">{ratingOf(s).toFixed(2)}</span></div>
+          <div className="stat"><span className="k">ACS</span><span className="v sm">{l.acs.toFixed(0)}</span></div>
+          <div className="stat"><span className="k">K/D</span><span className="v sm">{l.kd.toFixed(2)}</span></div>
+          <div className="stat"><span className="k">ADR</span><span className="v sm">{l.adr.toFixed(0)}</span></div>
+        </div>
+        <div className="row wrap tiny muted" style={{ gap: 12, marginTop: 12 }}>
+          <span>场次 {s.maps}</span>
+          <span>击杀 {s.kills}</span>
+          <span>死亡 {s.deaths}</span>
+          <span>助攻 {s.assists}</span>
+          <span>首杀差 {s.firstKills - s.firstDeaths > 0 ? '+' : ''}{s.firstKills - s.firstDeaths}</span>
+          <span>残局 {s.clutches}</span>
+          <span>MVP {s.mvps}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
