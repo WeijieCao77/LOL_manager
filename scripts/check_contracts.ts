@@ -16,7 +16,7 @@ import { WORLD_TEAMS } from '../src/engine/teams'
 import { advanceDay, setupSeason } from '../src/engine/season'
 import { Rng } from '../src/engine/rng'
 
-const top = WORLD_TEAMS.find(t => t.tag === 'TYL')!   // a club that will not be sacked
+const top = WORLD_TEAMS.find(t => t.tag === 'TES')!   // a club that will not be sacked
 const g = createNewGame(top.id, '审计经理', 20260824)
 setupSeason(g)
 const rng = new Rng(11)

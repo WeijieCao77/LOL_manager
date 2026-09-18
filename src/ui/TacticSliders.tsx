@@ -5,9 +5,9 @@ export const SLIDERS: {
   key: keyof Tactics; label: string; lo: string; hi: string; hint: string
 }[] = [
   { key: 'pace', label: '节奏', lo: '慢速运营', hi: '快速突破', hint: '快节奏进攻更强，防守容易被拉扯。双决斗吃这个，双哨卫怕这个。' },
-  { key: 'utility', label: '道具', lo: '节省', hi: '全开', hint: '道具全开两端都强，道具属性高的五人收益更大；双控场靠它活。' },
+  { key: 'utility', label: '视野', lo: '节省', hi: '全开', hint: '视野投入前后期都有用，意识高的五人收益更大；正面团战的阵容靠它活。' },
   { key: 'aggression', label: '侵略性', lo: '保守', hi: '激进', hint: '激进进攻收益高，防守风险大；对面双决斗时别拉满。' },
-  { key: 'adaptability', label: '中局应变', lo: '照战术板', hi: '随机应变', hint: '应变能力依赖指挥（IGL），落后时更容易翻盘。' },
+  { key: 'adaptability', label: '中局应变', lo: '照战术板', hi: '随机应变', hint: '应变靠全队的运营和心态，落后时更容易翻盘。' },
 ]
 
 export const DEFAULT_TACTICS: Tactics = {

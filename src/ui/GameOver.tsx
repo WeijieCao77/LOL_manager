@@ -36,8 +36,8 @@ export default function GameOver({ onRestart }: { onRestart: () => void }) {
   const [{ earned, fresh, unlocked }] = useState(() => {
     const list = game.finished ? endingsFor(game) : []
     // The same list the endings judge by, not a second regex that happens to
-    // agree. They did not agree: this one matched 'VALORANT Champions' while
-    // the endings asked for 'Champions', so the profile could say 「十座国际
+    // agree. They did not agree: this one matched '全球总决赛' while
+    // the endings asked for '全球总决赛', so the profile could say 「十座国际
     // 冠军」 on a career the verdict called 「一座也没有」.
     const worlds = game.honours.filter((h) =>
       (INTL_TITLES as readonly string[]).includes(h.title)).length

@@ -2,7 +2,7 @@
  * Can every one of them actually happen?
  *
  * This exists because of the bug that got through: season.ts handed out
- * 'VALORANT Champions' while the verdicts asked for 'Champions', so eight
+ * '全球总决赛' while the verdicts asked for '全球总决赛', so eight
  * endings and two achievements were unreachable and nothing failed. The test
  * suite could not see it, because check_endings.ts built its careers by
  * awarding itself the same constant the conditions read — the test and the
@@ -50,11 +50,11 @@ const store = new Map<string, string>()
 
 const CAREERS = Number(process.argv[2] ?? 4)
 // Two of these start in the second tier on purpose. A harvest made only of
-// top-flight careers never writes a Challengers or an 晋级 title, so the
+// top-flight careers never writes a 次级联赛 or an 晋级 title, so the
 // vocabulary it produces cannot express three badges and an ending that a
 // real player reaches by taking a smaller job.
-const TAGS = ['TYL', 'PRX', 'FNC', 'NRG', 'SEN', 'T1', 'EDG', 'G2']
-const LOWER = ['M80', 'SRB']
+const TAGS = ['TES', 'GEN', 'FNC', 'TL', 'FLY', 'T1', 'BLG', 'G2']
+const LOWER = ['CNV', 'FK']
 
 // ---------------------------------------------------------------- harvest
 
@@ -193,7 +193,7 @@ function harvest(): void {
 
       // The vocabulary is every trophy the engine CREATES, not the subset this
       // particular career happened to win. Reading it off `honours` made the
-      // audit's answer depend on whether the simulated manager won Champions
+      // audit's answer depend on whether the simulated manager won 全球总决赛
       // that decade — one unlucky batch of seeds and eight endings were
       // reported unreachable. `comps` is what the season actually builds, and
       // settleCompetition writes exactly these names into honours.
@@ -228,7 +228,7 @@ function harvest(): void {
     }
 
     for (const e of endingsFor(g)) seen.firedEnding.add(e.key)
-    const worlds = g.honours.filter((h) => /Masters|Champions/i.test(h.title)).length
+    const worlds = g.honours.filter((h) => /国际赛|全球总决赛/i.test(h.title)).length
     seen.records.push({
       careers: 1, finished: g.finished ? 1 : 0, sacked: g.finished ? 0 : 1,
       titles: g.honours.length, worldTitles: worlds, bestHaul: g.honours.length,
@@ -248,11 +248,11 @@ function vocabulary() {
   const all = [...seen.titles]
   return {
     all,
-    intl: all.filter((t) => /Masters|Champions/i.test(t) && !/Challengers/i.test(t)),
-    masters: all.filter((t) => /Masters/i.test(t)),
-    champions: all.filter((t) => /Champions/i.test(t) && !/Challengers/i.test(t) && !/Masters/i.test(t)),
-    regional: all.filter((t) => /Kickoff$/.test(t) || /Stage \d$/.test(t)),
-    challengers: all.filter((t) => /^Challengers/.test(t)),
+    intl: all.filter((t) => /国际赛|全球总决赛/i.test(t) && !/次级联赛/i.test(t)),
+    masters: all.filter((t) => /国际赛/i.test(t)),
+    champions: all.filter((t) => /全球总决赛/i.test(t) && !/次级联赛/i.test(t) && !/国际赛/i.test(t)),
+    regional: all.filter((t) => /第一赛段$/.test(t) || /Stage \d$/.test(t)),
+    challengers: all.filter((t) => /^次级联赛/.test(t)),
     ascension: all.filter((t) => /晋级/.test(t)),
   }
 }
@@ -260,7 +260,7 @@ function vocabulary() {
 /** A state assembled only out of harvested material. */
 function scaffold(): GameState {
   const g = createNewGame(
-    WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '构造',
+    WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '构造',
     20260828, createManager('构造', 30, 'expro'),
   )
   setupSeason(g)
@@ -355,9 +355,9 @@ for (const a of RUN_ACHIEVEMENTS) {
   if (g.manager) {
     let rep = Math.max(M('managerRep'), g.manager.reputation)
     for (const h of g.honours) {
-      const worth = /Kickoff$|Stage \d$/.test(h.title) || /^Challengers/.test(h.title)
+      const worth = /第一赛段$|Stage \d$/.test(h.title) || /^次级联赛/.test(h.title)
         ? TITLE_REP_WORTH.regional
-        : /Masters|Champions/.test(h.title) ? TITLE_REP_WORTH.international : 0
+        : /国际赛|全球总决赛/.test(h.title) ? TITLE_REP_WORTH.international : 0
       if (worth) rep = Math.min(96, rep + damped(rep, worth))
     }
     g.manager.reputation = rep
@@ -381,7 +381,7 @@ for (const a of RUN_ACHIEVEMENTS) {
   }
   // what many such careers would add up to, and every club the world has.
   // International titles come from the same harvest the endings are built
-  // from — the Masters and Champions honour strings the engine was seen to
+  // from — the 国际赛 and 全球总决赛 honour strings the engine was seen to
   // write — not only from the handful of careers sampled here: six careers
   // can all miss an international (2026-09-08, one player's IGL flag moved
   // and every sampled career came out without one), and that is luck, not

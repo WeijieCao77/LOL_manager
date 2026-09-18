@@ -120,7 +120,7 @@ export default function Training() {
   const describe = () => {
     const d = game.drill
     const main = !d || d.kind === 'none' ? '不安排团队训练'
-      : d.kind === 'map' ? `跑图 ${[d.map, d.map2].filter((m): m is string => !!m).map(mapCn).join('＋')}`
+      : d.kind === 'map' ? `战术训练`
         : d.kind === 'review' ? '教练复盘'
           : d.picks.map((x) => `${game.players[x.playerId]?.ign} 练${agentCn(x.agent)}`).join('、')
     const duo = game.duo
@@ -165,9 +165,9 @@ export default function Training() {
         <div className="tiny faint" style={{ marginBottom: 6 }}>主训练 · 三选一</div>
         <div className="grid c3" style={{ gap: 12 }}>
           <div className="drill-card">
-            <b>跑图</b>
+            <b>战术训练</b>
             <p className="tiny muted">
-              一周最多两张图。每张地图熟练度 <b>+2</b>（上限 95），阵容熟练度 +12；全队协同 <b>+9</b>、意识 <b>+5</b> 经验。
+              战术磨合度 <b>+2</b>（上限 95），正在练的那种打法的熟练度 +12；全队协同 <b>+9</b>、意识 <b>+5</b> 经验。
               四周没练也没打的图每周回落 {MAP_DECAY_PER_WEEK}（最低 {MAP_DECAY_FLOOR}），带 ↓ 的正在掉。
             </p>
             <div className="row wrap" style={{ gap: 5 }}>
@@ -188,7 +188,7 @@ export default function Training() {
                         : picked.length < 2 ? [...picked, m] : [picked[0], m]
                       setDrill(
                         next.length ? { kind: 'map', map: next[0], map2: next[1] } : { kind: 'none' },
-                        `跑图 ${next.map(mapCn).join('＋')}`,
+                        `战术训练`,
                       )
                     }}>
                     {mapCn(m)} <span className="tiny faint">{Math.round(me.mapPrefs[m] ?? 50)}</span>
@@ -211,7 +211,7 @@ export default function Training() {
           <div className="drill-card">
             <b>教练复盘</b>
             <p className="tiny muted">
-              全队意识 <b>+6</b>、沟通 <b>+3</b> 经验，乘教练战术加成。指挥经验只有 IGL 拿，给得多，指挥越低涨得越快。不掉体能，还恢复 1~4。
+              全队意识 <b>+6</b>、协同 <b>+3</b> 经验，乘教练战术加成。运营人人都涨：队长拿全额，其余人四成，运营越低涨得越快。不掉体能，还恢复 1~4。
             </p>
             {/* Who is actually getting the 指挥 experience, and how far along
                 he is. The table below only ever showed the attribute a player
@@ -223,7 +223,7 @@ export default function Training() {
               if (!igl) {
                 return (
                   <p className="tiny" style={{ color: 'var(--warn)', margin: '0 0 8px' }}>
-                    队里还没有指挥，指挥经验没人拿。去「阵容」页指定一个。
+                    队里还没有任命队长。复盘时全队都涨运营，队长拿全额、其余人四成；去「阵容」页任命一个。
                   </p>
                 )
               }
@@ -244,7 +244,7 @@ export default function Training() {
                     </div>
                   ) : (
                     <div className="faint" style={{ marginTop: 3 }}>
-                      一轮约 <b>+{Math.round(per)}</b> 经验，再 <b>{rounds}</b> 轮（{rounds * 7} 天）指挥 +1。
+                      一轮约 <b>+{Math.round(per)}</b> 经验，再 <b>{rounds}</b> 轮（{rounds * 7} 天）运营 +1。
                     </div>
                   )}
                 </div>

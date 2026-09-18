@@ -399,8 +399,8 @@ export function buildLineup(
 
 /**
  * The year has three pool windows, the way Riot actually runs it: the pool
- * that opens the season, a rotation when Stage 1 begins, and another when
- * Stage 2 begins. Challengers events follow the same calendar days, so one
+ * that opens the season, a rotation when 第二赛段 begins, and another when
+ * 第三赛段 begins. 次级联赛 events follow the same calendar days, so one
  * phase covers everybody.
  */
 export type PoolPhase = 0 | 1 | 2
@@ -414,7 +414,7 @@ export const poolPhaseOf = (stage: StageKey): PoolPhase =>
  * The 7 maps in the active competitive pool, for a given window of the year.
  *
  * Phase 0 deals seven of the thirteen; each later phase swaps one or two of
- * them for benched maps, cumulatively — the Stage 2 pool is the Stage 1 pool
+ * them for benched maps, cumulatively — the 第三赛段 pool is the 第二赛段 pool
  * with its own swap on top, not a fresh deal. Deterministic in (seed, phase),
  * so every screen and both veto paths agree on what is legal today.
  */
@@ -1094,6 +1094,10 @@ export function stripRoundLogs(result: MatchResult): void {
   for (const m of result.maps) {
     delete m.rounds
     delete m.edge
+    // Other clubs' games lose the draft: twenty lines of text and ten bans a game is most of a
+    // megabyte over a season, and nothing reads another club's bans after the day they were made.
+    delete m.draftLog
+    delete m.bans
   }
 }
 
@@ -1158,6 +1162,8 @@ export function pruneMatchDetail(state: GameState): void {
       delete m.edge
       delete m.rounds
       delete m.agents
+      delete m.bans
+      delete m.draftLog
     }
   }
 }
@@ -1192,6 +1198,8 @@ export function stripToTheBone(state: GameState): void {
       delete m.edge
       delete m.rounds
       delete m.agents
+      delete m.bans
+      delete m.draftLog
     }
   }
   if (state.news.length > 100) state.news.splice(0, state.news.length - 100)

@@ -49,7 +49,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   if (!ok) bad++
 }
 const mk = (seed = 20260826): GameState => {
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '审计', seed)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '审计', seed)
   setupSeason(g)
   return g
 }

@@ -10,7 +10,7 @@ import { Rng } from '../src/engine/rng'
 import { exportSave, importSave } from '../src/engine/save'
 
 const mk = () => {
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '合同审计', 20260914)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '合同审计', 20260914)
   setupSeason(g)
   return g
 }

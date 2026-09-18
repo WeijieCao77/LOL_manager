@@ -9,7 +9,7 @@ import { WORLD_TEAMS } from '../src/engine/teams'
 import { createManager } from '../src/engine/manager'
 import { pitchSponsor, sponsorSlots, SPONSOR_MAX } from '../src/engine/commercial'
 
-const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
 const m = createManager('测试', 40, 'expro')
 const g = createNewGame(me.id, m.name, 7, m)
 const team = g.teams[g.myTeam]!

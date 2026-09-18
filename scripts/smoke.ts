@@ -24,7 +24,7 @@ const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
 const state: GameState = createNewGame(me.id, '测试经理', 12345)
 setupSeason(state)
 // Which league a stat line was earned in is the tier the club held when the
-// season began, not the one it holds after Ascension. REJECT farmed a second
+// season began, not the one it holds after 次级联赛总决赛. REJECT farmed a second
 // division all year and then won promotion; reading their tier at the end
 // filed those totals under VCT and blamed VCT's calibration for them.
 const startTier = new Map(Object.values(state.teams).map((t) => [t.id, t.tier]))

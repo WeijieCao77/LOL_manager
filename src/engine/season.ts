@@ -51,15 +51,15 @@ import {
 /**
  * The year, in days.
  *
- * The calendar ran 336 days with one stage hard against the next: Kickoff's
- * final on a Sunday, the Masters draw on Tuesday, Stage 1 opening the day
- * after the Masters final. A manager wrote that it was 「拥挤」 — no time to
+ * The calendar ran 336 days with one stage hard against the next: 第一赛段's
+ * final on a Sunday, the 国际赛 draw on Tuesday, 第二赛段 opening the day
+ * after the 国际赛 final. A manager wrote that it was 「拥挤」 — no time to
  * do business between competitions — and the sport itself does not play
  * like that. So the year is the whole year now, and the stages are shaped
  * like the real ones: a league plays twice a week for five weeks, then a
- * fortnight of playoffs, then three to four weeks off before the Masters,
+ * fortnight of playoffs, then three to four weeks off before the 国际赛,
  * with the market open through the break that leads into it — and three
- * weeks off after the Masters before the next league starts (see
+ * weeks off after the 国际赛 before the next league starts (see
  * LEAGUE_DAYS, and keepBreaks for the rule that holds it whatever happens).
  */
 export { SEASON_DAYS } from './clock'
@@ -67,18 +67,18 @@ export { SEASON_DAYS } from './clock'
 /**
  * The days each regional regular season is spread over.
  *
- * A Masters ends on day 92 and Masters II on 200 (Swiss round on the
+ * A 国际赛 ends on day 92 and MSI 季中冠军赛 on 200 (Swiss round on the
  * INTERNATIONAL_OPEN day, playoffs eight days later, a round every two
  * days), so the leagues after them open on 112 and 220: twenty days off,
- * about what the real circuit gives. Stage 1 used to open on 100 — eight
- * days after the Masters final — and, before the year was the whole year,
+ * about what the real circuit gives. 第二赛段 used to open on 100 — eight
+ * days after the 国际赛 final — and, before the year was the whole year,
  * on 89, the day after it.
  */
 export const LEAGUE_DAYS: Record<'kickoff' | 'stage1' | 'stage2' | 'challengers1' | 'challengers2', [number, number]> = {
   kickoff: [24, 38],
   stage1: [112, 147],
   stage2: [220, 255],
-  // The two Challengers splits used to run 28–112 and 216–256, which put a
+  // The two 次级联赛 splits used to run 28–112 and 216–256, which put a
   // hundred and four empty days between them — a tier-2 manager clicked
   // through three and a half months with nothing to play, every season. The
   // same twenty matches now sit either side of a break the length of the one
@@ -94,19 +94,19 @@ export type { StageDef }
 
 export const STAGES: StageDef[] = [
   { key: 'preseason', name: '季前准备', start: 0, end: 20 },
-  { key: 'kickoff', name: 'Kickoff', start: 21, end: 62 },
-  { key: 'masters1', name: 'Masters I', start: 63, end: 98 },
-  { key: 'stage1', name: 'Stage 1', start: 99, end: 164 },
-  { key: 'masters2', name: 'Masters II', start: 165, end: 214 },
-  { key: 'stage2', name: 'Stage 2', start: 215, end: 280 },
-  { key: 'champions', name: 'Champions', start: 281, end: 322 },
+  { key: 'kickoff', name: '第一赛段', start: 21, end: 62 },
+  { key: 'masters1', name: 'First Stand', start: 63, end: 98 },
+  { key: 'stage1', name: '第二赛段', start: 99, end: 164 },
+  { key: 'masters2', name: 'MSI 季中冠军赛', start: 165, end: 214 },
+  { key: 'stage2', name: '第三赛段', start: 215, end: 280 },
+  { key: 'champions', name: '全球总决赛', start: 281, end: 322 },
   { key: 'offseason', name: '休赛期', start: 323, end: SEASON_DAYS - 1 },
 ]
 
 /**
  * The earliest day each international opens on — the Swiss round of a
- * Masters, the groups of Champions. Each sits about a fortnight into its
- * stage, so the stage begins with a break. The playoffs of a Masters start
+ * 国际赛, the groups of 全球总决赛. Each sits about a fortnight into its
+ * stage, so the stage begins with a break. The playoffs of a 国际赛 start
  * eight days after its Swiss round.
  */
 export const INTERNATIONAL_OPEN: Record<'masters1' | 'masters2' | 'champions', number> = {
@@ -118,7 +118,7 @@ export const stageAt = (day: number): StageKey =>
 
 export const stageName = (key: StageKey, state?: { rulesetId?: GameState['rulesetId'] }): string =>
   (state ? stagesOf(state) : STAGES).find((s) => s.key === key)?.name ??
-  ({ challengers1: 'Challengers 第一赛段', challengers2: 'Challengers 第二赛段', ascension: 'Ascension' } as Record<string, string>)[key] ??
+  ({ challengers1: '次级联赛 · 上半年', challengers2: '次级联赛 · 下半年', ascension: '次级联赛总决赛' } as Record<string, string>)[key] ??
   key
 
 /** Display a day index as an in-fiction date. */
@@ -188,56 +188,56 @@ export function setupSeason(state: GameState, notes?: string[]): void {
     // through qualifiers rather than a league — the LCQ later, and LOCK//IN
     // once for everyone below
     if (book.lockin) {
-      const s1 = makeComp(state, 'stage1', region === LEGACY_2023_DOMESTIC ? '中国进化赛' : `VCT ${region} · 联赛`, t1, region, 1)
+      const s1 = makeComp(state, 'stage1', region === LEGACY_2023_DOMESTIC ? '中国进化赛' : `${region} 联赛`, t1, region, 1)
       state.fixtures.push(...scheduleRegularSeason(s1, 'stage1', ...LD.stage1, 3, rng, '常规赛', Math.max(1, t1.length - 1)))
       if (t2.length >= 2) {
-        const c1 = makeComp(state, 'challengers1', `Challengers ${region} · 第一赛段`, t2, region, 2)
+        const c1 = makeComp(state, 'challengers1', `${region} 次级联赛 · 上半年`, t2, region, 2)
         state.fixtures.push(...scheduleRegularSeason(c1, 'challengers1', ...LD.challengers1, 3, rng, '常规赛'))
-        const c2 = makeComp(state, 'challengers2', `Challengers ${region} · 第二赛段`, t2, region, 2)
+        const c2 = makeComp(state, 'challengers2', `${region} 次级联赛 · 下半年`, t2, region, 2)
         state.fixtures.push(...scheduleRegularSeason(c2, 'challengers2', ...LD.challengers2, 3, rng, '常规赛'))
       }
       continue
     }
 
-    // ---- vct-2026: Kickoff drawn as a twelve-team triple elimination; the
+    // ---- vct-2026: 第一赛段 drawn as a twelve-team triple elimination; the
     // two stages are shells until their groups are drawn (see openStage1Draw)
     if (drawRules(state) && t1.length === 12) {
-      const kc = makeComp(state, 'kickoff', `${region} Kickoff`, t1, region, 1)
+      const kc = makeComp(state, 'kickoff', `${region} 第一赛段`, t1, region, 1)
       openKickoffDraw(state, kc, false)
-      const s1 = makeComp(state, 'stage1', `VCT ${region} · Stage 1`, t1, region, 1)
+      const s1 = makeComp(state, 'stage1', `${region} 第二赛段`, t1, region, 1)
       s1.grouped = true
-      const s2 = makeComp(state, 'stage2', `VCT ${region} · Stage 2`, t1, region, 1)
+      const s2 = makeComp(state, 'stage2', `${region} 第三赛段`, t1, region, 1)
       s2.grouped = true
       if (t2.length >= 2) {
-        const c1 = makeComp(state, 'challengers1', `Challengers ${region} · 第一赛段`, t2, region, 2)
+        const c1 = makeComp(state, 'challengers1', `${region} 次级联赛 · 上半年`, t2, region, 2)
         state.fixtures.push(...scheduleRegularSeason(c1, 'challengers1', ...LEAGUE_DAYS.challengers1, 3, rng, '常规赛'))
-        const c2 = makeComp(state, 'challengers2', `Challengers ${region} · 第二赛段`, t2, region, 2)
+        const c2 = makeComp(state, 'challengers2', `${region} 次级联赛 · 下半年`, t2, region, 2)
         state.fixtures.push(...scheduleRegularSeason(c2, 'challengers2', ...LEAGUE_DAYS.challengers2, 3, rng, '常规赛'))
       }
       continue
     }
 
-    // ---- Kickoff: a short group phase, then a top-four knockout.
+    // ---- 第一赛段: a short group phase, then a top-four knockout.
     // A bare bracket meant the very first fixture of a career was a
     // quarter-final against a club you had never played, and the standings
     // stayed empty all the way through because knockouts do not build a table.
-    const kc = makeComp(state, 'kickoff', `${region} Kickoff`, t1, region, 1)
+    const kc = makeComp(state, 'kickoff', `${region} 第一赛段`, t1, region, 1)
     state.fixtures.push(...scheduleRegularSeason(kc, 'kickoff', ...LEAGUE_DAYS.kickoff, 3, rng, '小组赛', 5))
 
-    // ---- Stage 1 & Stage 2: full round robin, playoffs seeded from the table
-    const s1 = makeComp(state, 'stage1', `VCT ${region} · Stage 1`, t1, region, 1)
+    // ---- 第二赛段 & 第三赛段: full round robin, playoffs seeded from the table
+    const s1 = makeComp(state, 'stage1', `${region} 第二赛段`, t1, region, 1)
     state.fixtures.push(...scheduleRegularSeason(s1, 'stage1', ...LEAGUE_DAYS.stage1, 3, rng))
 
-    const s2 = makeComp(state, 'stage2', `VCT ${region} · Stage 2`, t1, region, 1)
+    const s2 = makeComp(state, 'stage2', `${region} 第三赛段`, t1, region, 1)
     state.fixtures.push(...scheduleRegularSeason(s2, 'stage2', ...LEAGUE_DAYS.stage2, 3, rng))
 
-    // ---- Challengers: two splits, running alongside the tier-1 calendar
-    // even a two-club Challengers league is playable now that small leagues cycle
+    // ---- 次级联赛: two splits, running alongside the tier-1 calendar
+    // even a two-club 次级联赛 league is playable now that small leagues cycle
     if (t2.length >= 2) {
-      const c1 = makeComp(state, 'challengers1', `Challengers ${region} · 第一赛段`, t2, region, 2)
+      const c1 = makeComp(state, 'challengers1', `${region} 次级联赛 · 上半年`, t2, region, 2)
       state.fixtures.push(...scheduleRegularSeason(c1, 'challengers1', ...LEAGUE_DAYS.challengers1, 3, rng, '常规赛'))
 
-      const c2 = makeComp(state, 'challengers2', `Challengers ${region} · 第二赛段`, t2, region, 2)
+      const c2 = makeComp(state, 'challengers2', `${region} 次级联赛 · 下半年`, t2, region, 2)
       state.fixtures.push(...scheduleRegularSeason(c2, 'challengers2', ...LEAGUE_DAYS.challengers2, 3, rng, '常规赛'))
     }
   }
@@ -261,7 +261,7 @@ const LEGACY_2023_DOMESTIC: Region = 'LPL'
  * single-elimination bracket, seeded by strength. startBracket already
  * builds and advanceBracket already drives a 32-team knockout — 32强 to
  * the final over five rounds, the final a BO5 — so the whole event is one
- * competition in the Kickoff slot, region-less.
+ * competition in the 第一赛段 slot, region-less.
  */
 function createLockIn(state: GameState): void {
   const league = REGIONS.filter((r) => r !== LEGACY_2023_DOMESTIC).flatMap((r) => tier1Of(state, r))
@@ -295,6 +295,8 @@ const byPoints = (state: GameState) => (x: string, y: string) =>
  * from the two smaller regions play the Swiss first. The world championship
  * is sixteen, weighted the way Worlds is.
  */
+/** whether a second-tier champion swaps places with the weakest first-tier side at the year's end */
+export const PROMOTION = false
 export const MAJOR_REGIONS: Region[] = ['LPL', 'LCK', 'LEC', 'LCS']
 export const CHAMPIONS_SLOTS: Record<Region, number> = { LPL: 4, LCK: 4, LEC: 3, LCS: 2, LCP: 2, CBLOL: 1 }
 
@@ -320,7 +322,7 @@ export function mastersField(state: GameState, feeder: StageKey): { byes: string
 }
 
 /**
- * Masters Tokyo's twelve: the three league champions and the LOCK//IN
+ * 国际赛 Tokyo's twelve: the three league champions and the LOCK//IN
  * winner (or, if he is also a league champion, his league's runner-up) go
  * straight to the playoffs; the other two from each of the three leagues
  * and the top two of China's domestic circuit open in the Swiss round —
@@ -342,8 +344,8 @@ function mastersField2023(state: GameState): { byes: string[]; swiss: string[] }
   // The LOCK//IN winner's league sends four. Both branches used to lose one:
   // a winner who also won his league left the fourth bye empty and pushed a
   // ninth into an eight-team Swiss, and a winner who finished second or third
-  // took his Swiss place with him — eleven either way, and a Masters of eleven
-  // never finishes its Swiss, so Tokyo, the LCQs and Champions never came.
+  // took his Swiss place with him — eleven either way, and a 国际赛 of eleven
+  // never finishes its Swiss, so Tokyo, the LCQs and 全球总决赛 never came.
   const lockin = state.comps.kickoff?.champion
   if (lockin) {
     const region = state.teams[lockin]?.region
@@ -372,10 +374,10 @@ function mastersField2023(state: GameState): { byes: string[]; swiss: string[] }
 }
 
 /**
- * The LCQs: in each league, the sides not already through to Champions —
+ * The LCQs: in each league, the sides not already through to 全球总决赛 —
  * everyone but the top three on the year's points — in one knockout; in
- * China, every club of the domestic circuit for the three Champions places.
- * Both live in the Stage 2 slot, so points, prizes and the schedule read
+ * China, every club of the domestic circuit for the three 全球总决赛 places.
+ * Both live in the 第三赛段 slot, so points, prizes and the schedule read
  * them as the stage they are.
  */
 function createLcqs(state: GameState, day: number): void {
@@ -391,15 +393,15 @@ function createLcqs(state: GameState, day: number): void {
     state.fixtures.push(...startBracket(comp, field, 'stage2', day, 3))
     state.news.push({
       day: state.day, kind: 'league', important: region === state.teams[state.myTeam]?.region,
-      text: `${comp.name}名单：${field.map((t) => state.teams[t]?.name).join('、')}${region === LEGACY_2023_DOMESTIC ? '，前三名去 Champions。' : '，冠军拿最后一个 Champions 名额。'}`,
+      text: `${comp.name}名单：${field.map((t) => state.teams[t]?.name).join('、')}${region === LEGACY_2023_DOMESTIC ? '，前三名去 全球总决赛。' : '，冠军拿最后一个 全球总决赛 名额。'}`,
     })
   }
 }
 
 /**
- * Champions' sixteen, per region and best first: the Stage 2 playoff's top
+ * 全球总决赛' sixteen, per region and best first: the 第三赛段 playoff's top
  * two go straight in, then the two highest on the season's points among the
- * rest. Callable before Stage 2 ends — the qualification panel asks it who
+ * rest. Callable before 第三赛段 ends — the qualification panel asks it who
  * is on course.
  */
 export function championsField(state: GameState): Record<Region, string[]> {
@@ -446,7 +448,7 @@ export function championsField(state: GameState): Record<Region, string[]> {
   return out
 }
 
-/** A Masters, opened on its Swiss round. */
+/** A 国际赛, opened on its Swiss round. */
 function createMasters(state: GameState, stage: StageKey, name: string, feeder: StageKey, day: number): void {
   if (state.comps[stage]) return
   const { byes, swiss } = mastersField(state, feeder)
@@ -466,7 +468,7 @@ function createMasters(state: GameState, stage: StageKey, name: string, feeder: 
   })
 }
 
-/** Champions, opened on its four groups — one team from each region in
+/** 全球总决赛, opened on its four groups — one team from each region in
  *  each, seed levels spread so no group holds two regional winners. */
 function createChampions(state: GameState, name: string, day: number): void {
   if (state.comps.champions) return
@@ -475,7 +477,7 @@ function createChampions(state: GameState, name: string, day: number): void {
   // than laid out: the fixed rotation this replaces put the same region in
   // the same seat every season, and the group was written in region order,
   // which is the order the GSL opener pairs on — so every group of every
-  // Champions opened 美洲一号 vs 中国四号 and EMEA vs 太平洋. Seed order now,
+  // 全球总决赛 opened 美洲一号 vs 中国四号 and EMEA vs 太平洋. Seed order now,
   // so the opener is the 1v4 and 2v3 a GSL group is supposed to be.
   const square = championsGroupSquare(new Rng(hashStr(`champions:${state.seed}:${state.year}:groups`)))
   let groups = square.map((row) =>
@@ -520,7 +522,7 @@ function createChampions(state: GameState, name: string, day: number): void {
 /**
  * Hand out the prizes when a competition ends.
  *
- * The board reacts to how we finished — a bottom-third finish at Masters by a
+ * The board reacts to how we finished — a bottom-third finish at 国际赛 by a
  * side the ratings had higher costs 7 confidence — and that reaction used to
  * happen off-screen: the only line written was who won the thing. Our own
  * finish and what it cost now go into the turn's digest. The stage we were
@@ -530,7 +532,7 @@ function createChampions(state: GameState, name: string, day: number): void {
  * 换一个版本。
  *
  * 教练给的节奏：一年一次大型更新（系统性，休赛期），中间以国际赛为版本分界线
- * 做中小型更新。所以这里挂在国际赛结算上，Champions 之后那次是大改。
+ * 做中小型更新。所以这里挂在国际赛结算上，全球总决赛 之后那次是大改。
  *
  * 只动现役图池里出场的英雄——没人玩的角色改了也没人知道。
  */
@@ -587,7 +589,7 @@ export function settleCompetition(state: GameState, comp: Competition, notes: st
     day: state.day, kind: 'league', important: true,
     text: `🏆 ${champ?.name} 夺得 ${comp.name} 冠军！`,
   })
-  // 版本以国际赛为分界线更替 —— 一年一次大改（Champions 之后，进休赛期），
+  // 版本以国际赛为分界线更替 —— 一年一次大改（全球总决赛 之后，进休赛期），
   // 中间的大师赛之后是中小改。地区赛不改版本。
   if (comp.stage === 'masters1' || comp.stage === 'masters2' || comp.stage === 'champions') {
     applyPatch(state, comp.stage === 'champions', notes, comp.stage)
@@ -678,7 +680,7 @@ export function settleCompetition(state: GameState, comp: Competition, notes: st
         // 董事会满意」and「📉 董事会不满（信任 -7）」in the same digest.
         notes.push(`🏁 ${rank}。董事会要求前 ${obj.placeAtLeast}，赛段结束再评。`)
       } else {
-        // An event nobody briefed us on — Masters, Champions, Ascension. The
+        // An event nobody briefed us on — 国际赛, 全球总决赛, 次级联赛总决赛. The
         // board reads it against the field: a top-third finish is good news
         // from anywhere, a bottom-third finish is only bad news when the
         // clubs' ratings said we should have done better. The fourth seed
@@ -842,8 +844,8 @@ function consumeDraw(state: GameState, comp: Competition, ev: DrawEvent): void {
 }
 
 /**
- * Kickoff's draw: last year's Champions sides sit out the opening round —
- * in a career's first season, the real Champions 2025 field from the
+ * 第一赛段's draw: last year's 全球总决赛 sides sit out the opening round —
+ * in a career's first season, the real 全球总决赛 2025 field from the
  * records — and the other eight are drawn into the four opening ties.
  */
 function openKickoffDraw(state: GameState, comp: Competition, auto: boolean): void {
@@ -858,12 +860,12 @@ function openKickoffDraw(state: GameState, comp: Competition, auto: boolean): vo
   comp.format = 'triple'
   comp.plannedStart = LEAGUE_DAYS.kickoff[0]
   const ev = drawKickoffBracket(state, comp, byes, first, LEAGUE_DAYS.kickoff[0])
-  ev.log.unshift(firstYear ? `轮空位给 2025 Champions 的参赛队：${last.map((t) => state.teams[t]?.tag).join('、')}` : `轮空位给上届 Champions 的参赛队：${last.map((t) => state.teams[t]?.tag).join('、')}`)
-  if (last.length < 4) ev.log.unshift(`上届 Champions 只有 ${last.length} 队仍在本赛区，其余轮空位按俱乐部声望补足`)
+  ev.log.unshift(firstYear ? `轮空位给 2025 全球总决赛 的参赛队：${last.map((t) => state.teams[t]?.tag).join('、')}` : `轮空位给上届 全球总决赛 的参赛队：${last.map((t) => state.teams[t]?.tag).join('、')}`)
+  if (last.length < 4) ev.log.unshift(`上届 全球总决赛 只有 ${last.length} 队仍在本赛区，其余轮空位按俱乐部声望补足`)
   holdDraw(state, ev, auto)
 }
 
-/** Stage 1's groups, drawn from the Kickoff placings the day it ends. */
+/** 第二赛段's groups, drawn from the 第一赛段 placings the day it ends. */
 function openStage1Draw(state: GameState, region: Region, placings: string[], auto: boolean): void {
   const comp = state.comps[compKey('stage1', region)]
   if (!comp || !comp.grouped || comp.groups || drawsThisYear(state, comp.key).length) return
@@ -874,7 +876,7 @@ function openStage1Draw(state: GameState, region: Region, placings: string[], au
   holdDraw(state, drawStageGroups(state, comp, pots, LEAGUE_DAYS.stage1[0]), auto)
 }
 
-/** Stage 2's groups: Stage 1's reshuffled by the three swap pools. */
+/** 第三赛段's groups: 第二赛段's reshuffled by the three swap pools. */
 function openStage2Draw(state: GameState, s1: Competition, auto: boolean): void {
   if (!s1.region || !s1.groups) return
   const comp = state.comps[compKey('stage2', s1.region)]
@@ -887,7 +889,7 @@ function openStage2Draw(state: GameState, s1: Competition, auto: boolean): void 
 }
 
 /**
- * The next Swiss round of a Masters, drawn: round one crosses the second
+ * The next Swiss round of a 国际赛, drawn: round one crosses the second
  * seeds with third seeds of other regions; two and three pair by record,
  * three without a rematch. Nothing is written until the draw is finished.
  */
@@ -928,7 +930,7 @@ function progressCompetitions(state: GameState, notes: string[] = [], autoPick =
     // stop this year's competition of the same name.
     if (drawsThisYear(state, comp.key).some((d) => !d.consumed)) continue
 
-    // ---- Masters: the Swiss round, then the eight-team double elimination
+    // ---- 国际赛: the Swiss round, then the eight-team double elimination
     if (comp.format === 'masters') {
       const swiss = comp.swissSeeds ?? []
       if (!comp.bracketStarted && drawRules(state)) {
@@ -967,8 +969,8 @@ function progressCompetitions(state: GameState, notes: string[] = [], autoPick =
       continue
     }
 
-    // ---- Kickoff under vct-2026: the triple elimination, wave by wave; the
-    // day it ends, the region's Stage 1 groups are drawn from its placings
+    // ---- 第一赛段 under vct-2026: the triple elimination, wave by wave; the
+    // day it ends, the region's 第二赛段 groups are drawn from its placings
     if (comp.format === 'triple') {
       if (!comp.seeds?.length) continue   // the draw has not been held
       if (ko.every((f) => f.played)) {
@@ -981,7 +983,7 @@ function progressCompetitions(state: GameState, notes: string[] = [], autoPick =
       continue
     }
 
-    // ---- Champions: four GSL groups, then the same double elimination
+    // ---- 全球总决赛: four GSL groups, then the same double elimination
     if (comp.format === 'champions') {
       const all = (comp.groups ?? []).flat()
       const groupsT = championsGroups()
@@ -1051,8 +1053,8 @@ function progressCompetitions(state: GameState, notes: string[] = [], autoPick =
       const cut = PLAYOFF_CUT[comp.stage] ?? 8
       const table = sortStandings(comp)
       // VCT plays its playoffs double elimination — eight from a stage, four
-      // from Kickoff. A short league that cannot fill four falls back to the
-      // single bracket, as Challengers always does.
+      // from 第一赛段. A short league that cannot fill four falls back to the
+      // single bracket, as 次级联赛 always does.
       const double = comp.tier === 1 && table.length >= 4
       const size = double ? (Math.min(cut, table.length) >= 8 ? 8 : 4) : Math.min(cut, table.length)
       const seeds = table.slice(0, size)
@@ -1096,7 +1098,7 @@ function progressCompetitions(state: GameState, notes: string[] = [], autoPick =
   if (book.lockin) {
     // 2023: the leagues feed Tokyo; Tokyo done, the LCQs and China's
     // qualifier are drawn among the sides not yet through; those done,
-    // Champions
+    // 全球总决赛
     const s1Done = REGIONS.every((r) => state.comps[compKey('stage1', r)]?.champion)
     if (s1Done) createMasters(state, 'masters2', MASTERS_2, 'stage1', Math.max(state.day + 3, OPEN.masters2))
     if (state.comps.masters2?.champion) createLcqs(state, Math.max(state.day + 3, book.leagueDays.stage2[0]))
@@ -1115,18 +1117,18 @@ function progressCompetitions(state: GameState, notes: string[] = [], autoPick =
 }
 
 /**
- * A league does not start on the heels of a Masters.
+ * A league does not start on the heels of a 国际赛.
  *
  * The league's rounds are laid down on fixed days when the season is set
- * up; a Masters is generated round by round as it is played, its Swiss
- * round when every Kickoff has a champion and each later round when the
+ * up; a 国际赛 is generated round by round as it is played, its Swiss
+ * round when every 第一赛段 has a champion and each later round when the
  * one before is done. Nothing tied the two together. A manager's schedule
- * read 「4/1 Masters I 败者组决赛」 over 「4/1 VCT China · Stage 1 第1轮」:
- * his season had been set up on the old calendar, Stage 1 from day 89,
- * and the Masters bracket had since grown into the shape it has now,
+ * read 「4/1 First Stand 败者组决赛」 over 「4/1 VCT China · 第二赛段 第1轮」:
+ * his season had been set up on the old calendar, 第二赛段 from day 89,
+ * and the 国际赛 bracket had since grown into the shape it has now,
  * ending on 92. Even a new season had only eight days between the two.
  *
- * So, every morning: if a Masters has a match scheduled — played or not —
+ * So, every morning: if a 国际赛 has a match scheduled — played or not —
  * the league that follows it may not open within BREAK_AFTER_INTERNATIONAL
  * days of the latest one, and its unplayed rounds are spread again from
  * that day to the end of the league's window. LEAGUE_DAYS gives twenty
@@ -1165,7 +1167,7 @@ const JUDGED: StageKey[] = ['kickoff', 'stage1', 'stage2']
 /**
  * The competition the managed club is actually in during a judged stage.
  *
- * A Challengers side does not play `stage1:China` — it plays two splits of its
+ * A 次级联赛 side does not play `stage1:China` — it plays two splits of its
  * own that straddle the tier-1 calendar. The board was setting it a target on
  * the VCT stage anyway and settleObjective then looked up a competition the
  * club is not in, found no placing, and returned. So a tier-2 objective was
@@ -1179,10 +1181,10 @@ function judgedCompKey(state: GameState, stage: StageKey): string | null {
   // 2023: a 32-team bracket and a qualifier are not a table to be judged on
   if (rulebookOf(state).lockin && stage !== 'stage1') return null
   if (me.tier === 1) return `${stage}:${me.region}`
-  // the two Challengers splits conclude around Stage 1 and Stage 2
+  // the two 次级联赛 splits conclude around 第二赛段 and 第三赛段
   if (stage === 'stage1') return `challengers1:${me.region}`
   if (stage === 'stage2') return `challengers2:${me.region}`
-  return null   // Kickoff has no Challengers equivalent
+  return null   // 第一赛段 has no 次级联赛 equivalent
 }
 
 /** Where in its own league does the club sit by strength? */
@@ -1398,7 +1400,7 @@ export function judgeTenure(
  * Exported (with TITLE_REP_WORTH) so check_reachable.ts can extrapolate a
  * winning career's reputation through the engine's own curve instead of
  * restating these numbers — restated constants are exactly how the
- * 'Champions' spelling bug survived every test it had.
+ * '全球总决赛' spelling bug survived every test it had.
  */
 export function damped(current: number, gain: number): number {
   return gain * clamp((96 - current) / 42, 0.12, 1)
@@ -1411,7 +1413,7 @@ export const TITLE_REP_WORTH = { regional: 2.5, international: 6 } as const
  * A club's standing, and what moves it.
  *
  * Nothing did. A club opened with reputation equal to its rating and kept
- * it for the rest of the save — a Challengers side that went up and won its
+ * it for the rest of the save — a 次级联赛 side that went up and won its
  * league sat in the fifties for years, a relegated VCT side rotted in the
  * second division at 70-something. Sponsorship, streaming, job offers and
  * who takes your call all read this number, so the world could not change
@@ -1447,7 +1449,7 @@ export function deservedReputation(team: Team, order: string[]): number {
 
 /**
  * The winter settlement: every club moves a third of the way to the level
- * its league and its season deserve. Called before Ascension swaps tiers,
+ * its league and its season deserve. Called before 次级联赛总决赛 swaps tiers,
  * so a side is judged in the league it actually played.
  */
 export function settleClubReputation(state: GameState, notes: string[]): void {
@@ -1455,8 +1457,8 @@ export function settleClubReputation(state: GameState, notes: string[]): void {
     for (const tier of [1, 2] as const) {
       const clubs = Object.values(state.teams).filter((t) => t.region === region && t.tier === tier)
       if (!clubs.length) continue
-      // the league order: the second Challengers split's finish for tier 2
-      // (that is the one Ascension reads), champ points for VCT
+      // the league order: the second 次级联赛 split's finish for tier 2
+      // (that is the one 次级联赛总决赛 reads), champ points for VCT
       const chal = tier === 2 ? state.comps[compKey('challengers2', region)] : undefined
       const order = chal?.finished.length
         ? [...chal.finished, ...clubs.filter((t) => !chal.finished.includes(t.id)).map((t) => t.id)]
@@ -1530,7 +1532,7 @@ function offerJobs(state: GameState, notes: string[]): void {
  * It used to be that the only way to say no was to let it sit on the
  * dashboard for thirty days until it expired.
  *
- * The club is left alone for a stage after that — the length of Stage 1,
+ * The club is left alone for a stage after that — the length of 第二赛段,
  * 66 days. Without the cool-off the generator would simply ask again the
  * next morning, which is the same panel that would not go away.
  */
@@ -1694,7 +1696,7 @@ export interface AdvanceOpts {
    * a turn covers several days; the scoreboard is still there to open.
    */
   autoScrims?: boolean
-  /** a Masters pick that falls to the manager is made by the coaches (headless runs) */
+  /** a 国际赛 pick that falls to the manager is made by the coaches (headless runs) */
   autoResolveDrawDecisions?: boolean
 }
 
@@ -2023,7 +2025,7 @@ export function advanceDay(state: GameState, opts: AdvanceOpts = {}): DayReport 
     settleObjective(state, prevStage, notes)
     setObjective(state, notes)
     offerJobs(state, notes)
-    // some years the league floats a themed capsule as Stage 1 opens —
+    // some years the league floats a themed capsule as 第二赛段 opens —
     // deterministic per save+year, so a reload does not conjure a new one
     if (state.stage === 'stage1'
       && ((hashStr(`bundle:${state.seed}:${state.year}`) >>> 4) % 100) < 60) {
@@ -2338,15 +2340,19 @@ function endSeason(state: GameState, rng: Rng, notes: string[] = []): void {
   // ---- what the season did to every club's name, judged in the league it played
   settleClubReputation(state, notes)
 
-  // ---- Ascension: each region's Challengers champion swaps with the weakest tier-1 side
-  for (const region of REGIONS) {
+  // ---- Promotion and relegation. The leagues of this sport are franchised: a second-tier
+  // title is a title, and nobody goes up or comes down for it. What moves between the tiers
+  // is people — a manager who wins down there is approached by a club up here (job offers),
+  // and his best players are bought. The block below is the shooter's promotion rule, kept
+  // for the historical entries that really had one (the LPL and LSPL of 2016–2017).
+  for (const region of PROMOTION ? REGIONS : []) {
     const chal = state.comps[compKey('challengers2', region)]
     const promoted = chal?.champion ? state.teams[chal.champion] : null
     if (!promoted) continue
     const tier1 = Object.values(state.teams).filter((t) => t.region === region && t.tier === 1)
     // A club that just came up is the one with the fewest champ points almost
     // by definition, so sorting the whole league sent it straight back down:
-    // win Ascension, play one VCT season, and you are in Challengers again
+    // win 次级联赛总决赛, play one VCT season, and you are in 次级联赛 again
     // next February, for ever. The real slot runs two years. So a club still
     // inside its term is not a candidate, and the league picks its weakest
     // from the rest.
@@ -2356,10 +2362,10 @@ function endSeason(state: GameState, rng: Rng, notes: string[] = []): void {
     if (!relegated || relegated.id === promoted.id) continue
 
     promoted.tier = 1
-    promoted.league = `VCT ${region}`
+    promoted.league = region
     promoted.ascendedYear = state.year
     relegated.tier = 2
-    relegated.league = `Challengers ${region}`
+    relegated.league = `${region} 次级联赛`
     delete relegated.ascendedYear
     // going up is the biggest thing that can happen to a club's name in a
     // year; going down is the second biggest
@@ -2367,7 +2373,7 @@ function endSeason(state: GameState, rng: Rng, notes: string[] = []): void {
     relegated.reputation = clamp(relegated.reputation + CLUB_REP.relegated, 20, 99)
 
     // Sponsorship follows the league you play in. Without this a promoted club
-    // kept its Challengers deals and picked up VCT running costs the same
+    // kept its 次级联赛 deals and picked up VCT running costs the same
     // week — M80 went up and was insolvent two seasons later no matter what
     // the manager did. Going up is a windfall and coming down is a cliff, and
     // both are things a manager should be told rather than discover.
@@ -2394,20 +2400,20 @@ function endSeason(state: GameState, rng: Rng, notes: string[] = []): void {
     }
     state.news.push({
       day: state.day, kind: 'league', important: true,
-      text: `🎫 ${promoted.name} 通过 Ascension 升入 VCT ${region}，${relegated.name} 降入次级联赛。`,
+      text: `🎫 ${promoted.name} 升入 ${region}，${relegated.name} 降入次级联赛。`,
     })
     if (promoted.id === state.myTeam) {
-      state.honours.push({ year: state.year, title: `晋级 VCT ${region}` })
+      state.honours.push({ year: state.year, title: `晋级一级联赛 ${region}` })
       state.titlePoster = {
-        year: state.year, tier: 'ascension', name: `Ascension ${region}`,
+        year: state.year, tier: 'ascension', name: `次级联赛总决赛 ${region}`,
         teamId: state.myTeam,
         how: `击败 ${relegated.name}，升入一级联赛`,
       }
     }
     if (promoted.id === state.myTeam) {
-      notes.push(`🎫 我们通过 Ascension 升入 VCT ${region}，席位保两个赛季。`)
+      notes.push(`🎫 我们升入 ${region}，席位保两个赛季。`)
     }
-    if (relegated.id === state.myTeam) notes.push(`🎫 我们降入 Challengers ${region}。`)
+    if (relegated.id === state.myTeam) notes.push(`🎫 我们降入 ${region} 次级联赛。`)
   }
 
   // ---- contracts tick down; expiring players leave
@@ -2594,7 +2600,7 @@ function endSeason(state: GameState, rng: Rng, notes: string[] = []): void {
   state.year += 1
   state.day = 0
   state.stage = 'preseason'
-  // next year's Kickoff byes are this year's Champions field; the draws of
+  // next year's 第一赛段 byes are this year's 全球总决赛 field; the draws of
   // the year before last are let go so a save does not grow without bound
   state.lastChampionsTeams = state.comps.champions?.teams ?? state.lastChampionsTeams
   state.draws = (state.draws ?? []).filter((d) => d.year >= state.year - 1)

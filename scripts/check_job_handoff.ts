@@ -9,7 +9,7 @@ import { wageBill } from '../src/engine/roster'
 import { exportSave, importSave } from '../src/engine/save'
 import { Rng } from '../src/engine/rng'
 
-const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '换队审计', 20260914)
+const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '换队审计', 20260914)
 const oldId = g.myTeam, old = g.teams[oldId]
 const next = Object.values(g.teams).find((t) => t.id !== oldId)!
 const candidate = analystMarket(g)[0]

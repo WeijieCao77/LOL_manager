@@ -360,7 +360,7 @@ export const styleAlign = (m: StyleMix, map: string): number => {
  */
 const ALIGN_MID = 1 / 3
 const ALIGN_SPAN = 0.075
-// the 95th percentile of |克制| over sampled legal drafts (scripts/lol_comp_probe.ts)
+// the 95th percentile of |克制| over sampled legal drafts (scripts/check_draft.ts)
 const COUNTER_HALF = 0.075
 const clamp1 = (x: number) => Math.max(-1, Math.min(1, x))
 

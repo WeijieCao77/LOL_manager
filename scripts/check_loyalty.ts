@@ -40,7 +40,7 @@ const check = (ok: boolean, what: string, detail = '') => {
 }
 
 const SEASONS = Number(process.argv[2] ?? 4)
-const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
 const g = createNewGame(me.id, '审计', 20260901)
 setupSeason(g)
 

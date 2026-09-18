@@ -56,7 +56,7 @@ function speaks(name: string, msg: unknown): void {
 }
 
 function fresh(seed = 4242): GameState {
-  const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+  const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
   const g = createNewGame(me.id, '审计经理', seed)
   setupSeason(g)
   g.actions = { day: g.day, used: 0 }

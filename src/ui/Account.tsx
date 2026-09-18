@@ -127,7 +127,7 @@ export default function Account(
               <button className="sm ghost" onClick={copy}>{copied ? '已复制' : '复制'}</button>
             </div>
             <p className="tiny faint" style={{ margin: 0, lineHeight: 1.8 }}>
-              VCT电竞经理和开瓦包共用这个账号，成就、结局、生涯和卡牌收藏都在上面，换设备时填入即可找回。
+              成就、结局和生涯都记在这个账号上，换设备时填入即可找回。
               <b>它就是密码，不要发给别人。</b>
             </p>
 

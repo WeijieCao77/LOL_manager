@@ -51,7 +51,7 @@ export function makeFixture(
  * How many times a league plays itself through.
  *
  * A twelve-team league needs one pass to give everyone eleven games. A small
- * Challengers league of three would only get two, which is not a season — so
+ * 次级联赛 league of three would only get two, which is not a season — so
  * small leagues cycle several times, the way real lower divisions do.
  */
 export function cyclesFor(teamCount: number, targetGames = 10): number {
@@ -66,7 +66,7 @@ export function scheduleRegularSeason(
 ): Fixture[] {
   // An odd league gives one club a bye every round, so a schedule cut off
   // part-way through a cycle leaves whoever has not had their bye yet a game
-  // ahead of the field — Challengers Pacific and China both play seven. Only a
+  // ahead of the field — 次级联赛 Pacific and China both play seven. Only a
   // whole cycle is fair, so an odd league rounds to the nearest one instead.
   const odd = comp.teams.length % 2 === 1
   const perCycle = Math.max(1, comp.teams.length - 1)
@@ -80,7 +80,7 @@ export function scheduleRegularSeason(
       rounds.push(c % 2 === 0 ? pairs : pairs.map(([a, b]) => [b, a] as [string, string]))
     }
   }
-  // a short group phase plays only part of the way round, so a Kickoff is not
+  // a short group phase plays only part of the way round, so a 第一赛段 is not
   // as long as a full stage
   if (!odd && rounds.length > targetGames) rounds = rounds.slice(0, targetGames)
   if (!rounds.length) return []
@@ -105,7 +105,7 @@ export function scheduleRegularSeason(
  *
  * The same to-the-day spacing as scheduleRegularSeason, applied to what is
  * left of a league: the rounds keep their pairings and their order, only
- * the days move. Used to hold the break after a Masters (keepBreaks in
+ * the days move. Used to hold the break after a 国际赛 (keepBreaks in
  * season.ts). If the window is too short for a game every second day the
  * tail runs past `endDay`; the playoffs are made from whenever the last
  * round is played, so they follow.
@@ -293,7 +293,7 @@ export function startBracket(
 }
 
 /** Championship-point awards for a completed competition. */
-// the real circuit's shape: a regional top four, a Masters top six
+// the real circuit's shape: a regional top four, a 国际赛 top six
 export const CHAMP_POINTS: Record<string, number[]> = {
   kickoff: [6, 4, 3, 2],
   stage1: [9, 7, 5, 4, 3, 3, 2, 2],

@@ -651,7 +651,7 @@ export interface Team {
    */
   igl?: string | null
   /**
-   * The year this club won Ascension, for as long as the slot it won is
+   * The year this club won 次级联赛总决赛, for as long as the slot it won is
    * still running. A promoted club holds its place for two seasons — that is
    * the term the real circuit gives it — so it is not the one sent back down
    * at the end of the first. Absent on every club that came up long ago or
@@ -839,13 +839,13 @@ export interface Competition {
   /** true once the group phase has been converted into a bracket */
   bracketStarted?: boolean
   /** how the knockout is shaped — see engine/bracket.ts; absent means the
-   *  old single elimination, which older saves and Challengers still run */
+   *  old single elimination, which older saves and 次级联赛 still run */
   format?: 'single' | 'double' | 'masters' | 'champions' | 'triple'
   /** the playoff's seed order, once known */
   seeds?: string[]
-  /** a Masters' eight Swiss-round teams, seeded */
+  /** a 国际赛' eight Swiss-round teams, seeded */
   swissSeeds?: string[]
-  /** Champions' four groups of four; under vct-2026 also a stage's Alpha and Omega */
+  /** 全球总决赛' four groups of four; under vct-2026 also a stage's Alpha and Omega */
   groups?: string[][]
   /** names of the groups, in `groups` order — ['Alpha', 'Omega'], ['A', 'B', 'C', 'D'] */
   groupNames?: string[]
@@ -922,7 +922,7 @@ export interface GameState {
   draws?: import('./draw').DrawEvent[]
   /** a draw the manager has to hold — reveal or skip, or pick — before the clock moves */
   pendingDrawId?: string
-  /** last season's Champions field, for this year's Kickoff byes */
+  /** last season's 全球总决赛 field, for this year's 第一赛段 byes */
   lastChampionsTeams?: string[]
   /** day index since career start */
   day: number
@@ -1010,7 +1010,7 @@ export interface GameState {
   titlePoster?: TitlePoster
   /**
    * How many international titles the player's club has taken, and so how hard
-   * the rest of the world is chasing. Every Masters or Champions trophy raises
+   * the rest of the world is chasing. Every 国际赛 or 全球总决赛 trophy raises
    * it: AI clubs train harder and recruit for potential, not just today's
    * rating. Undefined on old saves means nobody has been provoked yet.
    */

@@ -14,7 +14,7 @@ import { Rng } from '../src/engine/rng'
 
 let bad = 0
 // a club whose players carry long careers, so seeded totals sit past marks
-const g = createNewGame(WORLD_TEAMS.find(t => t.tag === 'NOVA')!.id, '审计经理', 20260824)
+const g = createNewGame(WORLD_TEAMS.find(t => t.tag === 'WBG')!.id, '审计经理', 20260824)
 setupSeason(g)
 const rng = new Rng(3)
 const early: string[] = []

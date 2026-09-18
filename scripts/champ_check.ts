@@ -4,7 +4,7 @@ import { WORLD_TEAMS } from '../src/engine/teams'
 import { advanceDay, setupSeason, commitFixture, fixtureRng } from '../src/engine/season'
 import { simulateMatch } from '../src/engine/match'
 
-const me = WORLD_TEAMS.find((t) => t.tag === 'NOVA')!
+const me = WORLD_TEAMS.find((t) => t.tag === 'WBG')!
 const g = createNewGame(me.id, 'T', 11, undefined)
 setupSeason(g)
 
@@ -24,7 +24,7 @@ for (const key of Object.keys(g.comps)) {
   const ko = g.fixtures.filter((f) => f.comp === key && f.label.startsWith('KO:'))
   console.log(`  ${key.padEnd(24)} champion=${c.champion ?? '—'} koFixtures=${ko.length} played=${ko.filter(f=>f.played).length}`)
 }
-// trace our own club through its Stage 1 playoff
+// trace our own club through its 第二赛段 playoff
 const s1 = g.comps['stage1:China']
 if (s1) {
   const row = s1.standings[g.myTeam]

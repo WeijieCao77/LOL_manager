@@ -35,7 +35,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   if (!ok) bad++
 }
 const mk = (seed = 20260913): GameState => {
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'EDG')!.id, '审计', seed)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'BLG')!.id, '审计', seed)
   setupSeason(g)
   return g
 }
@@ -52,7 +52,7 @@ const patchNews = (g: GameState) => g.news.filter((n) => n.text.startsWith('🔧
   const g = mk()
   g.day = 120
   const notes: string[] = []
-  settleCompetition(g, fakeComp(g, 'masters1', 'Masters Toronto'), notes)
+  settleCompetition(g, fakeComp(g, 'masters1', '国际赛 Toronto'), notes)
   const p = g.patch!
   check('第一站大师赛结算后有版本', !!p)
   check('版本带 id、年份和影响阶段', p.id === `${g.year}-masters1-120` && p.year === g.year && p.after === '第二赛段起', `${p.id} ${p.after}`)
@@ -69,9 +69,9 @@ const patchNews = (g: GameState) => g.news.filter((n) => n.text.startsWith('🔧
   applyPatch(g, false, [], 'masters1')
   check('同一天同一赛段再来一次不会再滚', JSON.stringify(g.patch) === before && g.patchLog!.length === 1 && patchNews(g).length === 1)
 
-  settleCompetition(g, fakeComp(g, 'masters2', 'Masters London'), [])
+  settleCompetition(g, fakeComp(g, 'masters2', '国际赛 London'), [])
   check('第二站大师赛是另一个版本，历史有两条', g.patch!.id !== p.id && g.patchLog!.length === 2 && g.patch!.after === '冠军赛起')
-  settleCompetition(g, fakeComp(g, 'champions', 'Champions Shanghai'), [])
+  settleCompetition(g, fakeComp(g, 'champions', '全球总决赛 Shanghai'), [])
   check('冠军赛之后是大改，写明下赛季起', g.patch!.big && g.patch!.after === `${g.year + 1} 赛季起`)
   check('地区赛不换版本', (() => { const n = g.patchLog!.length; settleCompetition(g, fakeComp(g, 'stage1', '赛区第一赛段'), []); return g.patchLog!.length === n })())
 }
@@ -80,7 +80,7 @@ const patchNews = (g: GameState) => g.news.filter((n) => n.text.startsWith('🔧
 {
   const g = mk()
   g.day = 120
-  settleCompetition(g, fakeComp(g, 'masters1', 'Masters Toronto'), [])
+  settleCompetition(g, fakeComp(g, 'masters1', '国际赛 Toronto'), [])
   const a = patchAdvice(g)
   check('建议覆盖现役图池的每张图', a.maps.length === poolFor(g).length && a.maps.every((m) => Object.keys(m.agents).length === 5))
   check('版本之子和 darlings() 一致', a.darlings.slice(0, 3).map((d) => d.agent).join() === darlings(g.patch, 3).join(), a.darlings.map((d) => d.agent).join())

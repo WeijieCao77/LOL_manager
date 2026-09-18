@@ -28,7 +28,7 @@ for (const [key, open] of Object.entries(INTERNATIONAL_OPEN)) {
   check(st.end - open >= 20, `${st.name} has ${st.end - open} days after opening for Swiss/groups and a double-elim`)
 }
 check(TRANSFER_WINDOWS.every(([a, b]) => a < b && a >= 0 && b < SEASON_DAYS), 'transfer windows sit inside the year')
-check(TRANSFER_WINDOWS[1][0] === STAGES.find((s) => s.key === 'masters1')!.start, 'the spring window opens the day Kickoff ends')
+check(TRANSFER_WINDOWS[1][0] === STAGES.find((s) => s.key === 'masters1')!.start, 'the spring window opens the day 第一赛段 ends')
 check(TRANSFER_WINDOWS[3][0] === STAGES.find((s) => s.key === 'offseason')!.start, 'the offseason window opens with the offseason')
 
 console.log('host cities')
@@ -44,7 +44,7 @@ check(seen.size >= 12, `ten years visit ${seen.size} different cities`)
 check(hostCities(9001, 2028).masters1 !== hostCities(9002, 2028).masters1 || hostCities(9001, 2028).champions !== hostCities(9002, 2028).champions, 'a different seed travels differently')
 
 console.log('a season, from the strongest club')
-const strongest = WORLD_TEAMS.find((t) => t.tag === 'PRX')!
+const strongest = WORLD_TEAMS.find((t) => t.tag === 'GEN')!
 const g = createNewGame(strongest.id, 'cal', 4242)
 setupSeason(g)
 let firstPoster: { day: number; key: string; city: string; how: string } | null = null
@@ -69,6 +69,6 @@ for (const key of ['masters1', 'masters2', 'champions'] as const) {
   check(days.length > 0 && Math.min(...days) >= st.start && Math.max(...days) <= st.end, `${key} played on days ${Math.min(...days)}–${Math.max(...days)} inside ${st.start}–${st.end}`)
 }
 const lastRegional = Math.max(...g.fixtures.filter((f) => f.stage === 'stage2').map((f) => f.day))
-check(lastRegional < INTERNATIONAL_OPEN.champions - 7, `Stage 2 ended on day ${lastRegional}, ${INTERNATIONAL_OPEN.champions - lastRegional} days before Champions opens`)
+check(lastRegional < INTERNATIONAL_OPEN.champions - 7, `第三赛段 ended on day ${lastRegional}, ${INTERNATIONAL_OPEN.champions - lastRegional} days before 全球总决赛 opens`)
 console.log(bad ? `\n${bad} problem(s)` : '\nall good')
 process.exit(bad ? 1 : 0)

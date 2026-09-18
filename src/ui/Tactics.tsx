@@ -32,7 +32,7 @@ export default function Tactics() {
       <Panel
         title="各图预案 · 每张图的英雄阵容和战术"
         className="own"
-        actions={<span className="tiny faint">训练赛和跑图都按这里练</span>}
+        actions={<span className="tiny faint">训练赛和战术训练都按这里练</span>}
       >
         <p className="small muted" style={{ marginTop: 0 }}>
           定好每张图的五个英雄和四条滑杆，赛前不用再调。同一套阵容打得越多越熟，熟练度进比赛是加分。
@@ -91,7 +91,7 @@ export default function Tactics() {
             ))}
           </div>
           {!lineup.some((p) => p.isIgl) && (
-            <p className="small neg">⚠ 首发没有指挥（IGL），中局应变大减。</p>
+            <p className="small neg">⚠ 首发里没有任命队长，运营最高的人自动顶上。</p>
           )}
           <p className="tiny faint" style={{ marginBottom: 0 }}>以 {mapCn(pool[0])} 的预案计算。</p>
         </Panel>
@@ -102,7 +102,7 @@ export default function Tactics() {
           <table>
             <thead>
               <tr>
-                <th>地图</th><th>阵容</th><th style={{ width: '32%' }}>地图熟练度</th>
+                <th>场地</th><th>阵容</th><th style={{ width: '32%' }}>战术磨合度</th>
                 <th className="num">数值</th><th style={{ width: '22%' }}>阵容熟练度</th><th>状态</th>
               </tr>
             </thead>

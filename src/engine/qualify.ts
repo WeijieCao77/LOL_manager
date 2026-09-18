@@ -2,8 +2,8 @@
  * Where the club stands on the road to the next international event.
  *
  * The standings said who was above whom and nothing else; a manager on the
- * Stage 1 table had to know, from outside the game, that the top three go to
- * Masters and that the winner skips the Swiss round. This answers, in one
+ * 第二赛段 table had to know, from outside the game, that the top three go to
+ * 国际赛 and that the winner skips the Swiss round. This answers, in one
  * panel and one agenda line, the three questions the table cannot: what does
  * this stage lead to, what do we still need, and what seed would we be.
  *
@@ -50,7 +50,7 @@ export function qualifyRule(stage: StageKey, drawn = false): string {
         : `常规赛前 8 进季后赛（双败淘汰）。季后赛前 3 名去 ${MASTERS_2}：第 1 名直接进季后赛，第 2、3 名先打瑞士轮。`
     case 'stage2':
       return drawn
-        ? `分组按 Stage 1 名次重抽后再打一次两组单循环，每组前 4 进季后赛。季后赛前 2 名直接去 ${CHAMPIONS}，赛区另外 2 个名额按全年冠军积分排。`
+        ? `分组按 第二赛段 名次重抽后再打一次两组单循环，每组前 4 进季后赛。季后赛前 2 名直接去 ${CHAMPIONS}，赛区另外 2 个名额按全年冠军积分排。`
         : `常规赛前 8 进季后赛（双败淘汰）。季后赛前 2 名直接去 ${CHAMPIONS}，赛区另外 2 个名额按全年冠军积分排。`
     default:
       return ''
@@ -59,7 +59,7 @@ export function qualifyRule(stage: StageKey, drawn = false): string {
 
 /** Points on offer, for the panel's footnote. */
 export const POINTS_NOTE =
-  '冠军积分：Kickoff 前 4 名 6/4/3/2；Stage 1、Stage 2 前 8 名 9/7/5/4/3/3/2/2；Masters 前 6 名 12/9/7/5/4/4。'
+  '冠军积分：第一赛段 前 4 名 6/4/3/2；第二赛段、第三赛段 前 8 名 9/7/5/4/3/3/2/2；国际赛 前 6 名 12/9/7/5/4/4。'
 
 /** The day each international opens on, at the earliest. */
 export const INTERNATIONAL_START = INTERNATIONAL_OPEN
@@ -102,7 +102,7 @@ export function qualifiedEvent(state: GameState): Qualified | null {
     const feeder = key === 'champions' ? null : state.comps[compKey(key === 'masters1' ? 'kickoff' : 'stage1', me.region)]
     const how = comp.byes?.includes(me.id) ? '赛区冠军，直接进季后赛'
       : comp.swissSeeds?.includes(me.id) ? swissHow((feeder?.finished.indexOf(me.id) ?? -1) + 1)
-        : key === 'champions' ? (championsField(state)[me.region].indexOf(me.id) < 2 ? 'Stage 2 前 2，直接晋级' : '全年积分名额') : '拿到了参赛名额'
+        : key === 'champions' ? (championsField(state)[me.region].indexOf(me.id) < 2 ? '第三赛段 前 2，直接晋级' : '全年积分名额') : '拿到了参赛名额'
     return { key, name: comp.name, city: comp.city ?? hostCity(state, key), year: state.year, teamId: me.id, how }
   }
   return null
@@ -124,7 +124,7 @@ export interface Upcoming {
  * The international event the club has already qualified for but which does
  * not exist yet.
  *
- * A Masters is created only once every region's feeder stage has concluded,
+ * A 国际赛 is created only once every region's feeder stage has concluded,
  * which can be days after ours did. In that gap the club knew it was going —
  * the qualification panel said so — while the top bar counted down to a
  * league game forty days away and the schedule listed nothing in between.
@@ -160,7 +160,7 @@ export function upcomingInternational(state: GameState): Upcoming | null {
       const field = championsField(state)[me.region]
       const idx = field.indexOf(state.myTeam)
       if (idx < 0) return null
-      return { key: ev.key, name: ev.name, day: start, swiss: false, how: idx < 2 ? 'Stage 2 前 2，直接晋级' : '全年积分名额' }
+      return { key: ev.key, name: ev.name, day: start, swiss: false, how: idx < 2 ? '第三赛段 前 2，直接晋级' : '全年积分名额' }
     }
     const { byes, swiss } = mastersField(state, ev.feeder)
     if (byes.includes(state.myTeam)) {
@@ -243,13 +243,13 @@ export function qualification(state: GameState): QualStatus | null {
       const field = championsField(state)[me.region]
       const idx = field.indexOf(state.myTeam)
       if (idx >= 0) {
-        const how = idx < 2 ? `Stage 2 ${ordinal(place)}，直接晋级` : `全年积分 ${me.champPoints} 分，赛区积分名额`
+        const how = idx < 2 ? `第三赛段 ${ordinal(place)}，直接晋级` : `全年积分 ${me.champPoints} 分，赛区积分名额`
         return { event: feed.event, tone: 'good', headline: `已锁定 ${feed.event}（${how}）。`, lines: [rule] }
       }
       const last = field[3] ? state.teams[field[3]] : null
       return {
         event: feed.event, tone: 'warn',
-        headline: `无缘 ${feed.event}：Stage 2 ${ordinal(place)}，积分 ${me.champPoints}${last ? `，最后一个名额是 ${last.name}（${last.champPoints} 分）` : ''}。`,
+        headline: `无缘 ${feed.event}：第三赛段 ${ordinal(place)}，积分 ${me.champPoints}${last ? `，最后一个名额是 ${last.name}（${last.champPoints} 分）` : ''}。`,
         lines: [rule],
       }
     }
@@ -413,7 +413,7 @@ export function nextInEvent(state: GameState): NextIn | null {
         const r = at(`瑞士轮 第${n}轮`)
         return r ? { comp, day: r.day, round: `瑞士轮 第${n}轮` } : null
       }
-      // Champions groups: the next group wave, or the playoffs once through
+      // 全球总决赛 groups: the next group wave, or the playoffs once through
       const g = mine.filter((f) => /^KO:\d+:[A-D]组/.test(f.label))
       const lastG = g[g.length - 1]
       if (!lastG) { const r = rounds[0]; return r ? { comp, day: r.day, round: '小组赛 开局赛' } : null }
@@ -426,7 +426,7 @@ export function nextInEvent(state: GameState): NextIn | null {
       return r ? { comp, day: r.day, round: `小组赛 ${next}` } : null
     }
     // under the 2026 rulebook every bracket is a template, and the template
-    // says where a side goes next — Kickoff's three lanes included
+    // says where a side goes next — 第一赛段's three lanes included
     if (drawRules(state) && (comp.bracketStarted || comp.format === 'triple')) {
       const tpl = comp.format === 'triple' ? TRIPLE_12 : comp.grouped ? STAGE_8 : MASTERS_8
       const all = state.fixtures.filter((f) => f.comp === key && f.label.startsWith('KO:') && !/^KO:\d+:[A-D]组/.test(f.label))
@@ -436,7 +436,7 @@ export function nextInEvent(state: GameState): NextIn | null {
       return r ? { comp, day: r.day, round: `${comp.format === 'triple' ? '' : '季后赛 '}${nxt.name}` } : null
     }
     // the playoffs: the next round follows from the last result — eight
-    // teams have two more lower rounds than four (Kickoff's bracket)
+    // teams have two more lower rounds than four (第一赛段's bracket)
     const eight = comp.format !== 'double' || (comp.seeds ?? []).length >= 8
     const NEXT: Record<string, [string, string]> = eight ? {
       胜者组第一轮: ['胜者组第二轮', '败者组第一轮'], 胜者组第二轮: ['胜者组决赛', '败者组第二轮'],

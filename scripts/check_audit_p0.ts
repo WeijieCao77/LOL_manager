@@ -29,7 +29,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? '  — ' + detail : ''}`)
   if (!ok) bad++
 }
-const mk = (tag = 'TYL'): GameState => {
+const mk = (tag = 'BLG'): GameState => {
   const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === tag)!.id, '审计', 20260827)
   setupSeason(g)
   return g

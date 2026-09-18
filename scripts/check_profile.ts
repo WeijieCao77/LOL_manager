@@ -160,7 +160,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   // The career predated `startingSquad`, so the field was undefined — which
   // reads as "you inherited nobody", not as "unknown", and every player on the
   // books counted as a signing.
-  const fresh = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '审计', 20260828)
+  const fresh = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '审计', 20260828)
   setupSeason(fresh)
 
   // exactly what an older save looks like on disk
@@ -222,7 +222,7 @@ const check = (name: string, ok: boolean, detail = '') => {
 
 // ---- a fresh career has earned nothing yet, and nothing throws
 {
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '审计', 20260828)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '审计', 20260828)
   setupSeason(g)
   const got = earnedNow(g)
   check('开局不会白送成就', got.length <= 2, got.join('、') || '一个都没有')

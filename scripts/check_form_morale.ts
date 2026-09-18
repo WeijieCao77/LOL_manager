@@ -60,7 +60,7 @@ for (const [label, fa, ma, fb, mb] of cases) {
 }
 
 // ---- part two: how far apart clubs actually get
-const s2: GameState = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'EDG')!.id, '测试', 4242)
+const s2: GameState = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'BLG')!.id, '测试', 4242)
 setupSeason(s2)
 const samples: { day: number; form: number[]; morale: number[]; teamForm: number[]; teamMorale: number[] }[] = []
 const sample = () => {

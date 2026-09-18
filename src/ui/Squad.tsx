@@ -11,7 +11,7 @@ import { ratingOf, selectLineup } from '../engine/match'
 import { releasePlayer, squadFloorBlock } from '../engine/transfer'
 import { bondBetween, notableBonds, squadHarmony } from '../engine/bonds'
 import { departureImpact, trustLabel, trustOf, trustOnBench } from '../engine/trust'
-import { ATTR_CN, ATTR_KEYS } from '../engine/types'
+import { ATTR_CN, ATTR_KEYS, ROLES } from '../engine/types'
 import type { Player } from '../engine/types'
 import { useAction } from './useAction'
 import { fmtDay } from './common'
@@ -151,22 +151,22 @@ export default function Squad() {
           {Object.entries(roleCount).map(([r, n]) => (
             <span key={r} className="tag">{r} × {n}</span>
           ))}
-          {['决斗者', '先锋', '控场', '哨卫'].filter((r) => !roleCount[r]).map((r) => (
+          {ROLES.filter((r) => !roleCount[r]).map((r) => (
             <span key={r} className="tag warn">缺少 {r}</span>
           ))}
           {noIgl && (
             <span className="tag warn">
-              首发无指挥{benchedIgl ? ` · ${benchedIgl.ign} 在替补席`
-                : hurtIgl ? ` · 指挥 ${hurtIgl.ign} 伤停中（还需 ${hurtIgl.injuredUntil - game.day} 天）` : ''}
+              首发里没有队长{benchedIgl ? ` · ${benchedIgl.ign} 在替补席`
+                : hurtIgl ? ` · 队长 ${hurtIgl.ign} 伤停中（还需 ${hurtIgl.injuredUntil - game.day} 天）` : ''}
             </span>
           )}
         </div>
         {noIgl && (
           <div className="tiny" style={{ padding: '0 14px 10px', color: 'var(--warn)' }}>
             <div style={{ marginBottom: 6 }}>
-              没有指挥：攻防各扣 4 分，中局决策再扣 3 分。
-              {benchedIgl && `把 ${benchedIgl.ign} 放进首发，或让首发里的人指挥：`}
-              {hurtIgl && `${hurtIgl.ign} 伤停中，先让别人指挥，伤愈后可以再任命回来：`}
+              没有队长时，场上运营最高的人自动顶上最大的那一份；更衣室里少一个说话的人。
+              {benchedIgl && `把 ${benchedIgl.ign} 放进首发，或在首发里另外任命一名队长：`}
+              {hurtIgl && `${hurtIgl.ign} 伤停中，先让别人当队长，伤愈后可以再任命回来：`}
             </div>
             <div className="row wrap" style={{ gap: 6 }}>
               {me.starters
@@ -213,8 +213,8 @@ export default function Squad() {
                 {view === 'stats' && (
                   <>
                     <th className="num clickable" onClick={() => setSort('rating')}>评分</th>
-                    <th className="num">ACS</th><th className="num">K/D</th>
-                    <th className="num">ADR</th><th className="num">首杀差</th><th className="num">场次</th>
+                    <th className="num">表现分</th><th className="num">K/D</th>
+                    <th className="num">分均伤害</th><th className="num">一血差</th><th className="num">局数</th>
                   </>
                 )}
               </tr>
@@ -243,10 +243,10 @@ export default function Squad() {
                           title={iglsInSquad.length > 1
                             ? (p.id === caller?.id
                               ? `队长（运营 ${p.attrs.macro}）`
-                              : `副指挥：${caller?.ign} 不在场时由他喊话，点开可任命为主指挥`)
-                            : '队内指挥'}>
-                          {iglsInSquad.length > 1 ? (p.id === caller?.id ? '主指挥' : '副指挥')
-                            : p.iglSource === 'inferred' ? '推定 IGL' : 'IGL'}
+                              : `副队长：${caller?.ign} 不在场时由他顶上，点开可任命为队长`)
+                            : '队长'}>
+                          {iglsInSquad.length > 1 ? (p.id === caller?.id ? '队长' : '副队长')
+                            : '队长'}
                         </span>
                       )}
                       {p.listed && <span className="tag warn">挂牌</span>}

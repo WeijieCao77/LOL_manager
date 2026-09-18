@@ -66,7 +66,7 @@ export const siteId = (): string | null => rememberedId()
 /**
  * Has this account earned the right to start anywhere?
  *
- * Proving yourself once is enough: a three-peat of Champions in any save, a
+ * Proving yourself once is enough: a three-peat of 全球总决赛 in any save, a
  * career played to an ending at the ten-year mark, or reputation 90 — after
  * any of those, new careers ignore the reputation gate and the locked top
  * clubs alike. The first two ride on achievement keys precisely so that an

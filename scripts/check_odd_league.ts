@@ -2,15 +2,15 @@
  * An odd league has to schedule through a bye, so this checks that every club
  * still plays the same number of games and nobody sits out a whole stage.
  *
- * It used to run on Challengers China, which was odd while Weibo Gaming sat
+ * It used to run on 次级联赛 China, which was odd while Weibo Gaming sat
  * in it. China's second tier is the top eight of 全国大赛 now and comes out
- * even, so the odd one is Challengers Pacific at seven.
+ * even, so the odd one is 次级联赛 Pacific at seven.
  */
 import { createNewGame } from '../src/engine/world'
 import { WORLD_TEAMS } from '../src/engine/teams'
 import { setupSeason } from '../src/engine/season'
 
-const club = WORLD_TEAMS.find(t => t.tag === 'REJE')!
+const club = WORLD_TEAMS.find(t => t.tag === 'CNV')!
 const g = createNewGame(club.id, '审计经理', 20260823)
 setupSeason(g)
 
@@ -47,7 +47,7 @@ console.log(`\n执教 ${club.name} (${club.tag}) · ${club.league} · 阵容 ${c
 // meaningful moment to compare is after the last round has been played.
 import { advanceDay } from '../src/engine/season'
 import { Rng } from '../src/engine/rng'
-const top = WORLD_TEAMS.find(t => t.tag === 'TYL')!   // a club that will not be sacked
+const top = WORLD_TEAMS.find(t => t.tag === 'TES')!   // a club that will not be sacked
 const s2 = createNewGame(top.id, '审计经理', 20260823)
 setupSeason(s2)
 const rng = new Rng(7)

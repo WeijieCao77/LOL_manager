@@ -30,8 +30,8 @@ export function rosterBlock(state: GameState, teamId: string): string | null {
 
 export const TRANSFER_WINDOWS: [number, number][] = [
   [0, 20],    // 季前
-  [63, 90],   // the break before Masters I and its Swiss round — the group asked for a mid-spring market
-  [165, 198], // the break before Masters II and its Swiss round
+  [63, 90],   // the break before First Stand and its Swiss round — the group asked for a mid-spring market
+  [165, 198], // the break before MSI 季中冠军赛 and its Swiss round
   [323, 363], // 休赛期
 ]
 

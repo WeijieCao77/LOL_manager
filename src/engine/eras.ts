@@ -8,15 +8,15 @@
  * — the setup is real history, what happens next is the manager's. What a
  * year changes beyond its world:
  *
- *   - the calendar's names: the real host cities for that year's Masters
- *     and Champions (REAL_HOSTS) rather than the seeded rotation
+ *   - the calendar's names: the real host cities for that year's 国际赛
+ *     and 全球总决赛 (REAL_HOSTS) rather than the seeded rotation
  *   - which agents exist: an agent released after the game date is not on
  *     any map plan, drill or auto-pick until its patch lands (AGENT_SINCE),
  *     and lands with a news line when it does
  *   - the career's own clock: 五年之约 and the ten-year run count from the
  *     start year, not from 2026
  *   - the rulebook: the classic vct-2025 flow, which is the 2024–2025
- *     circuit's shape (Kickoff, two stages, two Masters, Champions)
+ *     circuit's shape (第一赛段, two stages, two 国际赛, 全球总决赛)
  *
  * The world files are loaded on demand — they are a quarter megabyte each
  * and only a historical start needs one.
@@ -58,9 +58,9 @@ export const ERA_CN: Record<number, string> = {
 }
 
 /**
- * Where the internationals were actually played. Masters I is the first
- * Masters of the year, Masters II the second, then Champions. 2023 had one
- * Masters (Tokyo) after LOCK//IN; it is listed for the day a 2023 start exists.
+ * Where the internationals were actually played. First Stand is the first
+ * 国际赛 of the year, MSI 季中冠军赛 the second, then 全球总决赛. 2023 had one
+ * 国际赛 (Tokyo) after LOCK//IN; it is listed for the day a 2023 start exists.
  */
 export const REAL_HOSTS: Record<number, { masters1: string; masters2: string; champions: string }> = {}
 
@@ -69,7 +69,7 @@ export const REAL_HOSTS: Record<number, { masters1: string; masters2: string; ch
  * listed have been in since before any world this game can start in
  * (2022). Veto and Miks are bounded by the event tables rather than a patch
  * note — neither appears in any 2025 event, Veto first at the 2026
- * Kickoff, Miks in mid-2026 — so their months are the earliest consistent
+ * 第一赛段, Miks in mid-2026 — so their months are the earliest consistent
  * with that; scripts/check_history_world.ts holds every entry against the
  * first competitive appearance in the cache.
  */
@@ -114,8 +114,8 @@ export const MAP_SINCE: Record<string, string> = {}
  * The competitive pool Riot actually ran in 2023–2025, from each date on: the
  * map lists of that year's events on Liquipedia, and the rotations their
  * pages date — Bind for Icebox from week 5 of the 2023 leagues, Haven for
- * Breeze in week 2 of 2024 Stage 2 and Abyss for Split at its playoffs. The
- * first entry is the 2022 Champions pool, which held until Lotus shipped.
+ * Breeze in week 2 of 2024 第三赛段 and Abyss for Split at its playoffs. The
+ * first entry is the 2022 全球总决赛 pool, which held until Lotus shipped.
  * Other years have no table and keep the dealt pool (match.activePool).
  */
 export const REAL_POOLS: [string, string[]][] = []

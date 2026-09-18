@@ -25,7 +25,7 @@ const FACTORS: {
   fix: string | ((mine: number) => string)
 }[] = [
   { key: 'base', label: '选手个人能力', fix: '阵容硬实力，靠转会和训练补' },
-  { key: 'map', label: '地图熟练度', fix: '在训练里安排「跑图」练这张图，或在 BP 时避开它' },
+  { key: 'map', label: '战术磨合度', fix: '在训练里安排「跑图」练这张图，或在 BP 时避开它' },
   { key: 'chem', label: '团队默契', fix: '更衣室关系与协同/沟通属性，双排练和集训能改善' },
   // comp's advice is filled in from the lineup that actually played — see
   // compFix below. Reading it off the number was how the panel came to tell

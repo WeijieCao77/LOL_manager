@@ -9,9 +9,9 @@ import type { Competition, Fixture } from '../engine/types'
  * Three shapes, all read left to right. A double elimination is two lanes —
  * the upper bracket over the lower, the grand final at the end of the upper
  * lane — because a side that loses in the top lane reappears in the bottom
- * one, and a single row of columns hid that. A Masters opens with its Swiss
- * round: the table of records, then the rounds. Champions opens with its four
- * groups. A Challengers bracket is still one lane.
+ * one, and a single row of columns hid that. A 国际赛 opens with its Swiss
+ * round: the table of records, then the rounds. 全球总决赛 opens with its four
+ * groups. A 次级联赛 bracket is still one lane.
  */
 export default function Bracket({ comp }: { comp: Competition }) {
   const { game } = useGame()
@@ -79,14 +79,14 @@ function Tie({ f }: { f: Fixture }) {
 
 /**
  * The double elimination: columns by wave, upper lane above lower lane. A
- * single-lane bracket (Challengers) has nothing in the lower lane and reads
+ * single-lane bracket (次级联赛) has nothing in the lower lane and reads
  * as it always did.
  */
 function Lanes({ fixtures, byes }: { fixtures: Fixture[]; byes?: string[] }) {
   const { game } = useGame()
   const waves = [...new Set(fixtures.map(waveOf))].sort((a, b) => a - b)
   const col = (f: Fixture) => waves.indexOf(waveOf(f))
-  // a Kickoff under the 2026 rulebook has a third lane between the two
+  // a 第一赛段 under the 2026 rulebook has a third lane between the two
   const upper = fixtures.filter((f) => !isLowerLabel(nameOf(f)) && !isMiddleLabel(nameOf(f)))
   const middle = fixtures.filter((f) => isMiddleLabel(nameOf(f)))
   const lower = fixtures.filter((f) => isLowerLabel(nameOf(f)))
@@ -165,7 +165,7 @@ function Swiss({ comp, fixtures }: { comp: Competition; fixtures: Fixture[] }) {
   )
 }
 
-/** Champions' four GSL groups, each as its own little column of ties. */
+/** 全球总决赛' four GSL groups, each as its own little column of ties. */
 function Groups({ comp, fixtures }: { comp: Competition; fixtures: Fixture[] }) {
   const { game } = useGame()
   return (

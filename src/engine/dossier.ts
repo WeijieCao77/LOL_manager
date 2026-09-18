@@ -85,7 +85,7 @@ export const coachDossier = (name: string): DossierEntry | undefined =>
  * The photograph for a彩卡.
  *
  * Chosen off the filename by scripts/fetch_legend_faces.py — Liquipedia names
- * these after the player and the event, so "with the VALORANT Champions 2021
+ * these after the player and the event, so "with the 全球总决赛 2021
  * trophy" is a claim we can act on. `tier` says how close it got, and the card
  * detail is honest about it rather than implying every one is a trophy shot.
  */
@@ -158,7 +158,7 @@ export interface Placement {
   won: boolean
   /** a top-three finish */
   podium: boolean
-  /** Champions, Masters, an international or a league playoff */
+  /** 全球总决赛, 国际赛, an international or a league playoff */
   major: boolean
 }
 
@@ -171,7 +171,7 @@ const ordinal = (place: string | null): number | null => {
 /**
  * Which events actually count as silverware.
  *
- * vlr lists a Korean stage-1 open qualifier next to Champions. Weighting them
+ * vlr lists a Korean stage-1 open qualifier next to 全球总决赛. Weighting them
  * the same turns every journeyman into a decorated veteran, so the trophy
  * shelf only marks the tournaments the sport treats as majors.
  */

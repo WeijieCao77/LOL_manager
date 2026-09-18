@@ -5,7 +5,7 @@ import { createManager } from '../src/engine/manager'
 import { advanceDay, setupSeason, stageName, SEASON_DAYS } from '../src/engine/season'
 import { agendaFor, screenLocked } from '../src/engine/agenda'
 
-const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
 const m = createManager('测试', 40, 'expro')
 const g = createNewGame(me.id, m.name, 7, m)
 setupSeason(g)

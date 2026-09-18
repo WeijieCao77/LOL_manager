@@ -6,7 +6,7 @@ import { advanceDay, setupSeason } from '../src/engine/season'
 import { pickAgentToLearn } from '../src/engine/training'
 import { activePool } from '../src/engine/match'
 
-const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
 
 function run(label: string, setup: (g: ReturnType<typeof createNewGame>) => void) {
   const g = createNewGame(me.id, 'T', 17); setupSeason(g)

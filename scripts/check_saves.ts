@@ -37,7 +37,7 @@ const check = (name: string, ok: boolean, detail = '') => {
 }
 
 const mk = (seed: number) => {
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '审计', seed)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '审计', seed)
   setupSeason(g)
   return g
 }

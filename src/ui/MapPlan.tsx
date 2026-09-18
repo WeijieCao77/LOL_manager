@@ -138,7 +138,7 @@ export default function MapPlan({
         </div>
         <div>
           <div className="row" style={{ gap: 8, alignItems: 'baseline' }}>
-            <span className="small muted">地图熟练度</span>
+            <span className="small muted">战术磨合度</span>
             <b className="mono">{pref}</b>
           </div>
           <Bar value={pref} />

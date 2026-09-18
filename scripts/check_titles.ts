@@ -1,9 +1,9 @@
 /**
  * The names the season awards, and the names the verdicts look for.
  *
- * These were two different lists. season.ts handed out 'VALORANT Champions';
- * endings.ts and achievements.ts both asked for 'Champions' and compared with
- * ===. Nothing threw, nothing failed a test, and every Champions-shaped ending
+ * These were two different lists. season.ts handed out '全球总决赛';
+ * endings.ts and achievements.ts both asked for '全球总决赛' and compared with
+ * ===. Nothing threw, nothing failed a test, and every 全球总决赛-shaped ending
  * was simply unreachable — a three-time world champion finished his ten years
  * and was told 「有过高光」, and a genuine 全冠之年 was told he had never won on
  * the last day.

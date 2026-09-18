@@ -41,7 +41,7 @@ export default function MatchModal({ fixture, onClose }: { fixture: Fixture; onC
       l.acs = l.rounds ? Math.round((l.damage / l.rounds) * 1.45) : 0
     }
     void rounds
-    return { map: '全部地图', scoreA: r.mapsWonA, scoreB: r.mapsWonB, lines }
+    return { map: '全部对局', scoreA: r.mapsWonA, scoreB: r.mapsWonB, lines }
   })() : null
 
   const perMap = allMaps ? tab > 0 : true
@@ -108,7 +108,7 @@ export default function MatchModal({ fixture, onClose }: { fixture: Fixture; onC
       {/* per-map detail */}
       {r.maps.length > 1 && (
         <div className="seg" style={{ marginBottom: 12 }}>
-          <button className={tab === 0 ? 'on' : ''} onClick={() => setTab(0)}>全部地图</button>
+          <button className={tab === 0 ? 'on' : ''} onClick={() => setTab(0)}>全部对局</button>
           {r.maps.map((m, i) => (
             <button key={i} className={tab === i + 1 ? 'on' : ''} onClick={() => setTab(i + 1)}>
               {mapCn(m.map)}
@@ -128,7 +128,7 @@ export default function MatchModal({ fixture, onClose }: { fixture: Fixture; onC
 
       {perMap && map?.rounds && map.rounds.length > 0 && (
         <div style={{ marginBottom: 16 }}>
-          <div className="nav-group" style={{ padding: '0 0 8px' }}>回合走势 · {mapCn(map.map)}</div>
+          <div className="nav-group" style={{ padding: '0 0 8px' }}>比赛走势</div>
           <RoundRibbon
             rounds={map.rounds} mineIsA={mineIsA}
             mineTag={(mineIsA ? a : b)?.tag} theirTag={(mineIsA ? b : a)?.tag}
@@ -363,9 +363,9 @@ function Scoreboard({
           <table>
             <thead>
               <tr>
-                <th>选手</th><th>英雄</th><th>位置</th><th className="num">评分</th><th className="num">ACS</th>
+                <th>选手</th><th>英雄</th><th>位置</th><th className="num">评分</th><th className="num">表现分</th>
                 <th className="num">K</th><th className="num">D</th><th className="num">A</th>
-                <th className="num">ADR</th><th className="num">首杀</th><th className="num">残局</th>
+                <th className="num">分均伤害</th><th className="num">一血</th><th className="num">多杀</th>
               </tr>
             </thead>
             <tbody>

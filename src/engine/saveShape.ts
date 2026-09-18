@@ -1,4 +1,5 @@
 import type { GameState } from './types'
+import { ATTR_KEYS } from './types'
 
 const record = (v: unknown): v is Record<string, any> =>
   v !== null && typeof v === 'object' && !Array.isArray(v)
@@ -32,7 +33,7 @@ export function assertCareerSave(value: unknown): asserts value is GameState {
   for (const [id, p] of Object.entries(s.players)) {
     if (!record(p) || p.id !== id || typeof p.ign !== 'string'
       || !numbers(p, ['age', 'overall', 'potential', 'form', 'morale', 'fatigue', 'salary', 'value', 'contractYears', 'loyalty', 'ambition'])
-      || !numbers(p.attrs, ['aim', 'reaction', 'awareness', 'utility', 'clutch', 'teamwork', 'communication', 'igl'])
+      || !numbers(p.attrs, ATTR_KEYS)
       || !numbers(p.season, ['maps', 'rounds', 'kills', 'deaths', 'assists', 'firstKills', 'firstDeaths', 'damage', 'clutches', 'mvps'])
       || !numbers(p.career, ['maps', 'rounds', 'kills', 'deaths', 'assists', 'firstKills', 'firstDeaths', 'damage', 'clutches', 'mvps'])) return fail()
   }

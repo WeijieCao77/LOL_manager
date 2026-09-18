@@ -54,12 +54,12 @@ export interface Achievement {
 // ----------------------------------------------------------------- the save
 
 // Imported rather than restated: this file had its own copy of the three
-// titles, with the same wrong spelling of Champions, so 「冠军赛冠军」 and
+// titles, with the same wrong spelling of 全球总决赛, so 「冠军赛冠军」 and
 // 「全冠之年」 were unreachable for the same reason the endings were.
 const isIntl = (t: string) => (INTL_TITLES as readonly string[]).includes(t)
 const isMasters = (t: string) => t === MASTERS_1 || t === MASTERS_2
 const isChampions = (t: string) => t === CHAMPIONS
-const isRegional = (t: string) => /Kickoff$/.test(t) || /^VCT .+ · Stage \d$/.test(t)
+const isRegional = (t: string) => /^(LPL|LCK|LEC|LCS|LCP|CBLOL) 第[一二三]赛段$/.test(t)
 
 export interface Facts {
   squad: Player[]
@@ -111,7 +111,7 @@ export function factsOf(state: GameState): Facts {
     }
   }
 
-  // a perfect international year: Masters I, Masters II and Champions
+  // a perfect international year: First Stand, MSI 季中冠军赛 and 全球总决赛
   const intlBy = new Map<number, Set<string>>()
   const regBy = new Map<number, Set<string>>()
   for (const h of honours) {
@@ -131,7 +131,7 @@ export function factsOf(state: GameState): Facts {
     imports: me ? squad.filter((p) => isImport(p, me)).length : 0,
     perfectMaps, overtimeWins, deciders, sweeps,
     perfectYears: [...intlBy.values()].filter((got) => INTL_TITLES.every((t) => got.has(t))).length,
-    // Kickoff plus both Stages is every tier-1 trophy the region has to give
+    // 第一赛段 plus both Stages is every tier-1 trophy the region has to give
     regionalSweeps: [...regBy.values()].filter((got) => got.size >= 3).length,
     clubs: new Set((state.tenures ?? []).map((t) => t.teamId)).size || 1,
     seasons: state.year - 2026 + 1,
@@ -155,33 +155,33 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'firstRegional', scope: 'run', group: '冠军', title: '赛区冠军',
-    brief: '第一次拿下 Kickoff 或某个赛段的赛区冠军',
+    brief: '第一次拿下 第一赛段 或某个赛段的赛区冠军',
     test: (_s, f) => won(f, isRegional),
   },
   {
     key: 'firstChallengers', scope: 'run', group: '冠军', title: '次级联赛冠军',
-    brief: '第一次拿下 Challengers 赛段冠军',
-    test: (_s, f) => won(f, (t) => /^Challengers /.test(t)),
+    brief: '第一次拿下 次级联赛 赛段冠军',
+    test: (_s, f) => won(f, (t) => /^次级联赛 /.test(t)),
   },
   {
     key: 'firstAscension', scope: 'run', group: '冠军', title: '晋升赛冠军',
-    brief: '第一次通过 Ascension 升入 VCT',
-    test: (_s, f) => won(f, (t) => /^晋级 VCT/.test(t)),
+    brief: '第一次从次级联赛被一级联赛的俱乐部请走',
+    test: (_s, f) => won(f, (t) => /^晋级一级联赛/.test(t)),
   },
   {
     key: 'firstMasters', scope: 'run', group: '冠军', title: '大师赛冠军',
-    brief: '第一次拿下 Masters',
+    brief: '第一次拿下 国际赛',
     test: (_s, f) => won(f, isMasters),
   },
   {
     key: 'firstChampions', scope: 'run', group: '冠军', title: '冠军赛冠军',
-    brief: '第一次拿下 Champions',
+    brief: '第一次拿下 全球总决赛',
     hard: true,
     test: (_s, f) => won(f, isChampions),
   },
   {
     key: 'regionalSweep', scope: 'run', group: '冠军', title: '赛区全扫',
-    brief: '同一年拿下 Kickoff、Stage 1 和 Stage 2',
+    brief: '同一年拿下 第一赛段、第二赛段 和 第三赛段',
     hard: true,
     test: (_s, f) => f.regionalSweeps > 0,
   },
@@ -198,7 +198,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     // see freeTeamChoice in profile.ts. Checked every turn, so a save holding
     // the streak right now unlocks it without waiting for the career to end.
     key: 'threepeat', scope: 'run', group: '冠军', title: '三连霸',
-    brief: '连续三年拿下 Champions，中途换队也算',
+    brief: '连续三年拿下 全球总决赛，中途换队也算',
     hard: true,
     test: (_s, f) => {
       const years = [...new Set(f.honours.filter((h) => isChampions(h.title)).map((h) => h.year))]

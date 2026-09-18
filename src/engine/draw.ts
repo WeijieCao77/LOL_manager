@@ -9,16 +9,16 @@
  * ball — so a reload, a skip or a watched ceremony all show the same thing,
  * and opening packs or signing players in between changes nothing.
  *
- * One draw is a decision rather than a ceremony: after a Masters Swiss, the
+ * One draw is a decision rather than a ceremony: after a 国际赛 Swiss, the
  * four regional champions pick their quarter-final opponents in a drawn
  * order. That one waits for the human when it is his turn (advanceDay stops
  * on it), and an AI champion chooses by a small model of who it would rather
  * not meet.
  *
- * Every placement that has a rule — one side per region in a Champions
+ * Every placement that has a rule — one side per region in a 全球总决赛
  * group, a second seed against a third from another region in the Swiss,
  * no rematch in round three, same-group sides in opposite halves of the
- * Champions quarters — is placed by a solver that only takes a step the
+ * 全球总决赛 quarters — is placed by a solver that only takes a step the
  * rest of the draw can still complete from. When the natural slot is
  * refused, the reason is written into the step, so the screen can say
  * 「这两队同属中国赛区，该签顺延到下一合法小组」 instead of a ball landing
@@ -37,9 +37,9 @@ export type DrawKind =
   | 'champions-playoffs'
 
 export const DRAW_KIND_CN: Record<DrawKind, string> = {
-  'kickoff-bracket': 'Kickoff 签表抽签',
-  'stage1-groups': 'Stage 1 分组抽签',
-  'stage2-reshuffle': 'Stage 2 分组重抽',
+  'kickoff-bracket': '第一赛段 签表抽签',
+  'stage1-groups': '第二赛段 分组抽签',
+  'stage2-reshuffle': '第三赛段 分组重抽',
   'masters-swiss': '瑞士轮抽签',
   'masters-playoff-pick': '八强选择对手',
   'champions-groups': '小组抽签',
@@ -139,8 +139,8 @@ export const drawsOf = (state: GameState, compKey: string): DrawEvent[] =>
  * A competition key repeats every year — 'stage1:China' is the same string in
  * 2026 and 2031 — and last season's draws are kept for a year so the screens
  * can still show them. Asking "has this been drawn?" without asking "this
- * year?" answered yes forever: from a career's second season on, Stage 1 and
- * Stage 2 were never drawn again and the region simply had no league.
+ * year?" answered yes forever: from a career's second season on, 第二赛段 and
+ * 第三赛段 were never drawn again and the region simply had no league.
  */
 export const drawsThisYear = (state: GameState, compKey: string): DrawEvent[] =>
   drawsOf(state, compKey).filter((d) => d.year === state.year)
@@ -148,7 +148,7 @@ export const drawsThisYear = (state: GameState, compKey: string): DrawEvent[] =>
 /**
  * Is this draw the manager's to hold? His own region's, and any
  * international his club is in. The other regions' draws are held in the
- * background and reported in the news; a Masters he did not reach keeps
+ * background and reported in the news; a 国际赛 he did not reach keeps
  * its full record but never stops his clock.
  */
 export function needsManager(state: GameState, ev: DrawEvent): boolean {
@@ -156,8 +156,8 @@ export function needsManager(state: GameState, ev: DrawEvent): boolean {
   if (!comp) return false
   // A draw is yours to hold when your club is in the competition — not when
   // it merely happens in your region. It used to be the region, which was the
-  // same thing while every managed club was a VCT club; a Challengers side is
-  // not in its region's Kickoff, and was being stopped on day one to draw a
+  // same thing while every managed club was a VCT club; a 次级联赛 side is
+  // not in its region's 第一赛段, and was being stopped on day one to draw a
   // twelve-club bracket it has no team in (2026-09-09, managing ODG).
   return comp.teams.includes(state.myTeam)
 }
@@ -170,7 +170,7 @@ export const nextPendingDraw = (state: GameState): string | undefined =>
  * Draws the manager has not watched, oldest first: the internationals, and
  * the regional draws of his own region — the other three regions' draws are
  * held in the background and reported in the news, so a season does not
- * ask you to sit through four Stage 1 draws.
+ * ask you to sit through four 第二赛段 draws.
  */
 export const unwatchedDraws = (state: GameState): DrawEvent[] => (state.draws ?? []).filter((d) => {
   if (d.watched || d.status === 'awaiting-choice' || d.year !== state.year) return false
@@ -208,15 +208,15 @@ function completable(
 // ---------------------------------------------------------------- the draws
 
 /**
- * Kickoff: eight sides drawn into the four opening ties in the order they
+ * 第一赛段: eight sides drawn into the four opening ties in the order they
  * come out, then the four byes drawn into the second-round slots.
  * Outcome seeds: the eight in slot order, then the four byes.
  */
 export function drawKickoffBracket(state: GameState, comp: Competition, byes: string[], first: string[], playDay: number): DrawEvent {
   const rng = rngFor(state, comp.key, 'bracket')
   const ev = newEvent(state, comp, 'kickoff-bracket', 'bracket',
-    '上届 Champions 的四队轮空到胜者组第二轮，其余八队抽入胜者组第一轮。',
-    [{ name: '首轮参赛池', teams: first.slice() }, { name: 'Champions 轮空池', teams: byes.slice() }], playDay)
+    '上届 全球总决赛 的四队轮空到胜者组第二轮，其余八队抽入胜者组第一轮。',
+    [{ name: '首轮参赛池', teams: first.slice() }, { name: '全球总决赛 轮空池', teams: byes.slice() }], playDay)
   const firstOrder = rng.shuffle(first.slice())
   const byeOrder = rng.shuffle(byes.slice())
   firstOrder.forEach((t, i) => ev.steps.push({ team: t, pot: 0, slot: `胜者组第一轮 第${Math.floor(i / 2) + 1}场${i % 2 === 0 ? '上' : '下'}` }))
@@ -228,14 +228,14 @@ export function drawKickoffBracket(state: GameState, comp: Competition, byes: st
 }
 
 /**
- * Stage 1: six pots of two by Kickoff placing. From each pot the first ball
+ * 第二赛段: six pots of two by 第一赛段 placing. From each pot the first ball
  * goes to Alpha and the other to Omega.
  */
 export function drawStageGroups(state: GameState, comp: Competition, pots: string[][], playDay: number): DrawEvent {
   const rng = rngFor(state, comp.key, 'groups')
   const ev = newEvent(state, comp, 'stage1-groups', 'groups',
-    '按 Kickoff 名次分六档，每档两队：先抽出的进 Alpha 组，另一队进 Omega 组。',
-    pots.map((p, i) => ({ name: `第${'一二三四五六'[i] ?? i + 1}档（Kickoff 第 ${i * 2 + 1}、${i * 2 + 2} 名）`, teams: p.slice() })), playDay)
+    '按 第一赛段 名次分六档，每档两队：先抽出的进 Alpha 组，另一队进 Omega 组。',
+    pots.map((p, i) => ({ name: `第${'一二三四五六'[i] ?? i + 1}档（第一赛段 第 ${i * 2 + 1}、${i * 2 + 2} 名）`, teams: p.slice() })), playDay)
   const alpha: string[] = []
   const omega: string[] = []
   pots.forEach((pot, i) => {
@@ -251,16 +251,16 @@ export function drawStageGroups(state: GameState, comp: Competition, pots: strin
 }
 
 /**
- * Stage 2: three pools — the 1st/2nd placings, the 3rd/4th, the 5th/6th of
- * the Stage 1 groups. From each pool one placing is drawn, and the two
+ * 第三赛段: three pools — the 1st/2nd placings, the 3rd/4th, the 5th/6th of
+ * the 第二赛段 groups. From each pool one placing is drawn, and the two
  * sides that finished there swap groups; the other placing stays.
- * `alpha` and `omega` are the Stage 1 groups in finishing order.
+ * `alpha` and `omega` are the 第二赛段 groups in finishing order.
  */
 export function drawStageReshuffle(state: GameState, comp: Competition, alpha: string[], omega: string[], playDay: number): DrawEvent {
   const rng = rngFor(state, comp.key, 'reshuffle')
   const pools: [number, number][] = [[0, 1], [2, 3], [4, 5]]
   const ev = newEvent(state, comp, 'stage2-reshuffle', 'reshuffle',
-    '按 Stage 1 名次分三个交换池（第 1/2、3/4、5/6 名），每池抽一个名次：该名次的两队互换小组，另一名次留在原组。',
+    '按 第二赛段 名次分三个交换池（第 1/2、3/4、5/6 名），每池抽一个名次：该名次的两队互换小组，另一名次留在原组。',
     pools.map(([x, y]) => ({ name: `第 ${x + 1}/${y + 1} 名池`, teams: [alpha[x], omega[x], alpha[y], omega[y]].filter(Boolean) })), playDay)
   const nextAlpha = alpha.slice()
   const nextOmega = omega.slice()
@@ -279,7 +279,7 @@ export function drawStageReshuffle(state: GameState, comp: Competition, alpha: s
 }
 
 /**
- * A Masters Swiss round.
+ * A 国际赛 Swiss round.
  *  round 1: a second seed against a third seed from another region — the
  *           second seeds come out one at a time, and the third seed drawn
  *           for each is one the rest of the round can still be completed
@@ -380,7 +380,7 @@ export function drawSwissRound(
  * region and one from every seed level in each. That shape is a Latin square,
  * and the layout used to be a FIXED one — group i took region j's (i+j)th seed
  * — with the group written out in region order, which is the order the GSL
- * opener pairs on. So every group of every Champions of every career opened
+ * opener pairs on. So every group of every 全球总决赛 of every career opened
  * 美洲一号 vs 中国四号 and EMEA vs 太平洋. The constraints were right; it was
  * simply never a draw. Here the square is picked at random and the group comes
  * out in seed order, which is what a GSL group is.
@@ -410,7 +410,7 @@ export function championsGroupSquare(rng: Rng, n = 4): number[][] {
 }
 
 /**
- * Champions: pot 1 (the Stage 2 winners) into A–D in the order drawn; then
+ * 全球总决赛: pot 1 (the 第三赛段 winners) into A–D in the order drawn; then
  * pots 2, 3, 4 — each ball into the first group, A to D, that has nobody
  * from its region and that the rest of the pot can still be placed after.
  * Outcome groups are ordered by pot, so a GSL group's 1v4 / 2v3 falls out.
@@ -455,7 +455,7 @@ export function drawChampionsGroups(state: GameState, comp: Competition, pots: s
 }
 
 /**
- * Champions quarter-finals: each group winner draws a runner-up from
+ * 全球总决赛 quarter-finals: each group winner draws a runner-up from
  * another group; a group's two sides land in different halves (ties 1 and 2
  * are one half, 3 and 4 the other). Outcome pairs in tie order.
  */
@@ -514,7 +514,7 @@ export function drawChampionsPlayoffs(
 // ---------------------------------------------------------------- the pick
 
 /**
- * The Masters quarter-final pick: the four champions' order is drawn, then
+ * The 国际赛 quarter-final pick: the four champions' order is drawn, then
  * each picks a Swiss qualifier still unclaimed; the last takes what is
  * left. Created with the order drawn and nothing chosen; resolvePicks
  * plays it out, stopping when it is the human's turn.

@@ -131,14 +131,14 @@ export function PatchPanel() {
             </div>
           )}
           <p className="small muted" style={{ marginTop: 0 }}>
-            版本、地图适配、熟练度是三件事，表里分开列：顺版本是英雄本身在这一版强，合适是打法对这张图，熟练度是这五个人练过多少。
+            版本、克制、熟练度是三件事，表里分开列：顺版本是英雄本身在这一版强，克制是打法压着对面的打法，熟练度是这五个人练过多少。
             这里只是建议，预案不会自动改，要换去上面的各图预案里换。
           </p>
           <div className="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>地图</th><th>预案</th><th className="num">版本</th><th className="num">地图适配</th><th className="num">熟练度</th><th>本队建议</th>
+                  <th>场地</th><th>预案</th><th className="num">版本</th><th className="num">打法适配</th><th className="num">熟练度</th><th>本队建议</th>
                 </tr>
               </thead>
               <tbody>

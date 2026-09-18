@@ -24,7 +24,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   if (!ok) bad++
 }
 const mk = (): GameState => {
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'KBG')!.id, '审计', 20260828)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'DKC')!.id, '审计', 20260828)
   setupSeason(g)
   return g
 }
@@ -90,7 +90,7 @@ const mk = (): GameState => {
   const noGift = g.finances.log.some((l) => l.label.includes('直播礼物'))
   check('no wins, no gifts', !noGift)
   g.fixtures.push({
-    id: 'W1', day: g.day - 2, stage: g.stage, comp: 'Challengers China', teamA: g.myTeam,
+    id: 'W1', day: g.day - 2, stage: g.stage, comp: '次级联赛 China', teamA: g.myTeam,
     teamB: Object.keys(g.teams).find((id) => id !== g.myTeam)!, bo: 3, label: '测试',
     played: true, result: { mapsWonA: 2, mapsWonB: 0 } as never,
   } as never)
@@ -99,9 +99,9 @@ const mk = (): GameState => {
 }
 
 // ---- trophies move a balance sheet
-check('a Challengers title is worth winning', PRIZE.challengers1[0] >= 80000 && PRIZE.challengers2[0] >= 120000,
+check('a 次级联赛 title is worth winning', PRIZE.challengers1[0] >= 80000 && PRIZE.challengers2[0] >= 120000,
   `${PRIZE.challengers1[0]} / ${PRIZE.challengers2[0]}`)
-check('Champions pays like the biggest event in the game', PRIZE.champions[0] >= 1500000)
+check('全球总决赛 pays like the biggest event in the game', PRIZE.champions[0] >= 1500000)
 
 console.log(bad ? `\n${bad} failed` : '\nall held')
 process.exit(bad ? 1 : 0)

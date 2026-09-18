@@ -38,7 +38,7 @@ const BY_ID = new Map(CHAMPIONS.map((c) => [c.id, c]))
 export const championOf = (id: string): Champion | undefined => BY_ID.get(id)
 
 /**
- * Champions by the position they are played in. A champion with two real
+ * The champions, by the position they are played in. A champion with two real
  * positions is listed under both — 加里奥 is a mid laner and a top laner, and
  * a table that kept only one would charge a top laner for picking him.
  */

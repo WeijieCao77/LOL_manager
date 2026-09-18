@@ -34,8 +34,8 @@ const show = (ign: string) => {
   }
   console.log(`\n${ign}`)
   for (const y of ['2024', '2025', '2026']) console.log(`   ${y}  ${get(y)}`)
-  console.log(`   国际赛 Champions ${get('tier:champions')}`)
-  console.log(`          Masters   ${get('tier:masters')}`)
+  console.log(`   国际赛 全球总决赛 ${get('tier:champions')}`)
+  console.log(`          国际赛   ${get('tier:masters')}`)
   console.log(`   赛区联赛         ${get('tier:league')}`)
 }
 

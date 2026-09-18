@@ -28,7 +28,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   if (!ok) bad++
 }
 const mk = (): GameState => {
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '审计', 20260827)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '审计', 20260827)
   setupSeason(g)
   return g
 }
@@ -144,7 +144,7 @@ check('the longest injury on the books is 18 days',
   check('six at reputation 65', sponsorSlots(me2) === 6)
   me2.reputation = 64
   check('and five just below the first tier', sponsorSlots(me2) === 5)
-  check('the market opens during Masters I', windowOpen(70))
+  check('the market opens during First Stand', windowOpen(70))
   check('and the locked screen counts down to day 63', (screenLocked('transfers', { ...g, day: 30 } as never) ?? '').includes('33 天'))
 }
 

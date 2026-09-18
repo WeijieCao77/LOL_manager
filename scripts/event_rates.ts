@@ -27,7 +27,7 @@ const bump = (k: string, run: number, n = 1) => {
 }
 
 for (let run = 0; run < RUNS; run++) {
-  const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+  const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
   const g = createNewGame(me.id, '测试', 1000 + run * 7)
   setupSeason(g)
   let days = 0

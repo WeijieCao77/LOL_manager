@@ -6,7 +6,7 @@
  * a system with 43 badges in it, that is nothing. This is a card that lands in
  * the corner, names what you did and what it took, and waits to be dismissed.
  *
- * Several can unlock on the same turn — winning Champions can be four at once —
+ * Several can unlock on the same turn — winning 全球总决赛 can be four at once —
  * so they queue rather than overwrite, and the card says how many are behind
  * it. Clicking through is one tap each; 全部知道了 clears the lot.
  */

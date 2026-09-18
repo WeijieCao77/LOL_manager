@@ -53,7 +53,7 @@ const { WORLD_TEAMS } = await import('../src/engine/teams')
 const { setupSeason } = await import('../src/engine/season')
 const { exportSave, importSave, saveGame, loadAutosave } = await import('../src/engine/save')
 const { readCareerPreview } = await import('../src/engine/savePreview')
-const game = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '旧版浏览器', 7)
+const game = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '旧版浏览器', 7)
 setupSeason(game)
 const file = exportSave(game)
 

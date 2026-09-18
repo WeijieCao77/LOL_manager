@@ -7,15 +7,15 @@
  * record by hand and check the answer.
  *
  * The trophy line is built on the season the game really runs: three
- * international events a year, so a 全冠年 is Masters I + Masters II +
- * Champions, and 黄金之路 is three of those in a row. The exact strings matter
+ * international events a year, so a 全冠年 is First Stand + MSI 季中冠军赛 +
+ * 全球总决赛, and 黄金之路 is three of those in a row. The exact strings matter
  * — they are what settleCompetition writes into `honours` — so the ones used
  * here are asserted against the engine's own list rather than retyped.
  *
  *     npx tsx scripts/check_endings.ts
  */
 // Titles come from the constant, never a literal: this file used to spell
-// Champions its own way, matching a copy in endings.ts that the season never
+// 全球总决赛 its own way, matching a copy in endings.ts that the season never
 // awarded — so the test and the code agreed and both were wrong.
 import { createNewGame } from '../src/engine/world'
 import { squadOf } from '../src/engine/roster'
@@ -41,7 +41,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? '  — ' + detail : ''}`)
   if (!ok) bad++
 }
-const mk = (tag = 'TYL'): GameState => {
+const mk = (tag = 'BLG'): GameState => {
   const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === tag)!.id, '审计', 20260828)
   setupSeason(g)
   g.year = FINAL_YEAR
@@ -93,17 +93,17 @@ const has = (g: GameState, key: string) => endingsFor(g).some((e) => e.key === k
 // ---- 全冠年 is the three international events, and nothing else counts
 {
   const g = mk()
-  won(g, 2030, 'Masters I')
-  won(g, 2030, 'Masters II')
+  won(g, 2030, 'First Stand')
+  won(g, 2030, 'MSI 季中冠军赛')
   check('只拿两站大师赛不算全冠年', !has(g, 'perfectYear'), `全冠 ${factsOf(g).perfectYears.length} 年`)
   won(g, 2030, CHAMPIONS)
   check('补上冠军赛才是全冠年', has(g, 'perfectYear'))
 
   // and a regional title cannot stand in for one of them
   const h = mk()
-  won(h, 2030, 'Masters I')
-  won(h, 2030, 'Masters II')
-  won(h, 2030, 'VCT China · Stage 1')
+  won(h, 2030, 'First Stand')
+  won(h, 2030, 'MSI 季中冠军赛')
+  won(h, 2030, 'VCT China · 第二赛段')
   check('赛区冠军不能顶替冠军赛', !has(h, 'perfectYear'))
 }
 
@@ -125,7 +125,7 @@ const has = (g: GameState, key: string) => endingsFor(g).some((e) => e.key === k
   check('「不朽」排在「黄金之路」前面', endingOf(five).dynasty?.key === 'immortal')
 }
 
-// ---- the Champions streak line
+// ---- the 全球总决赛 streak line
 {
   const g = mk()
   won(g, 2030, CHAMPIONS); won(g, 2031, CHAMPIONS)
@@ -140,7 +140,7 @@ const has = (g: GameState, key: string) => endingsFor(g).some((e) => e.key === k
 // ---- 大师 is for the nearly-man: internationals, but never the big one
 {
   const g = mk()
-  won(g, 2030, 'Masters I'); won(g, 2032, 'Masters II')
+  won(g, 2030, 'First Stand'); won(g, 2032, 'MSI 季中冠军赛')
   check('只拿大师赛 →「大师」', endingOf(g).dynasty?.key === 'masterOnly')
   won(g, 2033, CHAMPIONS)
   check('拿到冠军赛之后就不再是「大师」', !has(g, 'masterOnly'))
@@ -160,7 +160,7 @@ const has = (g: GameState, key: string) => endingsFor(g).some((e) => e.key === k
 
   const still = mk()
   won(still, 2030, CHAMPIONS); won(still, 2031, CHAMPIONS)
-  won(still, 2033, 'VCT China · Stage 1')
+  won(still, 2033, 'VCT China · 第二赛段')
   still.year = 2034
   check('之后还有进账就不算', !has(still, 'icarus'))
 }
@@ -229,7 +229,7 @@ const has = (g: GameState, key: string) => endingsFor(g).some((e) => e.key === k
   // touched it, so the moment you changed jobs nobody on the new team was on
   // that list: 「推倒重来」 and the 大换血 badge fired for free, and
   // 「一起走到最后」 became impossible.
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '审计', 20260828)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '审计', 20260828)
   setupSeason(g)
   const other = WORLD_TEAMS.find((t) => t.tier === 1 && t.id !== g.myTeam)!
   moveToClub(g, other.id)
@@ -247,7 +247,7 @@ const has = (g: GameState, key: string) => endingsFor(g).some((e) => e.key === k
 
 // ---- 「草根」看的是你接手那天的级别，不是现在的
 {
-  // Ascension sets team.tier = 1, so reading the club's current tier erased
+  // 次级联赛总决赛 sets team.tier = 1, so reading the club's current tier erased
   // the very thing the ending is about: a manager who took a second-division
   // side up and then won the region read back as having started in the first.
   const low = WORLD_TEAMS.find((t) => t.tier === 2)!
@@ -257,13 +257,13 @@ const has = (g: GameState, key: string) => endingsFor(g).some((e) => e.key === k
   g.teams[g.myTeam]!.tier = 1                    // 晋级
   g.year = FINAL_YEAR
   g.finished = true
-  won(g, 2035, `VCT ${g.teams[g.myTeam]!.region} · Stage 1`)
+  won(g, 2035, `VCT ${g.teams[g.myTeam]!.region} · 第二赛段`)
   check('升上去之后仍然算「从次级起步」', has(g, 'grassroots'))
 }
 
 // ---- 十年真的会结束，而不是无限跑下去
 {
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '审计', 20260828)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '审计', 20260828)
   setupSeason(g)
   let guard = 0
   let asked = 0

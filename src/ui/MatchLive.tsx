@@ -164,7 +164,7 @@ export default function MatchLive({
               <p className="tiny faint" style={{ margin: 0 }}>
                 {game.vetoPlan
                   ? `你亲自 BP 的结果：${simRef.current!.vetoLog.join('，')}`
-                  : '已按地图熟练度自动 BP。想自己 ban 图点「手动 BP」。'}
+                  : '已按战术磨合度自动 BP。想自己 ban 图点「手动 BP」。'}
               </p>
             </div>
           </div>
@@ -209,10 +209,9 @@ export default function MatchLive({
 
   // `round` counts rounds completed, so it reads 0 in the moment before the
   // first one is played — and "第 0 回合" is not a thing that exists
-  const roundNo = Math.max(1, map?.round ?? 1)
 
   return (
-    <Modal wide title={`${map ? mapCn(map.map) : '换图中'} · 第 ${roundNo} 回合`} onClose={skip} onBgClose={() => {}}>
+    <Modal wide title={map ? `第 ${sim.played.length + 1} 局 · ${Math.floor(map.minute)} 分钟 · 击杀 ${map.a} : ${map.b}` : '下一局 BP 中'} onClose={skip} onBgClose={() => {}}>
       <div className="row" style={{ gap: 8, justifyContent: 'center', marginBottom: 6 }}>
         {sim.played.map((m, i) => (
           <span key={i} className="tag">

@@ -85,7 +85,7 @@ function state_keepFaith(g: GameState): void {
   g.missedStreak = 0
 }
 
-const TAGS = ['TYL', 'SEN', 'FNC', 'PRX', 'NRG', 'T1']
+const TAGS = ['TES', 'FLY', 'FNC', 'GEN', 'TL', 'T1']
 const seen = new Map<string, number>()
 /** every achievement any of these careers managed to earn, and how often */
 const badges = new Map<string, number>()

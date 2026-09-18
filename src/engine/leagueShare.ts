@@ -45,7 +45,7 @@ export const weeklyStipend = (tier: number): number =>
  *
  * 固定 pays the same whatever happened. 销量 starts lower and rides champ
  * points and reputation — a champion at rep 80 roughly doubles the fixed
- * figure, a quiet season at a small club undercuts it. Challengers capsules
+ * figure, a quiet season at a small club undercuts it. 次级联赛 capsules
  * sell a fraction of a VCT one.
  */
 export function bundlePot(state: GameState): number {
@@ -136,7 +136,7 @@ export function negotiateShare(state: GameState): string {
 export function setDealMode(state: GameState, mode: LeagueDeal['mode']): string {
   const deal = leagueDealOf(state)
   if (deal.mode === mode) return ''
-  if (state.day >= 63) return '合作方式只能在 Masters I 之前改，现在改不了了。'
+  if (state.day >= 63) return '合作方式只能在 First Stand 之前改，现在改不了了。'
   if (deal.modeYear === state.year) return '今年的合作方式已经定过一次了。'
   deal.mode = mode
   deal.modeYear = state.year
@@ -145,7 +145,7 @@ export function setDealMode(state: GameState, mode: LeagueDeal['mode']): string 
     : '已改为固定结算，每年一笔固定分成。'
 }
 
-/** The league floats a themed capsule. Generated when Stage 1 opens, some years. */
+/** The league floats a themed capsule. Generated when 第二赛段 opens, some years. */
 export function offerBundle(state: GameState, notes: string[]): void {
   const me = state.teams[state.myTeam]
   if (!me || me.tier !== 1) return

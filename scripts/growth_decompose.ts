@@ -16,7 +16,7 @@ const RIVALRY = Number(process.env.RIVALRY ?? 0)
 const SEEDS: [number, number][] = [[20260826, 7], [20260827, 17], [20260828, 27], [20260829, 37], [20260830, 47]]
 
 const mk = (seed: number): GameState => {
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '审计', seed)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '审计', seed)
   setupSeason(g)
   return g
 }

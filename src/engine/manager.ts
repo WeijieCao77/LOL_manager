@@ -131,7 +131,7 @@ export function ageBand(age: number): { key: string; label: string; note: string
 /**
  * Deliberately on the same scale as Team.reputation (which runs ~49-83), so
  * the two can be compared directly. The floor is set so that even the youngest
- * unknown can always take a Challengers job — starting low is the point, being
+ * unknown can always take a 次级联赛 job — starting low is the point, being
  * unable to start at all is not.
  */
 function ageReputation(age: number): number {
@@ -216,7 +216,7 @@ export function spendPoint(m: Manager, k: ManagerSkill, delta: 1 | -1): string |
  * Reputation gates the club's standing, and the very top of each league is
  * always shut — those jobs are earned by winning, not chosen at the start.
  */
-/** Challengers clubs will take anyone — there is always somewhere to start. */
+/** 次级联赛 clubs will take anyone — there is always somewhere to start. */
 export const OPEN_TO_ALL = 52
 
 export function canManage(

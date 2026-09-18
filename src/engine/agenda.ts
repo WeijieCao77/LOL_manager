@@ -184,7 +184,7 @@ export function agendaFor(state: GameState): AgendaItem[] {
     case 'stage2':
       items.push({ key: 'lineup', tone: 'todo', go: 'squad', text: '赛段进行中，注意轮换和体能。' })
       {
-        // where the table leads — the next Masters or Champions, and what we
+        // where the table leads — the next 国际赛 or 全球总决赛, and what we
         // still need for it — rather than a line that only named the cut
         const q = qualification(state)
         items.push({

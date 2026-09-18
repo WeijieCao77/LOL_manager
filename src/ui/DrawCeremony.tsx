@@ -8,7 +8,7 @@
  * pairings, the opening ties. 抽下一签 turns one ball, 全部揭晓 the rest;
  * nothing here changes what was decided when the draw was made.
  *
- * The one draw that IS a decision — the Masters quarter-final pick — shows
+ * The one draw that IS a decision — the 国际赛 quarter-final pick — shows
  * the candidates with what a coach would want to know and waits for the
  * click, or hands it to the coaches. A pick is written the moment it is
  * made; closing the window does not take it back.
@@ -29,7 +29,7 @@ export default function DrawCeremony({ drawId, onClose }: { drawId: string; onCl
   const comp = ev ? game.comps[ev.competitionKey] : undefined
   // A save written before the pick learned to resolve itself still holds a
   // 'ready' event; opening the ceremony is the moment to catch that up, or the
-  // choice panel stays invisible for the rest of that Masters. Above the
+  // choice panel stays invisible for the rest of that 国际赛. Above the
   // early return, because a hook cannot sit under one.
   const stale = ev?.kind === 'masters-playoff-pick' && ev.status === 'ready'
   useEffect(() => {

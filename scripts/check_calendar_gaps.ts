@@ -1,17 +1,17 @@
 /**
  * No two of our competitions on one day, and a real break between them.
  *
- * The Masters bracket is generated as it goes — its Swiss round opens when
- * every Kickoff has a champion, its playoffs eight days later, a round every
+ * The 国际赛 bracket is generated as it goes — its Swiss round opens when
+ * every 第一赛段 has a champion, its playoffs eight days later, a round every
  * two days — while the league's rounds are laid down for fixed days at the
- * start of the season. Nothing tied the two together, and 「4/1 Masters I
- * 败者组决赛」 sat above 「4/1 Stage 1 第1轮」 in a manager's schedule.
+ * start of the season. Nothing tied the two together, and 「4/1 First Stand
+ * 败者组决赛」 sat above 「4/1 第二赛段 第1轮」 in a manager's schedule.
  *
  * Plays whole seasons from several clubs and prints, per international, the
  * days it was played and the first day of the league after it; then sets a
- * season up on the calendar a save from before 2026-09-04 carries — Stage 1
+ * season up on the calendar a save from before 2026-09-04 carries — 第二赛段
  * from day 89, a round every six days — and plays it through the engine as
- * it is now, which has to move that league out of the Masters' way.
+ * it is now, which has to move that league out of the 国际赛' way.
  */
 import { createNewGame } from '../src/engine/world'
 import { WORLD_TEAMS } from '../src/engine/teams'
@@ -22,7 +22,7 @@ const N = Number(process.argv[2] ?? 6)
 const WANT = Number(process.argv[3] ?? 20)
 let bad = 0
 const check = (ok: boolean, what: string) => { if (!ok) bad++; console.log(`  ${ok ? '✓' : '✗'} ${what}`) }
-const tags = ['PRX', 'EDG', 'SEN', 'FNC', 'KBG', 'TYL', 'G2', 'NRG']
+const tags = ['GEN', 'BLG', 'FLY', 'FNC', 'DKC', 'TES', 'G2', 'TL']
 const nextOf = { masters1: 'stage1', masters2: 'stage2', champions: 'offseason' } as const
 
 function playAndReport(g: GameState, label: string, want: number): void {
@@ -56,10 +56,10 @@ for (let i = 0; i < N; i++) {
   playAndReport(g, `${team.tag} seed ${1000 + i * 7}`, WANT)
 }
 
-// a season set up before the calendar changed: Stage 1 from day 89, one
+// a season set up before the calendar changed: 第二赛段 from day 89, one
 // round every six days, as the saves of 2026-09-03 carry it
 {
-  const team = WORLD_TEAMS.find((t) => t.tag === 'KBG')!
+  const team = WORLD_TEAMS.find((t) => t.tag === 'DKC')!
   const g = createNewGame(team.id, 'cal', 4242)
   setupSeason(g)
   const rounds = new Map<string, number>()
@@ -68,10 +68,10 @@ for (let i = 0; i < N; i++) {
     f.day = 89 + rounds.get(f.label)! * 6
   }
   const before = Math.min(...g.fixtures.filter((f) => f.stage === 'stage1').map((f) => f.day))
-  console.log(`\nold save: Stage 1 laid down from day ${before} (${rounds.size} rounds, every 6 days)`)
+  console.log(`\nold save: 第二赛段 laid down from day ${before} (${rounds.size} rounds, every 6 days)`)
   playAndReport(g, 'KBG on the 2026-09-03 calendar', BREAK_AFTER_INTERNATIONAL)
   const s1 = g.fixtures.filter((f) => f.stage === 'stage1' && !f.label.startsWith('KO:')).map((f) => f.day)
-  check(Math.max(...s1) <= LEAGUE_DAYS.stage1[1] + 2, `its Stage 1 still ends by day ${Math.max(...s1)} (window ends ${LEAGUE_DAYS.stage1[1]})`)
+  check(Math.max(...s1) <= LEAGUE_DAYS.stage1[1] + 2, `its 第二赛段 still ends by day ${Math.max(...s1)} (window ends ${LEAGUE_DAYS.stage1[1]})`)
 }
 console.log(bad ? `\n${bad} problem(s)` : '\nall good')
 process.exit(bad ? 1 : 0)

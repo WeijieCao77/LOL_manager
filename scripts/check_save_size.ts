@@ -68,7 +68,7 @@ const check = (name: string, ok: boolean, detail = '') => {
 const kb = (s: string) => Math.round(s.length / 1024)
 const partKb = (v: unknown) => Math.round(((JSON.stringify(v) ?? '').length) / 1024)
 
-const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
 const g: GameState = createNewGame(me.id, '尺寸审计', 20260831)
 setupSeason(g)
 console.log(`开局 ${kb(packState(g))} KB`)

@@ -25,7 +25,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   if (!ok) bad++
 }
 const mk = (): GameState => {
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'EDG')!.id, '审计', 20260909)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'BLG')!.id, '审计', 20260909)
   setupSeason(g)
   return g
 }
@@ -52,7 +52,7 @@ const win = (g: GameState, stage: string, name: string, region?: string, city?: 
 }
 {
   const g = mk()
-  const p = win(g, 'champions', 'Champions 2026', undefined, '上海')
+  const p = win(g, 'champions', '全球总决赛 2026', undefined, '上海')
   check('国际赛夺冠是最高一档', !!p && p.tier === 'international', p?.tier)
   check('国际赛带主办城市', p?.city === '上海', p?.city)
 }
@@ -60,13 +60,13 @@ const win = (g: GameState, stage: string, name: string, region?: string, city?: 
   const g = mk()
   win(g, 'stage1', '第一赛段', '中国')
   const first = g.titlePoster?.name
-  win(g, 'champions', 'Champions 2026', undefined, '上海')
+  win(g, 'champions', '全球总决赛 2026', undefined, '上海')
   check('再拿一个冠军会换成新的那张', g.titlePoster?.name !== first, `${first} → ${g.titlePoster?.name}`)
 }
 {
   // 看过就清掉，跟 UI 的 onClose 一致；这里只验状态能被清空
   const g = mk()
-  win(g, 'masters1', 'Masters 上海', undefined, '上海')
+  win(g, 'masters1', '国际赛 上海', undefined, '上海')
   check('大师赛也是国际赛档', g.titlePoster?.tier === 'international')
   g.titlePoster = undefined
   check('清掉之后不会再弹', !g.titlePoster)

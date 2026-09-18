@@ -20,7 +20,6 @@ const Home = lazy(() => import('./ui/Home'))
 const ManagerGame = lazy(() => import('./ManagerGame'))
 import UpdateNudge from './ui/UpdateNudge'
 import DomainNotice from './ui/DomainNotice'
-import MusicPlayer from './ui/MusicPlayer'
 
 type Mode = 'home' | 'career' | 'career-test'
 const PATHS: Record<Mode, string> = { home: '/', career: '/manager', 'career-test': '/manager/test' }
@@ -75,8 +74,6 @@ export default function App() {
       <UpdateNudge />
       <DomainNotice />
       <Suspense fallback={loading}>{page}</Suspense>
-      {/* under every page, so it keeps playing across both */}
-      <MusicPlayer />
     </>
   )
 }

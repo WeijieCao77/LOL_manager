@@ -17,7 +17,7 @@ import type { GameState } from '../src/engine/types'
 
 const SEASONS = Number(process.argv[2] ?? 6)
 const SEED = Number(process.argv[3] ?? 20260906)
-const g: GameState = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'EDG')!.id, '审计', SEED)
+const g: GameState = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'BLG')!.id, '审计', SEED)
 setupSeason(g)
 
 const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / Math.max(1, xs.length)

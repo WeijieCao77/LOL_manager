@@ -33,7 +33,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   if (!ok) bad++
 }
 const mk = (seed = 20260913): GameState => {
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'EDG')!.id, '审计', seed)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'BLG')!.id, '审计', seed)
   setupSeason(g)
   return g
 }
@@ -48,7 +48,7 @@ const comp = (g: GameState, stage: Competition['stage'], name: string, champ: st
   g.day = 120
   const me = g.teams[g.myTeam]
   const bench = me.roster.find((id) => !me.starters.includes(id))
-  const c = comp(g, 'masters1', 'Masters Toronto', g.myTeam)
+  const c = comp(g, 'masters1', '国际赛 Toronto', g.myTeam)
   settleCompetition(g, c, [])
   const p = g.players[me.starters[0]]
   const t = p.titles![p.titles!.length - 1]
@@ -68,7 +68,7 @@ const comp = (g: GameState, stage: Competition['stage'], name: string, champ: st
   const g = mk()
   g.day = 120
   const me = g.teams[g.myTeam]
-  settleCompetition(g, comp(g, 'masters1', 'Masters Toronto', g.myTeam), [])
+  settleCompetition(g, comp(g, 'masters1', '国际赛 Toronto', g.myTeam), [])
   const p = g.players[me.starters[0]]
   const other = Object.values(g.teams).find((t) => t.id !== g.myTeam && t.tier === 1)!
   const before = p.clubHist!.length

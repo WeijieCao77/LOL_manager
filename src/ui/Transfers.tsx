@@ -341,7 +341,7 @@ export default function Transfers() {
             {ROLES.map((r) => (
               <option key={r} value={r}>要一个{r}</option>
             ))}
-            <option value="igl">要一个指挥（IGL）</option>
+            <option value="igl">要一名队长</option>
           </select>
           {askRole && (
             <label className="tiny faint row" style={{ gap: 6, alignItems: 'center' }}>
@@ -360,7 +360,7 @@ export default function Transfers() {
             <option value="">选择俱乐部…</option>
             {askClubs.map((t) => (
               <option key={t.id} value={t.id}>
-                {t.tag} · {t.name} — {t.tier === 2 ? '次级' : 'VCT'} · 声望 {Math.round(t.reputation)}
+                {t.tag} · {t.name} — {t.tier === 2 ? '次级' : '一级'} · 声望 {Math.round(t.reputation)}
               </option>
             ))}
           </select>
@@ -370,9 +370,9 @@ export default function Transfers() {
         {askRole ? (
           <div>
             <div className="row wrap" style={{ gap: 8, alignItems: 'baseline', marginBottom: 8 }}>
-              <b>全世界的{askRole === 'igl' ? '指挥（IGL）' : askRole}</b>
+              <b>全世界的{askRole === 'igl' ? '队长' : askRole}</b>
               <span className="tag">{roleHits.length} 人{roleHits.length === 40 ? '（只列前 40）' : ''}</span>
-              <span className="tiny faint">按能力排序 · {askRole === 'igl' ? '各个位置的指挥都在内' : '兼任这个位置的人也在内'}</span>
+              <span className="tiny faint">按能力排序 · {askRole === 'igl' ? '各个位置的队长都在内' : '兼任这个位置的人也在内'}</span>
             </div>
             {roleHits.length === 0 ? (
               <p className="tiny faint" style={{ margin: 0 }}>没有符合条件的人，放宽能力下限或换个赛区试试。</p>
@@ -521,7 +521,7 @@ export default function Transfers() {
             <select value={role} onChange={(e) => setRole(e.target.value as Role | 'all' | 'igl')} style={{ width: 110, padding: '5px 8px', fontSize: 12 }}>
               <option value="all">全部位置</option>
               {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
-              <option value="igl">指挥（IGL）</option>
+              <option value="igl">队长</option>
             </select>
             <input
               value={search} onChange={(e) => setSearch(e.target.value)}
@@ -552,8 +552,8 @@ export default function Transfers() {
                     <Face id={p.id} /><b>{p.ign}</b>
                     {p.isIgl && (
                       <span className="tag" style={{ marginLeft: 6 }}
-                        title={p.iglSource === 'inferred' ? '真实指挥未确认，暂由他代行' : '队内指挥'}>
-                        {p.iglSource === 'inferred' ? '推定 IGL' : 'IGL'}
+                        title={p.iglSource === 'inferred' ? '队长：比赛里他的运营占全队最大的一份' : '队长'}>
+                        {p.iglSource === 'inferred' ? '队长' : 'IGL'}
                       </span>
                     )}
                     {game.importLimit && isImport(p, me) && (

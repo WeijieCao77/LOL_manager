@@ -19,7 +19,7 @@ import { cycleDays } from '../src/engine/actions'
 import { Rng } from '../src/engine/rng'
 import { defaultContract } from '../src/engine/types'
 
-const club = WORLD_TEAMS.find(t => t.tag === 'KBG')!
+const club = WORLD_TEAMS.find(t => t.tag === 'DKC')!
 const g = createNewGame(club.id, '审计经理', 20260824)
 setupSeason(g)
 const rng = new Rng(3)
@@ -96,7 +96,7 @@ console.log(`  新问价 → ${enquireAbout(g5, mark2.id)}`)
 // answerable the day after it shuts, or "closed" would mean "frozen". The bid
 // is placed by hand rather than waited for: whether the AI happens to want one
 // of our players on day 20 is not what this is checking.
-const g6 = createNewGame(WORLD_TEAMS.find(t => t.tag === 'TYL')!.id, '审计经理', 20260824)
+const g6 = createNewGame(WORLD_TEAMS.find(t => t.tag === 'TES')!.id, '审计经理', 20260824)
 setupSeason(g6)
 const rng6 = new Rng(21)
 while (g6.day < 20) advanceDay(g6, rng6)

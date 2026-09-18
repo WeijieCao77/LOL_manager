@@ -8,7 +8,7 @@ import { defaultContract, SQUAD_ROLE_CN } from '../src/engine/types'
 import type { SquadRole } from '../src/engine/types'
 import { Rng } from '../src/engine/rng'
 
-const me = WORLD_TEAMS.find((t) => t.tag === 'KBG')!  // a weak club, worst case
+const me = WORLD_TEAMS.find((t) => t.tag === 'DKC')!  // a weak club, worst case
 const g = createNewGame(me.id, 'T', 3); setupSeason(g)
 const club = g.teams[g.myTeam]
 

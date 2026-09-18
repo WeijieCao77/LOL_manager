@@ -5,7 +5,7 @@ import { WORLD_TEAMS } from '../src/engine/teams'
 import { advanceDay, setupSeason } from '../src/engine/season'
 import { incomingOffers } from '../src/engine/transfer'
 
-const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
 const g = createNewGame(me.id, 'T', 21)
 setupSeason(g)
 

@@ -18,7 +18,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? '  — ' + detail : ''}`)
   if (!ok) bad++
 }
-const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'PRX')!.id, '审计经理', 20260905)
+const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'GEN')!.id, '审计经理', 20260905)
 setupSeason(g)
 let found: { comp: string; loser: string; day: number } | null = null
 let guard = 0

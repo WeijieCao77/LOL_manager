@@ -15,7 +15,7 @@ import type { Fixture, Region } from '../engine/types'
  * 本队 used to be exactly the club's own fixtures, which had two holes in it.
  * A playoff we had just gone out of vanished — its final was two days away
  * and the page said nothing, so a manager who had finished third did not know
- * when the winner would be decided. And the Masters we had already qualified
+ * when the winner would be decided. And the 国际赛 we had already qualified
  * for was not on it at all until the draw existed, which can be a week later:
  * the page listed a league game forty days out, then a 7-day advance landed
  * on 「G2 · 9 天后」 with nothing in between. So 本队 now also carries the rest
@@ -53,7 +53,7 @@ const INTL_ALL: { key: 'masters1' | 'masters2' | 'champions'; name: string }[] =
 
 export default function Schedule() {
   const { game, openMatch } = useGame()
-  // 2023 has no Masters I; its Masters is in the second slot and its LCQ in Stage 2's
+  // 2023 has no First Stand; its 国际赛 is in the second slot and its LCQ in 第三赛段's
   const book = rulebookOf(game)
   const INTL = INTL_ALL.filter((e) => !(book.lockin && e.key === 'masters1'))
   const INTERNATIONAL_START = book.internationalOpen
@@ -95,8 +95,8 @@ export default function Schedule() {
     }
     // a playoff we are out of still has a winner to find: its remaining ties
     // join our stage's section, greyed, so the final's date is on the page.
-    // OUT of, which means we were in it: a Challengers side is not in its
-    // region's Kickoff at all, and 本队 opened on twelve clubs' bracket
+    // OUT of, which means we were in it: a 次级联赛 side is not in its
+    // region's 第一赛段 at all, and 本队 opened on twelve clubs' bracket
     // (2026-09-09, managing ODG).
     for (const comp of Object.values(game.comps)) {
       if (comp.region !== myRegion || comp.champion || !comp.bracketStarted) continue
@@ -205,7 +205,7 @@ export default function Schedule() {
           })}
         </div>
         <p className="tiny muted" style={{ marginBottom: 0, marginTop: 10 }}>
-          Challengers 与 VCT 并行；Challengers 第二赛段冠军经 Ascension 升入 VCT。
+          次级联赛与一级联赛并行。联盟制没有升降级：次级联赛的冠军是一座奖杯，往上走的是人。
         </p>
       </Panel>
 

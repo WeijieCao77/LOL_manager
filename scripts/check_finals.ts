@@ -11,7 +11,7 @@ import { WORLD_TEAMS } from '../src/engine/teams'
 import { advanceDay, setupSeason } from '../src/engine/season'
 import { Rng } from '../src/engine/rng'
 
-const me = WORLD_TEAMS.find(t => t.tag === 'TYL')!
+const me = WORLD_TEAMS.find(t => t.tag === 'TES')!
 const g = createNewGame(me.id, '审计经理', 20260824)
 setupSeason(g)
 const rng = new Rng(31)

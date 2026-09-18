@@ -6,7 +6,7 @@ import { activePool } from '../src/engine/match'
 import { simulateMatch } from '../src/engine/match'
 import { sortStandings } from '../src/engine/league'
 
-const me = WORLD_TEAMS.find((t) => t.tag === 'PRX')!
+const me = WORLD_TEAMS.find((t) => t.tag === 'GEN')!
 const g = createNewGame(me.id, 'T', 99)
 setupSeason(g)
 

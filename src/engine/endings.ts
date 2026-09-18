@@ -14,8 +14,8 @@
  * qualifies for, so a homegrown side that wins everything is credited twice.
  *
  * The trophy conditions are built on the season the game actually runs. A year
- * holds exactly three international events — Masters I, Masters II and
- * Champions — so a 全冠年 is those three, and 黄金之路 is three such years in a
+ * holds exactly three international events — First Stand, MSI 季中冠军赛 and
+ * 全球总决赛 — so a 全冠年 is those three, and 黄金之路 is three such years in a
  * row: nine international titles without dropping one. That number comes from
  * the calendar rather than from wanting a big-sounding figure.
  *
@@ -71,9 +71,9 @@ export interface Ending {
  * The three international trophies, spelled the way the season actually
  * awards them.
  *
- * They were spelled a fourth way here — 'Champions' — while season.ts hands
- * out 'VALORANT Champions', and an exact-match check between the two never
- * fired. Every Champions-shaped ending was unreachable, and a three-time world
+ * They were spelled a fourth way here — '全球总决赛' — while season.ts hands
+ * out '全球总决赛', and an exact-match check between the two never
+ * fired. Every 全球总决赛-shaped ending was unreachable, and a three-time world
  * champion was told 「有过高光——不是一个会被写进历史的十年」.
  *
  * check_endings.ts could not catch it, because it builds its test careers by
@@ -82,27 +82,27 @@ export interface Ending {
  * season.ts imports them, which is the only arrangement where the two cannot
  * drift apart again.
  */
-export const MASTERS_1 = 'Masters I'
-export const MASTERS_2 = 'Masters II'
-export const CHAMPIONS = 'VALORANT Champions'
+export const MASTERS_1 = 'First Stand'
+export const MASTERS_2 = 'MSI 季中冠军赛'
+export const CHAMPIONS = '全球总决赛'
 export const INTL_TITLES = [MASTERS_1, MASTERS_2, CHAMPIONS] as const
 
 const isIntl = (t: string) => (INTL_TITLES as readonly string[]).includes(t)
 const isChampions = (t: string) => t === CHAMPIONS
-/** A tier-1 regional trophy: a Kickoff or one of the two Stages. */
-const isRegional = (t: string) => /Kickoff$/.test(t) || /^VCT .+ · Stage \d$/.test(t)
-const isChallengers = (t: string) => /^Challengers /.test(t)
-const isAscension = (t: string) => /^晋级 VCT/.test(t)
+/** A tier-1 regional trophy: a 第一赛段 or one of the two Stages. */
+const isRegional = (t: string) => /^(LPL|LCK|LEC|LCS|LCP|CBLOL) 第[一二三]赛段$/.test(t)
+const isChallengers = (t: string) => /^次级联赛 /.test(t)
+const isAscension = (t: string) => /^晋级一级联赛/.test(t)
 
 export interface Facts {
   seasons: number
-  /** years holding the Champions trophy */
+  /** years holding the 全球总决赛 trophy */
   champYears: number[]
   /** years in which all three international events came home */
   perfectYears: number[]
   /** longest run of consecutive perfect years — three of them is 黄金之路 */
   perfectStreak: number
-  /** longest run of consecutive years holding Champions */
+  /** longest run of consecutive years holding 全球总决赛 */
   champStreak: number
   intlTitles: number
   regionalTitles: number
@@ -184,7 +184,7 @@ export function factsOf(state: GameState): Facts {
     && !allYears.some((y) => y > streakEnd)
 
   // Which tier the job was taken at, stamped when it was taken. Reading the
-  // club's tier now would answer the wrong question: Ascension sets tier to 1,
+  // club's tier now would answer the wrong question: 次级联赛总决赛 sets tier to 1,
   // so a manager who actually went up with a second-division side reads back
   // as having started in the first. Older saves have no stamp and fall back to
   // the first club's current tier, which is what they always did.
@@ -298,9 +298,9 @@ export const ENDINGS: Ending[] = [
   },
   {
     key: 'ascend', track: '王朝', title: '升班马',
-    brief: '带队从次级联赛升入 VCT',
+    brief: '从次级联赛起步，走进了一级联赛',
     test: (_s, f) => f.promotions > 0,
-    text: (s) => `你在次级联赛接手了${club(s)}，把它送进了 VCT。`
+    text: (s) => `你在次级联赛接手了${club(s)}，最后站上了一级联赛的舞台。`
       + `那些年在空荡荡的赛场里打的比赛，现在都值了。`,
   },
   {
@@ -346,7 +346,7 @@ export const ENDINGS: Ending[] = [
   },
   {
     key: 'grassroots', track: '故事', title: '草根',
-    brief: '从次级联赛的球队起步，最后拿下 VCT 赛区冠军',
+    brief: '从次级联赛的球队起步，最后拿下一级联赛的赛区冠军',
     test: (_s, f) => f.startedLow && f.regionalTitles > 0,
     text: (s) => `你是从没人看的次级联赛开始的。现在${club(s)}是赛区冠军，`
       + `而当年那间小小的训练室，墙上还挂着第一张合影。`,

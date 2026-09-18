@@ -23,7 +23,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   if (!ok) bad++
 }
 
-const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '审计经理', 20260825)
+const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '审计经理', 20260825)
 setupSeason(g)
 const rng = new Rng(9)
 
@@ -111,7 +111,7 @@ check('the bid actually gets its answer in the new season',
 // resolver every day and re-rolled the odds — seven re-rolls per offseason
 // turn, so it nearly always hit the rejection branch before the player saw it.
 {
-  const g2 = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TYL')!.id, '审计', 20260825)
+  const g2 = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '审计', 20260825)
   setupSeason(g2)
   const { pitchSponsor: pitch, signSponsor } = await import('../src/engine/commercial')
   const rng2 = new Rng(21)

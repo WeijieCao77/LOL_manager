@@ -58,7 +58,7 @@ export default function Support({ raised = false }: { raised?: boolean }) {
           className={`support-fab${open ? ' on' : ''}${raised ? ' raised' : ''}`}
           onClick={() => setOpen((x) => !x)}
           aria-expanded={open}
-          title="VCT电竞经理和开瓦包永久免费，愿意的话支持一下"
+          title="英雄联盟电竞经理永久免费，愿意的话支持一下"
         >
           <span className="ico" aria-hidden="true">⚡</span>
           <span className="lbl">支持作者</span>
@@ -74,7 +74,7 @@ export default function Support({ raised = false }: { raised?: boolean }) {
               <button className="sm ghost" onClick={() => setOpen(false)}>关闭 ✕</button>
             </div>
             <p className="small muted">
-              VCT电竞经理和开瓦包<b>永久免费，不卖数值、不卖抽卡</b>。
+              英雄联盟电竞经理<b>永久免费，不卖数值</b>。
               喜欢的话可以支持一下；不支持也没关系，在群里提 bug 和建议就是支持。
             </p>
             <div className="support-body">
@@ -91,7 +91,7 @@ export default function Support({ raised = false }: { raised?: boolean }) {
             </div>
             <div className="support-foot">
               <button className="sm ghost" onClick={hide}>不用了，别再提示</button>
-              <span className="tiny faint">数据来自 vlr.gg / Liquipedia，游戏内容为程序模拟，与现实无关</span>
+              <span className="tiny faint">数据来自 Oracle's Elixir / Leaguepedia，游戏内容为程序模拟，与现实无关</span>
             </div>
           </div>
         </>

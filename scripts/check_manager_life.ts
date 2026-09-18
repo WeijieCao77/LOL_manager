@@ -34,7 +34,7 @@ const check = (name: string, ok: boolean, detail = '') => {
 }
 const mk = (seed = 20260913, age = 31): GameState => {
   const m = createManager('审计', age, 'expro')
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'EDG')!.id, '审计', seed, m)
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'BLG')!.id, '审计', seed, m)
   setupSeason(g)
   return g
 }

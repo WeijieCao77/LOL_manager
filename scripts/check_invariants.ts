@@ -128,7 +128,7 @@ function audit(g: GameState, when: string): void {
 }
 
 const seasons = Number(process.argv[2] ?? 1)
-const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
 const g = createNewGame(me.id, '审计', 20260831)
 setupSeason(g)
 audit(g, '开局')

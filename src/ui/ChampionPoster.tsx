@@ -4,7 +4,7 @@ import type { TitlePoster } from '../engine/types'
 /**
  * 夺冠海报。
  *
- * 晋级已经有一张（QualifyPoster）——「确认晋级 Masters」是赛季的一个节点，而
+ * 晋级已经有一张（QualifyPoster）——「确认晋级 国际赛」是赛季的一个节点，而
  * 拿下冠军是赛季本身。这里用同一套版式，只把分量往上抬一级：三档赛事各有自己
  * 的色带和眉标，国际赛还带主办城市。
  *
@@ -18,8 +18,8 @@ import type { TitlePoster } from '../engine/types'
  */
 const TIER = {
   ascension: { eyebrow: 'Promoted', lead: '升入一级联赛', band: 'var(--sentinel)' },
-  regional: { eyebrow: 'Champions', lead: '赛区冠军', band: 'var(--accent)' },
-  international: { eyebrow: 'World Champions', lead: '国际赛冠军', band: 'var(--initiator)' },
+  regional: { eyebrow: '全球总决赛', lead: '赛区冠军', band: 'var(--accent)' },
+  international: { eyebrow: 'World 全球总决赛', lead: '国际赛冠军', band: 'var(--initiator)' },
 } as const
 
 export default function ChampionPoster({

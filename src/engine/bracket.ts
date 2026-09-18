@@ -4,15 +4,15 @@
  *
  * The circuit's real 2026 formats, as played:
  *
- *   Masters (12 teams)     the four regional winners wait in the playoffs;
+ *   国际赛 (12 teams)     the four regional winners wait in the playoffs;
  *                          the eight 2nd/3rd seeds play a three-round Swiss
  *                          (BO3, two wins through, two losses out) for the
  *                          other four places; then an eight-team double
  *                          elimination, lower final and grand final BO5
- *   Champions (16 teams)   four GSL groups of four, two through from each,
+ *   全球总决赛 (16 teams)   four GSL groups of four, two through from each,
  *                          then the same eight-team double elimination
- *   Stage 1 / Stage 2      an eight-team double elimination from the table
- *   Kickoff                a four-team double elimination from the table
+ *   第二赛段 / 第三赛段      an eight-team double elimination from the table
+ *   第一赛段                a four-team double elimination from the table
  *
  * A double elimination is written here as a template: waves of named rounds,
  * each slot saying where its two teams come from — a seed, or the winner or
@@ -66,7 +66,7 @@ export const DOUBLE_8: Wave[] = [
   [{ name: GF, slots: [{ a: W(UBF, 0), b: W(LBF, 0), bo: 5 }] }],
 ]
 
-/** Four seeds: Kickoff's playoff. */
+/** Four seeds: 第一赛段's playoff. */
 export const DOUBLE_4: Wave[] = [
   [{ name: UB1, slots: [{ a: S(1), b: S(4) }, { a: S(2), b: S(3) }] }],
   [
@@ -78,13 +78,13 @@ export const DOUBLE_4: Wave[] = [
 ]
 
 /**
- * The 2026 Kickoff: twelve sides, three lives each.
+ * The 2026 第一赛段: twelve sides, three lives each.
  *
- * Eight drawn into the opening round, four (last year's Champions sides)
+ * Eight drawn into the opening round, four (last year's 全球总决赛 sides)
  * drawn into the second round's byes. A first loss drops a side into the
  * middle bracket, a second into the lower, a third sends it home. There is
  * no grand final: the upper, middle and lower brackets each end in a final
- * of their own, and their winners are the region's three Masters seeds in
+ * of their own, and their winners are the region's three 国际赛 seeds in
  * that order. Thirty ties over nine waves; the middle and lower finals are
  * BO5, the upper final BO3.
  *
@@ -146,7 +146,7 @@ export const TRIPLE_12_PLACES: Src[] = [
   W(KUF, 0), W(KMF, 0), W(KLF, 0), L(KLF, 0), L(KLSF, 0), L(KL5, 0),
   L(KL4, 0), L(KL4, 1), L(KL3, 0), L(KL3, 1), L(KL2, 0), L(KL1, 0),
 ]
-/** The rounds that end a Kickoff bracket lane — the winners qualify. */
+/** The rounds that end a 第一赛段 bracket lane — the winners qualify. */
 export const isMiddleLabel = (name: string): boolean => name.startsWith('中段组')
 
 /**
@@ -176,7 +176,7 @@ export const STAGE_8_PLACES: Src[] = [
 ]
 
 /**
- * A Masters' eight after the pick: seeds in pairs, [champion, its pick] ×
+ * A 国际赛' eight after the pick: seeds in pairs, [champion, its pick] ×
  * 4 in the order chosen, so the quarter-finals are the pairs made and ties
  * 1–2 and 3–4 share a half. From the second wave on it is DOUBLE_8.
  */
@@ -239,7 +239,7 @@ function resolve(src: Src, seeds: string[], ko: Fixture[]): string | null {
 /**
  * Build the next wave of a templated bracket, or decide it.
  *
- * `offset` numbers the waves after whatever came before — Champions' playoff
+ * `offset` numbers the waves after whatever came before — 全球总决赛' playoff
  * waves follow its three group waves. Returns the new fixtures; sets
  * `comp.champion` and prepends the template's placings to `comp.finished`
  * when the last wave is played.
@@ -255,7 +255,7 @@ const knocksOut = (name: string): boolean =>
  * Placings used to be written only when the champion was known, so between
  * the lower final and the grand final a club beaten into third stood nowhere
  * — the panel said 「季后赛进行中」 to a side that was already booked for
- * Masters. The lower bracket eliminates in rising order (7–8th, then 5–6th,
+ * 国际赛. The lower bracket eliminates in rising order (7–8th, then 5–6th,
  * 4th, 3rd, the runner-up), so each wave's losers go in front of the ones
  * already there and the order is right at every moment.
  */
@@ -355,7 +355,7 @@ export const championsGroups = (): Wave[] =>
 export const doubleFor = (n: number): { template: Wave[]; places: Src[] } =>
   n >= 8 ? { template: DOUBLE_8, places: DOUBLE_8_PLACES } : { template: DOUBLE_4, places: DOUBLE_4_PLACES }
 
-/** The vct-2026 templates: a triple-elimination Kickoff, a grouped stage's eight, a Masters' picked eight. */
+/** The vct-2026 templates: a triple-elimination 第一赛段, a grouped stage's eight, a 国际赛' picked eight. */
 export const tripleTemplate = (): { template: Wave[]; places: Src[] } => ({ template: TRIPLE_12, places: TRIPLE_12_PLACES })
 export const stageTemplate = (): { template: Wave[]; places: Src[] } => ({ template: STAGE_8, places: STAGE_8_PLACES })
 export const mastersTemplate = (): { template: Wave[]; places: Src[] } => ({ template: MASTERS_8, places: DOUBLE_8_PLACES })
@@ -463,12 +463,12 @@ export function swissDone(state: GameState, comp: Competition, seeds: string[]):
   return seeds.every((id) => { const r = swissRecord(comp, id); return r.w >= 2 || r.l >= 2 })
 }
 
-/** The eight-team playoff order for a Masters: the four byes, then the Swiss
+/** The eight-team playoff order for a 国际赛: the four byes, then the Swiss
  *  qualifiers best record first, so 1v8 is a regional winner against the
  *  last team through. */
 export const mastersSeeds = (byes: string[], through: string[]): string[] => [...byes, ...through]
 
-/** The eight-team playoff order for Champions: group winners, then runners-up
+/** The eight-team playoff order for 全球总决赛: group winners, then runners-up
  *  rotated so nobody meets their own group in the opening round. */
 export const championsSeeds = (firsts: string[], seconds: string[]): string[] => [
   firsts[0], firsts[1], firsts[2], firsts[3],

@@ -33,7 +33,7 @@ const check = (ok: boolean, what: string, detail = '') => {
   if (!ok) bad++
 }
 
-const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
 const g = createNewGame(me.id, '审计', 20260901)
 setupSeason(g)
 const MAP = 'Breeze'

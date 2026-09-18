@@ -641,6 +641,12 @@ def main():
                 continue
             holes.append(f'{tname} 只有 {len(roster)} 人')
         mine = [p for p in players_out if p['teamId'] == tid]
+        # 合同年限在队内错开发：每人独立随机的话，十支队里会有一支同一年四五个人一起到期（合同悬崖），
+        # 那一年的续约谈判没法打。按总评排好，照 3/2/4/1/2/3/1 轮着发，起点每队不同。
+        cycle = [3, 2, 4, 1, 2, 3, 1]
+        offset = random.Random(f'{Y}:{tname}:contracts').randrange(len(cycle))
+        for i, p in enumerate(sorted(mine, key=lambda p: -p['overall'])):
+            p['contractYears'] = cycle[(i + offset) % len(cycle)]
         starters = sorted(mine, key=lambda p: -p['overall'])[:5]
         rating = int(round(sum(p['overall'] for p in starters) / max(1, len(starters))))
         # 队长：开局时每队运营最高的首发。这只是游戏里的一个职务（经理可以改任），

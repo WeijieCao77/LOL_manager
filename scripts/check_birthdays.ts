@@ -37,7 +37,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   if (!ok) bad++
 }
 const mk = (seed = 20260913): GameState => {
-  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'EDG')!.id, '审计', seed, createManager('审计', 30, 'expro'))
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'BLG')!.id, '审计', seed, createManager('审计', 30, 'expro'))
   setupSeason(g)
   g.boardConfidence = 100; g.onNotice = false; g.missedStreak = 0
   return g

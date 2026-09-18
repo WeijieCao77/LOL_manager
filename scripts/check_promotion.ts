@@ -16,7 +16,7 @@ const check = (label: string, ok: boolean, detail = '') => {
   if (!ok) fails++
 }
 
-const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'EDG')!.id, 'x', 4, createManager('t', 24, 'grassroots'))
+const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'BLG')!.id, 'x', 4, createManager('t', 24, 'grassroots'))
 setupSeason(g)
 const team = g.teams[g.myTeam]
 const founding = team.coach!.name

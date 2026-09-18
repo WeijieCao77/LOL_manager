@@ -36,7 +36,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? '  — ' + detail : ''}`)
   if (!ok) bad++
 }
-const mk = (tag = 'EDG', seed = 20260905): GameState => {
+const mk = (tag = 'BLG', seed = 20260905): GameState => {
   const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === tag)!.id, '审计', seed)
   setupSeason(g)
   return g

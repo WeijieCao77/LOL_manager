@@ -41,12 +41,16 @@ function sharedMonths(a: string | undefined, b: string | undefined, state: GameS
   return Math.max(0, now - (y * 12 + m))
 }
 
-/** Pairs that spend the round working off each other. */
-const PAIRED: Record<string, string> = {
-  决斗者: '先锋',   // the entry and the one opening space for him
-  先锋: '决斗者',
-  控场: '哨卫',     // the two holding the site together
-  哨卫: '控场',
+/**
+ * Positions that spend the game working off each other: the bottom lane is two
+ * people in one lane for fifteen minutes; the jungler lives or dies by his mid
+ * laner's priority and sets up his support's vision.
+ */
+const PAIRED: Record<string, string[]> = {
+  下路: ['辅助'],
+  辅助: ['下路', '打野'],
+  打野: ['中单', '辅助'],
+  中单: ['打野'],
 }
 
 /**
@@ -94,7 +98,7 @@ export function initialBond(state: GameState, aId: string, bId: string): number 
   // the two who have to talk every round get closer faster
   const ra = a.role
   const rb = b.role
-  if (PAIRED[ra] === rb) v += 3
+  if (PAIRED[ra]?.includes(rb)) v += 3
   if (ra === rb) v += 1          // same role, same problems
 
   // some people are simply easier to play with

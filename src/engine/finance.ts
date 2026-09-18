@@ -4,7 +4,7 @@ import { weeklyStipend } from './leagueShare'
 import type { GameState, StageKey } from './types'
 
 /** Prize money by competition and placement (USD). */
-// Raised across the board after the group's "赚不到钱" week: a Challengers
+// Raised across the board after the group's "赚不到钱" week: a 次级联赛
 // title paid $40k against a season's wage bill, and winning the biggest event
 // in the game paid one million — trophies should move a balance sheet.
 export const PRIZE: Record<string, number[]> = {
@@ -51,13 +51,13 @@ export function awardPrize(state: GameState, stage: StageKey, order: string[]): 
  *
  * Exported because the finance screen used to carry its own copy of this sum
  * and had never learned about the tier scale — it showed a profitable
- * Challengers club a red annual loss, sign and all. One formula, two readers.
+ * 次级联赛 club a red annual loss, sign and all. One formula, two readers.
  */
 export function weeklyUpkeep(state: GameState, teamId: string): number {
   const team = state.teams[teamId]
   if (!team) return 0
   // Operating costs scale with the tier the club actually competes in: a
-  // Challengers org does not fly to Masters, does not carry a VCT support
+  // 次级联赛 org does not fly to 国际赛, does not carry a VCT support
   // staff, and does not run a VCT facility.
   const scale = team.tier === 1 ? 1 : 0.35
   return Math.round((team.facilities * 900 + squadOf(state, teamId).length * 1400) / 4 * scale)
@@ -76,13 +76,13 @@ export function weeklyFinance(state: GameState): void {
       (team.id === state.myTeam ? skillMod(state.manager, 'business', 0.005) : 1))
     // Operating costs scale with the tier the club actually competes in.
     //
-    // The formula was tier-blind, so a Challengers side paid VCT-scale running
+    // The formula was tier-blind, so a 次级联赛 side paid VCT-scale running
     // costs on a tenth of the income: measured across the world, 28 of 29
     // tier-2 clubs lost money every season and a typical one went from $0.69M
     // to -$0.21M inside three seasons. Since a manager with ordinary starting
-    // reputation can *only* be hired in Challengers, that was the default new
+    // reputation can *only* be hired in 次级联赛, that was the default new
     // career — insolvent by construction, with no decision able to prevent it.
-    // A Challengers org does not fly to Masters, does not carry a VCT support
+    // A 次级联赛 org does not fly to 国际赛, does not carry a VCT support
     // staff, and does not run a VCT facility.
     const upkeep = weeklyUpkeep(state, team.id)
     // The league's partnership stipend, paid to every club by tier. This is

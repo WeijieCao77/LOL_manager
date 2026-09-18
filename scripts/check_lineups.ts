@@ -40,7 +40,7 @@ const check = (name: string, ok: boolean, detail = '') => {
 }
 
 const fresh = (): GameState => {
-  const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+  const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
   const g = createNewGame(me.id, '审计', 20260831)
   setupSeason(g)
   return g

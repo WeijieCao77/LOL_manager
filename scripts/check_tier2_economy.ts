@@ -1,11 +1,11 @@
 /**
- * Does a Challengers club's money make sense? (2026-09-05, from the group)
+ * Does a 次级联赛 club's money make sense? (2026-09-05, from the group)
  *
  *   npx tsx scripts/check_tier2_economy.ts [seasons]
  *
  * The group's second point was about the second division: streaming,
  * business, transfer prices and income all read as VCT numbers to them. This
- * plays a Challengers club as a bystander — no manager actions at all, so
+ * plays a 次级联赛 club as a bystander — no manager actions at all, so
  * the lines are the engine's own — and prints what it earns and spends,
  * what the AI clubs of both tiers do with their budgets, what a player costs
  * against those budgets, and what a stream or a sponsor is worth in each
@@ -27,7 +27,7 @@ const seasons = Number(process.argv[2] ?? 3)
 const money = (n: number) => `$${Math.round(n / 1000)}K`
 const median = (xs: number[]) => { const s = xs.slice().sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : NaN }
 
-const me = WORLD_TEAMS.find((t) => t.tag === 'KBG')!
+const me = WORLD_TEAMS.find((t) => t.tag === 'DKC')!
 const g: GameState = createNewGame(me.id, '旁观', 20260905)
 setupSeason(g)
 const mine = g.teams[g.myTeam]

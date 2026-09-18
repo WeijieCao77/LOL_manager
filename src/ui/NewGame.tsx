@@ -116,7 +116,7 @@ export default function NewGame({ onHome,
     setupSeason(g)
     track('career_start', {
       club: selected?.tag ?? null,
-      tier: selected?.tier === 1 ? 'VCT' : 'CHAL',
+      tier: selected?.tier === 1 ? '一级' : '次级',
       region: selected?.region ?? null,
       origin: originKey,
       age,
@@ -171,9 +171,9 @@ export default function NewGame({ onHome,
         <div className="spacer" style={{ flex: 1 }} />
         <ThemeToggle compact />
       </div>
-      <h1>VCT<span className="r">电竞经理</span></h1>
+      <h1>LOL<span className="r">电竞经理</span></h1>
       <p className="muted" style={{ marginTop: 0, marginBottom: 24 }}>
-        无畏契约电竞经理 · 执掌一支战队，征战 VCT 四大赛区与次级联赛
+        英雄联盟电竞经理 · 执掌一支战队，征战六大赛区与次级联赛
       </p>
 
       <div className="row wrap" style={{ marginBottom: 20 }}>
@@ -296,12 +296,12 @@ export default function NewGame({ onHome,
                 <div key={tier} style={{ marginBottom: 16 }}>
                   <div className="nav-group" style={{ padding: '0 0 7px' }}>
                     {tier === 1
-                      ? `一级联赛 · VCT ${REGION_CN[region]}（${byTier[tier].length} 队）`
-                      : `次级联赛 · Challengers ${REGION_CN[region]}（${byTier[tier].length} 队）`}
+                      ? `一级联赛 · ${region}（${REGION_CN[region]}，${byTier[tier].length} 队）`
+                      : `次级联赛 · 次级联赛 ${REGION_CN[region]}（${byTier[tier].length} 队）`}
                     <span className="tiny faint" style={{ marginLeft: 8, textTransform: 'none', letterSpacing: 0 }}>
                       {tier === 1
-                        ? 'Kickoff → Stage 1 → Stage 2，可争夺 Masters 与 Champions'
-                        : '两个赛段，冠军通过 Ascension 升入 VCT'}
+                        ? '第一赛段 → 第二赛段 → 第三赛段，可争夺 国际赛 与 全球总决赛'
+                        : '联盟制，没有升降级：在这里做出成绩，一级联赛的俱乐部会来请你'}
                     </span>
                   </div>
                   <div className="team-pick">
@@ -320,7 +320,7 @@ export default function NewGame({ onHome,
                           <span>{t.name}</span>
                         </div>
                         <span className={`tag ${t.tier === 1 ? 't1' : ''}`}>
-                          {t.tier === 1 ? 'VCT' : 'CHAL'}
+                          {t.tier === 1 ? '一级' : '次级'}
                         </span>
                       </div>
                       <div className="row small muted" style={{ gap: 8 }}>
@@ -374,8 +374,8 @@ export default function NewGame({ onHome,
           <div className="panel-body">
             {currentRuleset() === 'vct-2026' && (
               <p className="small muted" style={{ marginTop: 0 }}>
-                <b>{RULESET_CN['vct-2026']}</b>：Kickoff 抽签进十二队三败淘汰，Stage 1/2 抽 Alpha、Omega 两组，
-                Masters 瑞士轮逐轮抽签、赛区冠军自选八强对手，Champions 抽四档小组和八强。轮到你的抽签会等你亲手抽。
+                <b>{RULESET_CN['vct-2026']}</b>：第一赛段 抽签进十二队三败淘汰，第二赛段/2 抽 Alpha、Omega 两组，
+                国际赛 瑞士轮逐轮抽签、赛区冠军自选八强对手，全球总决赛 抽四档小组和八强。轮到你的抽签会等你亲手抽。
               </p>
             )}
             <p className="small muted" style={{ marginTop: 0 }}>
@@ -430,10 +430,11 @@ export default function NewGame({ onHome,
 
       <div style={{ marginTop: 20 }}><Credit /></div>
       <p className="tiny muted" style={{ marginTop: 12, lineHeight: 1.8 }}>
-        游戏内所有战队与选手均为真实人物。阵容、国籍、位置、照片、赛事名次与全部比赛数据取自
-        <b> vlr.gg</b>；真名、生日、教练、指挥、生涯队伍履历与部分选手照片取自 <b>Liquipedia</b>
-        （图片依 CC BY-SA 3.0 使用）；少量选手照片取自<b>号角 HOJO</b>（haojiao.cc）；英雄池取自真实出场记录。
-        八项能力值由这些真实数据按分位映射得出。合同、薪资与预算为游戏平衡的估算值。
+        游戏内所有战队与选手均为真实人物。阵容、位置、英雄池与全部比赛数据取自
+        <b> Oracle's Elixir</b> 的逐场数据（2024–2026）；中文名、真名、国籍、居民赛区与生日取自 <b>Leaguepedia</b>。
+        八项能力由这些真实数据在同位置、同联赛内换算得出；其中「运营」是他在场时队伍十五分钟之后多赢了多少，
+        不是任何人填的。查不到的资料留空，不编。合同、薪资与预算为游戏平衡的估算值。
+        本作与 Riot Games 无关，未使用任何官方美术素材。
       </p>
     </div>
   )

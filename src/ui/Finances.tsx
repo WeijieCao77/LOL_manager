@@ -91,7 +91,7 @@ export default function Finances() {
 
       <Panel title={`联盟分成 · ${deal.share}% 捆绑包分成`}>
         <p className="small muted" style={{ marginTop: 0 }}>
-          每支{me.tier === 1 ? ' VCT ' : ' Challengers '}俱乐部每赛季有
+          每支{me.tier === 1 ? '一级联赛' : '次级联赛'}俱乐部每赛季有
           <b> {money(stipend)} </b>津贴，随每周结算到账。年度捆绑包赛季末结算，你拿 <b>{deal.share}%</b>，比例每年可以谈一次。
         </p>
         <div className="row wrap" style={{ gap: 10, alignItems: 'center', marginBottom: 10 }}>
@@ -111,7 +111,7 @@ export default function Finances() {
             </button>
           </div>
           <span className="tiny faint">
-            固定：旱涝保收。销量：跟声望和成绩走。只能在 Masters I 前改，一年一次。
+            固定：旱涝保收。销量：跟声望和成绩走。只能在 First Stand 前改，一年一次。
           </span>
         </div>
         <div className="row wrap" style={{ gap: 10, alignItems: 'center' }}>

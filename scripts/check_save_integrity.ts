@@ -14,7 +14,7 @@ const storage = {
   get length() { return store.size },
 }
 Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: storage })
-const state = createNewGame(WORLD_TEAMS.find(t => t.tag === 'TYL')!.id, '存档边界', 123)
+const state = createNewGame(WORLD_TEAMS.find(t => t.tag === 'TES')!.id, '存档边界', 123)
 setupSeason(state)
 const original = exportSave(state)
 const mutations: [string, (s: any) => void][] = [

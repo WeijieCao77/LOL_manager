@@ -33,7 +33,7 @@ const check = (name: string, ok: boolean, detail = '') => {
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? '  — ' + detail : ''}`)
   if (!ok) bad++
 }
-const mk = (tag = 'TYL'): GameState => {
+const mk = (tag = 'BLG'): GameState => {
   const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === tag)!.id, '审计', 20260827)
   setupSeason(g)
   return g
@@ -103,7 +103,7 @@ const mk = (tag = 'TYL'): GameState => {
 {
   const g = mk('KBG')
   const me = g.teams[g.myTeam]
-  check('a Challengers club is not a VCT club', me.tier === 2)
+  check('a 次级联赛 club is not a VCT club', me.tier === 2)
   let charged = 0
   for (let i = 0; i < 7; i++) advanceDay(g)
   charged = -(g.finances.log.filter((l) => l.label === '运营开支').reduce((a, b) => a + b.amount, 0))

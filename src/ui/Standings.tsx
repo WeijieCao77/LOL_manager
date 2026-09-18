@@ -39,7 +39,7 @@ function Table({ comp, members, cut: cutOverride }: { comp: Competition; members
           <tr>
             <th className="num">{concluded ? '名次' : '#'}</th><th>战队</th>
             <th className="num">常规赛</th>
-            <th className="num">小局</th><th className="num">净胜局</th><th className="num">回合差</th>
+            <th className="num">小局</th><th className="num">净胜局</th><th className="num">胜局</th>
             {concluded && <th>季后赛</th>}
           </tr>
         </thead>
@@ -92,7 +92,7 @@ export default function Standings() {
   const myRegion = game.teams[game.myTeam]?.region
   const [region, setRegion] = useState(myRegion ?? 'China')
 
-  // What is being played now sits on top; what is over sinks. The Masters in
+  // What is being played now sits on top; what is over sinks. The 国际赛 in
   // progress used to be the last panel on the page, under three finished
   // league tables — 「当时正在打的比赛应该提到最上面」.
   const rank = (c: Competition): number => {
@@ -101,14 +101,14 @@ export default function Standings() {
     if (played && !c.champion) return 1
     return c.champion ? 3 : 2
   }
-  // calendar position; the two Challengers splits straddle Stage 1 and Stage 2
+  // calendar position; the two 次级联赛 splits straddle 第二赛段 and 第三赛段
   const order = (c: Competition): number => {
     const i = stagesOf(game).findIndex((s) => s.key === c.stage)
     if (i >= 0) return i
     return c.stage === 'challengers1' ? 3.5 : c.stage === 'challengers2' ? 5.5 : 9
   }
-  // your own competitions lead. A Challengers side used to open this page on
-  // the VCT Kickoff bracket of twelve clubs it is not in, with its own league
+  // your own competitions lead. A 次级联赛 side used to open this page on
+  // the VCT 第一赛段 bracket of twelve clubs it is not in, with its own league
   // three panels down (2026-09-09).
   const mine = (c: Competition): number => (c.teams.includes(game.myTeam) ? 0 : 1)
   const shown = Object.values(game.comps)
@@ -161,8 +161,8 @@ export default function Standings() {
             >
               {c.format === 'triple' ? (
                 <p className="tiny faint" style={{ padding: '9px 13px', margin: 0 }}>
-                  三败淘汰：十二队，输三场出局。胜者组、中段组、败者组三场决赛的冠军，即本赛区去 Masters 的 1、2、3 号种子。
-                  上届 Champions 四队轮空到胜者组第二轮。
+                  三败淘汰：十二队，输三场出局。胜者组、中段组、败者组三场决赛的冠军，即本赛区去 国际赛 的 1、2、3 号种子。
+                  上届 全球总决赛 四队轮空到胜者组第二轮。
                   {!c.seeds?.length && '签表还没抽，抽签在总览页进行。'}
                 </p>
               ) : c.grouped && c.groups ? (
@@ -175,7 +175,7 @@ export default function Standings() {
                   ))}
                 </div>
               ) : c.grouped ? (
-                <div className="empty">分组要等 {c.stage === 'stage1' ? 'Kickoff' : 'Stage 1'} 打完抽签才定。</div>
+                <div className="empty">分组要等 {c.stage === 'stage1' ? '第一赛段' : '第二赛段'} 打完抽签才定。</div>
               ) : (
                 <Table comp={c} />
               )}
@@ -226,8 +226,8 @@ export default function Standings() {
               <thead>
                 <tr>
                   <th className="num">#</th><th>选手</th><th>战队</th><th className="num">能力</th>
-                  <th className="num">评分</th><th className="num">ACS</th><th className="num">K/D</th>
-                  <th className="num">ADR</th><th className="num">KPR</th>
+                  <th className="num">评分</th><th className="num">表现分</th><th className="num">K/D</th>
+                  <th className="num">分均伤害</th><th className="num">分均击杀</th>
                   <th className="num">首杀差</th><th className="num">场次</th>
                 </tr>
               </thead>

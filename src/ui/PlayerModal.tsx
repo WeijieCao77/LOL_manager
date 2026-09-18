@@ -85,9 +85,9 @@ export default function PlayerModal(
           <Roles p={p} />
           <OvrBadge value={p.overall} />
           {p.isIgl && (
-            <span className="tag" title={p.iglSource === 'inferred' ? '真实指挥未确认，暂由他代行'
-              : isMain ? '主指挥：在场上就由他喊话' : isDeputy ? '副指挥：主指挥不在场上时由他喊话' : '已确认的队内指挥'}>
-              {p.iglSource === 'inferred' ? '推定 IGL' : isMain ? '主指挥' : isDeputy ? '副指挥' : 'IGL'}
+            <span className="tag" title={p.iglSource === 'inferred' ? '队长：比赛里他的运营占全队最大的一份'
+              : isMain ? '队长：比赛里他的运营占全队最大的一份' : isDeputy ? '副队长：队长不在场上时由他顶上' : '队长'}>
+              {isDeputy ? '副队长' : '队长'}
             </span>
           )}
         </span>
@@ -369,10 +369,10 @@ export default function PlayerModal(
                 <button className="sm" title={`他的运营 ${p.attrs.macro}`} onClick={() => {
                   const msg = appointIgl(game, p.id)
                   commit()
-                  logActivity(game, 'squad', `任命 ${p.ign} 为主指挥`)
+                  logActivity(game, 'squad', `任命 ${p.ign} 为队长`)
                   toast(msg)
                 }}>
-                  {p.isIgl ? '任命为主指挥' : '任命为指挥'}
+                  {'任命为队长'}
                 </button>
               )}
             </div>
@@ -411,9 +411,9 @@ function StatBlock({ title, s }: { title: string; s: Stats }) {
       <div className="panel-body">
         <div className="grid c4" style={{ gap: 10 }}>
           <div className="stat"><span className="k">评分</span><span className="v sm">{ratingOf(s).toFixed(2)}</span></div>
-          <div className="stat"><span className="k">ACS</span><span className="v sm">{l.acs.toFixed(0)}</span></div>
+          <div className="stat"><span className="k">表现分</span><span className="v sm">{l.acs.toFixed(0)}</span></div>
           <div className="stat"><span className="k">K/D</span><span className="v sm">{l.kd.toFixed(2)}</span></div>
-          <div className="stat"><span className="k">ADR</span><span className="v sm">{l.adr.toFixed(0)}</span></div>
+          <div className="stat"><span className="k">分均伤害</span><span className="v sm">{l.adr.toFixed(0)}</span></div>
         </div>
         <div className="row wrap tiny muted" style={{ gap: 12, marginTop: 12 }}>
           <span>场次 {s.maps}</span>

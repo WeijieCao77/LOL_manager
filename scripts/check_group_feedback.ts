@@ -21,7 +21,7 @@ import type { GameState } from '../src/engine/types'
 const fail = (msg: string): never => { throw new Error(msg) }
 
 const mk = (): GameState => {
-  const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+  const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
   const g = createNewGame(me.id, '测试', 7, createManager('测试', 30, 'expro'))
   setupSeason(g)
   return g
@@ -186,7 +186,7 @@ const mk = (): GameState => {
   hero.career.kills = 1900
   hero.career.deaths = 1500
   hero.career.mvps = 9
-  hero.titles = [{ year: 2026, title: 'China Kickoff' }]
+  hero.titles = [{ year: 2026, title: 'China 第一赛段' }]
   // an unknown from another club retires the same winter — the league notices
   const other = Object.values(g6.players).find((p) =>
     p.teamId && p.teamId !== g6.myTeam && p.overall < 78 && (p.career?.mvps ?? 0) < 8)!
@@ -208,7 +208,7 @@ const mk = (): GameState => {
   if (!note!.stints?.length) fail('告别卡应有本档效力履历')
   if (note!.stints![0]!.team !== g6.teams[g6.myTeam]!.name) fail('履历应是本档俱乐部，且解析为队名')
   if (note!.stints![0]!.from !== 2026) fail('开档所在俱乐部的履历应从 2026 起')
-  if (!note!.titles?.some((t) => t.title === 'China Kickoff')) fail('告别卡应带上本档冠军')
+  if (!note!.titles?.some((t) => t.title === 'China 第一赛段')) fail('告别卡应带上本档冠军')
   if (!g6.news.some((n) => n.text.startsWith('👋 正式退役：') && n.text.includes(other.ign))) {
     fail('其他俱乐部的退役也应上新闻（批量行）')
   }
@@ -224,12 +224,12 @@ const mk = (): GameState => {
 {
   const g = mk()
   g.honours = [
-    { year: 2027, title: 'VALORANT Champions' },   // 在第一家俱乐部
-    { year: 2028, title: 'VALORANT Champions' },   // 跳槽后
+    { year: 2027, title: '全球总决赛' },   // 在第一家俱乐部
+    { year: 2028, title: '全球总决赛' },   // 跳槽后
   ]
   const other = WORLD_TEAMS.find((t) => t.id !== g.myTeam && t.tier === 1)!
   moveToClub(g, other.id)
-  g.honours.push({ year: 2029, title: 'VALORANT Champions' })   // 第三家
+  g.honours.push({ year: 2029, title: '全球总决赛' })   // 第三家
   if (!earnedNow(g).includes('threepeat')) fail('跨队三连冠也该解锁「三连霸」——荣誉记在经理名下')
   if (g.honours.length !== 3) fail('换队不该清空经理的荣誉记录')
   console.log('✅ 三连霸跨队成立：2027 甲队 + 2028 乙队 + 2029 丙队 → 解锁')

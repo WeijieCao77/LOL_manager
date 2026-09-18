@@ -330,7 +330,7 @@ function migrate(state: GameState): GameState {
   repairClocks(state)
   // Old saves serialized drillVoid: true from a mechanic that no longer sets
   // it — left in place it swallowed the first seven-day drill's entire payout
-  // ("跑图7天但是没有涨地图熟练度"). Nothing reads it any more; clear it so
+  // ("跑图7天但是没有涨战术磨合度"). Nothing reads it any more; clear it so
   // an export/reimport cannot resurrect it either.
   delete (state as { drillVoid?: boolean }).drillVoid
   // saves written while physio bookings were not rebased across the new year
@@ -397,7 +397,7 @@ export function exportSave(state: GameState): string {
 export function importSave(text: string): GameState {
   const parsed = JSON.parse(text) as { format?: string; state?: GameState }
   if (parsed?.format !== 'VAL_MANAGER_SAVE' || !parsed.state) {
-    throw new Error('这不是一个有效的 VCT电竞经理 存档文件。')
+    throw new Error('这不是一个有效的英雄联盟电竞经理存档文件。')
   }
   assertCareerSave(parsed.state)
   return migrate(parsed.state)

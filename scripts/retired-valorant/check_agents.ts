@@ -1,0 +1,272 @@
+/**
+ * Agents finally matter, and the map has a Chinese name.
+ *
+ * Until now `agentPool` and `rolePro` were recorded and never read: the match
+ * engine only ever looked at a player's role list. A pick can now cost up to
+ * 12% of what a man is worth, which is also what the 练新英雄 drill buys back.
+ */
+import { createNewGame } from '../src/engine/world'
+import { WORLD_TEAMS } from '../src/engine/teams'
+import { setupSeason } from '../src/engine/season'
+import { buildLineup, selectLineup, MatchSim, vetoOrder } from '../src/engine/match'
+import { agentFit, agentMod, agentRoleGaps, autoAgents, normalizeAgents, OFF_ROLE } from '../src/engine/agents'
+import { AGENT_CN, AGENT_ROLE, AGENTS, MAPS, MAP_META, canonAgent, mapCn } from '../src/engine/content'
+import { Rng } from '../src/engine/rng'
+import type { GameState, Role } from '../src/engine/types'
+
+let bad = 0
+const check = (name: string, ok: boolean, detail = '') => {
+  console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? '  — ' + detail : ''}`)
+  if (!ok) bad++
+}
+const mk = (): GameState => {
+  const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'TES')!.id, '审计', 20260828)
+  setupSeason(g)
+  return g
+}
+
+// ---- every player's recorded agents are the agents the game knows
+//
+// vlr writes 'cypher' and 'kayo'; the icons, the Chinese names and the
+// composition tables are keyed 'Cypher' and 'KAY/O'. 387 real players carried
+// the slugs into the game, so on the server their icons were broken and the
+// match engine believed none of them had ever played anything.
+{
+  const g = mk()
+  const players = Object.values(g.players)
+  const withPool = players.filter((p) => p.agentPool.length)
+  const bad = withPool.filter((p) => p.agentPool.some((a) => !AGENT_CN[a]))
+  check('every recorded agent is a canonical name', bad.length === 0, bad.slice(0, 3).map((p) => `${p.ign}: ${p.agentPool.join(',')}`).join(' | '))
+  check('most players carry a real pool', withPool.length > players.length * 0.5, `${withPool.length}/${players.length}`)
+  check('the slug spellings resolve', canonAgent('cypher') === 'Cypher' && canonAgent('kayo') === 'KAY/O' && canonAgent('KAY/O') === 'KAY/O')
+  // 'veto' is a column heading on vlr's match pages AND, since Riot shipped
+  // one, a sentinel. It used to be rejected as junk, which deleted the agent
+  // from the pool of everyone who plays it. Junk is rejected by not being in
+  // the table, not by name.
+  check('禁灭 resolves like any other agent', canonAgent('veto') === 'Veto' && canonAgent('Veto') === 'Veto')
+  check('a real column heading is still not an agent', canonAgent('overall') === null && canonAgent('rating') === null)
+  const known = withPool.filter((p) => p.agentPool.some((a) => AGENT_ROLE[a] === p.role)).length
+  check('a real player knows an agent of his own role', known > withPool.length * 0.7, `${known}/${withPool.length}`)
+}
+
+// ---- every map has a Chinese name and a composition
+{
+  const noName = MAPS.filter((m) => mapCn(m) === m)
+  check('every map reads in Chinese', noName.length === 0, noName.join('、'))
+  const noMeta = MAPS.filter((m) => !(MAP_META[m] ?? []).length)
+  check('every map has a usual composition', noMeta.length === 0, noMeta.join('、'))
+  const badMeta = MAPS.filter((m) => {
+    const roles = new Set((MAP_META[m] ?? []).map((a) => AGENT_ROLE[a]))
+    return (['决斗者', '先锋', '控场', '哨卫'] as Role[]).some((r) => !roles.has(r))
+  })
+  check('and every composition covers all four jobs', badMeta.length === 0, badMeta.join('、'))
+}
+
+// ---- a pick out of position costs, and training buys it back
+{
+  const g = mk()
+  const duelist = selectLineup(g, g.myTeam).find((p) => (p.roles ?? [p.role]).includes('决斗者'))!
+  const ownAgent = (MAP_META.Ascent).find((a) => AGENT_ROLE[a] === '决斗者')!
+  const wrongAgent = (MAP_META.Ascent).find((a) => AGENT_ROLE[a] === '哨卫')!
+  check('his own job costs nothing', agentFit(duelist, ownAgent) === 1)
+  const off = agentMod(duelist, wrongAgent)
+  // the job is the whole penalty now — the old extra for an agent outside his
+  // recorded pool was removed, because no training in the game could answer it
+  check('someone else\'s job costs exactly the position penalty',
+    Math.abs((1 - off) - OFF_ROLE) < 1e-9, `×${off.toFixed(3)}`)
+  duelist.agentPro = { ...(duelist.agentPro ?? {}), [wrongAgent]: 100 }
+  check('drilled to 100% ON THAT AGENT, the position penalty is gone',
+    agentFit(duelist, wrongAgent) === 1, `×${agentMod(duelist, wrongAgent).toFixed(3)}`)
+  // 练的是这一个角色，不是整个位置：同位置的另一个英雄仍然不会
+  const otherSentinel = (AGENTS['哨卫'] ?? []).find((a) => a !== wrongAgent)!
+  check('but the next sentinel is still a stranger',
+    Math.abs((1 - agentMod(duelist, otherSentinel)) - OFF_ROLE) < 1e-9,
+    `×${agentMod(duelist, otherSentinel).toFixed(3)}`)
+  duelist.agentPro = { [wrongAgent]: 50 }
+  const half = 1 - agentMod(duelist, wrongAgent)
+  check('and halfway there costs half of it',
+    Math.abs(half - OFF_ROLE * 0.5) < 1e-9, `−${(half * 100).toFixed(1)}%`)
+}
+
+// ---- the automatic sheet never puts anyone out of position
+{
+  const g = mk()
+  const CORE: Role[] = ['决斗者', '先锋', '控场', '哨卫']
+  let avoidable = 0
+  let gaps = 0
+  let forced = 0
+  for (const t of Object.values(g.teams)) {
+    const five = selectLineup(g, t.id)
+    if (five.length < 5) continue
+    // roles this squad simply has nobody for — someone must play them anyway
+    // how many of the four jobs this squad can genuinely staff with distinct
+    // players — the same matching the assigner does, computed independently
+    const byRole = new Map<Role, string>()
+    const held = new Map<string, Role>()
+    const walk = (r: Role, seen: Set<string>): boolean => {
+      for (const p of five) {
+        if (seen.has(p.id) || !(p.roles ?? [p.role]).includes(r)) continue
+        seen.add(p.id)
+        const h = held.get(p.id)
+        if (!h || walk(h, seen)) { byRole.set(r, p.id); held.set(p.id, r); return true }
+      }
+      return false
+    }
+    for (const r of CORE) walk(r, new Set())
+    const missing = CORE.length - byRole.size
+    for (const m of MAPS) {
+      const picks = autoAgents(g, t.id, five, m)
+      if (agentRoleGaps(five, picks).length) gaps++
+      // 「错位」问的是位置，不是熟不熟这个角色 —— 本职里没练过的英雄有惩罚，
+      // 但那不叫错位，那是让他去练
+      const off = five.filter((p) => {
+        const need = AGENT_ROLE[picks[p.id]]
+        const covers = p.roles ?? [p.role]
+        return !!need && !covers.includes(need) && !covers.includes('自由人')
+      }).length
+      forced += Math.min(off, missing)
+      avoidable += Math.max(0, off - missing)
+    }
+  }
+  check('nobody is auto-assigned out of position avoidably', avoidable === 0, `${avoidable} 次可避免的错位`)
+  check('and every automatic comp still covers all four jobs', gaps === 0, `${gaps} 套缺位置`)
+  console.log(`  ${forced} 次被迫错位（世界里现有的位置空缺）`)
+
+  // The hole is built here rather than found: the world used to contain
+  // exactly one (RA without a sentinel), and it closed the day Z1Yan was
+  // corrected to 哨卫 — a check that only fires when the data happens to be
+  // wrong is not a check. Strip 哨卫 from a whole five and somebody must
+  // still be sent to play it.
+  const t = Object.values(g.teams).find((x) => selectLineup(g, x.id).length === 5)!
+  const five = selectLineup(g, t.id)
+  for (const p of five) {
+    const rs = (p.roles ?? [p.role]).filter((r) => r !== '哨卫')
+    p.role = rs[0] ?? '决斗者'
+    p.roles = rs.length ? rs : ['决斗者']
+    // 熟练度按英雄记之后，光改 roles 不够 —— 他仍然会奇乐。要造一个真的打
+    // 不了哨卫的五人，得连英雄熟练度一起清掉。
+    p.agentPro = Object.fromEntries(
+      Object.entries(p.agentPro ?? {}).filter(([a]) => AGENT_ROLE[a] !== '哨卫'))
+  }
+  let holeForced = 0
+  let holeGaps = 0
+  for (const m of MAPS) {
+    const picks = autoAgents(g, t.id, five, m)
+    if (agentRoleGaps(five, picks).length) holeGaps++
+    holeForced += five.filter((p) => agentFit(p, picks[p.id]) < 1).length
+  }
+  check('a five with nobody for 哨卫 still gets someone forced into it', holeForced > 0,
+    `${t.tag}: ${holeForced} 次 over ${MAPS.length} maps`)
+  check('and that forced sheet still covers all four jobs', holeGaps === 0, `${holeGaps} 套缺位置`)
+}
+
+// ---- a hand-made bad sheet really does weaken the side
+{
+  const g = mk()
+  const five = selectLineup(g, g.myTeam)
+  const before = buildLineup(g, g.myTeam, 'Ascent').atk
+  const wrong: Record<string, string> = {}
+  five.forEach((p) => {
+    const mine = p.roles ?? [p.role]
+    // an agent outside his jobs that he has never played either — proficiency
+    // is graded from his career now, so a duelist who has 300 rounds of Omen
+    // is not the test of a bad sheet
+    wrong[p.id] = Object.keys(AGENT_ROLE).find(
+      (a) => !mine.includes(AGENT_ROLE[a]) && !(p.agentPro?.[a]) && !Object.values(wrong).includes(a))!
+  })
+  g.agentPicks = { Ascent: wrong }
+  const after = buildLineup(g, g.myTeam, 'Ascent').atk
+  check('a whole five out of position is measurably worse',
+    before - after > 5, `${before.toFixed(2)} → ${after.toFixed(2)}`)
+}
+
+// ---- a veto the manager ran himself is the one that gets played
+{
+  const g = mk()
+  const foe = Object.values(g.teams).find((t) => t.id !== g.myTeam)!
+  const want = ['Abyss', 'Split', 'Lotus']
+  g.vetoPlan = { fixtureId: 'X', maps: want, log: ['测试'] }
+  const sim = new MatchSim(g, g.myTeam, foe.id, 3, new Rng(4))
+  check('the manager\'s maps are the ones played',
+    JSON.stringify((sim as unknown as { maps: string[] }).maps) === JSON.stringify(want),
+    (sim as unknown as { maps: string[] }).maps.map(mapCn).join(' / '))
+  // a plan for the wrong number of maps is ignored rather than half-applied
+  g.vetoPlan = { fixtureId: 'X', maps: ['Abyss'], log: [] }
+  const sim2 = new MatchSim(g, g.myTeam, foe.id, 3, new Rng(4))
+  check('a plan that does not fit the format is ignored',
+    (sim2 as unknown as { maps: string[] }).length !== 1)
+}
+
+// ---- the veto order is a real veto
+{
+  for (const bo of [1, 3, 5] as const) {
+    const o = vetoOrder(bo)
+    check(`BO${bo} veto leaves exactly ${bo} map(s) from seven`,
+      7 - o.filter((x) => x === 'ban').length - 0 >= bo, o.join('/'))
+  }
+}
+
+// ---- five different agents, and nobody empty-handed
+{
+  const g = mk()
+  const five = selectLineup(g, g.myTeam)
+  const auto = autoAgents(g, g.myTeam, five, 'Ascent')
+  // what the panel does when you hand one man another's agent: a swap
+  const cur = { ...auto }
+  const wanted = auto[five[0].id]
+  const holder = Object.keys(cur).find((id) => cur[id] === wanted && id !== five[1].id)
+  if (holder) cur[holder] = cur[five[1].id]
+  cur[five[1].id] = wanted
+  const fixed = normalizeAgents(g, g.myTeam, five, 'Ascent', cur)
+  check('a side never fields the same agent twice',
+    new Set(Object.values(fixed)).size === 5, Object.values(fixed).join('、'))
+  check('and nobody is left without one', five.every((p) => !!fixed[p.id]))
+
+  // a hand-edited save with a duplicate is repaired rather than played
+  const dup: Record<string, string> = {}
+  five.forEach((p) => { dup[p.id] = 'Jett' })
+  const repaired = normalizeAgents(g, g.myTeam, five, 'Ascent', dup)
+  check('a save that somehow holds five Jetts is repaired',
+    new Set(Object.values(repaired)).size === 5, Object.values(repaired).join('、'))
+}
+
+// ---- no penalty a manager cannot answer
+{
+  const g = mk()
+  const p = selectLineup(g, g.myTeam)[0]
+  const mine = p.roles ?? [p.role]
+  const own = (AGENTS[mine[0]] ?? []).filter((a) => !p.agentPool.includes(a))
+  check('there is an agent of his own role he has never been recorded on', own.length > 0)
+  // 本职里一个没碰过的角色现在是有代价的 —— 而且这个代价练一周就能开始还
+  const unknown = 1 - agentMod(p, own[0])
+  check('an agent of his own role he has never touched costs something, but less than a wrong job',
+    unknown > 0 && unknown < OFF_ROLE - 1e-9, `−${(unknown * 100).toFixed(1)}%`)
+  const played = (AGENTS[mine[0]] ?? []).find((a) => p.agentPool.includes(a))
+  if (played) {
+    check('one he actually plays costs nothing', agentMod(p, played) === 1)
+    check('and the manager can close the gap by drilling that one agent', (() => {
+      const before = agentMod(p, own[0])
+      p.agentPro = { ...(p.agentPro ?? {}), [own[0]]: 100 }
+      const after = agentMod(p, own[0])
+      delete p.agentPro[own[0]]
+      return before < 1 && after === 1
+    })())
+  }
+}
+
+// ---- the scoreboard knows who played what
+{
+  const g = mk()
+  const foe = Object.values(g.teams).find((t) => t.id !== g.myTeam)!
+  const sim = new MatchSim(g, g.myTeam, foe.id, 3, new Rng(9))
+  while (!sim.decided && sim.nextMap()) { sim.current!.runOut(); sim.closeMap() }
+  const res = sim.finish()
+  check('every map records the agents that were on it',
+    res.maps.every((m) => Object.keys(m.agents ?? {}).length >= 10),
+    res.maps.map((m) => `${mapCn(m.map)}:${Object.keys(m.agents ?? {}).length}`).join(' '))
+  const anyId = Object.keys(res.maps[0].lines)[0]
+  check('and a player on the sheet has one', !!res.maps[0].agents?.[anyId])
+}
+
+console.log(bad ? `\n${bad} failed` : '\nall held')
+process.exit(bad ? 1 : 0)

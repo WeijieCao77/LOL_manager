@@ -115,7 +115,7 @@ export default function Dashboard() {
             // The tutorial's trial day is a sandbox rolled back at its end, so a
             // draw waiting on the manager is held by the coaches there — the
             // last step says 「推进」 and the day has to move (2026-09-07: a new
-            // career opened onto the Kickoff draw and the tour at once, and the
+            // career opened onto the 第一赛段 draw and the tour at once, and the
             // draw kept 31 December from ending).
             reports.push(advanceDay(game, { deferMine: true, autoScrims: span > 1, autoResolveDrawDecisions: !!game.tutorialDay }))
             const last = reports[reports.length - 1]
@@ -455,7 +455,7 @@ export default function Dashboard() {
           const drill = drillRunning ? game.drill : undefined
           const drillText =
             !drill || drill.kind === 'none' ? null
-              : drill.kind === 'map' ? `团队跑图 · ${mapCn(drill.map)}`
+              : drill.kind === 'map' ? `团队战术训练`
                 : drill.kind === 'review' ? '教练复盘'
                   : drill.picks.length === 1
                     ? `${game.players[drill.picks[0].playerId]?.ign} 练${agentCn(drill.picks[0].agent)}（${Math.round(game.players[drill.picks[0].playerId]?.agentPro?.[drill.picks[0].agent] ?? 0)}%）`
@@ -528,9 +528,9 @@ export default function Dashboard() {
                   <tr key={p.id} className="clickable" onClick={() => openPlayer(p.id)}>
                     <td><Face id={p.id} /><b>{p.ign}</b>{p.isIgl && (
                       <span className="tag" style={{ marginLeft: 5 }}
-                        title={p.iglSource === 'inferred' ? '真实指挥未确认，暂由他代行'
-                          : game.teams[game.myTeam]?.igl === p.id ? '主指挥' : '副指挥：主指挥不在场上时由他喊话'}>
-                        {p.iglSource === 'inferred' ? '推定 IGL' : game.teams[game.myTeam]?.igl === p.id ? '主指挥' : '副指挥'}
+                        title={p.iglSource === 'inferred' ? '队长：比赛里他的运营占全队最大的一份'
+                          : game.teams[game.myTeam]?.igl === p.id ? '队长' : '副队长：队长不在场上时由他顶上'}>
+                        {p.iglSource === 'inferred' ? '队长' : game.teams[game.myTeam]?.igl === p.id ? '队长' : '副队长'}
                       </span>
                     )}</td>
                     <td><Roles p={p} /></td>
@@ -612,9 +612,9 @@ export default function Dashboard() {
               </select>
             </div>
             <div className="field">
-              <label className="small muted">地图</label>
+              <label className="small muted">场地</label>
               <select value={scrimMap} onChange={(e) => setScrimMap(e.target.value)}>
-                <option value="">选择地图…</option>
+                <option value="">选择…</option>
                 {pool.map((m) => (
                   <option key={m} value={m}>
                     {mapCn(m)}（熟练度 {Math.round(me.mapPrefs[m] ?? 50)}）
@@ -679,7 +679,7 @@ export default function Dashboard() {
               <table>
                 <thead>
                   <tr>
-                    <th>选手</th><th className="num">评分</th><th className="num">ACS</th>
+                    <th>选手</th><th className="num">评分</th><th className="num">表现分</th>
                     <th className="num">K/D</th><th className="num">场次</th>
                   </tr>
                 </thead>

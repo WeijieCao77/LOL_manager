@@ -30,7 +30,7 @@ export default function RetireCard({ note, onClose }: { note: RetireNote; onClos
       title={
         <span className="row" style={{ gap: 8 }}>
           <span>👋 职业生涯谢幕 · {note.year}</span>
-          <span className="tag" title="本卡为《VCT电竞经理》游戏模拟内容">游戏内容</span>
+          <span className="tag" title="本卡为《英雄联盟电竞经理》游戏模拟内容">游戏内容</span>
         </span>
       }
       onClose={onClose}
@@ -89,7 +89,7 @@ export default function RetireCard({ note, onClose }: { note: RetireNote; onClos
         <div style={{ marginBottom: 4 }}>
           <div className="nav-group" style={{ padding: '0 0 6px' }}>本档生涯数据</div>
           <div className="grid c4" style={{ gap: 10 }}>
-            <div className="stat"><span className="k">地图</span><span className="v sm">{c.maps}</span></div>
+            <div className="stat"><span className="k">局数</span><span className="v sm">{c.maps}</span></div>
             <div className="stat"><span className="k">K/D</span><span className="v sm">{kd}</span></div>
             {rating && <div className="stat"><span className="k">评分</span><span className="v sm">{rating}</span></div>}
             <div className="stat"><span className="k">MVP</span><span className="v sm">{c.mvps}</span></div>
@@ -102,7 +102,7 @@ export default function RetireCard({ note, onClose }: { note: RetireNote; onClos
           ? '他在你的队里退役。这张卡不会再出现，想留念现在截图。'
           : '这张卡不会再出现，想留念现在截图。'}
         <br />
-        《VCT电竞经理》· 履历、荣誉与数据均为本存档 2026 年起的游戏模拟，非真实资讯。
+        《英雄联盟电竞经理》· 履历、荣誉与数据均为本存档 2026 年起的游戏模拟，非真实资讯。
       </p>
 
       <div className="row" style={{ gap: 10, marginTop: 14, justifyContent: 'flex-end' }}>

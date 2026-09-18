@@ -29,3 +29,6 @@ _ref/
 
 # research caches, rebuildable
 analysis/lol/cache/
+
+audit_report.txt
+audit_rerun.txt
