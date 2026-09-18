@@ -17,7 +17,10 @@ const rulesetEnv = process.env.RULESET
 if (rulesetEnv === 'vct-2025' || rulesetEnv === 'vct-2026') setCurrentRuleset(rulesetEnv)
 
 const seasons = Number(process.argv[2] ?? 1)
-const me = WORLD_TEAMS.find((t) => t.tag === 'EDG')!
+// The strongest club in the biggest league: a headless run makes no decisions at all, and a
+// mid-table board sacks a manager who misses three stage targets running — which a do-nothing
+// manager does. That is the game working, but it is not what this script is here to test.
+const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
 const state: GameState = createNewGame(me.id, '测试经理', 12345)
 setupSeason(state)
 // Which league a stat line was earned in is the tier the club held when the
@@ -29,6 +32,7 @@ const startTier = new Map(Object.values(state.teams).map((t) => [t.id, t.tier]))
 console.log(`managing ${state.teams[state.myTeam].name} (${state.teams[state.myTeam].league})`)
 console.log(`fixtures generated: ${state.fixtures.length}`)
 
+const problems: string[] = []
 const t0 = Date.now()
 let matches = 0
 const titles: string[] = []
@@ -50,6 +54,9 @@ for (let s = 0; s < seasons; s++) {
       }
     }
     if (state.day > SEASON_DAYS + 5) throw new Error('season did not roll over')
+    // a dismissed manager's clock stops (advanceDay returns at once); waiting for the year to
+    // turn would spin here for ever, which is how this script once ran for ten minutes
+    if (state.gameOver) { problems.push(`the manager was dismissed on day ${state.day}: ${state.gameOver}`); break }
   }
 }
 const elapsed = Date.now() - t0
@@ -61,7 +68,6 @@ for (const t of titles) console.log('  ' + t)
 console.log(`\nsimulated ${seasons} season(s), ${matches} matches in ${elapsed}ms`)
 
 // ---- invariants
-const problems: string[] = []
 for (const t of Object.values(state.teams)) {
   const squad = squadOf(state, t.id)
   // the human club is exempt: nobody re-signed its expiring contracts in a headless run

@@ -87,8 +87,12 @@ const monthOf = (s: { year: number; day: number }): number => {
 export function agentAvailable(s: { year: number; day: number }, agent: string): boolean {
   const since = AGENT_SINCE[agent]
   if (!since) return true
-  const m = monthOf(s)
-  return s.year > since[0] || (s.year === since[0] && m >= since[1])
+  // Asked for every champion, thousands of times a simulated day. Nearly all
+  // of them shipped in an earlier year, which the year alone answers; only one
+  // released in the current year needs the calendar, and building a Date for
+  // all 173 was what made a season take ten minutes instead of ten seconds.
+  if (s.year !== since[0]) return s.year > since[0]
+  return monthOf(s) >= since[1]
 }
 
 /** the agents released on this very game day's month start — for the news line */

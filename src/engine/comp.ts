@@ -1,72 +1,43 @@
 /**
- * What a five IS, read off the agents it takes onto the map — and what that
- * shape does to the sliders, the timeout calls and the opponent.
+ * What a five IS, read off the champions it drafts — and what that does to
+ * the sliders and to the opponent.
  *
- * Until now the four tactical dials were the same four numbers for every
- * composition, and they nearly cancelled: aggression 100 was worth +1.4 on
- * attack and −0.75 on defence, which measured out at +0.4 points of map win
- * rate. The only setting that moved anything was 道具, and it moved the same
- * way for everybody, so the honest strategy was "drag everything right". That
- * is a dial with one correct position, which is not a decision. The group
- * chat said so: 「战术板的四个滑杆跟比赛胜负关系不大，阵容也跟胜负关系不大」.
+ * In the shooter this engine came from, a five's shape was which jobs it
+ * doubled up on. Here a five is always one of each position, and its shape is
+ * WHEN it wants to win the game:
  *
- * Real compositions have a shape, and the shape decides what the sliders can
- * buy. Pro data (thespike / rib / vlr composition tables, 2025 season):
+ *   前期滚雪球  strong in lane and in the first fights, thin once the map opens
+ *              up — it has to be ahead at fifteen, and it has to end the game
+ *   正面团战    built to group and fight over objectives; even early and late,
+ *              best in the middle of the game
+ *   运营后期    gives up the early game to scale, side-lane and out-rotate
+ *   均衡        leans nowhere in particular; no shape to play into or against
  *
- *   双决斗 (2 duelists)     tempo and chaos — about 54% over the season,
- *                            58.8% in Pacific at 2026 Kickoff, lives on winning
- *                            duels; attack-leaning, thin on defence
- *   双控场 (2 controllers)  Omen + Viper was the dominant pair of 2025 —
- *                            methodical map control, pays on both sides, and
- *                            it is the utility budget that feeds it
- *   双哨卫 (2 sentinels)    setups and retakes — a defensive shape, slower,
- *                            punishes anyone who runs into it
- *   标准 (1D 2I 1C 1S)      the forgiving formula every map's default is
+ * Which of these a draft is comes from the champions themselves, and what a
+ * champion leans towards is measured, not authored: how much longer its wins
+ * run than its losses and how far ahead it is at fifteen (`lean`), and how
+ * much of its team's fighting it takes part in (`fight`) — twelve years of
+ * professional games, scripts/lol/build_champions.py.
  *
- * So the engine reads the five's shape and scales the dials by it: 节奏 and
- * 侵略性 pay roughly double on a double-duelist five and cost double on a
- * double-sentinel one, 道具 is what a double-controller five is built on. And
- * the OPPONENT's shape decides what your dials run into — fast pace into a
- * double-sentinel setup is what loses the pistol, an aggressive defence
- * against two duelists gets run over.
+ * The engine reads the shape and scales the dials by it: 节奏 and 侵略性 pay
+ * roughly double on a snowball draft and cost double on a scaling one, 视野 is
+ * what a team-fighting draft is built on. And the OPPONENT's shape decides
+ * what your dials run into.
  *
- * Nothing here is a number the manager cannot act on: every term is either
- * a slider, an agent pick, or the opponent's sheet.
+ * Nothing here is a number the manager cannot act on: every term is a slider,
+ * a champion pick, or the opponent's sheet.
  */
-import { AGENT_ROLE } from './content'
-import type { GameState, Role, Tactics } from './types'
+import { championOf } from './content'
+import type { GameState, Tactics } from './types'
 
+/** internal keys kept from the engine's origin: rush = 前期, control = 团战, hold = 运营 */
 export type CompStyle = 'rush' | 'hold' | 'control' | 'standard'
 
-export interface CompShape {
-  决斗者: number
-  先锋: number
-  控场: number
-  哨卫: number
-}
-
-export function compShape(agents: Iterable<string>): CompShape {
-  const s: CompShape = { 决斗者: 0, 先锋: 0, 控场: 0, 哨卫: 0 }
-  for (const a of agents) {
-    const r = AGENT_ROLE[a] as Role | undefined
-    if (r && r in s) s[r as keyof CompShape]++
-  }
-  return s
-}
-
-/**
- * The doubled role names the style. A five is five agents over four jobs, so
- * at most one job is doubled while all four are covered; a five with a hole
- * can double two, and then the tempo shape wins — two duelists and two
- * controllers with no sentinel is the 2026 「蚊子」 Yoru comp, and it is
- * played as a rush.
- */
+/** The draft's shape: whichever corner of the triangle it leans into, if it leans at all. */
 export function compStyle(agents: Iterable<string>): CompStyle {
-  const s = compShape(agents)
-  if (s.决斗者 >= 2) return 'rush'
-  if (s.哨卫 >= 2) return 'hold'
-  if (s.控场 >= 2) return 'control'
-  return 'standard'
+  const m = styleMix(agents)
+  if (Math.max(...m) - Math.min(...m) < STYLE_LEAN_MIN) return 'standard'
+  return (['rush', 'control', 'hold'] as const)[m.indexOf(Math.max(...m))]
 }
 
 export const COMP_STYLE_CN: Record<CompStyle, {
@@ -78,27 +49,27 @@ export const COMP_STYLE_CN: Record<CompStyle, {
   counter: string
 }> = {
   rush: {
-    label: '双决斗',
-    blurb: '两个突破手：节奏快、进攻硬，防守端薄。',
-    advice: '节奏和侵略性往右拉，拉在左边等于白带两个决斗者。暂停时「强攻」更猛。',
-    counter: '侵略性别拉高，激进的防守会被两个决斗者冲穿；中局应变拉高。',
+    label: '前期滚雪球',
+    blurb: '对线和前几波小团强，地图打开之后变薄：十五分钟必须领先，而且要尽快结束。',
+    advice: '节奏和侵略性往右拉，拉在左边等于白选一套前期阵容。',
+    counter: '侵略性别拉高，前期和他们硬碰是送；中局应变拉高，拖过他们的强势期。',
   },
   hold: {
-    label: '双哨卫',
-    blurb: '两个守点位：防守端厚，节奏慢，进攻端要靠道具慢推。',
-    advice: '节奏和侵略性往左拉，拉快了两个哨卫就是两个没枪的人。暂停时「稳守」更稳。',
-    counter: '节奏放慢，冲两个哨卫的布置就是送；道具拉高慢慢拆。',
+    label: '运营后期',
+    blurb: '前期让资源换发育，靠分带和转线拉扯，越往后越强。',
+    advice: '节奏和侵略性往左拉，拉快了就是拿一套后期阵容去打前期。',
+    counter: '节奏拉快，别等他们发育起来；视野拉高，抓他们分带的人。',
   },
   control: {
-    label: '双控场',
-    blurb: '两套烟：控图打法，攻防两端都受益，靠道具喂。',
-    advice: '道具拉高，节奏和侵略性放中间。',
-    counter: '道具拉高，节奏别太慢，等他们的烟铺开就晚了。',
+    label: '正面团战',
+    blurb: '抱团围绕小龙和大龙打正面，前后期都不差，中期最强。',
+    advice: '视野拉高，节奏和侵略性放中间。',
+    counter: '视野拉高，节奏别太慢，别在他们选好的地方接团。',
   },
   standard: {
-    label: '标准',
-    blurb: '一决斗、双先锋、一控场、一哨卫，最不挑的公式。',
-    advice: '滑杆按对手来调：对双哨卫放慢节奏，对双决斗别把侵略性拉满。',
+    label: '均衡',
+    blurb: '哪个时间段都能打，没有特别强的时候，也没有特别怕的对手。',
+    advice: '滑杆按对手来调：对运营阵容加快节奏，对前期阵容别把侵略性拉满。',
     counter: '没有特别要针对的，按自己阵容的打法来。',
   },
 }
@@ -248,28 +219,20 @@ export const FAM_DRILL = 12
 export const FAM_MATCH = 8
 export const FAM_SCRIM = 6
 
-export const compKey = (agents: Record<string, string>): string =>
-  Object.values(agents).slice().sort().join('|')
-
-const overlap = (a: string, b: string): number => {
-  const bs = b.split('|')
-  let n = 0
-  for (const x of a.split('|')) {
-    const i = bs.indexOf(x)
-    if (i >= 0) { n++; bs.splice(i, 1) }
-  }
-  return n / 5
-}
+/**
+ * What the club's practice is banked under: the KIND of draft, not the five
+ * champions in it. In a game with a ban phase no two games are played on the
+ * same five, so knowing "this exact sheet" would be a number that resets
+ * every game. What a squad really learns is how to play a snowball draft, or
+ * a scaling one — and that carries from one set of champions to the next.
+ */
+export const compKey = (agents: Record<string, string>): string => compStyle(Object.values(agents))
 
 export function familiarity(
-  state: GameState, teamId: string, map: string, agents: Record<string, string>,
+  state: GameState, teamId: string, _map: string, agents: Record<string, string>,
 ): number {
   if (teamId !== state.myTeam) return FAM_BASE
-  const cur = state.compPro?.[map]
-  if (!cur) return FAM_BASE
-  const key = compKey(agents)
-  if (cur.key === key) return cur.value
-  return cur.value * overlap(cur.key, key)
+  return state.compPro?.[compKey(agents)]?.value ?? FAM_BASE
 }
 
 /** The strength a familiarity value is worth, either way from neutral. */
@@ -280,76 +243,72 @@ export function learnComp(
   state: GameState, map: string, agents: Record<string, string>, amount: number,
 ): number {
   const key = compKey(agents)
-  if (!key) return FAM_BASE
   const from = familiarity(state, state.myTeam, map, agents)
   const value = Math.min(FAM_MAX, from + amount)
-  state.compPro = { ...(state.compPro ?? {}), [map]: { key, value } }
+  state.compPro = { ...(state.compPro ?? {}), [key]: { key, value } }
   return value
 }
 
-// ============================================================ 打法风格三角
+// ============================================================ 打法三角
 
 /**
- * 阵容的第二条轴：不是「谁上场」，是「道具怎么用」。
+ * 阵容在三角上的位置，和三个角之间的克制。
  *
- * comp.ts 上半部分数的是位置（双决斗 / 双哨卫 / 双控场），那条轴回答的是队形。
- * 这条轴来自 Isaaa 的 Style Dynamics 指南，回答的是打法，两条正交：星礈是控场，
- * 但她的回收烟是拿来换对面道具的；海神加蝰蛇循环冷却封点才是控制。同一个位置
- * 组合可以落在三角的不同角上。
+ *   前期  对线压制、入侵、小规模冲突，趁对面没发育起来打死
+ *   团战  抱团围绕资源打正面
+ *   运营  让前期换发育，分带、转线，不接正面
  *
- *   快攻 Aggro     一次性的催化型道具砸开空间，趁道具还在的窗口内打完回合
- *   消耗 Midrange  高频 + 可再生道具，拿便宜的换对面贵的，赢残局和下包后
- *   控制 Control   预铺点位、封锁空间，决定对面能走到哪
+ * 前期克运营（在他们发育起来之前结束），团战克前期（抱团打得过小规模冲突），
+ * 运营克团战（拉扯着不接团，把他们的阵容优势耗掉）。
  *
- * 快攻克控制，消耗克快攻，控制克消耗。（指南第 14 页把这行写反了，第 3、6、
- * 10 页和 FNATIC 输给 LOUD 那个实例都是这个方向。）
- *
- * 系数是 scripts/style_dynamics.ts 标定的：三项先各自归一化到 [-1,1]，分母取
- * 八千套抽样阵容的 5%/95% 分位——理论极值（纯快攻打纯控制）在五人阵容里根本
- * 排不出来，拿它标定会让克制项在实战中缩到 ±1%。
+ * 归一化常数由 scripts/check_comp.ts 对抽样的合法五人阵容标定。
  */
 export type StyleAxis = 0 | 1 | 2
-export const STYLE_CN = ['快攻', '消耗', '控制'] as const
+export const STYLE_CN = ['前期', '团战', '运营'] as const
 export type StyleMix = [number, number, number]
 
+/** a draft leans somewhere only when its strongest corner clears its weakest by this much */
+export const STYLE_LEAN_MIN = 0.11
+
 /**
- * 每个英雄在三角上的点数，总分 3。
+ * 每个英雄在三角上的点数，总分 3，由数据换算（content.ts 的 lean / fight）。
  *
- * 判据是道具性质，见 src/data/abilities.json（valorant-api 的技能表 +
- * Fandom 的充能与冷却，由 scripts/fetch_agent_abilities.py 抓取）：
- * 一次性的开路/位移道具算快攻，免费且冷却 ≥15 秒的可再生道具算消耗，
- * 预铺封锁算控制。2 秒那种使用窗口不算再生。
+ * (lean, fight) 是平面上的一个点：lean −1 纯前期 … +1 纯后期，fight 是参团率相对同位置
+ * 的偏移。三个角在这个平面上相隔 120°：
+ *
+ *   团战  参团率高，不管早晚
+ *   前期  参团率低、偏前期——抓单、入侵、单线压制
+ *   运营  参团率低、偏后期——分带、发育、拉扯
+ *
+ * 对称地投影，所以三个角谁也不占便宜（上一版把前期 / 后期当成一条轴的两端，
+ * 总有一端大于 1，团战只有 fight 为正时才加分，结果六百套阵容里只有八套读成团战）。
+ * 两个量都先除以各自的离散度（按选禁率加权约 0.4），lean 再减掉全体英雄的均值。
+ * 一个哪边都不靠的英雄是 [1, 1, 1]。
  */
-export const AGENT_STYLE: Record<string, StyleMix> = {
-  Jett: [3, 0, 0], Raze: [2, 1, 0], Phoenix: [2, 1, 0], Reyna: [3, 0, 0],
-  Yoru: [2, 1, 0], Neon: [3, 0, 0], Iso: [2, 0, 1], Waylay: [3, 0, 0],
-  // 钛狐四个技能全是一次性的开路道具，没有一个能再生。他原本被归到消耗，是
-  // 「铁夜壶 = 铁臂+夜露+钛狐」这条把错误抓出来的：这套的俗称说明它是抓人和
-  // 开局的阵容，而按旧分类它落在三角正中心，克制项恒为零。
-  Sova: [0, 2, 1], Breach: [3, 0, 0], Skye: [1, 2, 0], 'KAY/O': [1, 2, 0],
-  Fade: [1, 2, 0], Gekko: [0, 3, 0], Tejo: [2, 1, 0],
-  Brimstone: [1, 0, 2], Viper: [0, 1, 2], Omen: [0, 1, 2], Astra: [0, 2, 1],
-  Harbor: [0, 0, 3], Clove: [0, 1, 2], Miks: [0, 1, 2],
-  Sage: [0, 1, 2], Cypher: [0, 0, 3], Killjoy: [0, 0, 3], Chamber: [0, 1, 2],
-  Deadlock: [0, 0, 3], Vyse: [0, 0, 3], Veto: [0, 0, 3],
+const STYLE_SPREAD = 0.4
+const LEAN_MEAN = -0.09
+const STYLE_GAIN = 0.62
+const SIN60 = Math.sqrt(3) / 2
+
+export function agentStyle(agent: string): StyleMix | undefined {
+  const c = championOf(agent)
+  if (!c) return undefined
+  const x = (c.lean - LEAN_MEAN) / STYLE_SPREAD
+  const y = c.fight / STYLE_SPREAD
+  const raw: StyleMix = [
+    Math.max(0, 1 + STYLE_GAIN * (-SIN60 * x - 0.5 * y)),
+    Math.max(0, 1 + STYLE_GAIN * y),
+    Math.max(0, 1 + STYLE_GAIN * (SIN60 * x - 0.5 * y)),
+  ]
+  const t = raw[0] + raw[1] + raw[2]
+  return t ? [(3 * raw[0]) / t, (3 * raw[1]) / t, (3 * raw[2]) / t] : [1, 1, 1]
 }
 
 /**
- * 每张图想让你怎么打。
- *
- * 这组数来自九位教练/复盘从业者的问卷（scripts/survey_ingest.py）。问卷的地图
- * 那半跟原先手填的表几乎完全一致——微风岛屿差 0.01、森寒冬港 0.02、亚海 0.03，
- * 十三张里十二张差距小于 0.15——所以直接采用他们的平均值。英雄那半没有采用：
- * 在国内语境里「控制」是控图，是每套阵容都在做的事，不是区分维度，换上去会让
- * 八套阵容里七套都读成控制。
+ * 只有一张图，图对打法没有偏好：契合度这一项恒为零。保留这张表是因为读它的代码
+ * 还在；版本和克制两项才是这个游戏里阵容的意义。
  */
-export const MAP_WANT: Record<string, StyleMix> = {
-  Ascent: [0.36, 0.31, 0.33], Bind: [0.29, 0.41, 0.30], Breeze: [0.17, 0.28, 0.55],
-  Corrode: [0.27, 0.33, 0.40], Fracture: [0.54, 0.20, 0.26], Haven: [0.34, 0.32, 0.34],
-  Icebox: [0.24, 0.26, 0.50], Lotus: [0.36, 0.28, 0.36], Pearl: [0.23, 0.38, 0.38],
-  Split: [0.39, 0.16, 0.45], Summit: [0.25, 0.36, 0.39], Sunset: [0.34, 0.30, 0.36],
-  Abyss: [0.47, 0.23, 0.29],
-}
+export const MAP_WANT: Record<string, StyleMix> = {}
 
 const CENTRE: StyleMix = [1 / 3, 1 / 3, 1 / 3]
 
@@ -357,7 +316,7 @@ const CENTRE: StyleMix = [1 / 3, 1 / 3, 1 / 3]
 export function styleMix(agents: Iterable<string>): StyleMix {
   const s: StyleMix = [0, 0, 0]
   for (const a of agents) {
-    const v = AGENT_STYLE[a]
+    const v = agentStyle(a)
     if (!v) continue
     s[0] += v[0]; s[1] += v[1]; s[2] += v[2]
   }
@@ -401,7 +360,8 @@ export const styleAlign = (m: StyleMix, map: string): number => {
  */
 const ALIGN_MID = 1 / 3
 const ALIGN_SPAN = 0.075
-const COUNTER_HALF = 0.30
+// the 95th percentile of |克制| over sampled legal drafts (scripts/lol_comp_probe.ts)
+const COUNTER_HALF = 0.075
 const clamp1 = (x: number) => Math.max(-1, Math.min(1, x))
 
 export const alignN = (m: StyleMix, map: string): number =>

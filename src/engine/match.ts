@@ -1,11 +1,13 @@
 import { Rng, clamp } from './rng'
-import { MAPS, HIGHLIGHT_TEMPLATES as HL, mapCn } from './content'
+import { MAPS, HIGHLIGHT_TEMPLATES as HL } from './content'
 import { realPool } from './eras'
 import { agentMod, autoAgents, normalizeAgents } from './agents'
 import { isArena } from './types'
 import {
   DIAL_SCALE, callBoost, compStyle, famBonus, familiarity, styleEdge, styleName, stylePurity, tacticEdge,
 } from './comp'
+import { fearlessDraft, runDraft } from './draft'
+import type { DraftResult } from './draft'
 import { ROLES } from './types'
 import type { StyleMix } from './comp'
 import type { CompStyle } from './comp'
@@ -251,14 +253,23 @@ export function buildLineup(
   state: GameState, teamId: string, map: string,
   /** who we are up against on this map, for the matchup term; absent = a neutral five */
   oppId?: string,
+  /**
+   * The draft this game was actually played on (engine/draft.ts). Absent for
+   * the previews that only want to know what a club would field unopposed.
+   */
+  drafted?: { mine: Record<string, string>; theirs: Record<string, string> },
 ): Lineup {
   const team = state.teams[teamId]
   const players = selectLineup(state, teamId)
   // Who is on which agent. The manager's own picks for this map if he made
   // any; otherwise the map's usual composition, handed to whoever can play it.
   // Agents used to be decoration — this is where a pick starts to cost or pay.
-  const { agents: picks, style } = sheetFor(state, teamId, map, players)
-  const oppSheet = oppId && state.teams[oppId] ? sheetFor(state, oppId, map) : undefined
+  const { agents: picks, style } = drafted
+    ? { agents: drafted.mine, style: compStyle(Object.values(drafted.mine)) }
+    : sheetFor(state, teamId, map, players)
+  const oppSheet = drafted
+    ? { agents: drafted.theirs, style: compStyle(Object.values(drafted.theirs)) }
+    : oppId && state.teams[oppId] ? sheetFor(state, oppId, map) : undefined
   const oppStyle: CompStyle = oppSheet?.style ?? 'standard'
   const cardStrength = isArena(state) ? state.cardMatchStrength?.[teamId] : undefined
   if (cardStrength !== undefined) {
@@ -684,8 +695,14 @@ export class MapSim {
   private readonly swingA: number
   private readonly swingB: number
 
-  constructor(map: string, A: Lineup, B: Lineup, rng: Rng, format: 'first13' | 'full24' = 'first13') {
+  /** which side drafted first and plays from the blue base this game */
+  readonly blue: Side
+
+  constructor(
+    map: string, A: Lineup, B: Lineup, rng: Rng, format: 'first13' | 'full24' = 'first13', blue: Side = 'a',
+  ) {
     this.format = format
+    this.blue = blue
     this.map = map
     this.A = A
     this.B = B
@@ -740,9 +757,9 @@ export class MapSim {
     const early = late < 0.5
 
     const strA = (1 - late) * this.A.atk + late * this.A.def +
-      this.callMod(this.calls.a, early, this.A.style) + this.swingA + BLUE_EDGE
+      this.callMod(this.calls.a, early, this.A.style) + this.swingA + (this.blue === 'a' ? BLUE_EDGE : 0)
     const strB = (1 - late) * this.B.atk + late * this.B.def +
-      this.callMod(this.calls.b, early, this.B.style) + this.swingB
+      this.callMod(this.calls.b, early, this.B.style) + this.swingB + (this.blue === 'b' ? BLUE_EDGE : 0)
     // the side that is behind leans on its reading of the game to steady the ship
     const steadyA = this.gold < 0 ? this.A.midRound * 0.35 : 0
     const steadyB = this.gold > 0 ? this.B.midRound * 0.35 : 0
@@ -891,6 +908,7 @@ export class MapSim {
         edge: { a: this.A.edge, b: this.B.edge },
         lines: this.ctx.lines, rounds: this.ctx.rounds,
         agents: { ...this.A.agents, ...this.B.agents },
+        blue: this.blue === 'a' ? 'A' : 'B',
       },
       highlights: this.ctx.highlights,
     }
@@ -926,6 +944,9 @@ export class MatchSim {
   private rng: Rng
   private seenA = new Set<string>()
   private seenB = new Set<string>()
+  /** champions already played in this series — gone for everybody under 无畏征召 */
+  private usedChamps = new Set<string>()
+  private lastDraft: DraftResult | null = null
 
   readonly format: 'first13' | 'full24'
 
@@ -971,11 +992,29 @@ export class MatchSim {
     if (this.decided || this.mapIndex + 1 >= this.maps.length) return false
     this.mapIndex++
     const m = this.maps[this.mapIndex]
-    const A = buildLineup(this.state, this.aId, m, this.bId)
-    const B = buildLineup(this.state, this.bId, m, this.aId)
+    // Sides alternate through a series, the first game's blue side going to A
+    // (the higher seed or the home side, by how fixtures are written).
+    const blue: Side = this.mapIndex % 2 === 0 ? 'a' : 'b'
+    const fiveA = selectLineup(this.state, this.aId)
+    const fiveB = selectLineup(this.state, this.bId)
+    const mine = this.sideOf(this.state.myTeam)
+    const sheet = mine ? (this.state.agentPicks?.[m] ?? this.state.mapAgents?.[m]) : undefined
+    const draft = runDraft(
+      this.state, blue === 'a' ? fiveA : fiveB, blue === 'a' ? fiveB : fiveA, this.rng,
+      {
+        used: fearlessDraft(this.state) ? this.usedChamps : undefined,
+        plan: mine && sheet ? { side: mine === blue ? 'blue' : 'red', picks: sheet } : undefined,
+      },
+    )
+    this.lastDraft = draft
+    const picksA = blue === 'a' ? draft.blue : draft.red
+    const picksB = blue === 'a' ? draft.red : draft.blue
+    for (const c of [...Object.values(picksA), ...Object.values(picksB)]) this.usedChamps.add(c)
+    const A = buildLineup(this.state, this.aId, m, this.bId, { mine: picksA, theirs: picksB })
+    const B = buildLineup(this.state, this.bId, m, this.aId, { mine: picksB, theirs: picksA })
     for (const p of A.players) this.seenA.add(p.id)
     for (const p of B.players) this.seenB.add(p.id)
-    this.current = new MapSim(m, A, B, this.rng, this.format)
+    this.current = new MapSim(m, A, B, this.rng, this.format, blue)
     return true
   }
 
@@ -983,9 +1022,17 @@ export class MatchSim {
   closeMap(): void {
     if (!this.current) return
     const { score, highlights } = this.current.result()
+    if (this.lastDraft) {
+      const blueIsA = score.blue !== 'B'
+      score.bans = {
+        a: blueIsA ? this.lastDraft.bansBlue : this.lastDraft.bansRed,
+        b: blueIsA ? this.lastDraft.bansRed : this.lastDraft.bansBlue,
+      }
+      score.draftLog = this.lastDraft.log
+    }
     this.played.push(score)
     for (const h of highlights) {
-      if (this.highlights.length < 10) this.highlights.push(`[${mapCn(score.map)}] ${h}`)
+      if (this.highlights.length < 10) this.highlights.push(`[第 ${this.played.length} 局] ${h}`)
     }
     // A 24-round scrim can finish 12-12. The else branch used to hand that to
     // side B: the news read "0-1", the whole squad lost form and morale for a

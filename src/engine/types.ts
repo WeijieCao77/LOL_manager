@@ -738,6 +738,12 @@ export interface MapScore {
   dragonsB?: number
   baronsA?: number
   baronsB?: number
+  /** which side drafted first and played from the blue base */
+  blue?: 'A' | 'B'
+  /** the five bans each side spent */
+  bans?: { a: string[]; b: string[] }
+  /** the draft as it was called, a line a step; kept for the managed club's games */
+  draftLog?: string[]
   /** per-side factor breakdown, for the post-match explanation */
   edge?: { a: EdgeBreakdown; b: EdgeBreakdown }
   /** per-player line for this map, keyed by player id */
