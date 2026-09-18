@@ -81,17 +81,26 @@ export function refreshValue(p: Player): void {
   p.value = marketValue(p)
 }
 
-/** Derived per-round numbers used all over the UI. */
+/**
+ * Derived numbers used all over the UI.
+ *
+ * `rounds` in a stat block is MINUTES played (the field keeps its name from
+ * the round-based shooter this engine came from), so everything here that
+ * says "per round" is per minute: `adr` is damage per minute, `kpr` kills per
+ * minute. `acs` is the composite rating on a 200-is-average scale, because
+ * that is the scale the awards and the leaderboards already read.
+ */
 export function statLine(s: Stats) {
   const r = s.rounds || 1
   const m = s.maps || 1
   return {
     kd: s.deaths ? s.kills / s.deaths : s.kills,
+    kda: (s.kills + s.assists) / Math.max(1, s.deaths),
     kpr: s.kills / r,
     dpr: s.deaths / r,
     apr: s.assists / r,
     adr: s.damage / r,
-    acs: (s.damage / r) * 1.45,
+    acs: ratingOf(s) * 200,
     kills: s.kills,
     maps: s.maps,
     fkDiff: s.firstKills - s.firstDeaths,
@@ -154,13 +163,19 @@ export const roleColor = (role: string): string =>
     下路: 'var(--sentinel)', 辅助: 'var(--flex)',
   })[role] ?? 'var(--flex)'
 
-/** VLR-style composite rating, calibrated so an average starter sits at ~1.00. */
+/**
+ * A composite rating from the scoreboard, calibrated so an average starter
+ * sits at about 1.00. Per minute: a professional takes about 0.087 kills and
+ * deaths and 0.17 assists a minute (27.9 kills a game over 32.6 minutes).
+ * Carries score above it and supports a little below, as they do on any
+ * scoreboard; it does not know what position a man plays.
+ */
 export const ratingOf = (s: { kills: number; deaths: number; assists: number; rounds: number }) => {
   if (!s.rounds) return 0
-  const kpr = s.kills / s.rounds
-  const dpr = s.deaths / s.rounds
-  const apr = s.assists / s.rounds
-  return clamp(0.52 + kpr * 1.15 + apr * 0.28 - dpr * 0.55, 0, 3)
+  const kpm = s.kills / s.rounds
+  const dpm = s.deaths / s.rounds
+  const apm = s.assists / s.rounds
+  return clamp(0.81 + kpm * 2.4 + apm * 0.9 - dpm * 2.0, 0, 3)
 }
 
 /**

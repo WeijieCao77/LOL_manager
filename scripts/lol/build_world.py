@@ -611,8 +611,8 @@ def main():
                 pid = f'P{len(players_out) + 1}'
                 est_age = age if age is not None else 21
                 potential = min(99, overall + int(max(0, 24 - est_age) * 2.2 + rng.random() * 4))
-                salary = int(round(33000 * math.exp((overall - 55) / 12) * (0.14 if tier == 2 else 1) * 2.5, -3))
-                value = int(round(20000 * math.exp((overall - 55) / 10.5) * (1.25 if est_age <= 21 else 1.0 if est_age <= 25 else .7) * (0.2 if tier == 2 else 1) * 2.5, -3))
+                salary = int(round(33000 * math.exp((overall - 55) / 12) * (0.14 if tier == 2 else 1), -3))
+                value = int(round(20000 * math.exp((overall - 55) / 10.5) * (1.25 if est_age <= 21 else 1.0 if est_age <= 25 else .7) * (0.2 if tier == 2 else 1), -3))
                 players_out.append(dict(
                     id=pid, ign=nm, teamId=tid, region=region,
                     nat=COUNTRY_ISO.get((b or {}).get('country')),
@@ -708,8 +708,8 @@ def main():
             role=ROLE_CN[pos], roles=[ROLE_CN[pos]], isCaptain=False, games=int(round(eff)), attrs=attrs, overall=overall,
             potential=min(99, overall + int(max(0, 24 - age) * 2.2 + rng.random() * 4)),
             form=55 + rng.randrange(20), morale=55 + rng.randrange(20), fatigue=0,
-            salary=int(round(33000 * math.exp((overall - 55) / 12) * 2.5 * .8, -3)),
-            value=int(round(20000 * math.exp((overall - 55) / 10.5) * 2.5 * .6, -3)),
+            salary=int(round(33000 * math.exp((overall - 55) / 12) * .8, -3)),
+            value=int(round(20000 * math.exp((overall - 55) / 10.5) * .6, -3)),
             contractYears=0, loyalty=35 + rng.randrange(50), ambition=35 + rng.randrange(55),
             champPool=[c for c, _ in champs.most_common(6)], champUse=dict(champs.most_common(30)), champWr={},
         ))

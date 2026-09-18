@@ -661,15 +661,18 @@ export interface Team {
 }
 
 /** How a single round played out — drives the broadcast-style round ribbon. */
+/** One beat of a game — about two minutes, fought over one thing. */
 export interface RoundLog {
   n: number
   winner: 'A' | 'B'
-  /** true when team A was attacking this round */
-  aAttack: boolean
-  end: 'elim' | 'spike' | 'defuse' | 'time'
-  /** economy state each side went into the round with */
-  buyA: 'eco' | 'force' | 'full'
-  buyB: 'eco' | 'force' | 'full'
+  /** game clock when it was settled */
+  minute: number
+  /** what it was fought over; 'nexus' is the beat that ended the game */
+  event: 'lane' | 'gank' | 'dragon' | 'herald' | 'tower' | 'fight' | 'pick' | 'baron' | 'nexus'
+  /** team A's gold lead after it (negative: B ahead) */
+  gold: number
+  killsA: number
+  killsB: number
 }
 
 /**
@@ -713,10 +716,28 @@ export interface EdgeBreakdown {
   def: number
 }
 
+/**
+ * One game of a series. The engine's word for it is still "map", from the
+ * shooter this was built on; every series here is played on the one map.
+ */
 export interface MapScore {
   map: string
+  /** who won, as 1–0. Kills do not decide a game, so they are not the score. */
   scoreA: number
   scoreB: number
+  killsA?: number
+  killsB?: number
+  /** game length */
+  minutes?: number
+  /** team A's gold lead at the end, and at fifteen minutes */
+  goldDiff?: number
+  goldAt15?: number
+  towersA?: number
+  towersB?: number
+  dragonsA?: number
+  dragonsB?: number
+  baronsA?: number
+  baronsB?: number
   /** per-side factor breakdown, for the post-match explanation */
   edge?: { a: EdgeBreakdown; b: EdgeBreakdown }
   /** per-player line for this map, keyed by player id */
@@ -735,9 +756,14 @@ export interface MapLine {
   damage: number
   firstKills: number
   firstDeaths: number
+  /** beats in which he took three kills or more */
   clutches: number
+  /** minutes played — the per-minute statistics divide by this */
   rounds: number
+  /** performance score; 200 is an average game */
   acs: number
+  cs?: number
+  gold?: number
 }
 
 export interface MatchResult {

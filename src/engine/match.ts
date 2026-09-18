@@ -35,24 +35,24 @@ import type {
  * thing. Measured with scratch scripts over three seasons; the smoke test
  * still holds the K/D calibration.
  */
-const MAP_SWING = 6
 /** the strength gap, in rating points, that moves a round from 50% to 73% */
-const ROUND_SENS = 30
 
 /** How much each role tends to take kills / take deaths. */
 // 决斗者 was 1.15 while every real duelist in a fifth slot sat on a default
 // initiator with the off-role penalty; with real agent pools he plays his own
 // agent at full strength, and 1.15 put the season's top K/D at 1.62 against
 // a real ceiling near 1.5. 1.08 lands it back there — see scripts/smoke.ts.
+/** how the five share 运营: the most of it counts for most (see buildLineup) */
+const MACRO_SHARE = [0.4, 0.25, 0.15, 0.1, 0.1]
+/** strength points, in the second half of the game only, per point of team 运营 above 62 */
+const MACRO_LATE = 0.3
+
 const KILL_WEIGHT: Record<Role, number> = {
   下路: 1.2, 中单: 1.12, 上单: 0.98, 打野: 0.95, 辅助: 0.62,
 }
 // and an entry player dies for it: 1.28, from 1.25, for the same reason
 const DEATH_WEIGHT: Record<Role, number> = {
   辅助: 1.18, 打野: 1.08, 上单: 1.05, 中单: 0.92, 下路: 0.88,
-}
-const ENTRY_WEIGHT: Record<Role, number> = {
-  打野: 1.8, 中单: 1.2, 上单: 1.0, 辅助: 1.0, 下路: 0.7,
 }
 
 export interface Lineup {
@@ -303,8 +303,20 @@ export function buildLineup(
   // club's caller and his flag comes with him. One voice calls the game: the
   // club's named main caller if he is on the server, else the best deputy
   // who is (callerOf). The others neither stack nor clash.
-  const igl = callerOf(state, team.id, players)
-  const iglBonus = igl ? (igl.attrs.macro - 60) * 0.09 : -4
+  // 运营 is carried by the five between them, not by one voice: the man with
+  // the most of it counts for most (40%, then 25/15/10/10), and the captain
+  // takes the top share whatever his number is — so who wears the armband is
+  // a decision with a price. It is paid out after the lanes break up, which
+  // is what it was measured as: winning more than the fifteen-minute state
+  // predicts (docs/调研-选手数值与年龄曲线.md §3–4).
+  const captain = callerOf(state, team.id, players)
+  const macroOrder = players.slice().sort((x, y) =>
+    Number(y.id === captain?.id) - Number(x.id === captain?.id) || y.attrs.macro - x.attrs.macro)
+  const teamMacro = macroOrder.length
+    ? macroOrder.reduce((sum, pl, i) => sum + pl.attrs.macro * (MACRO_SHARE[i] ?? 0.1), 0) /
+      macroOrder.reduce((sum, _pl, i) => sum + (MACRO_SHARE[i] ?? 0.1), 0)
+    : 55
+  const iglBonus = (teamMacro - 62) * MACRO_LATE
   // attributes say how well they can play together; bonds say whether they are
   const rapport = squadHarmony(state, team.id)
   const chem = clamp((avg('teamwork') + avg('teamfight')) / 2 + (rapport - NEUTRAL) * 0.18, 20, 99)
@@ -345,13 +357,13 @@ export function buildLineup(
   const missing = Math.max(0, 5 - players.length)
   const shortHanded = -missing * 18
 
-  const common = base + iglBonus + chemBonus + coachBonus + comp + mapPref + utilBonus + shortHanded +
+  const common = base + chemBonus + coachBonus + comp + mapPref + utilBonus + shortHanded +
     famEdge + se.total
   const atk = common + te.tacticsAtk + styleAtk + (avg('laning') - 65) * 0.05
-  const def = common + te.tacticsDef + styleDef + (avg('awareness') - 65) * 0.05 + 1.6
+  const def = common + te.tacticsDef + styleDef + (avg('awareness') - 65) * 0.05 + iglBonus
 
   const midRound =
-    (t.adaptability - 50) * DIAL_SCALE * 0.05 + (igl ? (igl.attrs.macro - 60) * 0.06 : -3) + (avg('clutch') - 65) * 0.05 +
+    (t.adaptability - 50) * DIAL_SCALE * 0.05 + (teamMacro - 60) * 0.06 + (avg('clutch') - 65) * 0.05 +
     te.styleMid + te.matchupMid
 
   const edge: EdgeBreakdown = {
@@ -480,6 +492,12 @@ export function runVeto(
 ): { maps: string[]; log: string[] } {
   const a = state.teams[aId]
   const b = state.teams[bId]
+  // One map: there is nothing to veto, and a series is that map as many times
+  // as it takes. What the two sides choose between games is the draft.
+  if (pool.length <= 1) {
+    const only = pool[0] ?? MAPS[0]
+    return { maps: Array.from({ length: bo }, () => only), log: [] }
+  }
   let remaining = pool.slice()
   const picked: string[] = []
   const log: string[] = []
@@ -517,48 +535,43 @@ export function runVeto(
   return { maps: picked.slice(0, bo), log }
 }
 
-// ---------------------------------------------------------------- economy
+// ---------------------------------------------------------------- one game on the Rift
 
-type Buy = 'eco' | 'force' | 'full'
+/**
+ * A game is a string of beats of about two minutes — a skirmish, a dragon, a
+ * tower, a Baron — and each is a contest between what the two fives bring to
+ * that part of the game.
+ *
+ * The engine this was built from split a map into an attacking half and a
+ * defending half, and a five's shape decided which it was good at. This game
+ * splits in time instead, and the same two numbers carry it: `atk` is what a
+ * five is worth in lane and in the first fights, `def` is what it is worth
+ * once the map has opened up. A snowball draft is strong early and thin late;
+ * a scaling draft is the reverse; the beats slide from one to the other
+ * between eight and twenty-two minutes.
+ *
+ * What the early game buys is gold, and gold is what makes the later beats
+ * easier — capped, so a lead is an advantage and not a verdict: the side that
+ * is better late comes back from a few thousand down, which is exactly what
+ * 运营 is measured as (docs/调研-选手数值与年龄曲线.md §3). After twenty minutes
+ * a beat won with a real lead can end the game.
+ *
+ * Held against the real numbers by scripts/check_match_shape.ts: game length,
+ * kills a game, how often the side ahead at fifteen wins, how often the blue
+ * side does.
+ */
 
-class Economy {
-  money = 800
-  lossStreak = 0
+/** one standard deviation of how a five turns up for THIS game */
+const GAME_SWING = 3.2
+/** strength points per step of the beat's logistic */
+const BEAT_SENS = 15
+/** what a gold lead is worth in a beat, at most, and the lead that buys half of it */
+const GOLD_PULL = 10
+const GOLD_SCALE = 5500
+/** the blue side picks first and wins 53.5% of real games; this much strength buys that */
+const BLUE_EDGE = 1.4
 
-  decide(rng: Rng): Buy {
-    if (this.money >= 3900) return 'full'
-    if (this.money >= 2200) return rng.chance(0.55) ? 'force' : 'eco'
-    return 'eco'
-  }
-
-  spend(buy: Buy) {
-    if (buy === 'full') this.money -= 3900
-    else if (buy === 'force') this.money -= 2300
-    else this.money -= 500
-    this.money = Math.max(0, this.money)
-  }
-
-  onWin(kills: number) {
-    this.money += 3000 + kills * 200
-    this.lossStreak = 0
-    this.money = Math.min(this.money, 9000)
-  }
-
-  onLoss(kills: number) {
-    this.money += 1900 + Math.min(this.lossStreak, 2) * 500 + kills * 200
-    this.lossStreak++
-    this.money = Math.min(this.money, 9000)
-  }
-
-  reset() {
-    this.money = 800
-    this.lossStreak = 0
-  }
-}
-
-const BUY_MOD: Record<Buy, number> = { full: 0, force: -6.5, eco: -15 }
-
-// ---------------------------------------------------------------- round + map sim
+type BeatKind = RoundLog['event']
 
 interface MapCtx {
   lines: Record<string, MapLine>
@@ -568,106 +581,60 @@ interface MapCtx {
 
 function blankLine(): MapLine {
   return {
-    kills: 0, deaths: 0, assists: 0, damage: 0,
-    firstKills: 0, firstDeaths: 0, clutches: 0, rounds: 0, acs: 0,
+    kills: 0, deaths: 0, assists: 0, damage: 0, firstKills: 0, firstDeaths: 0,
+    clutches: 0, rounds: 0, acs: 0, cs: 0, gold: 0,
   }
 }
 
-function allocateRound(
-  winners: Player[],
-  losers: Player[],
-  winnersLost: number,
-  losersLost: number,
-  ctx: MapCtx,
-  rng: Rng,
-  mapName: string,
-  /** when the round is being played around one player, they see more of it */
-  focusId?: string,
-): void {
-  const roundKills: Record<string, number> = {}
-  const kill = (killers: Player[], victims: Player[], count: number, firstOf: boolean) => {
-    // a club fielding fewer than five still has to play; never divide by nobody
-    if (!killers.length) return
-    const vPool = victims.slice()
-    for (let i = 0; i < count && vPool.length; i++) {
-      // The flat term keeps role players on the scoreboard — even a star only
-      // out-frags a support by roughly 1.5x over a season — but it used to be
-      // most of the weight: a 96-aim controller fragged like a 67-aim
-      // initiator, because the role factor outweighed thirty points of aim.
-      // Real scoreboards do not look like that (happywei 221 ACS to stax's
-      // 176), so the gun carries more of it now and the role a little less.
-      const kw = killers.map(
-        (p) => expectedShare(p) * stateFactor(p) * (p.id === focusId ? 1.55 : 1),
-      )
-      const dw = vPool.map(
-        (p) => (120 - p.attrs.awareness * 0.35 - p.attrs.clutch * 0.2) * DEATH_WEIGHT[p.role],
-      )
-      const killer = rng.weighted(killers, kw)
-      const victim = rng.weighted(vPool, dw)
-      const kl = ctx.lines[killer.id]
-      const vl = ctx.lines[victim.id]
-      kl.kills++
-      roundKills[killer.id] = (roundKills[killer.id] ?? 0) + 1
-      // a kill is often the finish on someone a teammate already damaged
-      kl.damage += 120 + rng.range(0, 55)
-      vl.deaths++
-      if (firstOf && i === 0) {
-        const entryK = rng.weighted(killers, killers.map((p) => ENTRY_WEIGHT[p.role] * (p.attrs.mechanics / 60)))
-        const entryV = rng.weighted(vPool, vPool.map((p) => ENTRY_WEIGHT[p.role]))
-        ctx.lines[entryK.id].firstKills++
-        ctx.lines[entryV.id].firstDeaths++
+/** what each position takes of its side's kills, deaths and assists, before ability */
+const ASSIST_WEIGHT: Record<Role, number> = { 辅助: 1.7, 打野: 1.35, 中单: 1.0, 上单: 0.85, 下路: 0.95 }
+const CSPM: Record<Role, number> = { 上单: 8.1, 打野: 5.9, 中单: 8.7, 下路: 9.3, 辅助: 1.2 }
+const DPM: Record<Role, number> = { 上单: 520, 打野: 390, 中单: 610, 下路: 690, 辅助: 190 }
+const GOLD_SHARE: Record<Role, number> = { 上单: 0.215, 打野: 0.19, 中单: 0.225, 下路: 0.25, 辅助: 0.12 }
+
+/** Hand one beat's kills out to the people who would have got them. */
+function allocateBeat(
+  winners: Player[], losers: Player[], winnersKills: number, losersKills: number,
+  ctx: MapCtx, rng: Rng, firstBlood: boolean, focusId?: string,
+): string | null {
+  let multi: string | null = null
+  const deal = (killers: Player[], victims: Player[], n: number, first: boolean) => {
+    if (!killers.length || !victims.length) return
+    const got: Record<string, number> = {}
+    for (let i = 0; i < n; i++) {
+      const k = rng.weighted(killers, killers.map((p) => killShare(p) * (p.id === focusId ? 1.35 : 1)))
+      const v = rng.weighted(victims, victims.map((p) => DEATH_WEIGHT[p.role] * (1.25 - p.attrs.awareness / 200)))
+      ctx.lines[k.id].kills++
+      ctx.lines[v.id].deaths++
+      got[k.id] = (got[k.id] ?? 0) + 1
+      if (first && i === 0) { ctx.lines[k.id].firstKills++; ctx.lines[v.id].firstDeaths++ }
+      // one to three team-mates were in on it
+      const mates = killers.filter((p) => p.id !== k.id)
+      const helpers = Math.min(mates.length, rng.int(1, 3))
+      const pool = mates.slice()
+      for (let h = 0; h < helpers && pool.length; h++) {
+        const m = rng.weighted(pool, pool.map((p) => ASSIST_WEIGHT[p.role] * (0.6 + p.attrs.teamwork / 160)))
+        ctx.lines[m.id].assists++
+        pool.splice(pool.indexOf(m), 1)
       }
-      // assist from a utility-heavy teammate
-      if (rng.chance(0.42)) {
-        const mates = killers.filter((p) => p.id !== killer.id)
-        if (mates.length) {
-          const aw = mates.map((p) => p.attrs.teamwork * 0.7 + p.attrs.awareness * 0.3)
-          ctx.lines[rng.weighted(mates, aw).id].assists++
-        }
-      }
-      vPool.splice(vPool.indexOf(victim), 1)
+    }
+    for (const [id, c] of Object.entries(got)) {
+      if (c >= 3) { ctx.lines[id].clutches++; if (c >= 4) multi = id }
     }
   }
-
-  kill(winners, losers, losersLost, true)
-  kill(losers, winners, winnersLost, false)
-
-  // Chip damage is a large, fairly flat share of every player's output. Keeping
-  // it independent of kills is what stops a star's ADR running away with their
-  // frag share, and lands the league near the real VCT average of ~135.
-  for (const p of [...winners, ...losers]) {
-    ctx.lines[p.id].damage += rng.range(20, 60) * (0.75 + p.attrs.teamfight / 260)
-    ctx.lines[p.id].rounds++
-  }
-
-  const room = () => ctx.highlights.length < 9
-
-  // a big individual round stands on its own, whether or not it was a clutch
-  for (const p of winners) {
-    const k = roundKills[p.id] ?? 0
-    if (k >= 5 && room()) ctx.highlights.push(HL.ace(p.ign, mapName))
-    else if (k === 4 && room() && rng.chance(0.5)) ctx.highlights.push(HL.quad(p.ign))
-  }
-
-  // a 1vX hold when the winning side was down to its last player. The survivor
-  // is whoever was most likely to still be standing, and the X is how many they
-  // actually took down — not the whole enemy side, which was the old bug.
-  if (winnersLost === 4) {
-    const hero = rng.weighted(
-      winners,
-      winners.map((p) => p.attrs.clutch * 0.6 + p.attrs.awareness * 0.4),
-    )
-    ctx.lines[hero.id].clutches++
-    const took = Math.max(1, Math.min(roundKills[hero.id] ?? 1, losersLost))
-    if (room() && (took >= 3 || rng.chance(0.4))) ctx.highlights.push(HL.clutch(hero.ign, took))
-  }
-
+  deal(winners, losers, winnersKills, firstBlood)
+  deal(losers, winners, losersKills, firstBlood && winnersKills === 0)
+  return multi
 }
 
-/** A tactical instruction called during a timeout; decays over a few rounds. */
+/** Everyone's share of a side's kills: mostly the hands, a little the position. */
+const killShare = (p: Player): number =>
+  (42 + (p.attrs.mechanics * 0.55 + p.attrs.teamfight * 0.3 + p.attrs.clutch * 0.15) * 0.78) * KILL_WEIGHT[p.role]
+
+/** A tactical instruction; kept for the scrim and watch flows that pass one in. */
 export interface TacticalCall {
   kind: 'focus' | 'rush' | 'steady'
-  /** for 'focus': who the round is played around */
+  /** for 'focus': who the game is played around */
   playerId?: string
   roundsLeft: number
 }
@@ -675,37 +642,45 @@ export interface TacticalCall {
 export type Side = 'a' | 'b'
 
 /**
- * One map, played a round at a time.
+ * One game, played a beat at a time.
  *
- * Watch mode drives this from the UI so it can stop for timeouts; skip mode
- * runs it straight to the end. Both share this exact code path, so a match you
- * watched and one you skipped are generated the same way.
+ * Watch mode drives this from the UI; skip mode runs it straight to the end.
+ * Both share this exact code path, so a game you watched and one you skipped
+ * are generated the same way.
  */
 export class MapSim {
   readonly map: string
   readonly A: Lineup
   readonly B: Lineup
+  /** kills, which is what the scoreboard shows — NOT who is winning; see `winner` */
   a = 0
   b = 0
-  /** rounds completed */
+  /** beats completed */
   round = 0
-  timeouts: Record<Side, number> = { a: 2, b: 2 }
+  /** game clock, minutes */
+  minute = 0
+  /** A's gold lead; negative when B is ahead */
+  gold = 0
+  /** A's gold lead at fifteen minutes, once the clock has passed it */
+  goldAt15: number | null = null
+  towers: Record<Side, number> = { a: 0, b: 0 }
+  dragons: Record<Side, number> = { a: 0, b: 0 }
+  barons: Record<Side, number> = { a: 0, b: 0 }
+  winner: 'A' | 'B' | null = null
+  /**
+   * There are no tactical timeouts in this sport. The fields stay because the
+   * watch screen reads them; with none to spend it never offers one.
+   */
+  timeouts: Record<Side, number> = { a: 0, b: 0 }
   calls: Record<Side, TacticalCall | null> = { a: null, b: null }
 
   private rng: Rng
   private ctx: MapCtx
-  private ecoA = new Economy()
-  private ecoB = new Economy()
-  private halfA = 0
-  private halfB = 0
-  private otAnnounced = false
-  private streak = 0
-  private streakSide: 'A' | 'B' | null = null
-  private mapPointSaid = false
+  private maxLead: Record<Side, number> = { a: 0, b: 0 }
+  private soulSaid = false
 
-  /** 'first13' is a real map; 'full24' plays both halves out, as scrims do */
+  /** kept for the scrim flow's signature; every game is simply played out */
   readonly format: 'first13' | 'full24'
-  /** how each side turned up for THIS map — see MAP_SWING */
   private readonly swingA: number
   private readonly swingB: number
 
@@ -715,37 +690,16 @@ export class MapSim {
     this.A = A
     this.B = B
     this.rng = rng
-    this.swingA = rng.norm(0, MAP_SWING)
-    this.swingB = rng.norm(0, MAP_SWING)
+    this.swingA = rng.norm(0, GAME_SWING)
+    this.swingB = rng.norm(0, GAME_SWING)
     this.ctx = { lines: {}, highlights: [], rounds: [] }
     for (const p of [...A.players, ...B.players]) this.ctx.lines[p.id] = blankLine()
   }
 
-  /** Side, pistol status and half for the round about to be played. */
-  private phase() {
-    const r = this.round + 1
-    if (r <= 12) return { aAttack: true, pistol: r === 1, half: 1 }
-    if (r <= 24) return { aAttack: false, pistol: r === 13, half: 2 }
-    const ot = r - 25
-    return { aAttack: ot % 2 === 0, pistol: false, half: 3 }
-  }
+  get over(): boolean { return this.winner !== null }
+  get rounds(): RoundLog[] { return this.ctx.rounds }
+  get highlights(): string[] { return this.ctx.highlights }
 
-  get over(): boolean {
-    // a scrim plays all 24 rounds so both sides get a full half on each side,
-    // which is the point of the session
-    if (this.format === 'full24') return this.round >= 24
-    return (this.a >= 13 || this.b >= 13) && Math.abs(this.a - this.b) >= 2
-  }
-
-  get rounds(): RoundLog[] {
-    return this.ctx.rounds
-  }
-
-  get highlights(): string[] {
-    return this.ctx.highlights
-  }
-
-  /** True when this side still has a timeout and the map is live. */
   canTimeout(side: Side): boolean {
     return !this.over && this.timeouts[side] > 0 && this.round > 0
   }
@@ -757,156 +711,135 @@ export class MapSim {
     return true
   }
 
-  /**
-   * Strength adjustment from an active tactical call.
-   *
-   * Scaled by the shape of the five it is called on: 强攻 with two duelists
-   * is the comp doing its job, 强攻 with two sentinels is not.
-   */
-  private callMod(call: TacticalCall | null, attacking: boolean, style: CompStyle): number {
+  private callMod(call: TacticalCall | null, early: boolean, style: CompStyle): number {
     if (!call) return 0
-    if (call.kind === 'rush') return (attacking ? 2.4 : -1.6) * callBoost('rush', style)
-    if (call.kind === 'steady') return (attacking ? -1.2 : 2.0) * callBoost('steady', style)
-    return 0.6 // focus: a small lift from playing to a known strength
+    if (call.kind === 'rush') return (early ? 2.4 : -1.6) * callBoost('rush', style)
+    if (call.kind === 'steady') return (early ? -1.2 : 2.0) * callBoost('steady', style)
+    return 0.6
+  }
+
+  /** What this beat is fought over, given the clock and what is left on the map. */
+  private pickBeat(): BeatKind {
+    const m = this.minute
+    const rng = this.rng
+    const drakes = this.dragons.a + this.dragons.b
+    if (this.round === 1) return 'lane'
+    if (m < 14) return rng.weighted<BeatKind>(['lane', 'gank', 'dragon', 'herald', 'tower'], [2.6, 2.6, drakes < 2 ? 3.6 : 0.8, 1.5, 1.2])
+    if (m < 24) return rng.weighted<BeatKind>(['fight', 'dragon', 'tower', 'pick', 'baron'], [2.2, 3.8, 2.6, 1.6, m >= 20 ? 1.4 : 0])
+    return rng.weighted<BeatKind>(['fight', 'baron', 'dragon', 'tower', 'pick'], [2.8, 2.4, 2.6, 2, 1.2])
   }
 
   playRound(): void {
     if (this.over) return
-    const { aAttack, pistol } = this.phase()
-    this.round++
-
-    // economies reset at each half and at the start of every overtime pair
-    if (this.round === 1 || this.round === 13 ||
-        (this.round >= 25 && (this.round - 25) % 2 === 0)) {
-      this.ecoA.reset()
-      this.ecoB.reset()
-    }
-    if (this.round === 13) {
-      this.halfA = this.a
-      this.halfB = this.b
-    }
-    if (this.round === 25 && this.format !== 'full24' && !this.otAnnounced) {
-      this.otAnnounced = true
-      this.ctx.highlights.push(HL.overtime())
-      // each side gets one extra timeout for overtime, as in the real rules
-      this.timeouts.a++
-      this.timeouts.b++
-    }
-
     const rng = this.rng
-    const buyA = pistol ? 'eco' : this.ecoA.decide(rng)
-    const buyB = pistol ? 'eco' : this.ecoB.decide(rng)
-    if (!pistol) {
-      this.ecoA.spend(buyA)
-      this.ecoB.spend(buyB)
-    }
+    this.round++
+    this.minute += this.round === 1 ? rng.range(2.6, 4.2) : rng.range(1.7, 2.7)
+    const m = this.minute
+    // 0 while the game is lanes and first fights, 1 once the map has opened up
+    const late = clamp((m - 8) / 14, 0, 1)
+    const early = late < 0.5
 
-    const strA = (aAttack ? this.A.atk : this.A.def) + (pistol ? 0 : BUY_MOD[buyA]) +
-      this.callMod(this.calls.a, aAttack, this.A.style) + this.swingA
-    const strB = (aAttack ? this.B.def : this.B.atk) + (pistol ? 0 : BUY_MOD[buyB]) +
-      this.callMod(this.calls.b, !aAttack, this.B.style) + this.swingB
-
-    // trailing side leans on mid-round calling to steady the ship
-    const swingA = this.a < this.b ? this.A.midRound * 0.35 : 0
-    const swingB = this.b < this.a ? this.B.midRound * 0.35 : 0
-
-    // sensitivity is deliberately shallow: in real VCT even the strongest side
-    // only takes ~60% of rounds off the field over a season
-    const diff = strA + swingA - (strB + swingB)
-    const sens = pistol ? ROUND_SENS + 5 : ROUND_SENS
-    const p = 1 / (1 + Math.exp(-diff / sens))
+    const strA = (1 - late) * this.A.atk + late * this.A.def +
+      this.callMod(this.calls.a, early, this.A.style) + this.swingA + BLUE_EDGE
+    const strB = (1 - late) * this.B.atk + late * this.B.def +
+      this.callMod(this.calls.b, early, this.B.style) + this.swingB
+    // the side that is behind leans on its reading of the game to steady the ship
+    const steadyA = this.gold < 0 ? this.A.midRound * 0.35 : 0
+    const steadyB = this.gold > 0 ? this.B.midRound * 0.35 : 0
+    const pull = GOLD_PULL * Math.tanh(this.gold / GOLD_SCALE)
+    const diff = strA + steadyA - (strB + steadyB) + pull
+    const p = 1 / (1 + Math.exp(-diff / BEAT_SENS))
     const aWins = rng.chance(p)
 
-    // how many fell on each side — tuned so total kills land near the real
-    // ~7 per round (KPR ≈ 0.7 across ten players)
-    const rushing = (aWins ? this.calls.a : this.calls.b)?.kind === 'rush'
-    const steady = (aWins ? this.calls.a : this.calls.b)?.kind === 'steady'
-    const elim = rng.chance(rushing ? 0.82 : 0.75)
-    const closeness = Math.abs(p - 0.5)
-
+    const kind = this.pickBeat()
     const winners = aWins ? this.A.players : this.B.players
     const losers = aWins ? this.B.players : this.A.players
-    // Casualties are bounded at both ends, and both bounds are needed.
-    //
-    // Capping by the victim's headcount alone — nobody can fall who is not
-    // there — left the other half untouched: a two-man side still dealt out a
-    // full five-victim quota, split between two players. It won 3.9% of its
-    // rounds and posted a 1.22 K/D on 324 ACS against a 200 baseline, taking
-    // MVP of a 0-13 loss. That is the two-row scoreboard a player sent in.
-    //
-    // So what a side can inflict scales with how many of them are alive to
-    // shoot. At five the scale is exactly 1, which leaves ordinary matches
-    // bit-for-bit unchanged.
+    const wSide: Side = aWins ? 'a' : 'b'
+    const lSide: Side = aWins ? 'b' : 'a'
     const power = (side: Player[]) => Math.min(1, side.length / 5)
-    const losersLost = Math.min(
-      losers.length,
-      Math.round((elim ? 5 : rng.int(2, 4)) * power(winners)),
-    )
-    const winnersLost = Math.min(
-      winners.length,
-      Math.round(rng.weighted([0, 1, 2, 3, 4], [
-        (1.2 - closeness) * (steady ? 1.6 : 1),
-        2.6, 3.4, 2.8,
-        (1.6 + closeness * 1.5) * (rushing ? 1.4 : steady ? 0.7 : 1),
-      ]) * power(losers)),
-    )
-    const focus = (aWins ? this.calls.a : this.calls.b)
-    allocateRound(
-      winners, losers, winnersLost, losersLost, this.ctx, rng, mapCn(this.map),
-      focus?.kind === 'focus' ? focus.playerId : undefined,
-    )
 
-    if (aWins) {
-      this.a++
-      this.ecoA.onWin(losersLost)
-      this.ecoB.onLoss(winnersLost)
-    } else {
-      this.b++
-      this.ecoB.onWin(losersLost)
-      this.ecoA.onLoss(winnersLost)
+    // how bloody it was: a team fight kills more people than a tower does
+    const bloody = kind === 'fight' || kind === 'baron' ? 1 : kind === 'tower' || kind === 'herald' ? 0.35 : 0.65
+    const closeness = Math.abs(p - 0.5)
+    let wk = Math.round(rng.weighted([0, 1, 2, 3, 4], [
+      2.4 * (1.25 - bloody), 3.4, 2.2 * bloody + 0.3, 1.3 * bloody, 0.5 * bloody * (0.6 + closeness),
+    ]) * power(winners))
+    let lk = Math.round(rng.weighted([0, 1, 2], [
+      6 + closeness * 6, 2.2 * bloody + 0.4, 0.7 * bloody,
+    ]) * power(losers))
+    wk = Math.min(wk, losers.length); lk = Math.min(lk, winners.length)
+    const firstBlood = this.a + this.b === 0 && wk + lk > 0
+    const focus = aWins ? this.calls.a : this.calls.b
+    const multi = allocateBeat(winners, losers, wk, lk, this.ctx, rng, firstBlood,
+      focus?.kind === 'focus' ? focus.playerId : undefined)
+    if (aWins) { this.a += wk; this.b += lk } else { this.b += wk; this.a += lk }
+
+    // ---- what the beat was worth
+    let swing = (300 * (wk - lk) + rng.range(150, 450)) * (m < 15 ? 0.72 : 1)
+    if (kind === 'dragon') { this.dragons[wSide]++; swing += 250 }
+    else if (kind === 'herald') swing += 550
+    else if (kind === 'tower') { this.towers[wSide]++; swing += rng.range(550, 800) }
+    else if (kind === 'baron') {
+      this.barons[wSide]++
+      this.towers[wSide] = Math.min(11, this.towers[wSide] + rng.int(1, 2))
+      swing += rng.range(1500, 2300)
+    } else if (kind === 'fight' && wk >= 3) {
+      this.towers[wSide] = Math.min(11, this.towers[wSide] + 1)
+      swing += 500
+    }
+    // shutdown gold: what the side that is behind takes is worth more
+    const wasBehind = aWins ? this.gold < -2500 : this.gold > 2500
+    if (wasBehind) swing *= 1.3
+    swing = Math.max(120, swing)
+    this.gold += aWins ? swing : -swing
+    if (this.goldAt15 === null && m >= 15) this.goldAt15 = Math.round(this.gold)
+    this.maxLead.a = Math.max(this.maxLead.a, this.gold)
+    this.maxLead.b = Math.max(this.maxLead.b, -this.gold)
+
+    // ---- can it end here
+    const lead = aWins ? this.gold : -this.gold
+    let ended = false
+    if (m >= 20) {
+      const byLead = clamp((lead - 2500) / 9000, 0, 0.8)
+      const byClock = clamp((m - 19) / 10, 0.12, 1)
+      const byObjective = kind === 'baron' ? 0.18 : kind === 'fight' && wk >= 4 ? 0.22 : 0
+      const soul = this.dragons[wSide] >= 4 ? 0.08 : 0
+      const dragging = m >= 34 ? clamp((m - 34) / 8, 0, 0.6) : 0
+      if (rng.chance(Math.min(0.94, byLead * byClock + byObjective * byClock + soul + dragging))) ended = true
+    }
+    if (m >= 45) ended = true
+    if (ended) {
+      const ace = Math.min(losers.length, rng.int(2, 5))
+      allocateBeat(winners, losers, ace, 0, this.ctx, rng, false)
+      if (aWins) this.a += ace; else this.b += ace
+      this.winner = aWins ? 'A' : 'B'
+      this.towers[wSide] = Math.max(this.towers[wSide], 8 + rng.int(0, 3))
     }
 
-    // record how the round resolved for the broadcast round ribbon
-    const attackersWon = aWins === aAttack
-    const end: RoundLog['end'] = elim
-      ? 'elim'
-      : attackersWon
-        ? 'spike'
-        : rng.chance(0.55) ? 'defuse' : 'time'
     this.ctx.rounds.push({
-      n: this.round, winner: aWins ? 'A' : 'B', aAttack, end,
-      buyA: buyA as 'eco' | 'force' | 'full', buyB: buyB as 'eco' | 'force' | 'full',
+      n: this.round, winner: aWins ? 'A' : 'B', minute: Math.round(m * 10) / 10,
+      event: ended ? 'nexus' : kind, gold: Math.round(this.gold), killsA: this.a, killsB: this.b,
     })
 
-    const winnerName = aWins ? this.A.team.name : this.B.team.name
-    const loserName = aWins ? this.B.team.name : this.A.team.name
+    // ---- the lines worth reading afterwards
     const room = () => this.ctx.highlights.length < 9
-
-    if (pistol && room() && rng.chance(0.3)) {
-      this.ctx.highlights.push(HL.eco(winnerName))
+    const name = (s: Side) => (s === 'a' ? this.A.team.name : this.B.team.name)
+    const ign = (id: string) => [...this.A.players, ...this.B.players].find((x) => x.id === id)?.ign ?? ''
+    if (firstBlood && room() && rng.chance(0.5)) {
+      const fb = Object.entries(this.ctx.lines).find(([, l]) => l.firstKills > 0)?.[0]
+      if (fb) this.ctx.highlights.push(`${Math.floor(m)} 分钟，${ign(fb)} 拿下一血。`)
     }
-    // a short buy beating a full one is the swing that decides halves
-    const winnerBuy = aWins ? buyA : buyB
-    const loserBuy = aWins ? buyB : buyA
-    if (!pistol && winnerBuy === 'eco' && loserBuy === 'full' && room() && rng.chance(0.14)) {
-      this.ctx.highlights.push(HL.antiEco(winnerName, loserName))
+    if (multi && room()) this.ctx.highlights.push(HL.quad(ign(multi)))
+    if (!this.soulSaid && this.dragons[wSide] === 4 && room()) {
+      this.soulSaid = true
+      this.ctx.highlights.push(`${name(wSide)} 拿下第四条小龙，龙魂到手。`)
     }
-    if (winnersLost === 0 && losersLost === 5 && room() && rng.chance(0.22)) {
-      this.ctx.highlights.push(HL.flawless(winnerName))
-    }
-    // a run of rounds is worth a line once it is genuinely a run
-    this.streak = this.streakSide === (aWins ? 'A' : 'B') ? this.streak + 1 : 1
-    this.streakSide = aWins ? 'A' : 'B'
-    if (this.streak === 5 && room()) this.ctx.highlights.push(HL.streak(winnerName, this.streak))
-    // saved on the brink — worth saying once, not every round spent there
-    if (!this.mapPointSaid) {
-      if (!aWins && this.a === 12 && this.b < 12) {
-        this.mapPointSaid = true
-        if (room()) this.ctx.highlights.push(HL.mapPoint(this.B.team.name))
-      } else if (aWins && this.b === 12 && this.a < 12) {
-        this.mapPointSaid = true
-        if (room()) this.ctx.highlights.push(HL.mapPoint(this.A.team.name))
-      }
+    if (kind === 'baron' && wasBehind && room()) this.ctx.highlights.push(`${name(wSide)} 落后时抢下大龙，局势反转。`)
+    else if (kind === 'baron' && room() && rng.chance(0.4)) this.ctx.highlights.push(`${Math.floor(m)} 分钟，${name(wSide)} 拿下大龙。`)
+    if (ended && room()) {
+      const back = this.maxLead[lSide]
+      if (back >= 5000) this.ctx.highlights.push(`${name(wSide)} 最多落后 ${(back / 1000).toFixed(1)}k，翻盘拿下这一局。`)
+      else if (m < 26) this.ctx.highlights.push(`${name(wSide)} ${Math.floor(m)} 分钟结束比赛。`)
     }
 
     for (const side of ['a', 'b'] as Side[]) {
@@ -915,23 +848,46 @@ export class MapSim {
     }
   }
 
-  /** Finalise per-player lines and hand back the map result. */
+  /** Finalise per-player lines and hand back the game. */
   result(): { score: MapScore; highlights: string[] } {
-    if ((this.halfA <= 3 && this.a > this.b) || (this.halfB <= 3 && this.b > this.a)) {
-      const t = this.a > this.b ? this.A.team.name : this.B.team.name
-      const from = this.a > this.b ? this.halfA : this.halfB
-      if (this.ctx.highlights.length < 8) this.ctx.highlights.push(HL.comeback(t, from))
+    const rng = this.rng
+    const m = Math.max(1, this.minute)
+    const aWon = this.winner === 'A'
+    const finish = (side: Player[], won: boolean, lead: number) => {
+      const teamGold = m * 1780 + lead / 2
+      const raw = side.map((p) => DPM[p.role] * (0.72 + (p.attrs.mechanics * 0.6 + p.attrs.teamfight * 0.4) / 250) *
+        (won ? 1.05 : 0.96) * rng.range(0.85, 1.15))
+      side.forEach((p, i) => {
+        const l = this.ctx.lines[p.id]
+        l.rounds = Math.round(m)
+        l.damage = Math.round(raw[i] * m)
+        l.cs = Math.round(CSPM[p.role] * m * (0.86 + p.attrs.farming / 600) * (won ? 1.02 : 0.98) * rng.range(0.94, 1.06))
+        l.gold = Math.round(teamGold * GOLD_SHARE[p.role] * (0.9 + p.attrs.farming / 800) + l.kills * 250 + l.assists * 60)
+      })
+      // a performance score on the scale the rest of the game already reads (200 is an average game)
+      const tk = Math.max(1, side.reduce((s, p) => s + this.ctx.lines[p.id].kills, 0))
+      const td = Math.max(1, side.reduce((s, p) => s + this.ctx.lines[p.id].deaths, 0))
+      const dmg = Math.max(1, raw.reduce((s, v) => s + v, 0))
+      side.forEach((p, i) => {
+        const l = this.ctx.lines[p.id]
+        const kp = (l.kills + l.assists) / tk
+        const rating = 1 + (kp - 0.6) * 0.55 - (l.deaths / td - 0.2) * 0.9 +
+          (raw[i] / dmg - DPM[p.role] / 2400) * 1.6 + (won ? 0.1 : -0.1)
+        l.acs = Math.round(200 * clamp(rating, 0.35, 1.9))
+      })
     }
-    const total = this.a + this.b
-    for (const id of Object.keys(this.ctx.lines)) {
-      const l = this.ctx.lines[id]
-      l.damage = Math.round(l.damage)
-      l.rounds = total
-      l.acs = total ? Math.round((l.damage / total) * 1.45) : 0
-    }
+    finish(this.A.players, aWon, this.gold)
+    finish(this.B.players, !aWon, -this.gold)
     return {
       score: {
-        map: this.map, scoreA: this.a, scoreB: this.b,
+        map: this.map,
+        // who won, as 1–0: everything downstream reads "the higher score won"
+        scoreA: aWon ? 1 : 0, scoreB: aWon ? 0 : 1,
+        killsA: this.a, killsB: this.b, minutes: Math.round(m * 10) / 10,
+        goldDiff: Math.round(this.gold), goldAt15: this.goldAt15 ?? Math.round(this.gold),
+        towersA: this.towers.a, towersB: this.towers.b,
+        dragonsA: this.dragons.a, dragonsB: this.dragons.b,
+        baronsA: this.barons.a, baronsB: this.barons.b,
         edge: { a: this.A.edge, b: this.B.edge },
         lines: this.ctx.lines, rounds: this.ctx.rounds,
         agents: { ...this.A.agents, ...this.B.agents },
@@ -940,10 +896,11 @@ export class MapSim {
     }
   }
 
-  /** Run the remaining rounds without stopping. */
+  /** Run the remaining beats without stopping. */
   runOut(): void {
     let guard = 0
-    while (!this.over && guard++ < 80) this.playRound()
+    while (!this.over && guard++ < 60) this.playRound()
+    if (!this.over) this.winner = this.gold >= 0 ? 'A' : 'B'
   }
 }
 

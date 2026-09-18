@@ -127,33 +127,21 @@ console.log(
   `   RAT ${avg(played.map((p) => ratingOf(p.career))).toFixed(2)}`,
 )
 
-// real VCT reference: ACS ~200 avg / ~270 elite, K/D 1.00 avg / ~1.35 elite, ADR ~135, KPR ~0.72
-if (avg(acsAll) < 175 || avg(acsAll) > 235) problems.push(`ACS average ${avg(acsAll).toFixed(0)} outside 175-235`)
-if (avg(kdAll) < 0.9 || avg(kdAll) > 1.12) problems.push(`K/D average ${avg(kdAll).toFixed(2)} outside 0.90-1.12`)
-// Only judge players with a real sample, the way a stats leaderboard
-// qualifies them — and judge the two tiers against their own yardsticks. The
-// reference numbers above are VCT numbers, so holding a Challengers season to
-// them compares against the wrong league: a VCT-calibre player stuck in a
-// second division genuinely farms, which is the same gap the data build
-// corrects for with SUBTIER_TO_VCT. Judging them together meant the league
-// leader was whichever tier-2 star had the softest schedule, and the check
-// passed or failed on him rather than on VCT being calibrated.
-const qualifiedOf = (tier: 1 | 2) => played
-  .filter((p) => p.career.maps >= 55 && (startTier.get(p.teamId ?? '') ?? 1) === tier)
-  .map((p) => statLine(p.career).kd)
-const t1Kd = qualifiedOf(1)
-const t2Kd = qualifiedOf(2)
-const topT1 = t1Kd.length ? Math.max(...t1Kd) : 0
-const topT2 = t2Kd.length ? Math.max(...t2Kd) : 0
-if (topT1 > 1.55) problems.push(`top VCT K/D ${topT1.toFixed(2)} too dominant (real max ~1.5)`)
-if (topT2 > 1.95) problems.push(`top Challengers K/D ${topT2.toFixed(2)} beyond even a farmed second division`)
-console.log(
-  `qualified (55+ maps): VCT ${t1Kd.length} 人 top K/D ${topT1.toFixed(2)}, ` +
-  `次级 ${t2Kd.length} 人 top K/D ${topT2.toFixed(2)}`,
-)
-if (avg(lines.map((l) => l.kpr)) < 0.6 || avg(lines.map((l) => l.kpr)) > 0.85) {
-  problems.push(`KPR average ${avg(lines.map((l) => l.kpr)).toFixed(2)} outside 0.60-0.85`)
-}
+// Real reference (LPL/LCK/LEC/LCS 2024–2026): 27.9 kills a game over 32.6 minutes, so a
+// player takes about 0.087 kills a minute; K/D averages 1.0 by construction. The shape of a
+// single game is held much more tightly by scripts/check_match_shape.ts — this only catches
+// a season whose scoreboards have gone somewhere absurd.
+if (avg(kdAll) < 0.85 || avg(kdAll) > 1.2) problems.push(`K/D average ${avg(kdAll).toFixed(2)} outside 0.85-1.20`)
+const kpm = avg(lines.map((l) => l.kpr))
+if (kpm < 0.06 || kpm > 0.115) problems.push(`kills per minute ${kpm.toFixed(3)} outside 0.060-0.115`)
+const rat = avg(played.map((p) => ratingOf(p.career)))
+if (rat < 0.9 || rat > 1.1) problems.push(`average rating ${rat.toFixed(2)} outside 0.90-1.10`)
+const qualified = played.filter((p) => p.career.maps >= 40).map((p) => statLine(p.career).kd)
+const topKd = qualified.length ? Math.max(...qualified) : 0
+// the best carries on the best sides finish a year around 5–6; past 9 is a broken allocation
+if (topKd > 9) problems.push(`top K/D ${topKd.toFixed(2)} over a full season is not a real scoreboard`)
+console.log(`qualified (40+ games): ${qualified.length} 人, top K/D ${topKd.toFixed(2)}, kills/min ${kpm.toFixed(3)}, rating ${rat.toFixed(2)}`)
+void startTier
 
 const ovr = Object.values(state.players).map((p) => p.overall).sort((a, b) => a - b)
 console.log(`overall spread: ${ovr[0]} / ${ovr[Math.floor(ovr.length / 2)]} / ${ovr[ovr.length - 1]}`)
