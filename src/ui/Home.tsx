@@ -30,25 +30,8 @@ const Account = lazy(() => import('./Account'))
 
 type Mode = 'home' | 'career'
 
-/**
- * The four leagues, and one player from each.
- *
- * The strip is the VCT league marks themselves — not a club standing in for a
- * league. Putting a club there said "here are four teams" and, worse, put
- * EDward Gaming's badge in the place that belongs to VCT CN.
- *
- * scripts/fetch_league_logos.py writes public/leagues/<Region>.webp. VCT EMEA
- * ships as solid black, which is invisible on this page, so that one is
- * repainted light at build time — which is how the mark is used on dark
- * grounds anyway.
- */
-const REGION_FACES: { region: Region; face: string }[] = [
-  // aspas — the most recognisable player in the game
-  { region: 'Americas', face: 'P16' },
-  { region: 'EMEA', face: 'P67' },        // Derke
-  { region: 'Pacific', face: 'P134' },    // Jinggg
-  { region: 'China', face: 'P200' },      // ZmjjKK
-]
+/** The six tier-one regions, in the order the world file lists them. */
+const HOME_REGIONS: Region[] = ['LPL', 'LCK', 'LEC', 'LCS', 'LCP', 'CBLOL']
 
 interface Resume {
   club: string | null
@@ -120,20 +103,16 @@ export default function Home({ onOpen }: { onOpen: (m: Mode) => void }) {
         {/* ---------------------------------------------------------- 经理 */}
         <article className="home-card">
           <div className="home-art crests">
-            {REGION_FACES.map((r) => (
-              <div key={r.region} className="home-region">
-                <img
-                  src={`${import.meta.env.BASE_URL}leagues/${r.region}.webp`}
-                  alt=""
-                  loading="lazy"
-                />
-                <span>{REGION_CN[r.region]}</span>
+            {HOME_REGIONS.map((r) => (
+              <div key={r} className="home-region">
+                <b className="mono">{r}</b>
+                <span>{REGION_CN[r]}</span>
               </div>
             ))}
           </div>
           <div className="home-body">
-            <h2>VCT电竞经理</h2>
-            <p className="lede">无畏契约电竞经理模拟</p>
+            <h2>LOL 电竞经理</h2>
+            <p className="lede">英雄联盟电竞经理模拟</p>
             <p className="blurb">
               接手一支真实战队，从 2026 出发。
               签人、训练、排兵、BP、谈赞助，打满五年可以收官领结局，
@@ -141,7 +120,7 @@ export default function Home({ onOpen }: { onOpen: (m: Mode) => void }) {
               {HOME_COUNTS.players} 名选手和 {HOME_COUNTS.headCoaches} 名已收录主教练全是真人，没有程序生成的。
             </p>
             <ul className="home-facts">
-              <li><b>{HOME_COUNTS.teams}</b> 支战队 · 四大赛区与次级联赛</li>
+              <li><b>{HOME_COUNTS.teams}</b> 支战队 · 六大赛区与次级联赛</li>
               <li><b>{ENDING_COUNT}</b> 种结局 · <b>{ACHIEVEMENT_COUNT}</b> 项成就</li>
             </ul>
             <div className="home-go">

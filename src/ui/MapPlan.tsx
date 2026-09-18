@@ -185,7 +185,7 @@ export default function MapPlan({
                             <option key={x} value={x}>{agentCn(x)}（{AGENT_ROLE[x]}）{proLabel(p, x)}</option>
                           ))}
                         </optgroup>
-                        {ROLES.filter((r) => r !== '自由人').map((r) => {
+                        {ROLES.map((r) => {
                           const rest = byPro(p, (AGENTS[r] ?? []).filter((x) => !meta.includes(x) && agentAvailable(game, x)))
                           return rest.length > 0 && (
                             <optgroup key={r} label={`${r}${mine.includes(r) ? '（本职）' : ''}`}>

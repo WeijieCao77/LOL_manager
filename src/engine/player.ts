@@ -3,33 +3,36 @@ import type { Rng } from './rng'
 import { ATTR_KEYS } from './types'
 import type { Attrs, Player, Role, Stats } from './types'
 
-/** Must stay in sync with scripts/extract.py so imported and in-game players agree. */
+/** The flat table: only a fallback for a player whose position is somehow unknown. */
 export const ATTR_WEIGHT: Record<keyof Attrs, number> = {
-  aim: 0.20, reaction: 0.15, awareness: 0.17, utility: 0.14,
-  clutch: 0.12, teamwork: 0.10, communication: 0.08, igl: 0.04,
+  laning: 0.16, mechanics: 0.19, teamfight: 0.17, farming: 0.11,
+  awareness: 0.14, clutch: 0.08, teamwork: 0.10, macro: 0.05,
 }
 
 /**
- * What each role is actually judged on. Mirrors ROLE_WEIGHT in
- * scripts/build_world.py, which is where every player's opening rating comes
- * from — the two must be identical.
+ * What each position is actually judged on. Mirrors ROLE_WEIGHT in
+ * scripts/lol/build_world.py, which is where every player's opening rating
+ * comes from — the two must be identical, or the first thing that recomputes
+ * a player (training, ageing) quietly re-rates him on a different table.
+ * scripts/check_role_weight.ts holds them together: build_world writes its
+ * table into world.json's meta.roleWeight.
  *
- * They were not. build_world weighted a duelist on aim and reaction; this file
- * re-derived him on the flat table the moment anything recomputed him, which
- * training, ageing and covering a second role all do. 94 of 515 players moved
- * three or more points on that first recompute and duelists lost 1.7 on
- * average, up to 6 — quietly undoing the role weighting itself.
+ * 运营 carries little weight everywhere on purpose. A veteran whose hands
+ * have gone is not an 85 because he reads the game; he is a 76 whose club
+ * wins more after fifteen minutes while he is on the server — that is paid
+ * out in the match engine, not in his rating.
  */
 export const ROLE_WEIGHT: Record<Role, Record<keyof Attrs, number>> = {
-  决斗者: { aim: 0.28, reaction: 0.22, clutch: 0.16, awareness: 0.12,
-    utility: 0.08, teamwork: 0.07, communication: 0.05, igl: 0.02 },
-  先锋: { aim: 0.17, reaction: 0.15, awareness: 0.20, utility: 0.20,
-    clutch: 0.09, teamwork: 0.10, communication: 0.07, igl: 0.02 },
-  控场: { aim: 0.15, reaction: 0.11, awareness: 0.20, utility: 0.22,
-    clutch: 0.09, teamwork: 0.13, communication: 0.08, igl: 0.02 },
-  哨卫: { aim: 0.19, reaction: 0.12, awareness: 0.22, utility: 0.15,
-    clutch: 0.15, teamwork: 0.10, communication: 0.05, igl: 0.02 },
-  自由人: { ...ATTR_WEIGHT },
+  上单: { laning: 0.24, mechanics: 0.20, teamfight: 0.16, farming: 0.12,
+    awareness: 0.10, clutch: 0.08, teamwork: 0.07, macro: 0.03 },
+  打野: { laning: 0.10, mechanics: 0.16, teamfight: 0.18, farming: 0.08,
+    awareness: 0.22, clutch: 0.08, teamwork: 0.12, macro: 0.06 },
+  中单: { laning: 0.20, mechanics: 0.24, teamfight: 0.16, farming: 0.12,
+    awareness: 0.10, clutch: 0.09, teamwork: 0.06, macro: 0.03 },
+  下路: { laning: 0.16, mechanics: 0.26, teamfight: 0.18, farming: 0.18,
+    awareness: 0.06, clutch: 0.09, teamwork: 0.05, macro: 0.02 },
+  辅助: { laning: 0.12, mechanics: 0.08, teamfight: 0.16, farming: 0.06,
+    awareness: 0.24, clutch: 0.06, teamwork: 0.20, macro: 0.08 },
 }
 
 /** The weights this player is judged on. */
@@ -98,7 +101,41 @@ export function statLine(s: Stats) {
 
 export const AGE_PEAK = 24
 
-/** Yearly attribute drift: growth for the young, decline for veterans. */
+/**
+ * Yearly drift of ONE attribute at this age: above zero it can still grow over
+ * the winter, below zero it fades.
+ *
+ * The abilities do not age together. Measured on 405 professionals with a
+ * birthdate on record, as the same man's change from one season to the next
+ * (docs/调研-选手数值与年龄曲线.md §2): 对线 peaks at twenty and falls every year
+ * from twenty-two; 操作 and 发育 hold until twenty-four; 团战 a little later and
+ * a little slower; 意识 is flat into the late twenties; 心态 and 运营 are bought
+ * with games played and do not go with the hands. A veteran is a player whose
+ * lane has gone and whose club still wins the second half of the game.
+ *
+ * The measured slopes carry regression to the mean (a standout year falls
+ * back) and survivorship (only those kept are seen again), which pull in
+ * opposite directions; the magnitudes below are set at roughly the measured
+ * size and held by scripts/check_aging.ts.
+ */
+export function attrDrift(age: number, k: keyof Attrs): number {
+  const curve = (steps: [number, number][]): number => {
+    for (const [upTo, v] of steps) if (age <= upTo) return v
+    return steps[steps.length - 1][1]
+  }
+  switch (k) {
+    case 'laning': return curve([[19, 1.0], [20, 0.6], [21, 0.2], [25, -1.3], [28, -1.7], [99, -2.0]])
+    case 'mechanics':
+    case 'farming': return curve([[20, 1.0], [23, 0.4], [27, -1.4], [99, -1.8]])
+    case 'teamfight': return curve([[20, 1.0], [23, 0.3], [27, -1.1], [99, -1.6]])
+    case 'teamwork': return curve([[22, 0.8], [25, 0.3], [28, -0.4], [99, -0.9]])
+    case 'awareness': return curve([[22, 1.0], [26, 0.4], [29, -0.2], [99, -0.7]])
+    case 'clutch': return curve([[24, 0.6], [29, 0.25], [99, -0.3]])
+    case 'macro': return curve([[24, 0.6], [30, 0.45], [99, 0]])
+  }
+}
+
+/** The whole player's drift: growth for the young, decline for veterans. */
 export function ageDrift(p: Player): number {
   if (p.age <= 21) return 1.0
   if (p.age <= 24) return 0.65
@@ -113,8 +150,8 @@ export function ageDrift(p: Player): number {
  *  deepened set for the light themes. */
 export const roleColor = (role: string): string =>
   ({
-    决斗者: 'var(--duelist)', 先锋: 'var(--initiator)', 控场: 'var(--controller)',
-    哨卫: 'var(--sentinel)', 自由人: 'var(--flex)',
+    上单: 'var(--duelist)', 打野: 'var(--initiator)', 中单: 'var(--controller)',
+    下路: 'var(--sentinel)', 辅助: 'var(--flex)',
   })[role] ?? 'var(--flex)'
 
 /** VLR-style composite rating, calibrated so an average starter sits at ~1.00. */

@@ -366,7 +366,7 @@ export default function PlayerModal(
               {/* a deputy can be made the main caller too — with two IGLs
                   by trade the button used to vanish for both of them */}
               {!isMain && (
-                <button className="sm" title={`他的指挥属性 ${p.attrs.igl}`} onClick={() => {
+                <button className="sm" title={`他的运营 ${p.attrs.macro}`} onClick={() => {
                   const msg = appointIgl(game, p.id)
                   commit()
                   logActivity(game, 'squad', `任命 ${p.ign} 为主指挥`)

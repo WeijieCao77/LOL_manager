@@ -1,6 +1,6 @@
 import { Rng, clamp } from './rng'
 import { INJURIES } from './content'
-import { recomputeOverall, refreshValue, ageDrift, weightsFor } from './player'
+import { recomputeOverall, refreshValue, attrDrift, weightsFor } from './player'
 import { coachOr, squadOf } from './roster'
 import { duoBonded, weeklyBonds } from './bonds'
 import { analystEdge, staffBonus } from './staff'
@@ -62,7 +62,7 @@ export function pickAgentToLearn(p: Player, role: Role, available: (a: string) =
     .sort((x, y) => (p.agentPro?.[y] ?? 0) - (p.agentPro?.[x] ?? 0))[0]
 }
 import { facilityCost } from './staff'
-import { ATTR_CN, ATTR_KEYS } from './types'
+import { ATTR_CN, ATTR_KEYS, ROLES } from './types'
 import { lifeMod } from './managerLife'
 import { agentAvailable } from './eras'
 import type { AgentPick, Attrs, GameState, Player, Role, Team, TeamDrill } from './types'
@@ -113,7 +113,7 @@ export const AI_POLISH_STOP = 97
 
 /** an attribute this player can still put a point on */
 export const canGrow = (p: Player, k: keyof Attrs, stopAt = ATTR_MAX): boolean =>
-  (k !== 'igl' || p.isIgl) && p.attrs[k] < stopAt
+  p.attrs[k] < stopAt
 
 /**
  * The most useful individual focus for this player's actual role, and why.
@@ -141,7 +141,7 @@ export function trainingAdvice(p: Player, day?: number, stopAt = ATTR_MAX): Trai
     return { focus: 'rest', kind: 'hold', reason: `总评 ${p.overall} 已到潜力上限，再练也不涨，休息保状态` }
   }
   const weights = weightsFor(p)
-  const byWeight = ATTR_KEYS.filter((k) => k !== 'igl' || p.isIgl)
+  const byWeight = ATTR_KEYS
     .slice().sort((a, b) => weights[b] - weights[a] || p.attrs[a] - p.attrs[b])
   const room = byWeight.filter((k) => canGrow(p, k, stopAt))
   if (!room.length) {
@@ -285,8 +285,8 @@ function runDuo(state: GameState, team: Team, rng: Rng): void {
     const p = state.players[id]
     if (!p || p.teamId !== team.id || p.injuredUntil > state.day) continue
     addXp(p, 'teamwork', gain(10))
-    addXp(p, 'communication', gain(8))
-    addXp(p, 'reaction', gain(5))
+    addXp(p, 'teamfight', gain(8))
+    addXp(p, 'laning', gain(5))
     p.fatigue = clamp(p.fatigue + rng.range(5, 10), 0, 100)
     p.morale = clamp(p.morale + rng.range(0, 2), 0, 100)
   }
@@ -398,7 +398,7 @@ const REVIEW_IGL_BASE = 36
 
 export function reviewIglXp(state: GameState, p: Player): number {
   const rates = drillRates(state)
-  const learning = clamp((90 - p.attrs.igl) / 18, 0.15, 1.5)
+  const learning = clamp((90 - p.attrs.macro) / 18, 0.15, 1.5)
   return REVIEW_IGL_BASE * rates.dev * rates.review * learning
 }
 
@@ -464,8 +464,10 @@ function runDrill(state: GameState, rng: Rng, notes: string[]): void {
       for (const p of squad) {
         addXp(p, 'awareness', gain(6) * rates.review)
         // the rng lives here, so reviewIglXp is the expectation the card prints
-        if (p.isIgl) addXp(p, 'igl', reviewIglXp(state, p) * rng.range(0.8, 1.2))
-        addXp(p, 'communication', gain(3))
+        // 运营 is everybody's: the captain runs the session and takes the full rate,
+        // the rest of the room listens and takes less than half of it
+        addXp(p, 'macro', reviewIglXp(state, p) * (p.isIgl ? 1 : 0.4) * rng.range(0.8, 1.2))
+        addXp(p, 'teamwork', gain(3))
         p.fatigue = clamp(p.fatigue - rng.range(1, 4), 0, 100)
       }
       notes.push(team.coach ? `🎬 ${team.coach.name} 带队复盘，全队意识提升。` : '🎬 全队复盘录像。')
@@ -493,9 +495,9 @@ function runDrill(state: GameState, rng: Rng, notes: string[]): void {
         // Learning a position is a grind, not a switch. A quick learner still
         // needs the better part of a season, which is what makes buying a real
         // specialist worth the money.
-        const aptitude = 0.7 + (p.attrs.awareness + p.attrs.utility) / 400 + (p.flex ? 0.2 : 0)
+        const aptitude = 0.7 + (p.attrs.awareness + p.attrs.mechanics) / 400 + (p.flex ? 0.2 : 0)
         const learned = learnAgent(p, pick.agent, gain(AGENT_DRILL) * aptitude)
-        addXp(p, 'utility', gain(4))
+        addXp(p, 'mechanics', gain(4))
         p.fatigue = clamp(p.fatigue + rng.range(3, 7), 0, 100)
         if (learned) {
           notes.push(learned.newRole
@@ -537,7 +539,7 @@ function runDrill(state: GameState, rng: Rng, notes: string[]): void {
  * is a rate he cannot reach. Pair work is left out: an AI room's bonds do
  * not decay, so there is nothing for it to mend.
  */
-const CORE: Role[] = ['决斗者', '先锋', '控场', '哨卫']
+const CORE: Role[] = ROLES
 
 /** Weeks between a club's team sessions: 1 is every week. */
 export const AI_TEAM_SESSION_EVERY = 2
@@ -570,7 +572,7 @@ export function aiDrillFor(state: GameState, team: Team): TeamDrill {
   const covered = new Set(five.flatMap((p) => (p.roles?.length ? p.roles : [p.role])))
   const missing = CORE.find((r) => !covered.has(r))
   if (missing) {
-    const fit = (p: Player) => p.attrs.awareness + p.attrs.utility + (p.flex ? 20 : 0)
+    const fit = (p: Player) => p.attrs.awareness + p.attrs.mechanics + (p.flex ? 20 : 0)
     const learner = five
       .filter((p) => p.injuredUntil <= state.day && !p.isIgl && rolePeak(p, missing) < 100)
       .sort((a, b) => fit(b) - fit(a))[0]
@@ -622,11 +624,11 @@ export function aiClubWeek(state: GameState, team: Team, rng: Rng): void {
     case 'review': {
       for (const p of squad) {
         drilled(p, 'awareness', gain(6) * rates.review)
-        if (p.isIgl) {
-          const learning = clamp((90 - p.attrs.igl) / 18, 0.15, 1.5)
-          drilled(p, 'igl', REVIEW_IGL_BASE * rates.dev * rates.review * learning * rng.range(0.8, 1.2))
+        {
+          const learning = clamp((90 - p.attrs.macro) / 18, 0.15, 1.5)
+          drilled(p, 'macro', REVIEW_IGL_BASE * rates.dev * rates.review * learning * (p.isIgl ? 1 : 0.4) * rng.range(0.8, 1.2))
         }
-        drilled(p, 'communication', gain(3))
+        drilled(p, 'teamwork', gain(3))
         p.fatigue = clamp(p.fatigue - rng.range(1, 4), 0, 100)
       }
       break
@@ -637,9 +639,9 @@ export function aiClubWeek(state: GameState, team: Team, rng: Rng): void {
       for (const pick of drill.picks) {
         const p = state.players[pick.playerId]
         if (!p || p.teamId !== team.id) continue
-        const aptitude = 0.7 + (p.attrs.awareness + p.attrs.utility) / 400 + (p.flex ? 0.2 : 0)
+        const aptitude = 0.7 + (p.attrs.awareness + p.attrs.mechanics) / 400 + (p.flex ? 0.2 : 0)
         learnAgent(p, pick.agent, gain(AGENT_DRILL) * aptitude)
-        drilled(p, 'utility', gain(4))
+        drilled(p, 'mechanics', gain(4))
         p.fatigue = clamp(p.fatigue + rng.range(3, 7), 0, 100)
       }
       break
@@ -897,7 +899,6 @@ export function seasonRollover(state: GameState, rng: Rng): string[] {
         p.potentialRevisions = revisions + 1
       }
     }
-    const drift = ageDrift(p)
     // Captured before a single attribute moves. It used to sit further down,
     // which was fine while recomputeOverall was called exactly once at the
     // bottom — the moment the growth loop started recomputing as it went, a
@@ -906,6 +907,9 @@ export function seasonRollover(state: GameState, rng: Rng): string[] {
     const before = p.overall
 
     for (const k of ATTR_KEYS) {
+      // each ability on its own curve (player.ts attrDrift): a twenty-three
+      // year old is still learning the map while his lane has started to go
+      const drift = attrDrift(p.age, k)
       if (drift > 0) {
         // Live headroom, re-read after every bump rather than measured once
         // before the loop. Nine attributes each rolling up to +2 against a
@@ -914,10 +918,9 @@ export function seasonRollover(state: GameState, rng: Rng): string[] {
           p.attrs[k] = clamp(p.attrs[k] + rng.int(0, 2), 20, 99)
           recomputeOverall(p)
         }
-      } else if (rng.chance(Math.abs(drift) * 0.5)) {
-        // aim and reaction go first
-        const hit = k === 'aim' || k === 'reaction' ? 2 : 1
-        p.attrs[k] = clamp(p.attrs[k] - rng.int(0, hit), 20, 99)
+      } else if (drift < 0 && rng.chance(Math.min(0.9, -drift * 0.5))) {
+        // how fast is the curve's business, so every fading point is the same size
+        p.attrs[k] = clamp(p.attrs[k] - rng.int(1, 2), 20, 99)
       }
     }
     // Experience keeps rising even as the mechanics fade — but not past the
@@ -930,7 +933,8 @@ export function seasonRollover(state: GameState, rng: Rng): string[] {
     recomputeOverall(p)
     if (p.age >= 25 && p.overall < p.potential) {
       p.attrs.awareness = clamp(p.attrs.awareness + (rng.chance(0.4) ? 1 : 0), 20, 99)
-      if (p.isIgl) p.attrs.igl = clamp(p.attrs.igl + (rng.chance(0.5) ? 1 : 0), 20, 99)
+      // another season of games behind him; the captain carried more of them
+      p.attrs.macro = clamp(p.attrs.macro + (rng.chance(p.isIgl ? 0.5 : 0.3) ? 1 : 0), 20, 99)
     }
 
     recomputeOverall(p)

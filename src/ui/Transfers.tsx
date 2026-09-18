@@ -338,7 +338,7 @@ export default function Transfers() {
           <select className="sm" style={{ width: 150, flex: '0 0 auto' }} value={askRole}
             onChange={(e) => { setAskRole(e.target.value); if (e.target.value) setAskClub(null) }}>
             <option value="">按位置找人…</option>
-            {ROLES.filter((r) => r !== '自由人').map((r) => (
+            {ROLES.map((r) => (
               <option key={r} value={r}>要一个{r}</option>
             ))}
             <option value="igl">要一个指挥（IGL）</option>

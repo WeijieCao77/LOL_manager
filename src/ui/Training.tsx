@@ -227,14 +227,14 @@ export default function Training() {
                   </p>
                 )
               }
-              const xp = igl.xp.igl ?? 0
+              const xp = igl.xp.macro ?? 0
               const capped = igl.overall >= igl.potential
               const per = reviewIglXp(game, igl)
               const rounds = Math.max(1, Math.ceil((100 - xp) / per))
               return (
                 <div className="tiny" style={{ margin: '0 0 8px' }}>
                   <div className="row" style={{ gap: 7 }}>
-                    <span className="faint">指挥 <b>{igl.ign}</b> {igl.attrs.igl}</span>
+                    <span className="faint">队长 <b>{igl.ign}</b> 运营 {igl.attrs.macro}</span>
                     <Bar value={xp} color="var(--violet)" />
                     <span className="mono faint">{Math.round(xp)}%</span>
                   </div>
@@ -289,7 +289,7 @@ export default function Training() {
                       onChange={(e) => setAgentPick(p.id, e.target.value)}
                     >
                       <option value="">{full ? `已满 ${AGENT_DRILL_MAX} 人` : '不练'}</option>
-                      {ROLES.filter((r) => r !== '自由人').map((r) => (
+                      {ROLES.map((r) => (
                         <optgroup key={r} label={`${r}${(p.roles ?? [p.role]).includes(r) ? '（本职）' : ''}`}>
                           {/* 练满的也列着，只是点不了——藏起来就分不清是练满了还是没了 */}
                           {byPro(p, AGENTS[r] ?? []).map((a) => (

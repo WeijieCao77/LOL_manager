@@ -92,7 +92,7 @@ export function autoStarters(state: GameState, teamId: string): string[] {
   const chosen: Player[] = []
   // 自由人 is "covers anything", not a slot to fill — treating it as one forced
   // the squad's only flex player into the five ahead of better options
-  const core = ROLES.filter((r) => r !== '自由人')
+  const core = ROLES
   for (const role of core) {
     const p = squad.find((x) => x.role === role && !chosen.includes(x))
     if (p) chosen.push(p)
@@ -120,12 +120,12 @@ export function autoStarters(state: GameState, teamId: string): string[] {
   // than any single role gap costs, so a lineup that drops him is simply a
   // worse lineup. He replaces the lowest-rated starter whose roles someone
   // else still covers.
-  const igl = squad.filter((p) => p.isIgl).sort((a, b) => fit(a) - fit(b) || b.attrs.igl - a.attrs.igl)[0]
+  const igl = squad.filter((p) => p.isIgl).sort((a, b) => fit(a) - fit(b) || b.attrs.macro - a.attrs.macro)[0]
   if (igl && !five.includes(igl)) {
     const covered = (without: Player) => {
       const rest = five.filter((x) => x !== without).concat(igl)
       const have = new Set(rest.flatMap((p) => p.roles ?? [p.role]))
-      return ROLES.filter((r) => r !== '自由人').every((r) => have.has(r))
+      return ROLES.every((r) => have.has(r))
     }
     const drop = five
       .slice()
@@ -396,7 +396,7 @@ export function ensureCaller(state: GameState, teamId: string): void {
   const squad = squadOf(state, teamId)
   if (!squad.length) { team.igl = null; return }
   if (teamId !== state.myTeam && !squad.some((p) => p.isIgl)) {
-    const next = squad.slice().sort((a, b) => b.attrs.igl - a.attrs.igl)[0]
+    const next = squad.slice().sort((a, b) => b.attrs.macro - a.attrs.macro)[0]
     next.isIgl = true
     next.iglSource = 'inferred'
   }
@@ -406,7 +406,7 @@ export function ensureCaller(state: GameState, teamId: string): void {
   if (teamId !== state.myTeam && flagged.length <= 1) { delete team.igl; return }
   if (squad.some((p) => p.id === team.igl && p.isIgl)) return
   const had = team.igl
-  const best = flagged.sort((a, b) => b.attrs.igl - a.attrs.igl)[0]
+  const best = flagged.sort((a, b) => b.attrs.macro - a.attrs.macro)[0]
   team.igl = best?.id ?? null
   if (teamId === state.myTeam && had && best) {
     state.news.push({

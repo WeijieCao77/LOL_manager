@@ -27,7 +27,7 @@ export default function NewGame({ onHome,
   const [name, setName] = useState('')
   const [age, setAge] = useState(24)
   const [originKey, setOriginKey] = useState<string | null>(null)
-  const [region, setRegion] = useState<Region>('China')
+  const [region, setRegion] = useState<Region>('LPL')
   const [teamId, setTeamId] = useState<string | null>(null)
   // 历史生涯档: start in a past season from that season's real rosters, then
   // simulate. The world file is fetched when the year is picked.

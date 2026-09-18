@@ -6,6 +6,7 @@ import { isArena } from './types'
 import {
   DIAL_SCALE, callBoost, compStyle, famBonus, familiarity, styleEdge, styleName, stylePurity, tacticEdge,
 } from './comp'
+import { ROLES } from './types'
 import type { StyleMix } from './comp'
 import type { CompStyle } from './comp'
 import { callerOf, coachOr } from './roster'
@@ -44,14 +45,14 @@ const ROUND_SENS = 30
 // agent at full strength, and 1.15 put the season's top K/D at 1.62 against
 // a real ceiling near 1.5. 1.08 lands it back there — see scripts/smoke.ts.
 const KILL_WEIGHT: Record<Role, number> = {
-  决斗者: 1.08, 自由人: 1.03, 先锋: 0.98, 哨卫: 0.96, 控场: 0.93,
+  下路: 1.2, 中单: 1.12, 上单: 0.98, 打野: 0.95, 辅助: 0.62,
 }
 // and an entry player dies for it: 1.28, from 1.25, for the same reason
 const DEATH_WEIGHT: Record<Role, number> = {
-  决斗者: 1.28, 先锋: 1.08, 自由人: 1.0, 控场: 0.9, 哨卫: 0.88,
+  辅助: 1.18, 打野: 1.08, 上单: 1.05, 中单: 0.92, 下路: 0.88,
 }
 const ENTRY_WEIGHT: Record<Role, number> = {
-  决斗者: 2.0, 先锋: 1.3, 自由人: 1.0, 哨卫: 0.6, 控场: 0.5,
+  打野: 1.8, 中单: 1.2, 上单: 1.0, 辅助: 1.0, 下路: 0.7,
 }
 
 export interface Lineup {
@@ -105,7 +106,7 @@ export function effectiveRating(p: Player, day?: number): number {
  * count his ability twice, the exact thing FORM_BASE was introduced to stop.
  */
 export const expectedShare = (p: Player): number =>
-  (42 + (p.attrs.aim * 0.55 + p.attrs.reaction * 0.3 + p.attrs.clutch * 0.15) * 0.78) * KILL_WEIGHT[p.role]
+  (42 + (p.attrs.mechanics * 0.55 + p.attrs.teamfight * 0.3 + p.attrs.clutch * 0.15) * 0.78) * KILL_WEIGHT[p.role]
 
 /**
  * How much of the scoreboard a player's day takes.
@@ -179,8 +180,9 @@ export function selectLineup(state: GameState, teamId: string): Player[] {
   return chosen
 }
 
-const CORE_ROLES: Role[] = ['决斗者', '先锋', '控场', '哨卫']
-const GAP_COST: Record<string, number> = { 控场: 7, 哨卫: 5, 先锋: 4, 决斗者: 4 }
+const CORE_ROLES: Role[] = ROLES
+// a five is one of each position; a hole in it is somebody playing out of his seat
+const GAP_COST: Record<string, number> = { 上单: 6, 打野: 7, 中单: 6, 下路: 7, 辅助: 6 }
 
 /**
  * How well a five covers the map between them.
@@ -302,10 +304,10 @@ export function buildLineup(
   // club's named main caller if he is on the server, else the best deputy
   // who is (callerOf). The others neither stack nor clash.
   const igl = callerOf(state, team.id, players)
-  const iglBonus = igl ? (igl.attrs.igl - 60) * 0.09 : -4
+  const iglBonus = igl ? (igl.attrs.macro - 60) * 0.09 : -4
   // attributes say how well they can play together; bonds say whether they are
   const rapport = squadHarmony(state, team.id)
-  const chem = clamp((avg('teamwork') + avg('communication')) / 2 + (rapport - NEUTRAL) * 0.18, 20, 99)
+  const chem = clamp((avg('teamwork') + avg('teamfight')) / 2 + (rapport - NEUTRAL) * 0.18, 20, 99)
   const chemBonus = (chem - 65) * 0.07
   // 战术: the manager's own read of the game, on top of the coach's
   const mine = team.id === state.myTeam
@@ -320,9 +322,9 @@ export function buildLineup(
   // see engine/comp.ts for why the same slider is worth different things to
   // a double-duelist five and a double-sentinel one.
   const t = tacticsFor(state, teamId, map)
-  const te = tacticEdge(t, style, oppStyle, avg('utility'))
+  const te = tacticEdge(t, style, oppStyle, avg('awareness'))
   // 经济分析: better buys and better utility timing, all game
-  const utilBonus = te.utility + (avg('utility') - 65) * 0.05 +
+  const utilBonus = te.utility + (avg('awareness') - 65) * 0.05 +
     (mine ? analystEdge(state, 'economy') * 1.8 : 0)
   // how well the club knows these five agents on this map — a drilled sheet
   // plays above neutral, a sheet built last night plays below it
@@ -345,11 +347,11 @@ export function buildLineup(
 
   const common = base + iglBonus + chemBonus + coachBonus + comp + mapPref + utilBonus + shortHanded +
     famEdge + se.total
-  const atk = common + te.tacticsAtk + styleAtk + (avg('aim') - 65) * 0.05
+  const atk = common + te.tacticsAtk + styleAtk + (avg('laning') - 65) * 0.05
   const def = common + te.tacticsDef + styleDef + (avg('awareness') - 65) * 0.05 + 1.6
 
   const midRound =
-    (t.adaptability - 50) * DIAL_SCALE * 0.05 + (igl ? (igl.attrs.igl - 60) * 0.06 : -3) + (avg('clutch') - 65) * 0.05 +
+    (t.adaptability - 50) * DIAL_SCALE * 0.05 + (igl ? (igl.attrs.macro - 60) * 0.06 : -3) + (avg('clutch') - 65) * 0.05 +
     te.styleMid + te.matchupMid
 
   const edge: EdgeBreakdown = {
@@ -610,7 +612,7 @@ function allocateRound(
       kl.damage += 120 + rng.range(0, 55)
       vl.deaths++
       if (firstOf && i === 0) {
-        const entryK = rng.weighted(killers, killers.map((p) => ENTRY_WEIGHT[p.role] * (p.attrs.aim / 60)))
+        const entryK = rng.weighted(killers, killers.map((p) => ENTRY_WEIGHT[p.role] * (p.attrs.mechanics / 60)))
         const entryV = rng.weighted(vPool, vPool.map((p) => ENTRY_WEIGHT[p.role]))
         ctx.lines[entryK.id].firstKills++
         ctx.lines[entryV.id].firstDeaths++
@@ -619,7 +621,7 @@ function allocateRound(
       if (rng.chance(0.42)) {
         const mates = killers.filter((p) => p.id !== killer.id)
         if (mates.length) {
-          const aw = mates.map((p) => p.attrs.utility * 0.7 + p.attrs.communication * 0.3)
+          const aw = mates.map((p) => p.attrs.teamwork * 0.7 + p.attrs.awareness * 0.3)
           ctx.lines[rng.weighted(mates, aw).id].assists++
         }
       }
@@ -634,7 +636,7 @@ function allocateRound(
   // it independent of kills is what stops a star's ADR running away with their
   // frag share, and lands the league near the real VCT average of ~135.
   for (const p of [...winners, ...losers]) {
-    ctx.lines[p.id].damage += rng.range(20, 60) * (0.75 + p.attrs.utility / 260)
+    ctx.lines[p.id].damage += rng.range(20, 60) * (0.75 + p.attrs.teamfight / 260)
     ctx.lines[p.id].rounds++
   }
 

@@ -1,33 +1,48 @@
 import type { Patch } from './comp'
 import type { Manager } from './manager'
 
-export type Region = 'Americas' | 'EMEA' | 'Pacific' | 'China'
-export type Role = '决斗者' | '先锋' | '控场' | '哨卫' | '自由人'
+/**
+ * A region is its tier-one league. The key never changes with the league's
+ * name (EU LCS → LEC, LCS → LTA North → LCS): screens show a name by year,
+ * saves and lookups use the key.
+ */
+export type Region = 'LPL' | 'LCK' | 'LEC' | 'LCS' | 'LCP' | 'CBLOL'
+/** The five positions. A five is one of each — a position is a seat, not a style. */
+export type Role = '上单' | '打野' | '中单' | '下路' | '辅助'
 export type Tier = 1 | 2
 
-export const REGIONS: Region[] = ['Americas', 'EMEA', 'Pacific', 'China']
-export const ROLES: Role[] = ['决斗者', '先锋', '控场', '哨卫', '自由人']
+export const REGIONS: Region[] = ['LPL', 'LCK', 'LEC', 'LCS', 'LCP', 'CBLOL']
+export const ROLES: Role[] = ['上单', '打野', '中单', '下路', '辅助']
 export const REGION_CN: Record<Region, string> = {
-  Americas: '美洲', EMEA: '欧非中东', Pacific: '太平洋', China: '中国',
+  LPL: '中国', LCK: '韩国', LEC: '欧洲、中东与非洲', LCS: '北美', LCP: '亚太', CBLOL: '巴西',
 }
 
+/**
+ * Eight abilities, each read off real match statistics by
+ * scripts/lol/build_world.py (docs/调研-选手数值与年龄曲线.md).
+ *
+ * 运营 (macro) is the one that is not an individual statistic: it is what the
+ * club wins beyond what the fifteen-minute state predicts, while he is on the
+ * server. It names nobody as "the shotcaller" — calls in this game are spread
+ * across the five, and the data cannot tell who makes them.
+ */
 export interface Attrs {
-  aim: number
-  reaction: number
+  laning: number
+  mechanics: number
+  teamfight: number
+  farming: number
   awareness: number
-  utility: number
   clutch: number
   teamwork: number
-  communication: number
-  igl: number
+  macro: number
 }
 
 export const ATTR_KEYS: (keyof Attrs)[] = [
-  'aim', 'reaction', 'awareness', 'utility', 'clutch', 'teamwork', 'communication', 'igl',
+  'laning', 'mechanics', 'teamfight', 'farming', 'awareness', 'clutch', 'teamwork', 'macro',
 ]
 export const ATTR_CN: Record<keyof Attrs, string> = {
-  aim: '枪法', reaction: '反应', awareness: '意识', utility: '道具',
-  clutch: '残局', teamwork: '协同', communication: '沟通', igl: '指挥',
+  laning: '对线', mechanics: '操作', teamfight: '团战', farming: '发育',
+  awareness: '意识', clutch: '心态', teamwork: '协同', macro: '运营',
 }
 
 /** Accumulated performance over a competition period. */
@@ -204,8 +219,14 @@ export interface Player {
   ign: string
   teamId: string | null
   region: Region
-  /** ISO-ish country code from vlr.gg, e.g. 'kr' */
+  /** ISO country code, e.g. 'kr' */
   nat?: string
+  /**
+   * The region whose resident he is for the import rule, where Leaguepedia
+   * records one. Not nationality: a Korean who qualified as an LPL resident
+   * is 'LPL' here. See engine/imports.ts.
+   */
+  residency?: Region
   /** real name, where Liquipedia has one */
   realName?: string | null
   /** ISO birthdate from Liquipedia, null when unknown */

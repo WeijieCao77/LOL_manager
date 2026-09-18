@@ -653,9 +653,29 @@ def main():
             id=tid, name=tname, tag=TAG_ALIAS.get(tname) or tags.get(norm_name(tname)) or ''.join(w[0] for w in re.findall(r"[A-Za-z0-9']+", tname))[:4].upper(),
             region=region, tier=tier, league=label, rating=rating,
             budget=int(round(wage * 1.3 + (rating - 60) * (60000 if tier == 1 else 8000), -3)),
-            reputation=max(20, min(95, rating + (4 if tier == 1 else -14))),
+            reputation=0,   # 按联赛内排名定，见下面 league_reputation
             roster=roster, coach=None, facilities=max(30, min(95, rating + rng.randrange(-6, 7) + (0 if tier == 1 else -12))),
         ))
+
+    # ---- 俱乐部声望：按联赛内的排名拉开，不直接跟总评走。
+    # 声望决定谁愿意请一个没名气的经理（引擎里是「俱乐部声望 <= 经理声望 + 12」，新经理约 51）。
+    # 跟着总评走的话 LPL 垫底的队也有 75，新经理一支 LPL 队都带不了——而现实里后段班本来就会请新人。
+    # 每个联赛一个上限（赛区的分量），从第一名到最后一名线性落 SPAN 点。
+    PRESTIGE = {'LCK': 93, 'LPL': 92, 'LEC': 85, 'LCS': 80, 'LCP': 74, 'CBLOL': 73}
+    SPAN = 30
+    by_league = collections.defaultdict(list)
+    for t in teams_out:
+        by_league[t['league']].append(t)
+    for label, ts in by_league.items():
+        ts.sort(key=lambda t: -t['rating'])
+        top = PRESTIGE.get(ts[0]['region'], 70) if ts[0]['tier'] == 1 else PRESTIGE.get(ts[0]['region'], 70) - 36
+        span = SPAN if ts[0]['tier'] == 1 else 12
+        # 引擎里声望 <= 52 的俱乐部谁都愿意请（「总有地方可以起步」）。有二级联赛的赛区，那一层就是二级联赛；
+        # 没有的赛区（2026 年的 LPL：LDL 停办了），让一级联赛垫底的队落到这条线以下，否则年轻经理在这个赛区无处可去
+        if ts[0]['tier'] == 1 and not any(t['tier'] == 2 and t['region'] == ts[0]['region'] for t in teams_out):
+            span = top - 50
+        for i, t in enumerate(ts):
+            t['reputation'] = int(round(top - span * i / max(1, len(ts) - 1)))
 
     # ---- 自由人：评分年份里打过世界内联赛、开季不在任何名单里、档案上没退役的人
     fa = []

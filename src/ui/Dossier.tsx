@@ -7,10 +7,9 @@ import type { RawPlayer } from '../engine/world'
 import { Face, Flag, natName } from './Flag'
 import { AgentIcon, Panel, Bar, moneyFull } from './common'
 import { agentCn } from '../engine/content'
-import { ATTR_CN, ATTR_KEYS, REGION_CN, REGIONS } from '../engine/types'
+import { ATTR_CN, ATTR_KEYS, REGION_CN, REGIONS, ROLES } from '../engine/types'
 import type { Region, Role } from '../engine/types'
 
-const ROLES: Role[] = ['决斗者', '先锋', '控场', '哨卫', '自由人']
 
 const teamOf = new Map(WORLD_TEAMS.map((t) => [t.id, t]))
 
@@ -113,7 +112,7 @@ export default function Dossier({
         <select style={{ width: 'auto' }} value={role} onChange={(e) => setRole(e.target.value as Role | 'all' | 'igl')}>
           <option value="all">全部位置</option>
           {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
-          <option value="igl">指挥（IGL）</option>
+          <option value="igl">队长</option>
         </select>
         <div className="seg">
           <button className={sort === 'rating' ? 'on' : ''} onClick={() => setSort('rating')}>能力</button>
@@ -142,7 +141,7 @@ export default function Dossier({
               <tr key={entry.player.id} style={{ cursor: 'pointer' }} onClick={() => onOpen(entry.player.id)}>
                 <td>
                   <b>{entry.player.ign}</b>
-                  {entry.player.isIgl && <span className="tag t2" style={{ marginLeft: 5 }}>IGL</span>}
+                  {entry.player.isIgl && <span className="tag t2" style={{ marginLeft: 5 }}>队长</span>}
                 </td>
                 <td className="muted small">{entry.player.realName ?? '—'}</td>
                 <td className="small"><Flag nat={entry.player.nat} /> {natName(entry.player.nat)}</td>
@@ -213,7 +212,7 @@ function Detail({ entry, onBack }: { entry: Entry; onBack: () => void }) {
               {' · '}
               {club ? club.name : '自由人'}
               <br />
-              {entry.roles.join(' / ')}{player.isIgl && ' · 队内指挥'}
+              {entry.roles.join(' / ')}{player.isIgl && ' · 队长'}
               {' · '}总评 {player.overall}
             </div>
             <div className="row wrap" style={{ gap: 6, marginTop: 10 }}>

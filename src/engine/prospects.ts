@@ -22,13 +22,14 @@
  *    arrive unproven, seeded from their own id so the same man is the same man
  *    in every career, with a ceiling that closes as they get older.
  */
+import { NAT_REGION } from './imports'
 import { canonAgents } from './content'
 import RAW from '../data/prospects.json'
 import { Rng, clamp, hashStr } from './rng'
 import { AGENT_ROLE } from './content'
 import { recomputeOverall, refreshValue } from './player'
-import { ATTR_KEYS, defaultContract } from './types'
-import type { Attrs, Player, Region, Role } from './types'
+import { ATTR_KEYS, defaultContract, ROLES } from './types'
+import type { Attrs, Player, Role } from './types'
 
 export interface ProspectRow {
   id: string
@@ -47,24 +48,8 @@ interface ProspectFile {
 
 export const PROSPECTS = (RAW as unknown as ProspectFile).players ?? []
 
-/** Nationality → region, mirroring imports.ts so the import rule still works. */
-const NAT_REGION: Record<string, Region> = {
-  us: 'Americas', ca: 'Americas', br: 'Americas', ar: 'Americas',
-  cl: 'Americas', mx: 'Americas', pe: 'Americas', co: 'Americas',
-  uy: 'Americas', do: 'Americas', ec: 'Americas', bo: 'Americas',
-  cn: 'China', hk: 'China', mo: 'China', tw: 'China',
-  kr: 'Pacific', jp: 'Pacific', id: 'Pacific', th: 'Pacific',
-  ph: 'Pacific', sg: 'Pacific', my: 'Pacific', vn: 'Pacific',
-  in: 'Pacific', au: 'Pacific', nz: 'Pacific',
-  gb: 'EMEA', fr: 'EMEA', de: 'EMEA', es: 'EMEA', tr: 'EMEA',
-  ru: 'EMEA', pl: 'EMEA', se: 'EMEA', dk: 'EMEA', ua: 'EMEA',
-  it: 'EMEA', nl: 'EMEA', be: 'EMEA', fi: 'EMEA', no: 'EMEA',
-  pt: 'EMEA', cz: 'EMEA', ro: 'EMEA', gr: 'EMEA', il: 'EMEA',
-  ch: 'EMEA', at: 'EMEA', hu: 'EMEA', rs: 'EMEA', bg: 'EMEA',
-  kg: 'EMEA', kz: 'EMEA', az: 'EMEA', ma: 'EMEA', sa: 'EMEA',
-}
 
-const CORE: Role[] = ['决斗者', '先锋', '控场', '哨卫']
+const CORE: Role[] = ROLES
 
 /** The job he actually plays, read off the agents he has been seen on. */
 function roleOf(row: ProspectRow, rng: Rng): Role {
@@ -107,15 +92,15 @@ export function makeProspect(row: ProspectRow, year: number): Player {
   for (const k of ATTR_KEYS) {
     attrs[k] = clamp(Math.round(base + rng.range(-7, 7)), 25, 92)
   }
-  // the calling attribute is not something an unknown teenager has
-  attrs.igl = clamp(Math.round(base - rng.range(4, 14)), 20, 80)
+  // reading the second half of a game is not something an unknown teenager has
+  attrs.macro = clamp(Math.round(base - rng.range(4, 14)), 20, 80)
 
   const nat = (row.nat ?? '').toLowerCase() || undefined
   const p: Player = {
     id: row.id,
     ign: row.ign,
     teamId: null,
-    region: (nat ? NAT_REGION[nat] : undefined) ?? 'EMEA',
+    region: (nat ? NAT_REGION[nat] : undefined) ?? 'LEC',
     nat,
     realName: row.real ?? null,
     birth: row.born ?? undefined,

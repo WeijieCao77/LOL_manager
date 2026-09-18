@@ -48,5 +48,5 @@ export function callerOf(state: GameState, teamId: string, among?: Player[]): Pl
   const pool = among ? among.filter((p) => p.injuredUntil <= state.day) : squadOf(state, teamId)
   const main = team?.igl ? pool.find((p) => p.id === team.igl && p.isIgl) : undefined
   if (main) return main
-  return pool.filter((p) => p.isIgl).sort((a, b) => b.attrs.igl - a.attrs.igl)[0]
+  return pool.filter((p) => p.isIgl).sort((a, b) => b.attrs.macro - a.attrs.macro)[0]
 }

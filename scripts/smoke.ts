@@ -81,8 +81,18 @@ for (const t of Object.values(state.teams)) {
   const k = `${t.region}/T${t.tier}`
   tierCount[k] = (tierCount[k] ?? 0) + 1
 }
-for (const [k, v] of Object.entries(tierCount)) {
-  if (k.endsWith('T1') && v !== 12) problems.push(`${k} has ${v} teams (expected 12)`)
+// League sizes are whatever the real leagues are (LPL 14, LCK 10, the smaller
+// regions 8) — what must hold is that a season neither loses a club nor
+// invents one: every league ends the year the size the world file started it.
+const worldCount: Record<string, number> = {}
+for (const t of WORLD_TEAMS) {
+  const k = `${t.region}/T${t.tier}`
+  worldCount[k] = (worldCount[k] ?? 0) + 1
+}
+for (const k of new Set([...Object.keys(tierCount), ...Object.keys(worldCount)])) {
+  if (k.endsWith('T1') && tierCount[k] !== worldCount[k]) {
+    problems.push(`${k} has ${tierCount[k] ?? 0} teams (the world file has ${worldCount[k] ?? 0})`)
+  }
 }
 
 console.log('\nleague sizes:', tierCount)

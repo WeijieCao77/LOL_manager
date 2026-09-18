@@ -8,6 +8,7 @@ import { importBlock } from './imports'
 import { skillMod } from './manager'
 import { trustOf, trustOnDeparture, TRUST_START } from './trust'
 import { KEPT_GAIN, RENEWAL_GAIN, loyaltyOnJoin, loyaltyOnListed, shiftLoyalty } from './loyalty'
+import { ROLES } from './types'
 import type { Contract, GameState, Player, SquadRole, Team, TransferOffer } from './types'
 
 /**
@@ -547,7 +548,7 @@ function weakestRole(state: GameState, team: Team): { role: Player['role']; stre
   // one", and world.ts's autoStarters already excludes it. Leaving it in made
   // it every squad's "weakest role" (nobody has one), which pointed two thirds
   // of the AI's shopping at a pool of ten players and killed the paid market.
-  const roles: Player['role'][] = ['决斗者', '先锋', '控场', '哨卫']
+  const roles: Player['role'][] = ROLES
   let worst: { role: Player['role']; strength: number } | null = null
   for (const r of roles) {
     const best = squad.filter((p) => p.role === r).sort((a, b) => b.overall - a.overall)[0]

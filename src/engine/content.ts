@@ -1,82 +1,69 @@
 import type { Role } from './types'
+import raw from '../data/champions.json'
 
 /**
- * Every map VALORANT has shipped to competitive, taken from vlr.gg's own map
- * filter. `activePool()` deals seven of these per season and rotates one or
- * two at the Stage 1 and Stage 2 boundaries, as Riot does.
+ * The map. There is one.
+ *
+ * VAL MANAGER, which this engine was built from, dealt seven maps a season and
+ * let clubs veto them; everything that varied by map there (comfort, the
+ * default five, drills) still runs here over a pool of one, so it is inert
+ * rather than removed. What varies from game to game in this sport is the
+ * draft, and that lives in comp.ts.
  */
-export const MAPS = [
-  'Ascent', 'Bind', 'Breeze', 'Corrode', 'Fracture', 'Haven', 'Icebox',
-  'Lotus', 'Pearl', 'Split', 'Summit', 'Sunset', 'Abyss',
-] as const
+export const MAPS = ['召唤师峡谷'] as const
 export type GameMap = (typeof MAPS)[number]
 
-/** Agents grouped by their in-game role, matching vlr.gg's agent filter. */
-export const AGENTS: Record<Role, string[]> = {
-  决斗者: ['Jett', 'Raze', 'Phoenix', 'Reyna', 'Yoru', 'Neon', 'Iso', 'Waylay'],
-  先锋: ['Sova', 'Breach', 'Skye', 'KAY/O', 'Fade', 'Gekko', 'Tejo'],
-  控场: ['Brimstone', 'Viper', 'Omen', 'Astra', 'Harbor', 'Clove', 'Miks'],
-  哨卫: ['Sage', 'Cypher', 'Killjoy', 'Chamber', 'Deadlock', 'Vyse', 'Veto'],
-  自由人: ['Sova', 'KAY/O', 'Omen', 'Sage', 'Breach', 'Viper', 'Skye', 'Cypher'],
+/**
+ * One champion as scripts/lol/build_champions.py read it off twelve years of
+ * professional games. Nothing here is authored except the Chinese name.
+ */
+export interface Champion {
+  id: string
+  /** official Chinese name; null where it could not be confirmed, and the id shows instead */
+  cn: string | null
+  /** every position it is really played in (12% of its games or more), most common first */
+  positions: Role[]
+  /** first appearance in a professional game, YYYY-MM-DD — a career in an earlier year cannot pick it */
+  since: string
+  /** −1 snowballs early … +1 scales late: how much longer its wins run than its losses, and its gold at 15 */
+  lean: number
+  /** team-fighting lean: kill participation against its position's average */
+  fight: number
+  /** pick / ban / win rate in the major leagues in the world's opening season */
+  meta: { pick: number; ban: number; win: number | null } | null
 }
 
-export const ALL_AGENTS = Array.from(new Set(Object.values(AGENTS).flat())).sort()
+export const CHAMPIONS = (raw as unknown as { champions: Champion[] }).champions
+const BY_ID = new Map(CHAMPIONS.map((c) => [c.id, c]))
+export const championOf = (id: string): Champion | undefined => BY_ID.get(id)
 
 /**
- * Official Chinese map names.
- *
- * The English name stays the key everywhere — it is what `mapPrefs` is stored
- * under in every existing save, what vlr.gg calls them, and what the broadcast
- * says — so this is a display layer, not a rename. `mapCn` is what screens
- * print.
+ * Champions by the position they are played in. A champion with two real
+ * positions is listed under both — 加里奥 is a mid laner and a top laner, and
+ * a table that kept only one would charge a top laner for picking him.
  */
-export const MAP_CN: Record<string, string> = {
-  Ascent: '亚海悬城', Bind: '源工重镇', Breeze: '微风岛屿', Corrode: '盐海矿镇',
-  Fracture: '裂变峡谷', Haven: '隐世修所', Icebox: '森寒冬港', Lotus: '莲华古城',
-  Pearl: '深海明珠', Split: '霓虹町', Summit: '天枢云阙', Sunset: '日落之城',
-  Abyss: '幽邃地窟',
-}
+export const AGENTS: Record<Role, string[]> = { 上单: [], 打野: [], 中单: [], 下路: [], 辅助: [] }
+for (const c of CHAMPIONS) for (const r of c.positions) AGENTS[r].push(c.id)
 
-/** A map as the manager reads it: Chinese, falling back to whatever we were given. */
+export const ALL_AGENTS = CHAMPIONS.map((c) => c.id).sort()
+
+/** The single map's display name; kept as a function because every screen already calls it. */
+export const MAP_CN: Record<string, string> = { 召唤师峡谷: '召唤师峡谷' }
 export const mapCn = (m: string): string => MAP_CN[m] ?? m
 
-/**
- * Official Chinese agent names, from the same translator as MAP_CN.
- *
- * Fetched by scripts/fetch_valorant_assets.ts from valorant-api.com's zh-CN
- * data — the script cross-checks the thirteen map names against MAP_CN before
- * trusting these, so 钛狐 really is what the national server calls Tejo. The
- * English name stays the key everywhere, exactly as with maps.
- */
-export const AGENT_CN: Record<string, string> = {
-  Astra: '星礈', Breach: '铁臂', Brimstone: '炼狱', Chamber: '尚勃勒',
-  Clove: '暮蝶', Cypher: '零', Deadlock: '钢锁', Fade: '黑梦',
-  Gekko: '盖可', Harbor: '海神', Iso: '壹决', Jett: '捷风',
-  'KAY/O': 'K/O', Killjoy: '奇乐', Neon: '霓虹', Omen: '幽影',
-  Phoenix: '不死鸟', Raze: '雷兹', Reyna: '芮娜', Sage: '贤者',
-  Skye: '斯凯', Sova: '猎枭', Tejo: '钛狐', Viper: '蝰蛇',
-  Vyse: '维斯', Waylay: '幻棱', Yoru: '夜露',
-  Miks: '迷核', Veto: '禁灭',
-}
+/** Official Chinese champion names. The English id stays the key everywhere. */
+export const AGENT_CN: Record<string, string> = Object.fromEntries(
+  CHAMPIONS.filter((c) => c.cn).map((c) => [c.id, c.cn as string]),
+)
 
 /**
- * The agent's canonical name from whatever spelling the data carried.
- *
- * vlr.gg files a player's agents as slugs — 'cypher', 'kayo' — and every
- * player with real data reached the game that way. The icon files, the
- * Chinese names and the composition tables are all keyed by the proper name,
- * so on a case-sensitive server the icons were broken, the names came out in
- * English, and the match engine found no player who had ever played anything.
- * Null for anything that is not an agent.
- *
- * 'veto' used to be one of those: it is a column on vlr's match pages, and it
- * was read as a stray heading. Then Riot shipped a sentinel called Veto, and
- * the rule that was keeping a heading out started deleting a real agent —
- * Autumn's most-played, in this data. Only the table below decides now.
+ * The champion's canonical id from whatever spelling the data carried —
+ * "KaiSa", "Kai'Sa" and "kaisa" are one champion. Null for anything that is
+ * not one.
  */
-const AGENT_BY_KEY = new Map(Object.keys(AGENT_CN).map((a) => [a.toLowerCase().replace(/[^a-z]/g, ''), a]))
-export const canonAgent = (a: string): string | null =>
-  AGENT_BY_KEY.get(String(a).toLowerCase().replace(/[^a-z]/g, '')) ?? null
+const squash = (a: string): string => String(a).toLowerCase().replace(/[^a-z0-9]/g, '')
+const AGENT_BY_KEY = new Map(CHAMPIONS.map((c) => [squash(c.id), c.id]))
+export const canonAgent = (a: string): string | null => AGENT_BY_KEY.get(squash(a)) ?? null
 /** A pool cleaned the same way: canonical, deduplicated, junk dropped. */
 export const canonAgents = (list: readonly string[]): string[] => {
   const out: string[] = []
@@ -87,45 +74,28 @@ export const canonAgents = (list: readonly string[]): string[] => {
   return out
 }
 
-/** An agent as the manager reads it. */
+/** A champion as the manager reads it. */
 export const agentCn = (a: string): string => AGENT_CN[a] ?? AGENT_CN[canonAgent(a) ?? ''] ?? a
 
-/**
- * Which job an agent is actually picked for.
- *
- * Derived from AGENTS rather than written twice, and 自由人 is skipped on
- * purpose — that key is a grab-bag of agents other roles already own, not a
- * fifth role an agent can belong to.
- */
+/** The position a champion is mostly played in. `agentRoles` has all of them. */
 export const AGENT_ROLE: Record<string, Role> = Object.fromEntries(
-  (Object.entries(AGENTS) as [Role, string[]][])
-    .filter(([role]) => role !== '自由人')
-    .flatMap(([role, list]) => list.map((a) => [a, role] as const)),
+  CHAMPIONS.filter((c) => c.positions.length).map((c) => [c.id, c.positions[0]]),
 ) as Record<string, Role>
+export const agentRoles = (a: string): Role[] => championOf(a)?.positions ?? []
+
+/** How contested a champion is in the opening season's drafts: picks plus bans. */
+export const presence = (a: string): number => {
+  const m = championOf(a)?.meta
+  return m ? m.pick + m.ban : 0
+}
 
 /**
- * What each map is usually played with, best-known first.
- *
- * A composition table, not a roster: these are agents, so nothing here has to
- * be a real person. Ordered by how routinely the agent shows up on that map in
- * professional play, and used two ways — to fill a lineup automatically with
- * something sensible, and to tell the manager when a hand-made pick is
- * unusual for the map.
+ * What the map is usually played with, most contested first — used to fill a
+ * lineup automatically with something sensible and to tell the manager when a
+ * hand-made pick is unusual. Read off the season's real drafts.
  */
 export const MAP_META: Record<string, string[]> = {
-  Ascent: ['Jett', 'KAY/O', 'Omen', 'Killjoy', 'Sova', 'Gekko', 'Cypher', 'Iso'],
-  Bind: ['Raze', 'Skye', 'Brimstone', 'Cypher', 'Gekko', 'Viper', 'Fade', 'Yoru'],
-  Breeze: ['Jett', 'Sova', 'Viper', 'Cypher', 'Gekko', 'Harbor', 'Chamber', 'Fade'],
-  Corrode: ['Raze', 'Tejo', 'Omen', 'Killjoy', 'Sova', 'Clove', 'Vyse', 'Neon'],
-  Fracture: ['Neon', 'Breach', 'Brimstone', 'Killjoy', 'Fade', 'Viper', 'Vyse', 'Raze'],
-  Haven: ['Jett', 'Breach', 'Omen', 'Killjoy', 'Sova', 'Astra', 'Cypher', 'Fade'],
-  Icebox: ['Jett', 'Sova', 'Viper', 'Killjoy', 'Harbor', 'Gekko', 'Sage', 'Raze'],
-  Lotus: ['Raze', 'Fade', 'Omen', 'Killjoy', 'Skye', 'Viper', 'Cypher', 'Neon'],
-  Pearl: ['Neon', 'Fade', 'Astra', 'Killjoy', 'Sova', 'Harbor', 'Cypher', 'Jett'],
-  Split: ['Raze', 'Skye', 'Omen', 'Cypher', 'Breach', 'Astra', 'Sage', 'Jett'],
-  Summit: ['Jett', 'Sova', 'Omen', 'Cypher', 'Tejo', 'Clove', 'Killjoy', 'Raze'],
-  Sunset: ['Raze', 'Breach', 'Omen', 'Cypher', 'Skye', 'Clove', 'Sage', 'Jett'],
-  Abyss: ['Neon', 'Tejo', 'Clove', 'Vyse', 'Sova', 'Omen', 'Killjoy', 'Waylay'],
+  召唤师峡谷: CHAMPIONS.slice().sort((a, b) => presence(b.id) - presence(a.id)).map((c) => c.id),
 }
 
 export const SPONSOR_NAMES = [
@@ -136,26 +106,26 @@ export const SPONSOR_NAMES = [
 
 /** Flavour lines used by the round narrator. */
 export const HIGHLIGHT_TEMPLATES = {
-  ace: (p: string, m: string) => `${p} 在 ${m} 单人五杀。`,
-  quad: (p: string) => `${p} 一回合带走四个，对面直接崩了。`,
+  ace: (p: string, m: string) => `${p} 在 ${m} 拿下五杀。`,
+  quad: (p: string) => `${p} 一波团战带走四个，对面直接崩了。`,
   clutch: (p: string, n: number) =>
-    n >= 3 ? `${p} 打赢 1v${n} 残局，把这回合抢了回来。`
-      : `${p} 最后一人守住 1v${n}，稳稳收下这回合。`,
-  firstBlood: (p: string, n: number) => `${p} 连续 ${n} 回合拿下首杀。`,
-  eco: (t: string) => `${t} 手枪局打崩对面经济，读秒阶段连下两分。`,
-  antiEco: (t: string, o: string) => `${t} 强起打穿了 ${o} 的满配，经济反转。`,
-  flawless: (t: string) => `${t} 五人零阵亡拿下这回合。`,
-  streak: (t: string, n: number) => `${t} 连下 ${n} 回合，把比分彻底拉开。`,
-  comeback: (t: string, from: number) => `${t} 上半场只拿 ${from} 分，下半场追了回来。`,
-  mapPoint: (t: string) => `${t} 在赛点上救回一局。`,
-  overtime: () => `常规回合战平，比赛进入加时。`,
+    n >= 3 ? `${p} 一打${n}，把这波团战抢了回来。`
+      : `${p} 残血反杀，稳稳收下这一波。`,
+  firstBlood: (p: string, n: number) => `${p} 连续 ${n} 次拿下首杀。`,
+  eco: (t: string) => `${t} 前期连续拿到资源，把经济拉开。`,
+  antiEco: (t: string, o: string) => `${t} 落后时打赢了 ${o} 的正面团，局势反转。`,
+  flawless: (t: string) => `${t} 零换五。`,
+  streak: (t: string, n: number) => `${t} 连赢 ${n} 波，把差距彻底拉开。`,
+  comeback: (t: string, from: number) => `${t} 前期只拿到 ${from} 分，后面追了回来。`,
+  mapPoint: (t: string) => `${t} 在高地上守住了一波。`,
+  overtime: () => `双方僵持，比赛进入大后期。`,
 }
 
 export const INJURIES = [
   { note: '手腕劳损', days: [5, 14] },
   { note: '腱鞘炎复发', days: [7, 18] },
   { note: '颈椎不适', days: [4, 10] },
+  { note: '腰伤', days: [6, 16] },
   { note: '重感冒', days: [2, 6] },
   { note: '心理疲劳 / 需要休息', days: [5, 12] },
-  { note: '肩部拉伤', days: [6, 16] },
 ]

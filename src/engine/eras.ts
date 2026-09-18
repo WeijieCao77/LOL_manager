@@ -21,11 +21,17 @@
  * The world files are loaded on demand — they are a quarter megabyte each
  * and only a historical start needs one.
  */
+import { CHAMPIONS } from './content'
 import type { RawTeam } from './teams'
 import type { RawPlayer } from './world'
 
-export const HISTORICAL_YEARS = [2023, 2024, 2025] as const
-export type StartYear = (typeof HISTORICAL_YEARS)[number] | 2026
+/**
+ * The past seasons a career can start in. Empty until their worlds are built:
+ * the entries planned are 2016 (S6) and 2022 (S12), each rated on its own
+ * era's matches by scripts/lol/build_world.py --year.
+ */
+export const HISTORICAL_YEARS: readonly number[] = []
+export type StartYear = number
 export const DEFAULT_START_YEAR = 2026
 
 export interface RawWorld {
@@ -34,10 +40,7 @@ export interface RawWorld {
   players: RawPlayer[]
 }
 
-export async function loadWorld(year: number): Promise<RawWorld | null> {
-  if (year === 2023) return (await import('../data/world_2023.json')).default as unknown as RawWorld
-  if (year === 2024) return (await import('../data/world_2024.json')).default as unknown as RawWorld
-  if (year === 2025) return (await import('../data/world_2025.json')).default as unknown as RawWorld
+export async function loadWorld(_year: number): Promise<RawWorld | null> {
   return null
 }
 
@@ -51,9 +54,6 @@ export const midYearOf = (s: { startYear?: number }): number => startYearOf(s) +
 export const finalYearOf = (s: { startYear?: number }): number => startYearOf(s) + 10
 
 export const ERA_CN: Record<number, string> = {
-  2023: '2023 赛季起 · 历史生涯档（LOCK//IN、单赛段联赛、东京 Masters、LCQ）',
-  2024: '2024 赛季起 · 历史生涯档',
-  2025: '2025 赛季起 · 历史生涯档',
   2026: '2026 赛季起',
 }
 
@@ -62,11 +62,7 @@ export const ERA_CN: Record<number, string> = {
  * Masters of the year, Masters II the second, then Champions. 2023 had one
  * Masters (Tokyo) after LOCK//IN; it is listed for the day a 2023 start exists.
  */
-export const REAL_HOSTS: Record<number, { masters1: string; masters2: string; champions: string }> = {
-  2023: { masters1: '东京', masters2: '东京', champions: '洛杉矶' },
-  2024: { masters1: '马德里', masters2: '上海', champions: '首尔' },
-  2025: { masters1: '曼谷', masters2: '多伦多', champions: '巴黎' },
-}
+export const REAL_HOSTS: Record<number, { masters1: string; masters2: string; champions: string }> = {}
 
 /**
  * When each agent joined the game, year and month of the patch. Agents not
@@ -77,11 +73,9 @@ export const REAL_HOSTS: Record<number, { masters1: string; masters2: string; ch
  * with that; scripts/check_history_world.ts holds every entry against the
  * first competitive appearance in the cache.
  */
-export const AGENT_SINCE: Record<string, [number, number]> = {
-  Harbor: [2022, 10], Gekko: [2023, 3], Deadlock: [2023, 6], Iso: [2023, 10],
-  Clove: [2024, 3], Vyse: [2024, 8], Tejo: [2025, 1], Waylay: [2025, 3],
-  Veto: [2025, 11], Miks: [2026, 6],
-}
+export const AGENT_SINCE: Record<string, [number, number]> = Object.fromEntries(
+  CHAMPIONS.map((c) => [c.id, [Number(c.since.slice(0, 4)), Number(c.since.slice(5, 7))] as [number, number]]),
+)
 
 const monthOf = (s: { year: number; day: number }): number => {
   const d = new Date(Date.UTC(s.year, 0, 1))
@@ -110,9 +104,7 @@ export function agentsReleasedToday(s: { year: number; day: number }): string[] 
  * When each map shipped, from Liquipedia's map pages. A map not listed was in
  * the game before any world this game can start in.
  */
-export const MAP_SINCE: Record<string, string> = {
-  Lotus: '2023-01-10', Sunset: '2023-08-29', Abyss: '2024-06-12', Corrode: '2025-06-25', Summit: '2026-06-24',
-}
+export const MAP_SINCE: Record<string, string> = {}
 
 /**
  * The competitive pool Riot actually ran in 2023–2025, from each date on: the
@@ -122,19 +114,7 @@ export const MAP_SINCE: Record<string, string> = {
  * first entry is the 2022 Champions pool, which held until Lotus shipped.
  * Other years have no table and keep the dealt pool (match.activePool).
  */
-export const REAL_POOLS: [string, string[]][] = [
-  ['2023-01-01', ['Ascent', 'Bind', 'Breeze', 'Fracture', 'Haven', 'Icebox', 'Pearl']],
-  ['2023-01-10', ['Ascent', 'Fracture', 'Haven', 'Icebox', 'Lotus', 'Pearl', 'Split']],
-  ['2023-04-29', ['Ascent', 'Bind', 'Fracture', 'Haven', 'Lotus', 'Pearl', 'Split']],
-  ['2024-01-01', ['Ascent', 'Bind', 'Breeze', 'Icebox', 'Lotus', 'Split', 'Sunset']],
-  ['2024-06-22', ['Ascent', 'Bind', 'Haven', 'Icebox', 'Lotus', 'Split', 'Sunset']],
-  ['2024-07-12', ['Abyss', 'Ascent', 'Bind', 'Haven', 'Icebox', 'Lotus', 'Sunset']],
-  ['2025-01-01', ['Abyss', 'Bind', 'Fracture', 'Haven', 'Lotus', 'Pearl', 'Split']],
-  ['2025-03-13', ['Ascent', 'Fracture', 'Haven', 'Icebox', 'Lotus', 'Pearl', 'Split']],
-  ['2025-06-07', ['Ascent', 'Haven', 'Icebox', 'Lotus', 'Pearl', 'Split', 'Sunset']],
-  ['2025-07-03', ['Ascent', 'Bind', 'Corrode', 'Haven', 'Icebox', 'Lotus', 'Sunset']],
-  ['2025-09-12', ['Abyss', 'Ascent', 'Bind', 'Corrode', 'Haven', 'Lotus', 'Sunset']],
-]
+export const REAL_POOLS: [string, string[]][] = []
 
 const isoOf = (s: { year: number; day: number }): string => {
   const d = new Date(Date.UTC(s.year, 0, 1))
@@ -144,7 +124,7 @@ const isoOf = (s: { year: number; day: number }): string => {
 
 /** the real pool on this game date, or null for a year without a table */
 export function realPool(s: { year: number; day: number }): string[] | null {
-  if (s.year < 2023 || s.year > 2025) return null
+  if (!REAL_POOLS.length) return null
   const iso = isoOf(s)
   let pool: string[] | null = null
   for (const [from, maps] of REAL_POOLS) if (from <= iso) pool = maps

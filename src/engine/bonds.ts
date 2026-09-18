@@ -99,7 +99,7 @@ export function initialBond(state: GameState, aId: string, bId: string): number 
 
   // some people are simply easier to play with
   v += (a.attrs.teamwork + b.attrs.teamwork - 140) * 0.05
-  v += (a.attrs.communication + b.attrs.communication - 140) * 0.035
+  v += (a.attrs.teamfight + b.attrs.teamfight - 140) * 0.035
 
   // a little grit so two similar pairs are not identical
   const jitter = (hashStr(`bond:${key(aId, bId)}`) % 7) - 3

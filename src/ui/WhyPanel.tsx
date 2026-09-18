@@ -1,3 +1,4 @@
+import { ROLES } from '../engine/types'
 import type { EdgeBreakdown, MapScore, Role } from '../engine/types'
 import { useGame } from './ctx'
 
@@ -51,7 +52,7 @@ const FACTORS: {
   { key: 'familiarity', label: '阵容熟练度', fix: '同一套五个英雄多打几场、跑图时练它；临时换阵容会从零开始' },
 ]
 
-const CORE_ROLES: Role[] = ['决斗者', '先锋', '控场', '哨卫']
+const CORE_ROLES: Role[] = ROLES
 
 export default function WhyPanel({ map, mineIsA }: { map: MapScore; mineIsA: boolean }) {
   const { game } = useGame()

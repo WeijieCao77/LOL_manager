@@ -188,7 +188,7 @@ export function setupSeason(state: GameState, notes?: string[]): void {
     // through qualifiers rather than a league — the LCQ later, and LOCK//IN
     // once for everyone below
     if (book.lockin) {
-      const s1 = makeComp(state, 'stage1', region === 'China' ? '中国进化赛' : `VCT ${region} · 联赛`, t1, region, 1)
+      const s1 = makeComp(state, 'stage1', region === LEGACY_2023_DOMESTIC ? '中国进化赛' : `VCT ${region} · 联赛`, t1, region, 1)
       state.fixtures.push(...scheduleRegularSeason(s1, 'stage1', ...LD.stage1, 3, rng, '常规赛', Math.max(1, t1.length - 1)))
       if (t2.length >= 2) {
         const c1 = makeComp(state, 'challengers1', `Challengers ${region} · 第一赛段`, t2, region, 2)
@@ -246,6 +246,17 @@ export function setupSeason(state: GameState, notes?: string[]): void {
 }
 
 /**
+ * LEGACY — to be deleted with the rest of the `vct-2023` rulebook (M3).
+ *
+ * That rulebook is VALORANT's 2023 circuit, in which one region ran a
+ * domestic circuit instead of a league. No career in this game can reach it:
+ * there is no 2023 world and no save is ever created on `vct-2023`. The code
+ * below it is woven through the season flow, so it stays compiling on this
+ * placeholder until the League rulebooks replace the file's formats wholesale.
+ */
+const LEGACY_2023_DOMESTIC: Region = 'LPL'
+
+/**
  * LOCK//IN: every league side and the two strongest Chinese clubs in one
  * single-elimination bracket, seeded by strength. startBracket already
  * builds and advanceBracket already drives a 32-team knockout — 32强 to
@@ -253,8 +264,8 @@ export function setupSeason(state: GameState, notes?: string[]): void {
  * competition in the Kickoff slot, region-less.
  */
 function createLockIn(state: GameState): void {
-  const league = REGIONS.filter((r) => r !== 'China').flatMap((r) => tier1Of(state, r))
-  const china = tier1Of(state, 'China').slice(0, 2)
+  const league = REGIONS.filter((r) => r !== LEGACY_2023_DOMESTIC).flatMap((r) => tier1Of(state, r))
+  const china = tier1Of(state, LEGACY_2023_DOMESTIC).slice(0, 2)
   const field = [...league, ...china].sort((a, b) => (state.teams[b]?.rating ?? 0) - (state.teams[a]?.rating ?? 0))
   if (field.length < 8) return
   const comp = makeComp(state, 'kickoff', 'VCT LOCK//IN', field)
@@ -275,25 +286,37 @@ const byPoints = (state: GameState) => (x: string, y: string) =>
   || (state.teams[y]?.rating ?? 0) - (state.teams[x]?.rating ?? 0)
 
 /**
- * A Masters' twelve: each region's top three from the feeder stage. The four
- * winners wait in the playoffs; the four seconds and four thirds play the
- * Swiss, seeded so that round one crosses a second with a third.
+ * How the international fields are shared between six regions of unequal
+ * strength. Interim numbers, close to the real events' allocation; the League
+ * rulebooks (M3) replace them with each year's real slots.
+ *
+ * The mid-season event is twelve: two from every region. The champions of the
+ * four major regions wait in the playoffs; their runners-up and both sides
+ * from the two smaller regions play the Swiss first. The world championship
+ * is sixteen, weighted the way Worlds is.
  */
+export const MAJOR_REGIONS: Region[] = ['LPL', 'LCK', 'LEC', 'LCS']
+export const CHAMPIONS_SLOTS: Record<Region, number> = { LPL: 4, LCK: 4, LEC: 3, LCS: 2, LCP: 2, CBLOL: 1 }
+
 export function mastersField(state: GameState, feeder: StageKey): { byes: string[]; swiss: string[] } {
   if (rulebookOf(state).lockin) return mastersField2023(state)
   const byes: string[] = []
   const seconds: string[] = []
-  const thirds: string[] = []
+  const minor: string[] = []
   for (const region of REGIONS) {
     const comp = state.comps[compKey(feeder, region)]
     if (!comp?.finished.length) continue
-    const [a, b, c] = comp.finished
-    if (a) byes.push(a)
-    if (b) seconds.push(b)
-    if (c) thirds.push(c)
+    const [a, b] = comp.finished
+    if (MAJOR_REGIONS.includes(region)) {
+      if (a) byes.push(a)
+      if (b) seconds.push(b)
+    } else {
+      if (a) minor.push(a)
+      if (b) minor.push(b)
+    }
   }
   const cmp = byPoints(state)
-  return { byes: byes.sort(cmp), swiss: [...seconds.sort(cmp), ...thirds.sort(cmp)] }
+  return { byes: byes.sort(cmp), swiss: [...seconds.sort(cmp), ...minor.sort(cmp)] }
 }
 
 /**
@@ -305,7 +328,7 @@ export function mastersField(state: GameState, feeder: StageKey): { byes: string
  */
 function mastersField2023(state: GameState): { byes: string[]; swiss: string[] } {
   const cmp = byPoints(state)
-  const leagues = REGIONS.filter((r) => r !== 'China')
+  const leagues = REGIONS.filter((r) => r !== LEGACY_2023_DOMESTIC)
   const byes: string[] = []
   const rest: string[] = []
   for (const region of leagues) {
@@ -337,12 +360,12 @@ function mastersField2023(state: GameState): { byes: string[]; swiss: string[] }
       const i = rest.indexOf(lockin)
       if (i >= 0) rest.splice(i, 1)
     }
-    if (region !== 'China' && place >= 0 && place <= 2) {
+    if (region !== LEGACY_2023_DOMESTIC && place >= 0 && place <= 2) {
       const fourth = comp?.finished[3]
       if (fourth) rest.push(fourth)
     }
   }
-  const cn = state.comps[compKey('stage1', 'China')]
+  const cn = state.comps[compKey('stage1', LEGACY_2023_DOMESTIC)]
   for (const t of (cn?.finished ?? []).filter((t) => !byes.includes(t)).slice(0, 2)) rest.push(t)
   while (byes.length > 4) rest.unshift(byes.pop()!)
   return { byes: byes.sort(cmp), swiss: rest.sort(cmp).slice(0, 8) }
@@ -360,15 +383,15 @@ function createLcqs(state: GameState, day: number): void {
     const key = compKey('stage2', region)
     if (state.comps[key]) continue
     const all = tier1Of(state, region)
-    const through = region === 'China' ? [] : all.slice().sort(byPoints(state)).slice(0, 3)
+    const through = region === LEGACY_2023_DOMESTIC ? [] : all.slice().sort(byPoints(state)).slice(0, 3)
     const field = all.filter((t) => !through.includes(t)).sort(byPoints(state))
     if (field.length < 2) continue
-    const comp = makeComp(state, 'stage2', region === 'China' ? '冠军赛中国资格赛' : `${region} LCQ`, field, region, 1)
+    const comp = makeComp(state, 'stage2', region === LEGACY_2023_DOMESTIC ? '冠军赛中国资格赛' : `${region} LCQ`, field, region, 1)
     comp.plannedStart = day
     state.fixtures.push(...startBracket(comp, field, 'stage2', day, 3))
     state.news.push({
       day: state.day, kind: 'league', important: region === state.teams[state.myTeam]?.region,
-      text: `${comp.name}名单：${field.map((t) => state.teams[t]?.name).join('、')}${region === 'China' ? '，前三名去 Champions。' : '，冠军拿最后一个 Champions 名额。'}`,
+      text: `${comp.name}名单：${field.map((t) => state.teams[t]?.name).join('、')}${region === LEGACY_2023_DOMESTIC ? '，前三名去 Champions。' : '，冠军拿最后一个 Champions 名额。'}`,
     })
   }
 }
@@ -389,9 +412,9 @@ export function championsField(state: GameState): Record<Region, string[]> {
     for (const region of REGIONS) {
       const all = tier1Of(state, region)
       const lcq = state.comps[compKey('stage2', region)]
-      if (region === 'China') {
+      if (region === LEGACY_2023_DOMESTIC) {
         // a Chinese Tokyo champion is China's extra place, as any league's would be
-        const cnTokyo = tokyo && state.teams[tokyo]?.region === 'China' ? tokyo : undefined
+        const cnTokyo = tokyo && state.teams[tokyo]?.region === LEGACY_2023_DOMESTIC ? tokyo : undefined
         const q = (lcq?.finished ?? []).filter((t) => t !== cnTokyo).slice(0, 3)
         out[region] = cnTokyo ? [cnTokyo, ...q] : q
         continue
@@ -409,13 +432,15 @@ export function championsField(state: GameState): Record<Region, string[]> {
     return out
   }
   for (const region of REGIONS) {
+    const slots = CHAMPIONS_SLOTS[region]
     const s2 = state.comps[compKey('stage2', region)]
-    const direct = (s2?.finished ?? []).slice(0, 2)
+    // the last split's finalists first, the rest of the region's places on the year's points
+    const direct = (s2?.finished ?? []).slice(0, Math.min(2, slots))
     const rest = Object.values(state.teams)
       .filter((t) => t.region === region && t.tier === 1 && !direct.includes(t.id))
       .map((t) => t.id)
       .sort(byPoints(state))
-      .slice(0, 2)
+      .slice(0, slots - direct.length)
     out[region] = [...direct, ...rest]
   }
   return out
@@ -469,7 +494,8 @@ function createChampions(state: GameState, name: string, day: number): void {
   comp.format = 'champions'
   comp.city = hostCity(state, 'champions')
   comp.plannedStart = day
-  if (drawRules(state) && all.length === 16) {
+  // the pot draw puts one side from each region in each group, which only an even field allows
+  if (drawRules(state) && all.length === 16 && REGIONS.every((r) => field[r].length === 4)) {
     // four pots — the four regions' first seeds, seconds, first and second
     // points qualifiers — drawn into A–D with one side per region per group;
     // held first, the groups and their ties written when it is finished

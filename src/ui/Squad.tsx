@@ -172,16 +172,16 @@ export default function Squad() {
               {me.starters
                 .map((id) => game.players[id])
                 .filter((x): x is Player => !!x && !x.isIgl)
-                .sort((a, b) => b.attrs.igl - a.attrs.igl)
+                .sort((a, b) => b.attrs.macro - a.attrs.macro)
                 .slice(0, 3)
                 .map((x) => (
                   <button key={x.id} className="sm" onClick={() => {
                     const msg = appointIgl(game, x.id)
                     commit()
-                    logActivity(game, 'squad', `任命 ${x.ign} 为队内指挥`)
+                    logActivity(game, 'squad', `任命 ${x.ign} 为队长`)
                     toast(msg)
                   }}>
-                    让 {x.ign} 指挥（指挥 {x.attrs.igl}）
+                    让 {x.ign} 当队长（运营 {x.attrs.macro}）
                   </button>
                 ))}
             </div>
@@ -242,7 +242,7 @@ export default function Squad() {
                         <span className="tag" style={{ opacity: iglsInSquad.length > 1 && p.id !== caller?.id ? 0.55 : 1 }}
                           title={iglsInSquad.length > 1
                             ? (p.id === caller?.id
-                              ? `主指挥（指挥 ${p.attrs.igl}），队里有 ${iglsInSquad.length} 名指挥出身的选手`
+                              ? `队长（运营 ${p.attrs.macro}）`
                               : `副指挥：${caller?.ign} 不在场时由他喊话，点开可任命为主指挥`)
                             : '队内指挥'}>
                           {iglsInSquad.length > 1 ? (p.id === caller?.id ? '主指挥' : '副指挥')

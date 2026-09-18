@@ -7,32 +7,42 @@
  * and the AI's alike, may hold at most IMPORT_MAX players whose nationality
  * belongs to another region, bench included.
  *
- * Origin is nationality, not the `region` field — that one records where a
- * player competes, which is by definition his club's region. A player with no
- * recorded nationality counts as native: an import rule should punish
+ * Origin is the player's competitive RESIDENCY where Leaguepedia records one —
+ * that is the thing the real rule is written on, and it is not nationality:
+ * Rookie is Korean and an LPL resident since December 2021. Nationality stands
+ * in where residency is not on record, and the `region` field after that. A
+ * player with neither counts as native: an import rule should punish
  * squad-building, never missing data. And the rule gates ACQUISITIONS only.
+ *
+ * The real rule caps the STARTING five, not the roster (a third import may
+ * sit on the bench). This one still counts the roster, which is slightly
+ * stricter; moving it to the lineup is on the list.
  * A squad already over the limit when the rule turns on keeps its players —
  * renewals are retention, not recruitment — it simply cannot add more.
  */
+import { REGION_CN } from './types'
 import type { GameState, Player, Region, Team } from './types'
 
 export const IMPORT_MAX = 2
 
-/** Mirrors NAT_REGION in scripts/build_world.py. */
-const NAT_REGION: Record<string, Region> = {
-  us: 'Americas', ca: 'Americas', br: 'Americas', ar: 'Americas',
-  cl: 'Americas', mx: 'Americas', pe: 'Americas', co: 'Americas',
-  uy: 'Americas', do: 'Americas', ec: 'Americas', bo: 'Americas',
-  cn: 'China', hk: 'China', mo: 'China', tw: 'China',
-  kr: 'Pacific', jp: 'Pacific', id: 'Pacific', th: 'Pacific',
-  ph: 'Pacific', sg: 'Pacific', my: 'Pacific', vn: 'Pacific',
-  in: 'Pacific', au: 'Pacific', nz: 'Pacific',
-  gb: 'EMEA', fr: 'EMEA', de: 'EMEA', es: 'EMEA', tr: 'EMEA',
-  ru: 'EMEA', pl: 'EMEA', se: 'EMEA', dk: 'EMEA', ua: 'EMEA',
-  it: 'EMEA', nl: 'EMEA', be: 'EMEA', fi: 'EMEA', no: 'EMEA',
-  pt: 'EMEA', cz: 'EMEA', ro: 'EMEA', gr: 'EMEA', il: 'EMEA',
-  ch: 'EMEA', at: 'EMEA', hu: 'EMEA', rs: 'EMEA', bg: 'EMEA',
-  kg: 'EMEA', kz: 'EMEA', az: 'EMEA', ma: 'EMEA', sa: 'EMEA',
+/**
+ * Which region a nationality belongs to, for players whose residency is not on
+ * record. Follows Riot's competitive regions as of 2026 (docs/调研-外援名额与居民规则.md):
+ * Hong Kong and Macao count with China; Taiwan, Vietnam, Japan, South-East Asia
+ * and Oceania are Asia-Pacific; Turkey, the CIS and MENA are EMEA since 2023;
+ * Latin America plays in the Brazilian conference's ecosystem.
+ */
+export const NAT_REGION: Record<string, Region> = {
+  cn: 'LPL', hk: 'LPL', mo: 'LPL',
+  kr: 'LCK',
+  tw: 'LCP', vn: 'LCP', jp: 'LCP', ph: 'LCP', sg: 'LCP', my: 'LCP', th: 'LCP', id: 'LCP', au: 'LCP', nz: 'LCP',
+  us: 'LCS', ca: 'LCS',
+  br: 'CBLOL', ar: 'CBLOL', cl: 'CBLOL', mx: 'CBLOL', pe: 'CBLOL', co: 'CBLOL', uy: 'CBLOL', do: 'CBLOL',
+  ec: 'CBLOL', ve: 'CBLOL', cr: 'CBLOL', py: 'CBLOL', bo: 'CBLOL',
+  gb: 'LEC', ie: 'LEC', fr: 'LEC', de: 'LEC', es: 'LEC', pt: 'LEC', it: 'LEC', nl: 'LEC', be: 'LEC', ch: 'LEC',
+  at: 'LEC', dk: 'LEC', se: 'LEC', no: 'LEC', fi: 'LEC', is: 'LEC', pl: 'LEC', cz: 'LEC', sk: 'LEC', hu: 'LEC',
+  ro: 'LEC', bg: 'LEC', gr: 'LEC', si: 'LEC', hr: 'LEC', rs: 'LEC', ba: 'LEC', mk: 'LEC', lt: 'LEC', lv: 'LEC',
+  ee: 'LEC', ua: 'LEC', ru: 'LEC', kz: 'LEC', am: 'LEC', tr: 'LEC', il: 'LEC', ma: 'LEC', eg: 'LEC', sa: 'LEC',
 }
 
 /**
@@ -49,7 +59,7 @@ const NAT_REGION: Record<string, Region> = {
  * is untouched.
  */
 export const originOf = (p: Player): Region =>
-  NAT_REGION[(p.nat ?? '').toLowerCase()] ?? p.region
+  p.residency ?? NAT_REGION[(p.nat ?? '').toLowerCase()] ?? p.region
 
 /** Is this player an import for this club? */
 export const isImport = (p: Player, team: Team): boolean =>
@@ -82,4 +92,4 @@ export function importBlock(state: GameState, teamId: string, p: Player): string
 }
 
 const regionCn = (r: Region): string =>
-  ({ Americas: '美洲', EMEA: '欧非中东', Pacific: '太平洋', China: '中国' })[r]
+  REGION_CN[r]

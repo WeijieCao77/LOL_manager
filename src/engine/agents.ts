@@ -10,10 +10,11 @@
  * Being on an agent he has actually played, rather than merely one from his
  * own role, is worth a little on top.
  */
-import { AGENT_ROLE, AGENTS, MAP_META, agentCn, canonAgent, canonAgents } from './content'
+import { AGENTS, MAP_META, agentCn, agentRoles, canonAgent, canonAgents } from './content'
 import { agentAvailable } from './eras'
 import { clamp, hashStr } from './rng'
 import { isArena } from './types'
+import { ROLES } from './types'
 import type { GameState, Player, Role } from './types'
 
 /**
@@ -25,19 +26,14 @@ export const IN_ROLE = 2 / 3
 /** How far off his job an agent puts a player: 1 = right at home, 0 = lost. */
 export function agentFit(p: Player, agent: string | undefined): number {
   if (!agent) return 1
-  const need = AGENT_ROLE[agent]
-  if (!need) return 1
+  const need = agentRoles(agent)
+  if (!need.length) return 1
   const covers = p.roles ?? [p.role]
-  // 自由人 in this data means "vlr never recorded a position", not "has none".
-  // Everything else in the engine treats such a player as able to plug any
-  // hole — autoStarters, the composition score — and the house rule is that
-  // missing data is never a penalty. He plays anything without complaint.
-  if (covers.includes('自由人')) return 1
   // 这个英雄本人练到哪了。练满就是练满，哪怕不是他的位置——一个决斗者把幽影
   // 练到 100，他上幽影就没有惩罚，这正是「代价必须能被消除」的意思。
   const pro = p.agentPro?.[agent] ?? 0
   // 本职的英雄有个地板：会打这个位置，就不至于完全不会用这个角色
-  const floor = covers.includes(need) ? IN_ROLE : 0
+  const floor = need.some((r) => covers.includes(r)) ? IN_ROLE : 0
   return Math.min(1, Math.max(floor, pro / 100))
 }
 
@@ -59,7 +55,7 @@ export function byPro(p: Player, agents: string[]): string[] {
 export function rolePeak(p: Player, role: Role): number {
   let best = 0
   for (const [a, v] of Object.entries(p.agentPro ?? {})) {
-    if (AGENT_ROLE[a] === role && v > best) best = v
+    if (agentRoles(a).includes(role) && v > best) best = v
   }
   return best
 }
@@ -144,7 +140,6 @@ export function seedAgentPro(p: Player): Record<string, number> {
   const meta = new Set(Object.values(MAP_META).flat())
   const seed = hashStr(p.id ?? p.ign ?? '')
   for (const role of (p.roles?.length ? p.roles : [p.role])) {
-    if (role === '自由人') continue
     const all = AGENTS[role] ?? []
     const width = hasTable ? 1 : POOL_PER_ROLE
     let want = width - all.filter((a) => (out[a] ?? 0) >= 100).length
@@ -188,13 +183,13 @@ export function agentWarn(p: Player, agent: string): string | null {
   const fit = agentFit(p, agent)
   if (fit >= 1) return null
   const loss = Math.round((1 - agentMod(p, agent)) * 100)
-  const need = AGENT_ROLE[agent]
+  const need = agentRoles(agent)
   const pro = Math.round(p.agentPro?.[agent] ?? 0)
-  const covers = (p.roles ?? [p.role]).includes(need)
+  const covers = need.some((r) => (p.roles ?? [p.role]).includes(r))
   if (pro > 0) return `${p.ign} 的${agentCn(agent)}只练到 ${pro}%，大约 −${loss}%`
   return covers
     ? `${p.ign} 没练过${agentCn(agent)}，大约 −${loss}%`
-    : `${p.ign} 不是${need}，也没练过${agentCn(agent)}，大约 −${loss}%`
+    : `${agentCn(agent)}是${need.join(' / ')}英雄，${p.ign} 不打这个位置，也没练过，大约 −${loss}%`
 }
 
 /**
@@ -254,7 +249,7 @@ export function autoAgents(
   // Cover the four jobs first, then fill. A comp is a set of jobs, not a
   // ranking, so who plays what is decided by matching before any agent is
   // handed out.
-  const CORE: Role[] = ['控场', '哨卫', '先锋', '决斗者']
+  const CORE: Role[] = ROLES
   const matched = matchRoles(five, CORE)
 
   for (const role of CORE) {
@@ -276,7 +271,7 @@ export function autoAgents(
     const known = (a: string) => isArena(state)
       ? man.agentPool.includes(a)
       : (man.agentPro?.[a] ?? 0) > 0
-    const onMap = meta.filter((a) => !used.has(a) && AGENT_ROLE[a] === role)
+    const onMap = meta.filter((a) => !used.has(a) && agentRoles(a).includes(role))
     // 开瓦包借用的世界要逐字走老路径：卡牌天梯的平衡是按那条链调过的，
     // 换一个回退顺序就会挪动卡组强弱（check_leagues 抓到过 83%）。
     const agent = isArena(state)
@@ -299,12 +294,12 @@ export function autoAgents(
       ? p.agentPool.includes(a)
       : (p.agentPro?.[a] ?? 0) > 0
     const pick =
-      meta.find((a) => !used.has(a) && mine.includes(AGENT_ROLE[a]) && knows(a))
+      meta.find((a) => !used.has(a) && agentRoles(a).some((r) => mine.includes(r)) && knows(a))
       // 中间这一层同样只在经理模式里加
       ?? (isArena(state) ? undefined
         : mine.flatMap((r) => AGENTS_NOW[r] ?? []).find((a) => !used.has(a) && knows(a)))
-      ?? meta.find((a) => !used.has(a) && mine.includes(AGENT_ROLE[a]))
-      ?? p.agentPool.find((a) => !used.has(a) && mine.includes(AGENT_ROLE[a]))
+      ?? meta.find((a) => !used.has(a) && agentRoles(a).some((r) => mine.includes(r)))
+      ?? p.agentPool.find((a) => !used.has(a) && agentRoles(a).some((r) => mine.includes(r)))
       ?? mine.flatMap((r) => AGENTS_NOW[r] ?? []).find((a) => !used.has(a))
       ?? meta.find((a) => !used.has(a))
     if (pick) { out[p.id] = pick; used.add(pick); taken.add(p.id) }
@@ -345,6 +340,7 @@ export function normalizeAgents(
 
 /** The roles a five is missing once every agent is assigned. */
 export const agentRoleGaps = (five: Player[], picks: Record<string, string>): Role[] => {
-  const have = new Set(five.map((p) => AGENT_ROLE[picks[p.id]]).filter(Boolean))
-  return (['决斗者', '先锋', '控场', '哨卫'] as Role[]).filter((r) => !have.has(r))
+  // a position is covered when the man sitting in it has picked a champion that is played there
+  return ROLES.filter((r) => !five.some((p) =>
+    (p.roles ?? [p.role]).includes(r) && agentRoles(picks[p.id] ?? '').includes(r)))
 }
