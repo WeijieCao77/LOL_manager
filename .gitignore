@@ -26,3 +26,6 @@ dist-server
 
 # reference clones of Val_Manager / LOL_breaker — read-only, not part of this game
 _ref/
+
+# research caches, rebuildable
+analysis/lol/cache/
