@@ -245,6 +245,10 @@ export function createNewGame(
     p.agentPro = seedAgentPro(p)
     delete p.agentUse
     delete p.agentR
+    // the pipeline's working (his real per-game numbers, how 运营 was put together) never
+    // changes and is in world.json for anyone who wants to show it: 52 KB a save for nothing
+    delete (p as { oe?: unknown }).oe
+    delete (p as { macroFrom?: unknown }).macroFrom
   }
 
   const teams: Record<string, Team> = {}

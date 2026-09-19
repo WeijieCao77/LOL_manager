@@ -1,0 +1,1733 @@
+{
+ "source": "Liquipedia (CC BY-SA 3.0)，选手页 Infobox",
+ "players": {
+  "PatkicaA": {
+   "born": null,
+   "country": "Serbia",
+   "name": "Aleksandar Stefanović",
+   "romanized": null
+  },
+  "Tao": {
+   "born": "2005-11-17",
+   "country": "Italy",
+   "name": "Alessandro Xu Hongtao",
+   "romanized": null
+  },
+  "Joinze": {
+   "born": null,
+   "country": "France",
+   "name": "Joao Da Fonseca",
+   "romanized": null
+  },
+  "Mafro": {
+   "born": "2002-10-13",
+   "country": "Croatia",
+   "name": "Lovre Čorić",
+   "romanized": null
+  },
+  "Kiki": {
+   "born": "2003-02-03",
+   "country": "France",
+   "name": "Killian Gauchey",
+   "romanized": null
+  },
+  "Sayn": {
+   "born": null,
+   "country": "Algeria",
+   "name": "طارق جغلاف",
+   "romanized": "Tarek Djoghlaf"
+  },
+  "Kuroneel": {
+   "born": "2002-09-17",
+   "country": "France",
+   "name": "Romain Poilane",
+   "romanized": null
+  },
+  "Improver": {
+   "born": null,
+   "country": "Morocco",
+   "name": "Imad Assafi",
+   "romanized": null
+  },
+  "Avarice": {
+   "born": null,
+   "country": "Bulgaria",
+   "name": "Александър Димитров",
+   "romanized": "Aleksandar Dimitrov"
+  },
+  "13": {
+   "born": "2003-06-20",
+   "country": "France",
+   "name": "Zayan Tareau",
+   "romanized": null
+  },
+  "Ryuk": {
+   "born": null,
+   "country": "Vietnam",
+   "name": "Võ Hoàng Lê Khang",
+   "romanized": null
+  },
+  "Mauki": {
+   "born": null,
+   "country": "Austria",
+   "name": "Felix Grohs",
+   "romanized": null
+  },
+  "Leon": {
+   "born": null,
+   "country": "Germany",
+   "name": "Leon Anton",
+   "romanized": null
+  },
+  "Nsurr": {
+   "born": null,
+   "country": "France",
+   "name": "Emilien Gergaud",
+   "romanized": null
+  },
+  "Abagnale": {
+   "born": null,
+   "country": "Turkey",
+   "name": "Semih Bilir",
+   "romanized": null
+  },
+  "Solid": {
+   "born": "1999-07-10",
+   "country": "Peru",
+   "name": "Diego Vallejo Trujillo",
+   "romanized": null
+  },
+  "Fisher": {
+   "born": "2004-07-05",
+   "country": "South Korea",
+   "name": "이정태",
+   "romanized": "Lee Jeong-tae"
+  },
+  "Marky": {
+   "born": "2002-09-23",
+   "country": "Spain",
+   "name": "Pedro José Serrano",
+   "romanized": null
+  },
+  "selenex": {
+   "born": null,
+   "country": "Spain",
+   "name": "Eric Lozano Gutiérrez",
+   "romanized": null
+  },
+  "Thien": {
+   "born": null,
+   "country": "Australia",
+   "name": "Romeo Tran",
+   "romanized": null
+  },
+  "Nyx": {
+   "born": null,
+   "country": "Spain",
+   "name": "Óscar Ruiz Vargas",
+   "romanized": null
+  },
+  "Hydra": {
+   "born": null,
+   "country": "Spain",
+   "name": "Raúl Moreno Valero",
+   "romanized": null
+  },
+  "Rayito": {
+   "born": null,
+   "country": "Spain",
+   "name": "Michael Curtet",
+   "romanized": null
+  },
+  "Legolas": {
+   "born": "2000-12-20",
+   "country": "Spain",
+   "name": "Sergio Vicente Gispert",
+   "romanized": null
+  },
+  "Unkn0wn": {
+   "born": null,
+   "country": "Greece",
+   "name": "Paris Fragkos",
+   "romanized": null
+  },
+  "Nash": {
+   "born": null,
+   "country": "Norway",
+   "name": "Alf-Kristian Sund",
+   "romanized": null
+  },
+  "WNTR": {
+   "born": null,
+   "country": "Germany",
+   "name": "Arne Winter",
+   "romanized": null
+  },
+  "Tayron": {
+   "born": null,
+   "country": "Turkey",
+   "name": "Uğurcan Doğan",
+   "romanized": null
+  },
+  "vayu": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Anders Hassager Beyer",
+   "romanized": "|birth_date="
+  },
+  "Menninkäinen": {
+   "born": null,
+   "country": "Finland",
+   "name": "Kaarle Kolehmainen",
+   "romanized": null
+  },
+  "Guvez": {
+   "born": "1998-12-10",
+   "country": "Sweden",
+   "name": "Lukas Gustavson",
+   "romanized": null
+  },
+  "krytybu": {
+   "born": null,
+   "country": "Norway",
+   "name": "Krystian Tyburczy",
+   "romanized": null
+  },
+  "ugandan fighter": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Alexander Ølholm",
+   "romanized": null
+  },
+  "Lulas": {
+   "born": null,
+   "country": "Portugal",
+   "name": "Luís Azevedo",
+   "romanized": null
+  },
+  "Oguzkhan": {
+   "born": null,
+   "country": "Turkey",
+   "name": "Oguzhan Delihasanoğlu",
+   "romanized": null
+  },
+  "Cast": {
+   "born": null,
+   "country": "Sweden",
+   "name": "Daniel Manousian",
+   "romanized": null
+  },
+  "Markus": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Markus Westerberg",
+   "romanized": null
+  },
+  "bicas": {
+   "born": null,
+   "country": "Portugal",
+   "name": "Pedro Simões",
+   "romanized": null
+  },
+  "NoWay": {
+   "born": "1997-03-05",
+   "country": "Vietnam",
+   "name": "Nguyễn Vũ Long",
+   "romanized": null
+  },
+  "Harbo": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Emil Harbo",
+   "romanized": null
+  },
+  "Bisgaard": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Sebastian Sørensen",
+   "romanized": null
+  },
+  "Lofti": {
+   "born": null,
+   "country": "Sweden",
+   "name": "Olle Årebäck Eriksson",
+   "romanized": null
+  },
+  "Zuhy": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Sami Tariq",
+   "romanized": null
+  },
+  "Ag0nyPain": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Jeppe Nikolaj",
+   "romanized": null
+  },
+  "Unicow": {
+   "born": null,
+   "country": "Sweden",
+   "name": "Simon Larsson",
+   "romanized": null
+  },
+  "RustySniper": {
+   "born": null,
+   "country": "Sweden",
+   "name": "Rahand Akram",
+   "romanized": null
+  },
+  "Faetski": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Jakob Sjontoft Skovmand",
+   "romanized": null
+  },
+  "Goldenpenny": {
+   "born": null,
+   "country": "Sweden",
+   "name": "Hugo Pilström",
+   "romanized": null
+  },
+  "Baki": {
+   "born": null,
+   "country": "Serbia",
+   "name": "Nikola Bakić",
+   "romanized": null
+  },
+  "Devn": {
+   "born": "2001-06-03",
+   "country": "Germany",
+   "name": "Nam Nguyen",
+   "romanized": null
+  },
+  "BunnyBeast": {
+   "born": null,
+   "country": "Sweden",
+   "name": "Simon Nord",
+   "romanized": null
+  },
+  "MadsF": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Mads Færgemann",
+   "romanized": null
+  },
+  "Don Ponk": {
+   "born": null,
+   "country": "Sweden",
+   "name": "Mohammed Kramdi",
+   "romanized": null
+  },
+  "Boltox": {
+   "born": null,
+   "country": "Estonia",
+   "name": "Arlet Semre",
+   "romanized": null
+  },
+  "Dovendyr": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Malte Olsen",
+   "romanized": null
+  },
+  "Luke": {
+   "born": null,
+   "country": "Germany",
+   "name": "Pascal Schulth",
+   "romanized": null
+  },
+  "FredSpaghet": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Frederik Topbjerg Bisgaard",
+   "romanized": null
+  },
+  "Akkers": {
+   "born": null,
+   "country": "United Kingdom",
+   "name": "Harry Akrill",
+   "romanized": null
+  },
+  "Peanut": {
+   "born": "1998-02-03",
+   "country": "South Korea",
+   "name": "한왕호",
+   "romanized": "Han Wang-ho"
+  },
+  "Levi": {
+   "born": "1997-11-18",
+   "country": "Vietnam",
+   "name": "Đỗ Duy Khánh",
+   "romanized": null
+  },
+  "pr1me": {
+   "born": null,
+   "country": "Turkey",
+   "name": "Mustafa Bilici",
+   "romanized": null
+  },
+  "Kokos": {
+   "born": null,
+   "country": "Poland",
+   "name": "Dominik Krzoska",
+   "romanized": null
+  },
+  "Zankiller": {
+   "born": null,
+   "country": "Morocco",
+   "name": "Abdellah Zandar",
+   "romanized": null
+  },
+  "Fame": {
+   "born": "1998-03-12",
+   "country": "Greece",
+   "name": "Βασίλης Αμοιρίδης",
+   "romanized": "Vasilis Amiridis"
+  },
+  "Kituruken": {
+   "born": null,
+   "country": "Turkey",
+   "name": "Umut Ceylan",
+   "romanized": null
+  },
+  "hammerul": {
+   "born": null,
+   "country": "Romania",
+   "name": "Amed Yildiz",
+   "romanized": "|birth_date="
+  },
+  "Mentos": {
+   "born": null,
+   "country": "Greece",
+   "name": "Alexandros Papadimitriou",
+   "romanized": null
+  },
+  "Alvanai": {
+   "born": null,
+   "country": "Albania",
+   "name": "Giannis Hasanai",
+   "romanized": null
+  },
+  "Alex": {
+   "born": "2000-01-22",
+   "country": "Taiwan",
+   "name": "陳煜明",
+   "romanized": "Chen Yu-ming"
+  },
+  "Druxy": {
+   "born": null,
+   "country": "Greece",
+   "name": "Apostolis Kabosos",
+   "romanized": null
+  },
+  "SM": {
+   "born": null,
+   "country": "Greece",
+   "name": "Στέλιος Μαυράκης",
+   "romanized": "Stelios Mavrakis"
+  },
+  "K1ng": {
+   "born": "1998-02-03",
+   "country": "Australia",
+   "name": "Calvin Truong",
+   "romanized": "|birth_date=1998-02-03"
+  },
+  "Booshi": {
+   "born": null,
+   "country": "France",
+   "name": "Théo Mouchiroud",
+   "romanized": null
+  },
+  "Evangelyne": {
+   "born": null,
+   "country": "Belgium",
+   "name": "Pierre Sauvage",
+   "romanized": null
+  },
+  "Speedy1": {
+   "born": "1999-09-21",
+   "country": "Greece",
+   "name": "Λουκάς Πρέκας",
+   "romanized": "Loukas Prekas"
+  },
+  "Lagas": {
+   "born": null,
+   "country": "Greece",
+   "name": "|romanized_name=Lazaros Fostiropoulos",
+   "romanized": "Lazaros Fostiropoulos"
+  },
+  "Send0o": {
+   "born": "1996-07-12",
+   "country": "Spain",
+   "name": "Rosendo Fuentes",
+   "romanized": null
+  },
+  "zorenous": {
+   "born": null,
+   "country": "Australia",
+   "name": "Cameron Abbott",
+   "romanized": null
+  },
+  "Pasu": {
+   "born": null,
+   "country": "Germany",
+   "name": "Paul Hildebrandt",
+   "romanized": null
+  },
+  "Habubu": {
+   "born": null,
+   "country": "Germany",
+   "name": "Seyit Cüce",
+   "romanized": null
+  },
+  "Reptile": {
+   "born": null,
+   "country": "Germany",
+   "name": "Jona Fritz",
+   "romanized": null
+  },
+  "Looki": {
+   "born": "2006-03-18",
+   "country": "Germany",
+   "name": "Rocco Palfi",
+   "romanized": null
+  },
+  "LIMIT": {
+   "born": "1997-12-27",
+   "country": "Croatia",
+   "name": "Dino Tot",
+   "romanized": null
+  },
+  "Visdom": {
+   "born": "1995-02-28",
+   "country": "Denmark",
+   "name": "Benjamin Ruberg Larsen",
+   "romanized": null
+  },
+  "Lorenz": {
+   "born": null,
+   "country": "Germany",
+   "name": "Lorenz Majorek",
+   "romanized": null
+  },
+  "Rychly": {
+   "born": null,
+   "country": "Germany",
+   "name": "Kevin Rychly",
+   "romanized": null
+  },
+  "Random": {
+   "born": "2001-12-30",
+   "country": "Czech Republic",
+   "name": "Adam Grepl",
+   "romanized": null
+  },
+  "Azuka": {
+   "born": null,
+   "country": "Germany",
+   "name": "Noa Azuka Asenime",
+   "romanized": null
+  },
+  "Fooneses": {
+   "born": null,
+   "country": "Germany",
+   "name": "Hannes Hollmann",
+   "romanized": null
+  },
+  "Yen": {
+   "born": null,
+   "country": "Switzerland",
+   "name": "Fadi Behnam",
+   "romanized": null
+  },
+  "Seneca": {
+   "born": null,
+   "country": "Sweden",
+   "name": "Simon Bucht",
+   "romanized": null
+  },
+  "Jeykup": {
+   "born": null,
+   "country": "Turkey",
+   "name": "Yakup Enes Ermişer",
+   "romanized": null
+  },
+  "Archfiend": {
+   "born": null,
+   "country": "Bulgaria",
+   "name": "Антони Петков",
+   "romanized": "Anthony Petkov"
+  },
+  "Diobello": {
+   "born": null,
+   "country": "Italy",
+   "name": "Daniel Zgura",
+   "romanized": null
+  },
+  "Raffy": {
+   "born": null,
+   "country": "Italy",
+   "name": "Raffaele Livigni",
+   "romanized": null
+  },
+  "SkaR": {
+   "born": null,
+   "country": "Italy",
+   "name": "Alessandro Torresi",
+   "romanized": null
+  },
+  "Fragola": {
+   "born": null,
+   "country": "Italy",
+   "name": "Alessandro Zappala",
+   "romanized": null
+  },
+  "Metroflox": {
+   "born": null,
+   "country": "France",
+   "name": "Florent Broucke",
+   "romanized": null
+  },
+  "Mario": {
+   "born": null,
+   "country": "Italy",
+   "name": "Mario D'Agostino",
+   "romanized": null
+  },
+  "Jekko": {
+   "born": null,
+   "country": "Georgia",
+   "name": "Jemal Revazishvili",
+   "romanized": null
+  },
+  "Inzuh": {
+   "born": null,
+   "country": "Italy",
+   "name": "Vincenzo Battaglia",
+   "romanized": null
+  },
+  "Divine": {
+   "born": null,
+   "country": "Italy",
+   "name": "Alex Corona",
+   "romanized": null
+  },
+  "Sadaz": {
+   "born": null,
+   "country": "Italy",
+   "name": "Antonio Scalese",
+   "romanized": null
+  },
+  "Xen0gan": {
+   "born": null,
+   "country": "Italy",
+   "name": "Andrea Morabito",
+   "romanized": null
+  },
+  "Shack": {
+   "born": null,
+   "country": "Italy",
+   "name": "Umberto Capurro",
+   "romanized": null
+  },
+  "DejaVu": {
+   "born": null,
+   "country": "Italy",
+   "name": "Andrea Declara",
+   "romanized": null
+  },
+  "Sharon": {
+   "born": null,
+   "country": "Turkey",
+   "name": "Muhammed Mirza Esen",
+   "romanized": null
+  },
+  "Xero": {
+   "born": "1988-07-19",
+   "country": "South Korea",
+   "name": "신혁",
+   "romanized": "Sin Hyeok"
+  },
+  "Crem": {
+   "born": null,
+   "country": "Turkey",
+   "name": "Ozan Tunalı",
+   "romanized": null
+  },
+  "Kyte": {
+   "born": null,
+   "country": "Italy",
+   "name": "Luca Angelo Amorotti",
+   "romanized": null
+  },
+  "OrthoZero": {
+   "born": null,
+   "country": "Italy",
+   "name": "Andrea Orefice",
+   "romanized": null
+  },
+  "Darkchri": {
+   "born": null,
+   "country": "Italy",
+   "name": "Christian Devo",
+   "romanized": null
+  },
+  "Pocovirtuoso": {
+   "born": null,
+   "country": "Italy",
+   "name": "رضا سيد أحمدي",
+   "romanized": "Reza Seyed Ahmadi"
+  },
+  "CHEF": {
+   "born": null,
+   "country": "Turkey",
+   "name": "Ali Durgut",
+   "romanized": null
+  },
+  "Cape": {
+   "born": null,
+   "country": "Turkey",
+   "name": "Bedirhan Çalişkan",
+   "romanized": null
+  },
+  "Creal": {
+   "born": null,
+   "country": "Turkey",
+   "name": "Bora Oruç",
+   "romanized": null
+  },
+  "Mean": {
+   "born": "1999-04-27",
+   "country": "Turkey",
+   "name": "Ahmet Cihan Battal",
+   "romanized": null
+  },
+  "Perle": {
+   "born": null,
+   "country": "Japan",
+   "name": "Seiju Takasu",
+   "romanized": null
+  },
+  "udon": {
+   "born": null,
+   "country": "Japan",
+   "name": "Mashahiro Adachi",
+   "romanized": null
+  },
+  "Rando": {
+   "born": null,
+   "country": "Japan",
+   "name": "Saeki Tada",
+   "romanized": null
+  },
+  "PonG": {
+   "born": null,
+   "country": "Japan",
+   "name": "Ryota Kawaguchi",
+   "romanized": null
+  },
+  "antana": {
+   "born": null,
+   "country": "Japan",
+   "name": "Ryuujyu Tanaka",
+   "romanized": null
+  },
+  "iu": {
+   "born": null,
+   "country": "China",
+   "name": "Chuhan Jin",
+   "romanized": null
+  },
+  "Potential": {
+   "born": null,
+   "country": "South Korea",
+   "name": "이시형",
+   "romanized": "Lee Si-hyung"
+  },
+  "Norwegian": {
+   "born": null,
+   "country": "France",
+   "name": "Matthieu Sauvage",
+   "romanized": null
+  },
+  "ss1": {
+   "born": null,
+   "country": "Japan",
+   "name": "Ryuma Nakanishi",
+   "romanized": null
+  },
+  "Tima": {
+   "born": null,
+   "country": "Japan",
+   "name": "Manato Iwami",
+   "romanized": null
+  },
+  "HRK": {
+   "born": null,
+   "country": "Japan",
+   "name": "Hiroki Lida",
+   "romanized": null
+  },
+  "Ham": {
+   "born": null,
+   "country": "Japan",
+   "name": "世羅 涼介",
+   "romanized": "Ryosuke Sara"
+  },
+  "Fubuki": {
+   "born": null,
+   "country": "Japan",
+   "name": "Masaki Ishizawa",
+   "romanized": null
+  },
+  "Grit": {
+   "born": null,
+   "country": "Japan",
+   "name": "Kazuki Aoshima",
+   "romanized": null
+  },
+  "Competitive": {
+   "born": null,
+   "country": "Japan",
+   "name": "Kouji Murimura",
+   "romanized": "|birth_date="
+  },
+  "Eria": {
+   "born": null,
+   "country": "Japan",
+   "name": "Takumi Ohashi",
+   "romanized": "|birth_date="
+  },
+  "Ravvy": {
+   "born": null,
+   "country": "Japan",
+   "name": "Kotarou Yoshida",
+   "romanized": null
+  },
+  "chico": {
+   "born": null,
+   "country": "Japan",
+   "name": "Hibiki Yamane",
+   "romanized": null
+  },
+  "Sunleaf": {
+   "born": null,
+   "country": "Japan",
+   "name": "Shuntaro Shimane",
+   "romanized": null
+  },
+  "dresscode": {
+   "born": null,
+   "country": "Japan",
+   "name": "Yoshiki Hashimoto",
+   "romanized": null
+  },
+  "MayR": {
+   "born": null,
+   "country": "Japan",
+   "name": "Kumagai Shunsuke",
+   "romanized": null
+  },
+  "Godot": {
+   "born": null,
+   "country": "South Korea",
+   "name": "송승주",
+   "romanized": "Song Seung-ju"
+  },
+  "Archer": {
+   "born": "1998-09-17",
+   "country": "South Korea",
+   "name": "이근희",
+   "romanized": "Lee Keun-hee"
+  },
+  "Vox": {
+   "born": null,
+   "country": "South Korea",
+   "name": "김유진",
+   "romanized": "Kim Yu-Jin"
+  },
+  "Fluid": {
+   "born": null,
+   "country": "Japan",
+   "name": "Yutaka Inoue",
+   "romanized": "|birth_date="
+  },
+  "koisi": {
+   "born": null,
+   "country": "Japan",
+   "name": "Kodai Fukuda",
+   "romanized": "|birth_date="
+  },
+  "Taiyaki": {
+   "born": null,
+   "country": "Japan",
+   "name": "Tojo Taishin",
+   "romanized": null
+  },
+  "Kurahuto": {
+   "born": null,
+   "country": "Japan",
+   "name": "|romanized_name=Masamune Hosokawa",
+   "romanized": "Masamune Hosokawa"
+  },
+  "Sh1vq": {
+   "born": null,
+   "country": "Japan",
+   "name": "Shusuke Takato",
+   "romanized": null
+  },
+  "anakin": {
+   "born": null,
+   "country": "Japan",
+   "name": "Haruhisa Yamamoto",
+   "romanized": null
+  },
+  "raku": {
+   "born": null,
+   "country": "China",
+   "name": "Rong Le",
+   "romanized": null
+  },
+  "random": {
+   "born": "2001-12-30",
+   "country": "Czech Republic",
+   "name": "Adam Grepl",
+   "romanized": null
+  },
+  "M G": {
+   "born": "2002-06-03",
+   "country": "South Korea",
+   "name": "이지훈",
+   "romanized": "Lee Ji-hoon"
+  },
+  "Trigo": {
+   "born": "1999-09-24",
+   "country": "Brazil",
+   "name": "Matheus Trigo",
+   "romanized": null
+  },
+  "Elkinho": {
+   "born": null,
+   "country": "Brazil",
+   "name": "Elker Marques",
+   "romanized": null
+  },
+  "Blueboar": {
+   "born": "2005-02-02",
+   "country": "Hungary",
+   "name": "Tibor Jobban",
+   "romanized": null
+  },
+  "Sikterr": {
+   "born": null,
+   "country": "Croatia",
+   "name": "Roko Karamatić",
+   "romanized": null
+  },
+  "Death": {
+   "born": null,
+   "country": "Bulgaria",
+   "name": "Lyuboslav Nedelev",
+   "romanized": null
+  },
+  "Renewal": {
+   "born": null,
+   "country": "France",
+   "name": "Tom Carvalho",
+   "romanized": null
+  },
+  "Pesho": {
+   "born": "2002-05-13",
+   "country": "North Macedonia",
+   "name": "Nikola Peshevski",
+   "romanized": null
+  },
+  "Lagolinas": {
+   "born": null,
+   "country": "Hungary",
+   "name": "Márton Petrucz",
+   "romanized": null
+  },
+  "Foxie": {
+   "born": "2002-09-10",
+   "country": "Slovenia",
+   "name": "Matija Vidovič Žmauc",
+   "romanized": null
+  },
+  "Ruby": {
+   "born": "1998-08-11",
+   "country": "South Korea",
+   "name": "이솔민",
+   "romanized": "Lee Sol-min"
+  },
+  "CROmpir": {
+   "born": null,
+   "country": "croatia",
+   "name": "Nikola Jagustin",
+   "romanized": null
+  },
+  "STANIK": {
+   "born": null,
+   "country": "Czechia",
+   "name": "Stanislav Hynk",
+   "romanized": null
+  },
+  "Kryzik": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Lasse Kruse",
+   "romanized": null
+  },
+  "Yuki": {
+   "born": null,
+   "country": "Japan",
+   "name": "高橋由紀",
+   "romanized": "Yuki Takahashi"
+  },
+  "Endless": {
+   "born": "1998-01-20",
+   "country": "China",
+   "name": "许昊",
+   "romanized": "Xu Hao"
+  },
+  "Danilo": {
+   "born": null,
+   "country": "croatia",
+   "name": "Deni Prtenjača",
+   "romanized": null
+  },
+  "Bala": {
+   "born": null,
+   "country": "Hungary",
+   "name": "Aron Balogh",
+   "romanized": null
+  },
+  "MegaJ": {
+   "born": null,
+   "country": "Serbia",
+   "name": "Luka Janković",
+   "romanized": null
+  },
+  "Draxo5": {
+   "born": null,
+   "country": "Bulgaria",
+   "name": "Denis Borisov",
+   "romanized": null
+  },
+  "Rilski": {
+   "born": null,
+   "country": "Bulgaria",
+   "name": "Ivan Mihaylov",
+   "romanized": null
+  },
+  "Vlaren": {
+   "born": "2000-06-11",
+   "country": "Czechia",
+   "name": "Vladimir Vývoda",
+   "romanized": null
+  },
+  "Enoch": {
+   "born": null,
+   "country": "Croatia",
+   "name": "Dilan Krnjak",
+   "romanized": null
+  },
+  "Kellie": {
+   "born": null,
+   "country": "Spain",
+   "name": "Joel Rodríguez Pérez",
+   "romanized": null
+  },
+  "Liweier": {
+   "born": null,
+   "country": "China",
+   "name": "相富乐",
+   "romanized": "Xiang Fule"
+  },
+  "Minji": {
+   "born": "2001-01-17",
+   "country": "Taiwan",
+   "name": "呂柏緯",
+   "romanized": "Lu Po-wei"
+  },
+  "Yuhe": {
+   "born": null,
+   "country": "Taiwan",
+   "name": "黃星維",
+   "romanized": "Huang Xing-Wei"
+  },
+  "Bwater": {
+   "born": "2004-10-21",
+   "country": "Taiwan",
+   "name": "鄭世博",
+   "romanized": "Cheng Shih-Po"
+  },
+  "Bisk": {
+   "born": null,
+   "country": "Netherlands",
+   "name": "Lars de Haan",
+   "romanized": null
+  },
+  "Emperor": {
+   "born": "1993-06-07",
+   "country": "South Korea",
+   "name": "김진현",
+   "romanized": "Kim Jin-hyun"
+  },
+  "Guertas": {
+   "born": null,
+   "country": "France",
+   "name": "Romain Polo",
+   "romanized": null
+  },
+  "Fishue": {
+   "born": null,
+   "country": "Germany",
+   "name": "Niklas Kraft",
+   "romanized": null
+  },
+  "Luncafoer": {
+   "born": null,
+   "country": "Netherlands",
+   "name": "Hendrik van Dijkhuizen",
+   "romanized": null
+  },
+  "Hatred": {
+   "born": "1997-12-10",
+   "country": "Bulgaria",
+   "name": "Веселин Попов",
+   "romanized": "Veselin Popov"
+  },
+  "Artanis": {
+   "born": null,
+   "country": "France",
+   "name": "Julien Poisson",
+   "romanized": null
+  },
+  "Dolis": {
+   "born": null,
+   "country": "Czechia",
+   "name": "Petr Dolejš",
+   "romanized": null
+  },
+  "Painful": {
+   "born": null,
+   "country": "Sweden",
+   "name": "Kevin Druga",
+   "romanized": null
+  },
+  "Unchained": {
+   "born": null,
+   "country": "Germany",
+   "name": "Eric Wendler",
+   "romanized": null
+  },
+  "rym": {
+   "born": null,
+   "country": "Venezuela",
+   "name": "Rym Salloum",
+   "romanized": null
+  },
+  "Asza": {
+   "born": null,
+   "country": "Netherlands",
+   "name": "Patrick Jacobs",
+   "romanized": null
+  },
+  "Khaydarin": {
+   "born": null,
+   "country": "Germany",
+   "name": "Jan Störmer",
+   "romanized": null
+  },
+  "Mikano": {
+   "born": null,
+   "country": "Netherlands",
+   "name": "Wouter Hendriks",
+   "romanized": null
+  },
+  "Fede": {
+   "born": null,
+   "country": "Spain",
+   "name": "Federico Alemany Antón",
+   "romanized": null
+  },
+  "Polychiki": {
+   "born": null,
+   "country": "France",
+   "name": "Matteo Urvoaz",
+   "romanized": null
+  },
+  "Luis": {
+   "born": null,
+   "country": "Germany",
+   "name": "Luis Busch",
+   "romanized": null
+  },
+  "Strongside": {
+   "born": null,
+   "country": "Netherlands",
+   "name": "Oscar van Kesteren",
+   "romanized": null
+  },
+  "Sankaizer": {
+   "born": null,
+   "country": "Russia",
+   "name": "|romanized_name=Mihail Cyrenjapov",
+   "romanized": "Mihail Cyrenjapov"
+  },
+  "Fred": {
+   "born": null,
+   "country": "Portugal",
+   "name": "Frederico Galvão",
+   "romanized": null
+  },
+  "Narttaker": {
+   "born": null,
+   "country": "Portugal",
+   "name": "Nuno Matias",
+   "romanized": null
+  },
+  "RapMonsters": {
+   "born": null,
+   "country": "Portugal",
+   "name": "Gabriel Rocha",
+   "romanized": null
+  },
+  "RealR": {
+   "born": null,
+   "country": "Portugal",
+   "name": "Rafael Carvalho",
+   "romanized": null
+  },
+  "Ze Luis": {
+   "born": null,
+   "country": "Portugal",
+   "name": "José Martins",
+   "romanized": null
+  },
+  "Rozpier": {
+   "born": null,
+   "country": "Portugal",
+   "name": "Matthieu Dos Santos",
+   "romanized": null
+  },
+  "Lostboy": {
+   "born": null,
+   "country": "Portugal",
+   "name": "André Tavares",
+   "romanized": null
+  },
+  "Rutzou": {
+   "born": null,
+   "country": "Denmark",
+   "name": "Patrick Rützou",
+   "romanized": null
+  },
+  "handm": {
+   "born": null,
+   "country": "Saudi Arabia",
+   "name": "هاشم باروم",
+   "romanized": "Hashem Baroum"
+  },
+  "Darky": {
+   "born": null,
+   "country": "Portugal",
+   "name": "Nuno Esteves",
+   "romanized": null
+  },
+  "Chakroun": {
+   "born": null,
+   "country": "Tunisia",
+   "name": "Raai Chakroun",
+   "romanized": null
+  },
+  "moe": {
+   "born": null,
+   "country": "Palestine",
+   "name": "معين حسين",
+   "romanized": "Mo'en Hussein"
+  },
+  "ShizuOo": {
+   "born": null,
+   "country": "Egypt",
+   "name": "Younis Mahamoud",
+   "romanized": null
+  },
+  "Exan": {
+   "born": null,
+   "country": "Tunisia",
+   "name": "صفوان بن بوبكر",
+   "romanized": "Safwen Ben Boubake"
+  },
+  "Akashi": {
+   "born": null,
+   "country": "Morocco",
+   "name": "أسامة شرادي",
+   "romanized": "Oussama Cherradi"
+  },
+  "Deceiving": {
+   "born": null,
+   "country": "Egypt",
+   "name": "|romanized_name=Ramy Refaat",
+   "romanized": "Ramy Refaat"
+  },
+  "VAEII": {
+   "born": "2006-08-16",
+   "country": "Egypt",
+   "name": "Ahmed Ashraf",
+   "romanized": null
+  },
+  "Peaker": {
+   "born": null,
+   "country": "Austria",
+   "name": "Raphael Alt",
+   "romanized": null
+  },
+  "Aeru": {
+   "born": null,
+   "country": "Tunisia",
+   "name": "Oussama Ben Amara",
+   "romanized": null
+  },
+  "Jalleba": {
+   "born": null,
+   "country": "Tunisia",
+   "name": "Ala Jalleb",
+   "romanized": "|birth_date="
+  },
+  "Frozen": {
+   "born": "1994-11-04",
+   "country": "South Korea",
+   "name": "김태일",
+   "romanized": "Kim Tae-il"
+  },
+  "Biskoo": {
+   "born": null,
+   "country": "Egypt",
+   "name": "وسف معتز",
+   "romanized": "Youssef Moataz"
+  },
+  "sas": {
+   "born": null,
+   "country": "Saudi Arabia",
+   "name": "|romanized_name=Sahal Waggass",
+   "romanized": "Sahal Waggass"
+  },
+  "Iheb": {
+   "born": null,
+   "country": "Tunisia",
+   "name": "Iheb Arif",
+   "romanized": null
+  },
+  "Zaremba": {
+   "born": null,
+   "country": "Poland",
+   "name": "Maciej Zaremba",
+   "romanized": "|birth_date="
+  },
+  "Aymen": {
+   "born": null,
+   "country": "Algeria",
+   "name": "Aymen Zeghina",
+   "romanized": null
+  },
+  "Sivvy": {
+   "born": null,
+   "country": "Egypt",
+   "name": "Fady Ibrahim",
+   "romanized": null
+  },
+  "Însane": {
+   "born": null,
+   "country": "Tunisia",
+   "name": "Taieb Kraiem",
+   "romanized": null
+  },
+  "frajgo": {
+   "born": null,
+   "country": "Poland",
+   "name": "Krzysztof Chibowski",
+   "romanized": null
+  },
+  "Guli": {
+   "born": null,
+   "country": "Poland",
+   "name": "Igor Oblizajek",
+   "romanized": null
+  },
+  "Peto": {
+   "born": null,
+   "country": "Slovakia",
+   "name": "Peter Kollár",
+   "romanized": null
+  },
+  "Loers": {
+   "born": null,
+   "country": "Mexico",
+   "name": "Héctor Serranía",
+   "romanized": null
+  },
+  "Vares": {
+   "born": null,
+   "country": "Mexico",
+   "name": "Adrián Olivares Olivares",
+   "romanized": null
+  },
+  "Solorio": {
+   "born": null,
+   "country": "Mexico",
+   "name": "José Manuel Solorio Gutiérrez",
+   "romanized": null
+  },
+  "Nannini": {
+   "born": null,
+   "country": "Venezuela",
+   "name": "David Gabriel Nannini Torres",
+   "romanized": null
+  },
+  "VirusFx": {
+   "born": null,
+   "country": "Mexico",
+   "name": "Guillermo Alfonso Navarrete Uxul",
+   "romanized": null
+  },
+  "Miracle": {
+   "born": null,
+   "country": "Russia",
+   "name": "Руслан Зайнулин",
+   "romanized": "Ruslan Zainulin"
+  },
+  "Tuercas": {
+   "born": null,
+   "country": "Mexico",
+   "name": "Khenmelt Omar Izaguirre Castillo",
+   "romanized": null
+  },
+  "Challenq": {
+   "born": null,
+   "country": "Venezuela",
+   "name": "Andrid Enrique Gomez Caballero",
+   "romanized": null
+  },
+  "Andathy": {
+   "born": null,
+   "country": "Mexico",
+   "name": "Alexis Efráin Ríos Bono",
+   "romanized": null
+  },
+  "Mitir": {
+   "born": null,
+   "country": "Colombia",
+   "name": "Juan Diego Orozco",
+   "romanized": null
+  },
+  "Chomu": {
+   "born": null,
+   "country": "Mexico",
+   "name": "Yahve Gloria",
+   "romanized": null
+  },
+  "Sudzzi": {
+   "born": null,
+   "country": "Canada",
+   "name": "Cory Miller",
+   "romanized": null
+  },
+  "Young": {
+   "born": "2001-01-16",
+   "country": "United States",
+   "name": "최영호",
+   "romanized": "Youngho Choi"
+  },
+  "Nukez": {
+   "born": null,
+   "country": "United States",
+   "name": "Tanner Waiyanet",
+   "romanized": null
+  },
+  "Fatihcan": {
+   "born": null,
+   "country": "Turkey",
+   "name": "Fatihcan Demir",
+   "romanized": null
+  },
+  "Tub": {
+   "born": null,
+   "country": "United States",
+   "name": "Ivan Guan",
+   "romanized": null
+  },
+  "Shogo": {
+   "born": "1999-12-21",
+   "country": "Israel",
+   "name": "Gil Meron",
+   "romanized": null
+  },
+  "Zev": {
+   "born": null,
+   "country": "Canada",
+   "name": "Mark Villanueva",
+   "romanized": null
+  },
+  "DrCalculus": {
+   "born": null,
+   "country": "Canada",
+   "name": "Derek Yuan",
+   "romanized": null
+  },
+  "Harusary": {
+   "born": "2005-06-04",
+   "country": "South Korea",
+   "name": "김현",
+   "romanized": "Kim Hyeon"
+  },
+  "Kaido": {
+   "born": null,
+   "country": "Canada",
+   "name": "Siddhant Nath",
+   "romanized": null
+  },
+  "Verdict": {
+   "born": null,
+   "country": "Canada",
+   "name": "Vincent Filosa",
+   "romanized": null
+  },
+  "Niles": {
+   "born": "1999-08-06",
+   "country": "United States",
+   "name": "Aiden Tidwell",
+   "romanized": null
+  },
+  "fishone": {
+   "born": null,
+   "country": "China",
+   "name": "于義",
+   "romanized": "Yu Yi"
+  },
+  "Dani": {
+   "born": null,
+   "country": "Spain",
+   "name": "Daniel Gómez Martínez",
+   "romanized": null
+  },
+  "Pasameelcelo": {
+   "born": null,
+   "country": "Andorra",
+   "name": "Jordi Franco Carreras",
+   "romanized": null
+  },
+  "Midnight": {
+   "born": null,
+   "country": "Spain",
+   "name": "Víctor Caro Rodríguez",
+   "romanized": null
+  },
+  "Dyenn": {
+   "born": null,
+   "country": "Spain",
+   "name": "Daniel Sánchez Vera",
+   "romanized": null
+  },
+  "Ivama": {
+   "born": null,
+   "country": "Spain",
+   "name": "Ivan Torn Cubero",
+   "romanized": null
+  },
+  "Clicker": {
+   "born": null,
+   "country": "Spain",
+   "name": "Alejandro Botella Santos",
+   "romanized": null
+  },
+  "Kaii": {
+   "born": "2004-07-08",
+   "country": "Spain",
+   "name": "Jorge Saiz Hoyos",
+   "romanized": null
+  },
+  "Marcv1": {
+   "born": null,
+   "country": "Spain",
+   "name": "Marc Villalba de la Arada",
+   "romanized": "|birth_date="
+  },
+  "TIMR": {
+   "born": null,
+   "country": "Czech Republic",
+   "name": "Tomáš Buštík",
+   "romanized": null
+  },
+  "Deleted": {
+   "born": null,
+   "country": "Spain",
+   "name": "Unai San Juan Fajardo",
+   "romanized": null
+  },
+  "Xixauxas": {
+   "born": null,
+   "country": "Spain",
+   "name": "Xavier Fluxà",
+   "romanized": null
+  },
+  "Kallesyn": {
+   "born": null,
+   "country": "France",
+   "name": "Victor Duvina",
+   "romanized": null
+  },
+  "Kitano": {
+   "born": null,
+   "country": "France",
+   "name": "Nathan Sellam",
+   "romanized": null
+  },
+  "Evaan": {
+   "born": null,
+   "country": "France",
+   "name": "Evan Kohl",
+   "romanized": null
+  },
+  "Sunfry": {
+   "born": null,
+   "country": "France",
+   "name": "Teddy Falconnet",
+   "romanized": null
+  },
+  "sinian": {
+   "born": null,
+   "country": "China",
+   "name": "丁家铭",
+   "romanized": "Ding Jiaming"
+  },
+  "Coward": {
+   "born": null,
+   "country": "China",
+   "name": "朱恕伟",
+   "romanized": "Zhu Shuwei"
+  },
+  "Dorian": {
+   "born": null,
+   "country": "China",
+   "name": "陈思远",
+   "romanized": "Chen Siyuan"
+  },
+  "Lqh": {
+   "born": "2006-03-02",
+   "country": "China",
+   "name": "李清华",
+   "romanized": "Li Qinghua"
+  },
+  "luoyiyu": {
+   "born": null,
+   "country": "China",
+   "name": "石家郡",
+   "romanized": "Shi Jiajun"
+  },
+  "Xiaorui": {
+   "born": null,
+   "country": "China",
+   "name": "钮晓睿",
+   "romanized": "Niu Shaorui"
+  },
+  "Nuo": {
+   "born": null,
+   "country": "China",
+   "name": "魏嘉诺",
+   "romanized": "Wei Jianuo"
+  },
+  "chips": {
+   "born": "1989-08-14",
+   "country": "France",
+   "name": "Fabien Culié",
+   "romanized": "|birth_date=1989-08-14"
+  },
+  "Ljun": {
+   "born": null,
+   "country": "China",
+   "name": "刘俊",
+   "romanized": "Liu Jun"
+  },
+  "5t5": {
+   "born": null,
+   "country": "China",
+   "name": "曾骏",
+   "romanized": "Zeng Jun"
+  },
+  "Mentality": {
+   "born": null,
+   "country": "China",
+   "name": "韦关振",
+   "romanized": "Wei Guanzhen"
+  },
+  "lucius": {
+   "born": null,
+   "country": "China",
+   "name": "吴明涛",
+   "romanized": "Wu Mingtao"
+  },
+  "Yukina": {
+   "born": null,
+   "country": "China",
+   "name": "宋佳荣",
+   "romanized": "Song Jiarong"
+  },
+  "Sunlight": {
+   "born": null,
+   "country": "United States",
+   "name": "Joseph Riebschleger",
+   "romanized": null
+  },
+  "Aherusi": {
+   "born": null,
+   "country": "China",
+   "name": "胡伟亮",
+   "romanized": "Hu Weiliang"
+  },
+  "Later": {
+   "born": null,
+   "country": "China",
+   "name": "张文健",
+   "romanized": "Zhang Wenjian"
+  },
+  "PO8": {
+   "born": null,
+   "country": "China",
+   "name": "邹竣",
+   "romanized": "Zou Jun"
+  },
+  "Jungoat": {
+   "born": null,
+   "country": "China",
+   "name": "兰德荣",
+   "romanized": "Lan Derong"
+  },
+  "Hran": {
+   "born": null,
+   "country": "China",
+   "name": "余浩然",
+   "romanized": "Yu Haoran"
+  },
+  "xLiang": {
+   "born": null,
+   "country": "China",
+   "name": "欧阳亮",
+   "romanized": "Ouyang Liang"
+  },
+  "chesterbb": {
+   "born": null,
+   "country": "China",
+   "name": "杨钧皓",
+   "romanized": "Yang Junhao"
+  },
+  "lamb": {
+   "born": null,
+   "country": "China",
+   "name": "张卓雅",
+   "romanized": "Zhang Zhuoya"
+  }
+ }
+}

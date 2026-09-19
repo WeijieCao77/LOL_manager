@@ -1349,7 +1349,7 @@ export function judgeTenure(
     (state.onNotice && (state.missedStreak ?? 0) >= 2) ||
     (state.onNotice && state.boardConfidence <= 18))
 
-  if (doomed && state.onNotice) {
+  if (doomed && state.onNotice && !HEADLESS.noDismissal) {
     // Say what actually ended it. There are three routes here and the message
     // only ever described one of them, so a manager fired on a confidence
     // floor was told "连续 1 个赛段没有达成目标" — a sentence that reads as a
@@ -1907,6 +1907,15 @@ function formFromResult(state: GameState, ids: string[], result: MatchResult): v
     r.p.form = clamp(r.p.form + clamp(residual / 30, -1.5, 1.5), 30, 99)
   }
 }
+
+/**
+ * For check scripts only. A headless run makes no decisions, and a board sacks a manager who
+ * misses three stage targets running — after which the clock stops (see the top of advanceDay)
+ * and a script that wanted eight seasons of the WORLD gets two. Long-horizon checks of things
+ * that have nothing to do with the manager (ageing, the rookie intake) set this. The game
+ * never does.
+ */
+export const HEADLESS = { noDismissal: false }
 
 export function advanceDay(state: GameState, opts: AdvanceOpts = {}): DayReport {
   // A career that has ended does not keep going. The sack screen has no close
@@ -2536,11 +2545,33 @@ function endSeason(state: GameState, rng: Rng, notes: string[] = []): void {
   // did — announced at 33, gone at 34. A man who just signed a long deal
   // signed it because he intends to play it.
   const noticed: string[] = []
+  const staying = Object.values(state.players).filter((p) => !p.retiring).length
+  const spare = clamp((staying - Object.keys(state.teams).length * 6.5) / 300, 0, 1)
   for (const p of Object.values(state.players)) {
     if (p.retiring) continue
-    let announceP = p.age >= 33 ? 0.45 : p.age >= 31 ? 0.2 : p.age >= 29 ? 0.06 : 0
+    // League of Legends careers end young. Measured (analysis/lol/exit_hazard.py):
+    // of the men who played 20+ tier-one games in a year, the share never seen
+    // again in any league was 2–4% at 18–20, 9–13% a year from 21 to 25, and
+    // 25% at 26. The rule this replaced was Valorant's (nothing before 29) and
+    // the world's starters aged from 24.0 to 27.1 under it; the real figure is
+    // 23.7. Who goes is not random either: the ones still starting and still
+    // good stay (Faker at 30), the bench and the unsigned leave.
+    let announceP = p.age >= 30 ? 0.4 : p.age >= 28 ? 0.3 : p.age >= 26 ? 0.22
+      : p.age >= 24 ? 0.13 : p.age >= 22 ? 0.1 : p.age >= 21 ? 0.06 : 0
+    const club = p.teamId ? state.teams[p.teamId] : undefined
+    if (!club) announceP *= 2.2
+    else if (!club.starters.includes(p.id)) announceP *= 1.6
+    else if (p.overall >= club.rating - 2) announceP *= 0.5
     if (p.contractYears >= 3) announceP = 0
-    else if (p.contractYears === 2) announceP *= 0.5
+    else if (p.contractYears === 2) announceP *= 0.6
+    // ...but the pool is closed. Everyone here is a real person and nobody is
+    // invented to replace him, so at the real exit rate the world cannot field
+    // five a side by 2030 (measured: 95 of 101 clubs short in 2035; with
+    // only the under-31s held back, 22 short). A man leaves if the world can
+    // spare him, and by the end of a ten-year career it mostly cannot — the
+    // late world is an old one. That is the price of the premise, and the
+    // same one VAL MANAGER pays.
+    announceP *= p.age >= 34 ? Math.max(spare, 0.25) : spare
     if (announceP && rng.chance(announceP)) {
       p.retiring = true
       p.persuaded = false

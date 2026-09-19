@@ -23,7 +23,8 @@ import { Rng } from '../src/engine/rng'
 import { ATTR_KEYS } from '../src/engine/types'
 import type { GameState, Player } from '../src/engine/types'
 
-const N = Number(process.argv[2] ?? 1500)
+// 1500 games put a standard error of 1.7 points on the difference this asks about (> 2): it failed one run in three
+const N = Number(process.argv[2] ?? 6000)
 const map = MAPS[0]
 const fresh = (): GameState => createNewGame('T1', 'onoff', 99)
 

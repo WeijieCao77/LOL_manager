@@ -51,7 +51,8 @@ export function assertCareerSave(value: unknown): asserts value is GameState {
     for (const m of f.result?.maps ?? []) {
       for (const line of Object.values(m.lines ?? {})) {
         if (Array.isArray(line)) {
-          if (line.length !== 9 || !line.every(finite)) return fail()
+          // nine numbers before 补刀 and 经济 were packed, eleven since
+          if ((line.length !== 9 && line.length !== 11) || !line.every(finite)) return fail()
         } else if (!record(line) || !Object.values(line).every(finite)) return fail()
       }
     }

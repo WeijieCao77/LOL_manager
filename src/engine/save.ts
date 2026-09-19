@@ -38,6 +38,11 @@ const worldPlayer = new Map(WORLD_PLAYERS.map((p) => [p.id, p]))
 const LINE_KEYS = [
   'kills', 'deaths', 'assists', 'damage',
   'firstKills', 'firstDeaths', 'clutches', 'rounds', 'acs',
+  // League of Legends' two. APPENDED, never inserted: a save packed before they existed
+  // has nine numbers a line and must still read back in the right columns. They were
+  // missing from this list for a while, and every reload wiped 补刀 and 经济 off every
+  // scoreboard — check_save_size's round trip is what said so.
+  'cs', 'gold',
 ] as const
 
 type PackedLine = number[]

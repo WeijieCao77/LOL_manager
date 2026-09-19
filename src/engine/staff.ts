@@ -100,11 +100,11 @@ export function staffMarket(state: GameState): StaffCandidate[] {
 }
 
 export const SPEC_CN: Record<AnalystSpec, { label: string; blurb: string }> = {
-  maps: { label: '图池分析', blurb: '「跑图」训练的战术磨合度收益 +60%' },
+  maps: { label: '版本研究', blurb: '阵容磨合训练的熟练度收益 +60%' },
   opponent: { label: '对手研究', blurb: '比赛中的战术加成提升，相当于多半个主教练' },
   potential: { label: '数据建模', blurb: '潜力看得更准，相当于额外的「眼光」' },
-  economy: { label: '经济分析', blurb: '道具与经济运用更高效，全场小幅加成' },
-  review: { label: '复盘专家', blurb: '「教练复盘」训练的意识与指挥收益翻倍' },
+  economy: { label: '资源分析', blurb: '视野与地图资源的运用更高效，全场小幅加成' },
+  review: { label: '复盘专家', blurb: '「教练复盘」训练的意识与运营收益翻倍' },
 }
 
 export const ROLE_CN: Record<StaffRole, string> = {

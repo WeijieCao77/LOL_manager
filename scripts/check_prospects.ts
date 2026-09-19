@@ -43,17 +43,23 @@ const mk = (tag = 'BLG'): GameState => {
   check('年龄来自真实生日，没有被凑数',
     added.every((p) => p.age === ageIn(PROSPECTS.find((r) => r.id === p.id)!, 2026)),
     `${Math.min(...ages)}~${Math.max(...ages)} 岁`)
-  check('全都有真实生日', added.every((p) => !!p.birth && !p.ageEstimated))
+  // A birthday that could not be found is not made up: he is in the pool at an
+  // estimated age and the UI says so (「年龄为估算」). What must never happen is
+  // an estimate passing for a record, or a record being ignored.
+  const dated = added.filter((p) => !!p.birth).length
+  check('有生日的用生日，查不到的标「年龄为估算」，没有第三种', added.every((p) => !!p.birth !== !!p.ageEstimated), `有生日 ${dated} / ${added.length}`)
+  check('查得到生日的占多数', dated >= added.length * 0.7, `${dated} / ${added.length}`)
 }
 
 // ---- unproven, and the ceiling closes with age
 {
-  const row = PROSPECTS[0]!
-  const young = makeProspect(row, 2026)
-  const old = makeProspect(row, 2036)
+  // over the whole pool, not the first row: one man's draw can be the floor
+  // (+2) at nineteen already, and then there is nothing left for ten years to close
   const head = (p: { potential: number; overall: number }) => p.potential - p.overall
-  check('同一个人十年后被发掘，成长空间更小', head(old) < head(young),
-    `${young.age} 岁 +${head(young)}，${old.age} 岁 +${head(old)}`)
+  const mean = (year: number) => PROSPECTS.reduce((s, r) => s + head(makeProspect(r, year)), 0) / PROSPECTS.length
+  const never = PROSPECTS.every((r) => head(makeProspect(r, 2036)) <= head(makeProspect(r, 2026)))
+  check('同一批人十年后被发掘，成长空间更小', never && mean(2036) < mean(2026) - 4,
+    `2026 年平均 +${mean(2026).toFixed(1)}，2036 年平均 +${mean(2036).toFixed(1)}`)
 
   const teens = PROSPECTS.filter((r) => ageIn(r, 2026) <= 20).map((r) => makeProspect(r, 2026))
   check('真正的年轻人仍有很宽的上限',

@@ -47,7 +47,7 @@ import type {
 /** how the five share 运营: the most of it counts for most (see buildLineup) */
 const MACRO_SHARE = [0.4, 0.25, 0.15, 0.1, 0.1]
 /** strength points, in the second half of the game only, per point of team 运营 above 62 */
-const MACRO_LATE = 0.3
+const MACRO_LATE = 0.38
 
 const KILL_WEIGHT: Record<Role, number> = {
   下路: 1.2, 中单: 1.12, 上单: 0.98, 打野: 0.95, 辅助: 0.62,
@@ -1151,7 +1151,7 @@ export function pruneMatchDetail(state: GameState): void {
     if (f.day >= foreignCutoff) continue
     // already stripped: leave it alone rather than reallocating every day
     if (!f.result.vetoLog.length && !f.result.highlights.length && !f.result.lineups
-      && !f.result.maps.some((m) => m.agents || m.edge || m.rounds || Object.keys(m.lines).length)) {
+      && !f.result.maps.some((m) => m.agents || m.edge || m.rounds || m.blue || Object.keys(m.lines).length)) {
       continue
     }
     f.result.vetoLog = []
@@ -1164,6 +1164,15 @@ export function pruneMatchDetail(state: GameState): void {
       delete m.agents
       delete m.bans
       delete m.draftLog
+      // the shape of the game — gold, kills, objectives — is the post-match screen's, and
+      // another club's match from a fortnight ago has no post-match screen any more. Twelve
+      // named numbers a game was 430 KB by the end of a season; the result and the length stay.
+      delete m.killsA; delete m.killsB
+      delete m.goldDiff; delete m.goldAt15
+      delete m.towersA; delete m.towersB
+      delete m.dragonsA; delete m.dragonsB
+      delete m.baronsA; delete m.baronsB
+      delete m.blue
     }
   }
 }

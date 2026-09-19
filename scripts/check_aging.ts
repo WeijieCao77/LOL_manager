@@ -15,14 +15,16 @@
  * back, every league sinks a point a year and nobody notices until 2032.
  */
 import { createNewGame } from '../src/engine/world'
-import { advanceDay } from '../src/engine/season'
+import { advanceDay, continuePastFive, setupSeason, HEADLESS } from '../src/engine/season'
 import { WORLD_TEAMS } from '../src/engine/teams'
 import { ATTR_CN, ATTR_KEYS } from '../src/engine/types'
 import type { Attrs } from '../src/engine/types'
 
 const SEASONS = Number(process.argv[2] ?? 6)
+HEADLESS.noDismissal = true        // this is about the world, not about the manager
 const me = WORLD_TEAMS.find((t) => t.tag === 'BLG')!
 const state = createNewGame(me.id, 'aging', 424242)
+setupSeason(state)                 // createNewGame alone books no fixtures: the first year would pass without a match
 
 let bad = 0
 const check = (ok: boolean, msg: string) => { if (!ok) bad++; console.log(`${ok ? 'ok  ' : 'FAIL'} ${msg}`) }
@@ -32,6 +34,8 @@ const BANDS = ['≤20', '21–23', '24–26', '27–29', '30+']
 const delta: Record<string, Record<keyof Attrs, number[]>> = {}
 for (const b of BANDS) delta[b] = Object.fromEntries(ATTR_KEYS.map((k) => [k, [] as number[]])) as Record<keyof Attrs, number[]>
 const level: number[] = []
+const pool: string[] = []
+const shortTeams: number[] = []
 const starterAge: number[] = []
 
 const tier1Starters = () => Object.values(state.teams).filter((t) => t.tier === 1)
@@ -41,10 +45,22 @@ for (let s = 0; s < SEASONS; s++) {
   const st = tier1Starters()
   level.push(st.reduce((a, p) => a + p.overall, 0) / st.length)
   starterAge.push(st.reduce((a, p) => a + p.age, 0) / st.length)
+  {
+    const all = Object.values(state.players)
+    const short = Object.values(state.teams).filter((t) => t.roster.length < 5).length
+    const free = all.filter((p) => !p.teamId)
+    pool.push(`${state.year}: 在世 ${all.length}，有队 ${all.length - free.length}，自由人 ${free.length}（其中 ≤22 岁 ${free.filter((p) => p.age <= 22).length}），不足五人的队 ${short}，一级首发里 ≤21 岁 ${st.filter((p) => p.age <= 21).length}`)
+    shortTeams.push(short)
+  }
   const before = new Map(Object.values(state.players).filter((p) => p.teamId).map((p) => [p.id, { age: p.age, attrs: { ...p.attrs } }]))
   const y = state.year
   let guard = 0
-  while (state.year === y && !state.gameOver && guard++ < 420) advanceDay(state, { autoResolveDrawDecisions: true })
+  while (state.year === y && !state.gameOver && guard++ < 420) {
+    // the mid-term review stops the clock until the manager answers; nobody is here to answer
+    if (state.midReview) continuePastFive(state)
+    advanceDay(state, { autoResolveDrawDecisions: true })
+  }
+  if (state.year === y && !state.gameOver) { console.log(`FAIL 第 ${s + 1} 季走了 420 天还没过年——世界停了`); process.exit(1) }
   if (state.gameOver) { console.log(`（第 ${s + 1} 季被解雇，停在这里：${state.gameOver}）`); break }
   for (const [id, b] of before) {
     const p = state.players[id]
@@ -72,8 +88,18 @@ check(m('30+', 'macro') > m('30+', 'laning') + 1, '30 岁以上：对线在垮�
 const drift = level[level.length - 1] - level[0]
 console.log(`\n一级联赛首发的平均总评：${level.map((v) => v.toFixed(1)).join(' → ')}`)
 console.log(`一级联赛首发的平均年龄：${starterAge.map((v) => v.toFixed(1)).join(' → ')}`)
+for (const line of pool) console.log(line)
 check(Math.abs(drift) < 2.5, `${level.length - 1} 个赛季里联盟水平漂了 ${drift >= 0 ? '+' : ''}${drift.toFixed(1)}（允许 ±2.5）`)
-check(starterAge[starterAge.length - 1] > 21.5 && starterAge[starterAge.length - 1] < 26.5, `首发平均年龄 ${starterAge[starterAge.length - 1].toFixed(1)} 岁（真实约 23.7，允许 21.5–26.5）`)
+// The pool is closed: every player is a real person and nobody is invented to
+// replace the ones who leave, so the world cannot stay 23.7 years old the way
+// the real one does — by 2035 the youngest man alive is 26. What CAN be held:
+// clubs still field five all the way to the end, and the starting fives age
+// slower than the calendar (the young do take places from the old).
+const perYear = (starterAge[starterAge.length - 1] - starterAge[0]) / Math.max(1, starterAge.length - 1)
+check(perYear < 0.95, `首发平均年龄每年 +${perYear.toFixed(2)} 岁（封闭的真人池子：日历是 +1.00，真实世界是 0）`)
+check(starterAge.length < 4 || starterAge[3] < 26.5, `前三个赛季首发平均年龄 ${starterAge.slice(0, 4).map((v) => v.toFixed(1)).join(' → ')}（第四年开局要求 < 26.5）`)
+// the managed club is nobody's job here, so one short club is ours
+check(Math.max(...shortTeams) <= 1, `每个赛季开局，凑不齐五个人的俱乐部最多 ${Math.max(...shortTeams)} 支（自己那支没人管，算 1）`)
 
 console.log(bad ? `\n❌ ${bad} 项不通过` : '\n✅ 年龄曲线和联盟水平都站得住')
 process.exit(bad ? 1 : 0)

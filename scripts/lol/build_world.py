@@ -663,6 +663,73 @@ def main():
             roster=roster, coach=None, facilities=max(30, min(95, rating + rng.randrange(-6, 7) + (0 if tier == 1 else -12))),
         ))
 
+    # ---- 教练：真实的人来自 Liquipedia 各赛事页的参赛名单（scripts/lol/fetch_liquipedia.py）。
+    # 两边的队名对不上（Liquipedia 写 BRION / Dplus / FEARX，OE 写 HANJIN BRION / Dplus KIA / BNK FEARX），
+    # 所以按「首发里有几个人相同」认队，三个以上算同一支。
+    # 三项数值现实里没有任何公开数字，只能估，而且要估得有来由：
+    #   战术  这支队比 15 分钟局面预示的多赢多少（运营残差）——那正是教练组临场和赛前准备的痕迹
+    #   培养  队里年轻人的水平：把 21 岁以下的人带到这个联赛的平均线以上，是教练的功劳
+    #   激励  全队的「心态」相对他们自身水平高多少（落后翻盘、决胜局）
+    # 每一项再按球队在联赛里的强弱挪一点——强队请得起好教练。估算值，meta.derived 里写明。
+    cpath = os.path.join(REPO, 'data-raw', 'lol', f'coaches_{Y}.json')
+    staffed = 0
+    if os.path.exists(cpath):
+        lp = json.load(open(cpath, encoding='utf-8'))['teams']
+        by_id = {p['id']: p for p in players_out}
+        league_mean = collections.defaultdict(list)
+        for t in teams_out:
+            league_mean[t['league']].append(t['rating'])
+        for t in teams_out:
+            mine_igns = {by_id[i]['ign'].lower() for i in t['roster']}
+            best, overlap = None, 0
+            for name, row in lp.items():
+                n = len(mine_igns & {x.lower() for x in row.get('players', [])})
+                if n > overlap:
+                    best, overlap = row, n
+            if not best or overlap < 3:
+                continue
+            heads = [x['name'] for x in best['staff'] if x['job'] == 'head']
+            others = [x['name'] for x in best['staff'] if x['job'] == 'assistant']
+            if not heads and others:
+                heads, others = others[:1], others[1:]
+            if not heads:
+                continue
+            squad = [by_id[i] for i in t['roster']]
+            rel = t['rating'] - sum(league_mean[t['league']]) / len(league_mean[t['league']])
+            rng = random.Random(f'{Y}:coach:{heads[0]}')
+            young = [p for p in squad if p['age'] <= 21]
+            youth = (sum(p['overall'] for p in young) / len(young) - t['rating']) if young else -2.0
+            grit = sum(p['attrs']['clutch'] - p['overall'] for p in squad) / len(squad)
+            clampi = lambda v: int(round(max(40, min(95, v))))
+            t['coach'] = dict(
+                name=heads[0], assistants=others[:3],
+                tactics=clampi(64 + 7.5 * team_macro.get(t['name'], 0.0) + rel * 0.8 + rng.uniform(-3, 3)),
+                development=clampi(63 + youth * 1.6 + len(young) * 1.5 + rel * 0.4 + rng.uniform(-3, 3)),
+                motivation=clampi(64 + grit * 1.8 + rel * 0.5 + rng.uniform(-3, 3)),
+            )
+            staffed += 1
+
+    # ---- 分析师：Liquipedia 的参赛名单里只给少数几支队记了分析师，没记的不编。
+    # 人少，所以不做成五行只差一两分的名单：每人一个专长，值得雇的理由各不相同（做法同 VAL MANAGER）。
+    # 三项数值没有任何真实来源，是按名字定种子的估算。
+    SPECS = ['maps', 'opponent', 'potential', 'economy', 'review']
+    analysts = []
+    if os.path.exists(cpath):
+        coach_names = {t['coach']['name'] for t in teams_out if t['coach']}
+        seen_an = set()
+        for club, row in sorted(lp.items()):
+            for x in row['staff']:
+                if x['job'] != 'analyst' or x['name'] in seen_an or x['name'] in coach_names:
+                    continue
+                seen_an.add(x['name'])
+                rng = random.Random(f'analyst:{x["name"]}')
+                ci = lambda mu, sd, lo, hi: int(round(max(lo, min(hi, rng.gauss(mu, sd)))))
+                analysts.append(dict(name=x['name'], **{'from': club}, tactics=ci(72, 7, 45, 90),
+                                     development=ci(58, 8, 35, 82), motivation=ci(56, 8, 35, 80)))
+        analysts.sort(key=lambda a: a['name'])
+        for i, a in enumerate(analysts):
+            a['spec'] = SPECS[i % len(SPECS)]
+
     # ---- 俱乐部声望：按联赛内的排名拉开，不直接跟总评走。
     # 声望决定谁愿意请一个没名气的经理（引擎里是「俱乐部声望 <= 经理声望 + 12」，新经理约 51）。
     # 跟着总评走的话 LPL 垫底的队也有 75，新经理一支 LPL 队都带不了——而现实里后段班本来就会请新人。
@@ -722,17 +789,18 @@ def main():
 
     world = dict(
         meta=dict(
-            season=Y, game='lol', history=bool(args.history),
+            season=Y, game='lol', history=bool(args.history), analysts=analysts,
             sources={"Oracle's Elixir": '逐场比赛数据：名单、位置、英雄、全部统计',
                      'Leaguepedia': '中文名、真名、国籍、居民赛区、生日',
-                     'Riot esports API': '战队简称'},
+                     'Riot esports API': '战队简称',
+                     'Liquipedia': '教练组（CC BY-SA 3.0）'},
             derived=dict(
                 measured=['laning', 'mechanics', 'teamfight', 'farming', 'awareness', 'clutch', 'teamwork'],
                 inferred=dict(macro='运营 = 40% 运营 RAPM + 20% 队伍运营残差 + 40% 资历，每人的三项分量在 macroFrom 里。说的是他在场时队伍 15 分钟之后多赢多少，不指定谁是指挥；isCaptain 只是开局时运营最高的首发',
                               laning_fallback=f'{len(derived_lane)} 人没有 15 分钟数据，对线由分均经济与补刀反推',
                               awareness_fallback=f'{len(derived_aware)} 人没有视野数据，意识由阵亡占比与一血参与反推'),
                 estimated='合同、薪资、身价、预算、设施、潜力、士气；没有生日的年龄',
-                missing='教练（OE 没有教练，待从 Leaguepedia 补）'),
+                coaches='教练组的人名和职务来自 Liquipedia 赛事页；战术 / 培养 / 激励三项是估算：运营残差、队内年轻人的水平、全队心态相对自身水平，再按球队强弱微调。分析师的人名真实，数值与专长是估算'),
             leagueBase={k: round(v, 1) for k, v in base.items() if k in codes},
             leagueStrength={k: dict(logit=round(v, 2), games=bt_n.get(k, 0)) for k, v in bt.items()},
             roleWeight={ROLE_CN[p]: w for p, w in ROLE_WEIGHT.items()},
@@ -745,7 +813,10 @@ def main():
 
     # ---- 报告
     print(f'\n-> {out_path}  {os.path.getsize(out_path) // 1024} KB', file=sys.stderr)
-    print(f'战队 {len(teams_out)}，选手 {len(players_out)}（自由人 {sum(1 for p in players_out if not p["teamId"])}）', file=sys.stderr)
+    print(f'战队 {len(teams_out)}，选手 {len(players_out)}（自由人 {sum(1 for p in players_out if not p["teamId"])}）；有教练的队 {staffed}', file=sys.stderr)
+    nocoach = [t['tag'] for t in teams_out if not t['coach'] and t['tier'] == 1]
+    if nocoach:
+        print('一级联赛里没有教练的队：' + '、'.join(nocoach), file=sys.stderr)
     print(f'国际赛拟合：' + '  '.join(f'{k} {v:+.2f}({bt_n.get(k, 0)}局)' for k, v in sorted(bt.items(), key=lambda x: -x[1])), file=sys.stderr)
     for code, region, tier, label in world_leagues:
         ts = [t for t in teams_out if t['league'] == label]

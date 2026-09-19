@@ -48,7 +48,7 @@ def main():
         players[-1] = {k: v for k, v in players[-1].items() if v is not None}
 
     meta = dict(world['meta'])
-    meta['analysts'] = []                      # OE 里没有分析师；不编
+    meta['analysts'] = meta.get('analysts') or []   # 真实的分析师来自 Liquipedia；没记的不编
     out = dict(meta=meta, teams=world['teams'], players=players)
     dst = os.path.join(REPO, 'src', 'data', 'world.json')
     json.dump(out, open(dst, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))

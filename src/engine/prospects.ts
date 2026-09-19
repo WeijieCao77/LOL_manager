@@ -29,7 +29,7 @@ import { Rng, clamp, hashStr } from './rng'
 import { AGENT_ROLE } from './content'
 import { recomputeOverall, refreshValue } from './player'
 import { ATTR_KEYS, defaultContract, ROLES } from './types'
-import type { Attrs, Player, Role } from './types'
+import type { Attrs, Player, Region, Role } from './types'
 
 export interface ProspectRow {
   id: string
@@ -39,6 +39,17 @@ export interface ProspectRow {
   born?: string | null
   age?: number | null
   agents?: string[]
+  /** the position he really plays, where the data has it — more reliable than reading it off champions that are played in two */
+  pos?: Role
+  /**
+   * How good he is against the others in his own league, put on this game's
+   * scale (scripts/lol/build_prospects.py). A real teenager who is carrying a
+   * regional league arrives better than one who is not — the intake used to be
+   * a dice roll around 58 for everybody.
+   */
+  level?: number
+  /** the region whose resident he is for the import rule */
+  res?: Region
 }
 
 interface ProspectFile {
@@ -53,6 +64,7 @@ const CORE: Role[] = ROLES
 
 /** The job he actually plays, read off the agents he has been seen on. */
 function roleOf(row: ProspectRow, rng: Rng): Role {
+  if (row.pos && ROLES.includes(row.pos)) return row.pos
   const counts = new Map<Role, number>()
   for (const a of row.agents ?? []) {
     // the scrape lowercases agent file names; AGENT_ROLE is keyed by the
@@ -87,7 +99,7 @@ export function makeProspect(row: ProspectRow, year: number): Player {
 
   // where an academy player sits: good enough to be worth a contract, not
   // good enough to walk into a starting five
-  const base = Math.round(rng.norm(58, 5))
+  const base = Math.round(row.level != null ? rng.norm(row.level, 2.5) : rng.norm(58, 5))
   const attrs = {} as Attrs
   for (const k of ATTR_KEYS) {
     attrs[k] = clamp(Math.round(base + rng.range(-7, 7)), 25, 92)
@@ -100,7 +112,8 @@ export function makeProspect(row: ProspectRow, year: number): Player {
     id: row.id,
     ign: row.ign,
     teamId: null,
-    region: (nat ? NAT_REGION[nat] : undefined) ?? 'LEC',
+    region: row.res ?? (nat ? NAT_REGION[nat] : undefined) ?? 'LEC',
+    residency: row.res,
     nat,
     realName: row.real ?? null,
     birth: row.born ?? undefined,

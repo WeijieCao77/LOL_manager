@@ -45,8 +45,13 @@ check('从来不低于当前能力', ids.every((id) => a.players[id].potential >
 check('从来不超过 99', ids.every((id) => a.players[id].potential <= 99))
 const moved = diffs.filter((d) => d !== 0).length
 check('大约一半的人动了', moved > ids.length * 0.35 && moved < ids.length * 0.85, `${moved}/${ids.length}`)
-const top = ids.filter((id) => base.get(id)!.potential >= 97)
-check('数据里潜力 97+ 的人在某个档里会掉到 96 以下', top.some((id) => a.players[id].potential <= 95 || b.players[id].potential <= 95))
+// the very top of the data, wherever that is — this world's ceiling is 94, the last one's was 99
+const peak = Math.max(...ids.map((id) => base.get(id)!.potential))
+const top = ids.filter((id) => base.get(id)!.potential >= peak - 2)
+// only a handful of men up there, so ask across more careers than two
+const seeds = [a, b, ...[3, 4, 5, 6].map((n) => createNewGame(team, '审计', n))]
+check(`数据里潜力最高的那批人（${peak - 2}+，${top.length} 人）不是钉死的：有的档里高、有的档里低`,
+  top.some((id) => seeds.some((g) => g.players[id].potential < base.get(id)!.potential) && seeds.some((g) => g.players[id].potential > base.get(id)!.potential)))
 // prospects too
 const pros = Object.values(a.players).filter((p) => !base.has(p.id))
 const prosB = pros.filter((p) => b.players[p.id] && b.players[p.id].potential !== p.potential).length

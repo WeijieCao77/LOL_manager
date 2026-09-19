@@ -58,7 +58,15 @@ const store = new Map<string, string>()
 // (measured on a fresh save: agentPro 30 → 101 KB across 659 players, the
 // peak 1,540 → 1,608 KB). Same reasoning as above: the state is bounded and
 // explained, so the budget moves by what it costs.
-const BUDGET_KB = 1_700
+//
+// League of Legends: the world is 885 people where Valorant's was 659 (101 clubs
+// across six regions and their second tiers, plus 260 real prospects), with 173
+// champions to be graded on instead of 28 agents — players alone are 1,040 KB
+// (agentPro 192). Measured peak 2,139 KB after old foreign games lost their
+// gold / kill / objective numbers (-430 KB) and players lost the pipeline's
+// working (-52 KB). The browser's line is ~2,500 (check_saves holds that one),
+// so this leaves about 15%: thin. Compressing the save is the real answer.
+const BUDGET_KB = 2_200
 
 let bad = 0
 const check = (name: string, ok: boolean, detail = '') => {
