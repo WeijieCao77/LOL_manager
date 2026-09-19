@@ -309,14 +309,14 @@ export default function ManagerGame({ onHome, testSaves = false }: { onHome: () 
             title={`回到首页 · 猪之家出品 · 小红书/抖音 @点点点点点点点点${testSaves ? ' · 测试存档区：这里的存档与正式版分开' : ''}`}
             onClick={onHome}
           >
-            VCT<span>电竞经理</span>
+            LOL<span>电竞经理</span>
             <em className="by">猪之家出品</em>
           </button>
           <div className="chip brand-club" title="所属俱乐部">
             <Crest id={game.myTeam} size={20} />
             <b>{myTeam?.name}</b>
             <span className={`tag ${myTeam?.tier === 1 ? 't1' : 't2'}`}>
-              {myTeam?.tier === 1 ? 'VCT' : 'CHAL'}
+              {myTeam?.league ?? (myTeam?.tier === 1 ? '一级' : '二级')}
             </span>
           </div>
           <div className="chip">{dateLabel(game)}</div>

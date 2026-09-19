@@ -45,7 +45,7 @@ CN = {
     'Morgana': '莫甘娜', 'Naafiri': '纳亚菲利', 'Nami': '娜美', 'Nasus': '内瑟斯', 'Nautilus': '诺提勒斯', 'Neeko': '妮蔻',
     'Nidalee': '奈德丽', 'Nilah': '尼菈', 'Nocturne': '魔腾', 'Nunu & Willump': '努努和威朗普', 'Olaf': '奥拉夫', 'Orianna': '奥莉安娜',
     'Ornn': '奥恩', 'Pantheon': '潘森', 'Poppy': '波比', 'Pyke': '派克', 'Qiyana': '奇亚娜', 'Quinn': '奎因', 'Rakan': '洛',
-    'Rammus': '拉莫斯', "Rek'Sai": '雷克塞', 'Rell': '芮尔', 'Renata Glasc': '烈娜塔·戈拉斯克', 'Renekton': '雷克顿', 'Rengar': '雷恩加尔',
+    'Rammus': '拉莫斯', "Rek'Sai": '雷克塞', 'Rell': '芮尔', 'Renata Glasc': '烈娜塔 · 戈拉斯克', 'Renekton': '雷克顿', 'Rengar': '雷恩加尔',
     'Riven': '锐雯', 'Rumble': '兰博', 'Ryze': '瑞兹', 'Samira': '莎弥拉', 'Sejuani': '瑟庄妮', 'Senna': '赛娜', 'Seraphine': '萨勒芬妮',
     'Sett': '瑟提', 'Shaco': '萨科', 'Shen': '慎', 'Shyvana': '希瓦娜', 'Singed': '辛吉德', 'Sion': '赛恩', 'Sivir': '希维尔',
     'Skarner': '斯卡纳', 'Smolder': '斯莫德', 'Sona': '娑娜', 'Soraka': '索拉卡', 'Swain': '斯维因', 'Sylas': '塞拉斯', 'Syndra': '辛德拉',
@@ -55,7 +55,8 @@ CN = {
     'Viktor': '维克托', 'Vladimir': '弗拉基米尔', 'Volibear': '沃利贝尔', 'Warwick': '沃里克', 'Wukong': '孙悟空', 'Xayah': '霞',
     'Xerath': '泽拉斯', 'Xin Zhao': '赵信', 'Yasuo': '亚索', 'Yone': '永恩', 'Yorick': '约里克', 'Yunara': '芸阿娜', 'Yuumi': '悠米',
     'Zac': '扎克', 'Zed': '劫', 'Zeri': '泽丽', 'Ziggs': '吉格斯', 'Zilean': '基兰', 'Zoe': '佐伊', 'Zyra': '婕拉',
-    # 译名没有把握的不写：留空，界面退到英文名，等作者确认。目前两个——Zaahen、Locke（2026）
+    'Zaahen': '亚恒', 'Locke': '洛克',
+    # 全表已对过 Riot Data Dragon 16.18.1 的 zh_CN 英雄表（173 个逐个相同）。以后的新英雄同样去那里查，查不到就留空，界面退到英文名
 }
 
 

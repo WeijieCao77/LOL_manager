@@ -91,11 +91,9 @@ export default function Dossier({
       }
     >
       <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>
-        {DOSSIER.meta.players} 名选手的照片、国籍、生涯队伍、荣誉与赛事记录。
-        名次、奖金与 {DOSSIER.meta.photos - (DOSSIER.meta.lpPhotos ?? 0) - (DOSSIER.meta.hjPhotos ?? 0)} 张照片取自 vlr.gg；
-        队伍履历与另外 {DOSSIER.meta.lpPhotos ?? 0} 张照片取自 Liquipedia（图片依 CC BY-SA 3.0 使用）；
-        {DOSSIER.meta.hjPhotos ?? 0} 张照片取自号角 HOJO（haojiao.cc）。
-        共收录 {DOSSIER.meta.events} 项赛事。
+        {WORLD_PLAYERS.length} 名选手的国籍、真名、位置与能力。
+        比赛数据来自 Oracle&apos;s Elixir，中文名、真名、国籍与生日来自 Leaguepedia，教练组来自 Liquipedia（CC BY-SA 3.0）；
+        {DOSSIER.meta.photos ?? 0} 张照片是 Riot 电竞接口里的官方定妆照，查不到的人不放照片。
       </p>
 
       <div className="row wrap" style={{ gap: 8, margin: '12px 0' }}>
