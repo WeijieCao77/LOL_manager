@@ -799,3 +799,38 @@ export function programFor(state: GameState, comp: Competition): Program | null 
   const p = REGION_PROGRAMS[region]?.[slot]
   return p ? { ...p, blurb: STAGE_BLURB[key] } : null
 }
+
+// ------------------------------------------------------------ in words, for the screens
+
+const EVENT_OF = { kickoff: 'masters1', stage1: 'masters2', stage2: 'champions' } as const
+export const EVENT_CN = { masters1: 'First Stand', masters2: 'MSI 季中冠军赛', champions: '全球总决赛' } as const
+
+/** what a region's stage sends on, in a few words */
+export function qualLine(region: Region, slot: Slot): string {
+  if (slot === 'kickoff') return region === 'LPL' || region === 'LCK' ? '前 2 去 First Stand' : '冠军去 First Stand'
+  if (slot === 'stage1') {
+    if (region === 'CBLOL') return '冠军去 MSI（巴西只有一个名额）'
+    if (region === 'LCP') return '冠军去 MSI，另一个名额给冠军之外积分最高的队'
+    return '前 2 去 MSI'
+  }
+  if (region === 'LPL') return '冠军是一号种子，全年积分第一是二号种子，接下来的积分前几名打区域资格赛'
+  if (region === 'LCP') return '前 2 去全球总决赛，第 3 个名额给积分最高的队'
+  if (region === 'CBLOL') return '前 2 去全球总决赛'
+  return '前 3 去全球总决赛'
+}
+
+/** the region's seeds for an event, once its feeding stage is over (or null) */
+export function eventSeeds(state: GameState, ev: 'masters1' | 'masters2' | 'champions', region: Region): string[] | null {
+  const slot = ev === 'masters1' ? 'kickoff' : ev === 'masters2' ? 'stage1' : 'stage2'
+  if (!state.comps[ckey(slot, region)]?.champion) return null
+  if (ev === 'masters1') return fstSeeds(state)[region]
+  if (ev === 'masters2') {
+    if (!state.comps.masters1?.champion) return null
+    return msiSeeds(state)[region]
+  }
+  if (!state.comps.masters2?.champion) return null
+  if (region === 'LPL' && state.comps['qual:LPL'] && !state.comps['qual:LPL'].champion) return null
+  return worldsSeeds(state, region)
+}
+
+export { EVENT_OF }

@@ -17,6 +17,7 @@ import { advanceDay, continuePastFive, setupSeason, HEADLESS } from '../src/engi
 import { setCurrentRuleset } from '../src/engine/ruleset'
 import { T1_REGIONS, worldsSlots } from '../src/engine/programs2026'
 import type { Fixture, GameState } from '../src/engine/types'
+import { qualification, upcomingInternational } from '../src/engine/qualify'
 
 HEADLESS.noDismissal = true
 setCurrentRuleset('lol-2026')
@@ -39,11 +40,16 @@ const seen = new Map<string, Fixture>()
 let guard = 0
 const year = g.year
 let snap: GameState | null = null
+const seenQual: { day: number; headline: string; upcoming: string | null; fst: string[] }[] = []
 while (g.year === year && guard++ < 420) {
   if (g.midReview) continuePastFive(g)
   advanceDay(g, { autoResolveDrawDecisions: true })
   for (const f of g.fixtures) if (f.played && !seen.has(f.id)) seen.set(f.id, { ...f })
   if (g.comps.champions?.champion && !snap) snap = JSON.parse(JSON.stringify(g))
+  if (g.comps['kickoff:LPL']?.champion && !seenQual.length) {
+    const q = qualification(g), up = upcomingInternational(g)
+    seenQual.push({ day: g.day, headline: q?.headline ?? '', upcoming: up ? `${up.name} ${up.how} @${up.day}` : g.comps.masters1 ? '（已建）' : null, fst: g.comps['kickoff:LPL'].finished.slice(0, 2) })
+  }
 }
 check(g.year === year + 1, '一年走完，进入下一年', `${g.year}`)
 const S = snap ?? g
@@ -109,6 +115,14 @@ check(fx.filter((f) => f.comp === 'kickoff:LCS' && f.ph === 'sw').length === 12,
   const qual = S.comps['qual:LPL']
   check(!!qual?.champion, 'LPL 区域资格赛打完了', qual ? `${qual.teams.map(tag).join(' ')} → ${qual.finished.map(tag).join(' ')}` : '没有')
   check(!g.honours.some((h) => h.title === 'LPL 区域资格赛'), '区域资格赛不算冠军头衔')
+}
+
+// the screens agree with the field: our own club, once Split 1 is over and First Stand is not yet built
+{
+  const q = seenQual[0]
+  const going = !!q && q.fst.includes(g.myTeam)
+  check(!!q && (going ? q.headline.includes('已锁定 First Stand') && !!q.upcoming : q.headline.includes('无缘 First Stand') && !q.upcoming),
+    '晋级形势和「下一个国际赛」与 First Stand 名单一致', q ? `${q.headline} · ${q.upcoming ?? '无'}` : '没取到')
 }
 
 // nobody plays twice a day

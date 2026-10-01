@@ -15,22 +15,30 @@
  * The one that surprises people most is 忠诚度, which does not move at all.
  */
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { currentRuleset, drawRules } from '../engine/ruleset'
+import { currentRuleset, drawRules, programRules } from '../engine/ruleset'
 import { GameCtx } from './ctx'
 import Rich from './rich'
-import { POINTS_NOTE, qualifyRule } from '../engine/qualify'
+import { LPL_POINTS_NOTE, POINTS_NOTE, qualifyRule } from '../engine/qualify'
 
 interface Line { t: string; d: string }
 interface Section { key: string; title: string; lede: string; up?: Line[]; down?: Line[]; use: string[]; useTitle?: string }
 
-const buildSections = (drawn: boolean): Section[] => [
+const buildSections = (drawn: boolean, lol = false): Section[] => [
   {
     key: 'format',
     title: '赛制与晋级',
     lede: '一年六段：第一赛段 → First Stand → 第二赛段 → MSI 季中冠军赛 → 第三赛段 → 全球总决赛，中间是休赛期和两个短转会窗。'
       + '赛区赛段先打循环赛，再打季后赛；国际赛的名额看季后赛名次和全年积分。'
       + '积分榜顶上的「晋级形势」会告诉你还差什么。',
-    use: [
+    use: lol ? [
+      '<b>LPL</b>：三个赛段都按上一赛段名次分组（Ascend / Perseverance / Nirvana），组内循环 BO3，再打骑士之路附加赛和八队双败淘汰。第二赛段 Nirvana 末两名当年的比赛就此结束，第三赛段只剩 12 队。',
+      '<b>LCK</b>：LCK Cup 两组只打对面组、按组计分；第二赛段十队双循环 + Road to MSI；第三赛段按名次分 Legend / Rise，带着前两轮的战绩再打双循环，再接入围赛和六队双败。',
+      '<b>LEC</b>：Versus 单循环 BO1 + 八队双败；春季、夏季单循环 BO3 + 六队双败。<b>LCS</b>：Lock-In 三轮瑞士轮；春季、夏季单循环 BO3 + 六队双败。<b>LCP</b>：前两个赛段单循环 + 六队双败，第三赛段瑞士轮。<b>CBLOL</b>：Cup 单循环 BO1 + 入围赛；之后两个赛段单循环 BO3 + 六队双败。',
+      '<b>First Stand</b>（8 队：LPL、LCK 各 2，其余赛区冠军）：两个 GSL 小组，各组前二进四强单败，全部 BO5。冠军所在赛区的 MSI 二号种子直通正赛。',
+      '<b>MSI</b>（11 队：CBLOL 1，其余各 2）：一号种子和 First Stand 冠军赛区的二号种子直通正赛，其余二号种子打四队双败入围赛出一队；正赛八队双败 BO5。冠军打进本赛区夏季季后赛就锁定一个全球总决赛名额，亚军所在赛区多一个名额。',
+      '<b>全球总决赛</b>（19 队：LPL、LCK、LEC、LCS、LCP 各 3，CBLOL 2，加上 MSI 带来的两个）：LEC、LCS、LCP、CBLOL 的末位种子打四队双败入围赛出一队；十六队瑞士轮五轮，三胜晋级、三负淘汰，决定命运的场次 BO3、其余 BO1；八强单败 BO5。',
+      LPL_POINTS_NOTE,
+    ] : [
       `<b>第一赛段</b>：${qualifyRule('kickoff', drawn)}`,
       `<b>第二赛段</b>：${qualifyRule('stage1', drawn)}`,
       `<b>第三赛段</b>：${qualifyRule('stage2', drawn)}`,
@@ -319,7 +327,8 @@ export default function Rules({ raised = false }: { raised?: boolean }) {
   // loaded yet, the one new careers get
   const ctx = useContext(GameCtx)
   const drawn = ctx ? drawRules(ctx.game) : currentRuleset() === 'vct-2026'
-  const SECTIONS = useMemo(() => buildSections(drawn), [drawn])
+  const lol = ctx ? programRules(ctx.game) : currentRuleset() === 'lol-2026'
+  const SECTIONS = useMemo(() => buildSections(drawn, lol), [drawn, lol])
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState(SECTIONS[0].key)
 

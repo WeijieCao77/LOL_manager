@@ -23,6 +23,9 @@ import { HEAT_LOSS, HEAT_TITLE, HEAT_WIN, HEAT_WINTER, NEMESIS_HEAT, NEMESIS_PRE
 import { DIFFICULTY } from '../src/engine/difficulty'
 import { TRUSTED } from '../src/engine/season'
 import { MACRO_LATE } from '../src/engine/match'
+import { LPL_POINTS } from '../src/engine/programs2026'
+import { LPL_POINTS_NOTE } from '../src/engine/qualify'
+const fstSlots = { LPL: 2, LCK: 2, LEC: 1, LCS: 1, LCP: 1, CBLOL: 1 }
 
 const panel = readFileSync(new URL('../src/ui/Rules.tsx', import.meta.url), 'utf8')
 
@@ -83,10 +86,18 @@ if (D.hard.topSlope !== 0.5 || D.pro.topSlope !== 0.4 || D.normal.topSlope !== 0
 says(`每周不满 +${D.normal.payGrievance}（困难 +${D.hard.payGrievance}，职业 +${D.pro.payGrievance}）`, '加薪没兑现的每周不满')
 says(`信任度在 ${TRUSTED}% 以上`, '董事会不因连败下课的门槛')
 
+// the League year (programs2026.ts): the fields and LPL's points as the engine has them
+says(`First Stand</b>（${Object.values(fstSlots).reduce((a, b) => a + b, 0)} 队`, 'First Stand 的队数')
+says(`MSI</b>（11 队`, 'MSI 的队数')
+says(`各 3，CBLOL 2，加上 MSI 带来的两个`, '全球总决赛的基础名额')
+for (const [k, label] of [['kickoff', '第一赛段'], ['stage1', '第二赛段']] as const) {
+  if (!LPL_POINTS_NOTE.includes(`${label} ${LPL_POINTS[k].join('/')}`)) { bad++; console.log(`FAIL LPL 积分说明里的${label}和引擎不一样`) }
+}
+
 // the panel must not quietly become a wall of unsourced claims: every section
 // has to say what the thing DOES, not only what moves it
 const sections = panel.match(/key: '/g)?.length ?? 0
-const uses = panel.match(/\n    use: \[/g)?.length ?? 0
+const uses = panel.match(/\n    use: (lol \? )?\[/g)?.length ?? 0
 if (sections !== uses) {
   bad++
   console.log(`FAIL 每一节都要有「它影响什么」 — ${sections} 节，${uses} 个 use`)

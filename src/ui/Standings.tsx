@@ -150,7 +150,7 @@ export default function Standings() {
               <div className={`qual ${qual.tone}`}>
                 <div className="lead">{qual.headline}</div>
                 {qual.lines.map((l, i) => <p key={i}>{l}</p>)}
-                <p className="tiny faint" style={{ margin: 0 }}>{POINTS_NOTE}</p>
+                {game.rulesetId !== 'lol-2026' && <p className="tiny faint" style={{ margin: 0 }}>{POINTS_NOTE}</p>}
               </div>
             </Panel>
           )}

@@ -11,14 +11,14 @@
  */
 import { INTERNATIONAL_OPEN, PLAYOFF_CUT, championsField, compKey, mastersField } from './season'
 import { rulebookOf } from './rulebook'
-import { drawRules } from './ruleset'
+import { drawRules, programRules } from './ruleset'
 import { sortStandings } from './league'
 import { CHAMPIONS, MASTERS_1, MASTERS_2 } from './endings'
 import { swissRecord, MASTERS_8, STAGE_8, TRIPLE_12, projectNext
 } from './bracket'
 import { hostCity } from './hosts'
 import { programNext, programRounds } from './formats'
-import { programFor } from './programs2026'
+import { EVENT_CN, EVENT_OF, eventSeeds, lplPoints, programFor, qualLine } from './programs2026'
 import type { Competition, Fixture, GameState, StageKey } from './types'
 
 export interface QualStatus {
@@ -62,6 +62,10 @@ export function qualifyRule(stage: StageKey, drawn = false): string {
 /** Points on offer, for the panel's footnote. */
 export const POINTS_NOTE =
   '冠军积分：第一赛段 前 4 名 6/4/3/2；第二赛段、第三赛段 前 8 名 9/7/5/4/3/3/2/2；国际赛 前 6 名 12/9/7/5/4/4。'
+
+/** LPL's Championship Points (lol-2026), the only league whose points decide Worlds seeds besides LCP's */
+export const LPL_POINTS_NOTE =
+  'LPL 积分：第一赛段 80/50/40/20/10/10/5/5，第二赛段 110/80/50/30/15/15/10/10，第三赛段（冠军之外）亚军 110、季军 80、第 4 名 50、5–6 名 30、7–8 名 15。'
 
 /** The day each international opens on, at the earliest. */
 export const INTERNATIONAL_START = INTERNATIONAL_OPEN
@@ -136,6 +140,20 @@ export function upcomingInternational(state: GameState): Upcoming | null {
   const me = state.teams[state.myTeam]
   if (!me || me.tier !== 1) return null
   const book = rulebookOf(state)
+  if (programRules(state)) {
+    for (const key of ['masters1', 'masters2', 'champions'] as const) {
+      if (state.comps[key]) continue
+      const seeds = eventSeeds(state, key, me.region)
+      if (!seeds) continue
+      const i = seeds.indexOf(state.myTeam)
+      if (i < 0) return null
+      return {
+        key, name: EVENT_CN[key], day: Math.max(state.day + 1, book.internationalOpen[key]), swiss: false,
+        how: `${me.region} ${i + 1} 号种子`,
+      }
+    }
+    return null
+  }
   const order: { key: 'masters1' | 'masters2' | 'champions'; feeder: StageKey; name: string }[] = [
     { key: 'masters1', feeder: 'kickoff', name: MASTERS_1 },
     { key: 'masters2', feeder: 'stage1', name: MASTERS_2 },
@@ -179,6 +197,7 @@ export function upcomingInternational(state: GameState): Upcoming | null {
 export function qualification(state: GameState): QualStatus | null {
   const me = state.teams[state.myTeam]
   if (!me || me.tier !== 1) return null
+  if (programRules(state)) return qualificationLol(state)
 
   // ---- inside an international: where we are in it
   if (state.stage === 'masters1' || state.stage === 'masters2' || state.stage === 'champions') {
@@ -470,4 +489,56 @@ export function nextInEvent(state: GameState): NextIn | null {
     void last
   }
   return null
+}
+
+/**
+ * 晋级形势 under lol-2026: what the stage under way sends on, and where we
+ * stand — read off the same seed lists the internationals are built from.
+ */
+function qualificationLol(state: GameState): QualStatus | null {
+  const me = state.teams[state.myTeam]
+  if (!me) return null
+  const stage = state.stage
+  if (stage === 'masters1' || stage === 'masters2' || stage === 'champions') {
+    const comp = state.comps[stage]
+    if (!comp) return null
+    if (!comp.teams.includes(state.myTeam)) return { event: comp.name, headline: `${comp.name} 进行中，我们没打进去。`, lines: [], tone: 'info' }
+    if (comp.champion) {
+      const place = comp.finished.indexOf(state.myTeam) + 1
+      return { event: comp.name, tone: place <= 3 ? 'good' : 'info', headline: place === 1 ? `我们是 ${comp.name} 冠军！` : `${comp.name} 结束：我们 ${ordinal(place)}。`, lines: [] }
+    }
+    const nx = nextInEvent(state)
+    const pending = state.fixtures.some((f) => f.comp === comp.key && !f.played && (f.teamA === state.myTeam || f.teamB === state.myTeam))
+    return {
+      event: comp.name, tone: 'info',
+      headline: pending || nx ? `${comp.name} 进行中${nx ? `：下一场 ${nx.round}` : ''}。` : `${comp.name}：我们已经出局，等结果。`,
+      lines: [],
+    }
+  }
+  const slot = stage === 'kickoff' || stage === 'stage1' || stage === 'stage2' ? stage : null
+  if (!slot) return null
+  const comp = state.comps[compKey(slot, me.region)]
+  if (!comp) return null
+  const ev = EVENT_OF[slot]
+  const rule = qualLine(me.region, slot)
+  const lines = [rule]
+  if (me.region === 'LPL') {
+    const pts = lplPoints(state)
+    const rank = Object.keys(pts).sort((a, b) => pts[b] - pts[a]).indexOf(state.myTeam) + 1
+    lines.push(`全年积分 ${pts[state.myTeam] ?? 0} 分${rank > 0 ? `（第 ${rank}）` : ''}。${LPL_POINTS_NOTE}`)
+  }
+  if (comp.champion) {
+    const seeds = eventSeeds(state, ev, me.region)
+    const place = comp.finished.indexOf(state.myTeam) + 1
+    if (!seeds) {
+      const rf = state.comps['qual:LPL']
+      if (rf?.teams.includes(state.myTeam)) return { event: EVENT_CN[ev], tone: 'info', headline: `${comp.name} ${ordinal(place)}：在 LPL 区域资格赛里争最后的名额。`, lines }
+      return { event: EVENT_CN[ev], tone: 'info', headline: `${comp.name} ${ordinal(place)}：名额要等别的比赛打完才定。`, lines }
+    }
+    const i = seeds.indexOf(state.myTeam)
+    return i >= 0
+      ? { event: EVENT_CN[ev], tone: 'good', headline: `已锁定 ${EVENT_CN[ev]}：${me.region} ${i + 1} 号种子（${comp.name} ${ordinal(place)}）。`, lines }
+      : { event: EVENT_CN[ev], tone: 'warn', headline: `无缘 ${EVENT_CN[ev]}：${comp.name} ${ordinal(place)}。`, lines }
+  }
+  return { event: EVENT_CN[ev], tone: 'info', headline: `${comp.name} 进行中：${rule}。`, lines: lines.slice(1) }
 }
