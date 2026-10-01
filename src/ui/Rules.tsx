@@ -16,6 +16,7 @@
  */
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { currentRuleset, drawRules, programRules } from '../engine/ruleset'
+import { eraOf } from '../engine/programsHist'
 import { GameCtx } from './ctx'
 import Rich from './rich'
 import { LPL_POINTS_NOTE, POINTS_NOTE, qualifyRule } from '../engine/qualify'
@@ -23,14 +24,37 @@ import { LPL_POINTS_NOTE, POINTS_NOTE, qualifyRule } from '../engine/qualify'
 interface Line { t: string; d: string }
 interface Section { key: string; title: string; lede: string; up?: Line[]; down?: Line[]; use: string[]; useTitle?: string }
 
-const buildSections = (drawn: boolean, lol = false): Section[] => [
+/** the years before 2025, as a career started in the past plays them (programsHist.ts) */
+const HIST_USE: Record<2016 | 2022, string[]> = {
+  2016: [
+    '2016–2018 年按 S6（2016）的真实赛制打：春季赛 → MSI → 夏季赛 → 区域资格赛 → 全球总决赛，没有 First Stand。',
+    '<b>LPL</b>：东西两区各六队，组内双循环、对面组单循环，BO3；季后赛八队单败，有季军赛。<b>LCK</b>：十队双循环 BO3，前五打擂台赛（外卡赛 BO3，之后 BO5）。',
+    '<b>EU LCS / NA LCS</b>：十队双循环（EU 夏季两局制，这里按两场单局打；NA 夏季 BO3），前二进半决赛、3–6 打八强，半决赛重排种子，有季军赛。夏季 8–10 名清空全年积分。',
+    '<b>LMS</b>：八队双循环两局制（按两场单局打），前四擂台赛。<b>CBLOL</b>：八队单循环两局制（按两场单局打），春季前六、夏季前四打淘汰赛。',
+    '<b>全年积分</b>：按春季、夏季名次累计（LPL 300 分制，其余 90 分制）。夏季冠军是一号种子，积分第一是二号种子，积分第三到第六打擂台赛争三号种子；LMS 只有两个名额（冠军 + 积分第二到第五的单败赛）。',
+    '<b>MSI</b>：六个赛区的春季赛冠军（巴西代表外卡），双循环 BO1，前四单败 BO5。<b>全球总决赛</b>：十五队分进四个小组（同赛区尽量不同组），双循环 BO1，前二进八强单败 BO5。外卡资格赛不模拟，巴西冠军直接占外卡席位。',
+    '<b>升降级</b>：年末次级联赛冠军升级、夏季赛末名降级（LPL、NA LCS 到 2017 年，EU LCS 到 2018 年，LCK、CBLOL 到 2020 年）。2016 年春季赛后的那次升降级不打。',
+  ],
+  2022: [
+    '2019–2024 年按 S12（2022）的真实赛制打：春季赛 → MSI → 夏季赛 → 区域资格赛 → 全球总决赛，没有 First Stand。',
+    '<b>LPL</b>：全联盟单循环 BO3，前十进季后赛：两条擂台赛（3/6/7/10 与 4/5/8/9），胜者挑战第二、第一，再接四队双败。<b>LCK</b>：十队双循环 BO3，前二进半决赛、3–6 打外卡赛，夏季第一名挑半决赛对手。',
+    '<b>LEC / LCS / PCS / CBLOL</b>：双循环 BO1，再打双败季后赛（LEC 夏季按全年积分排种子；LCS 夏季和 PCS 是八队）。',
+    '<b>全年积分</b>（LPL、LCK）：夏季冠军是一号种子，积分第一是二号种子，积分其后四队打区域资格赛：胜者组胜者是三号种子，败者组胜者是四号种子（去入围赛）。',
+    '<b>MSI</b>：六个赛区的春季赛冠军直接打对抗赛（小组赛的其他对手来自游戏没有的赛区），双循环 BO1，前四进淘汰赛，第一名挑半决赛对手。',
+    '<b>全球总决赛</b>（18 队）：LPL、LCK、LEC 各 4，LCS 3，PCS 2，CBLOL 1。七个末位种子打入围赛（单循环 BO1 前三晋级，再打两场 BO5 各出一队），小组赛四组双循环 BO1，八强单败 BO5。',
+  ],
+}
+
+const buildSections = (drawn: boolean, lol = false, era: 2016 | 2022 | 2026 = 2026): Section[] => [
   {
     key: 'format',
     title: '赛制与晋级',
-    lede: '一年六段：第一赛段 → First Stand → 第二赛段 → MSI 季中冠军赛 → 第三赛段 → 全球总决赛，中间是休赛期和两个短转会窗。'
+    lede: (era === 2026
+      ? '一年六段：第一赛段 → First Stand → 第二赛段 → MSI 季中冠军赛 → 第三赛段 → 全球总决赛，中间是休赛期和两个短转会窗。'
+      : '一年四段：春季赛 → MSI 季中冠军赛 → 夏季赛（之后是区域资格赛）→ 全球总决赛，中间是休赛期和转会窗。')
       + '赛区赛段先打循环赛，再打季后赛；国际赛的名额看季后赛名次和全年积分。'
       + '积分榜顶上的「晋级形势」会告诉你还差什么。',
-    use: lol ? [
+    use: lol && era !== 2026 ? HIST_USE[era] : lol ? [
       '<b>LPL</b>：三个赛段都按上一赛段名次分组（Ascend / Perseverance / Nirvana），组内循环 BO3，再打骑士之路附加赛和八队双败淘汰。第二赛段 Nirvana 末两名当年的比赛就此结束，第三赛段只剩 12 队。',
       '<b>LCK</b>：LCK Cup 两组只打对面组、按组计分；第二赛段十队双循环 + Road to MSI；第三赛段按名次分 Legend / Rise，带着前两轮的战绩再打双循环，再接入围赛和六队双败。',
       '<b>LEC</b>：Versus 单循环 BO1 + 八队双败；春季、夏季单循环 BO3 + 六队双败。<b>LCS</b>：Lock-In 三轮瑞士轮；春季、夏季单循环 BO3 + 六队双败。<b>LCP</b>：前两个赛段单循环 + 六队双败，第三赛段瑞士轮。<b>CBLOL</b>：Cup 单循环 BO1 + 入围赛；之后两个赛段单循环 BO3 + 六队双败。',
@@ -328,7 +352,8 @@ export default function Rules({ raised = false }: { raised?: boolean }) {
   const ctx = useContext(GameCtx)
   const drawn = ctx ? drawRules(ctx.game) : currentRuleset() === 'vct-2026'
   const lol = ctx ? programRules(ctx.game) : currentRuleset() === 'lol-2026'
-  const SECTIONS = useMemo(() => buildSections(drawn, lol), [drawn, lol])
+  const era = ctx ? eraOf(ctx.game.year) : 2026
+  const SECTIONS = useMemo(() => buildSections(drawn, lol, era), [drawn, lol, era])
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState(SECTIONS[0].key)
 

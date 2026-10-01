@@ -323,7 +323,7 @@ export default function ManagerGame({ onHome, testSaves = false }: { onHome: () 
             </span>
           </div>
           <div className="chip">{dateLabel(game)}</div>
-          <div className="chip">{stageName(game.stage)}</div>
+          <div className="chip">{stageName(game.stage, game)}</div>
           <div className="spacer" />
           <div className="chip" title="可用资金" aria-label="可用资金"><span aria-hidden="true">💰</span> <b>{money(game.finances.balance)}</b></div>
           <div

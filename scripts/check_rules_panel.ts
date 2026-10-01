@@ -97,7 +97,7 @@ for (const [k, label] of [['kickoff', '第一赛段'], ['stage1', '第二赛段'
 // the panel must not quietly become a wall of unsourced claims: every section
 // has to say what the thing DOES, not only what moves it
 const sections = panel.match(/key: '/g)?.length ?? 0
-const uses = panel.match(/\n    use: (lol \? )?\[/g)?.length ?? 0
+const uses = panel.match(/\n    use: (lol && era !== 2026 \? HIST_USE\[era\] : )?(lol \? )?\[/g)?.length ?? 0
 if (sections !== uses) {
   bad++
   console.log(`FAIL 每一节都要有「它影响什么」 — ${sections} 节，${uses} 个 use`)

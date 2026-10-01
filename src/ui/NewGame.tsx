@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { DEFAULT_START_YEAR, ERA_CN, HISTORICAL_YEARS, loadWorld } from '../engine/eras'
+import { eraOf, relegatesIn } from '../engine/programsHist'
+import { leagueLabel } from '../engine/leagueNames'
 import type { RawWorld } from '../engine/eras'
 import { RULESET_CN, currentRuleset } from '../engine/ruleset'
 import { ask } from './confirm'
@@ -300,12 +302,14 @@ export default function NewGame({ onHome,
                 <div key={tier} style={{ marginBottom: 16 }}>
                   <div className="nav-group" style={{ padding: '0 0 7px' }}>
                     {tier === 1
-                      ? `一级联赛 · ${region}（${REGION_CN[region]}，${byTier[tier].length} 队）`
-                      : `次级联赛 · 次级联赛 ${REGION_CN[region]}（${byTier[tier].length} 队）`}
+                      ? `一级联赛 · ${leagueLabel(startYear, region)}（${REGION_CN[region]}，${byTier[tier].length} 队）`
+                      : `次级联赛 · ${REGION_CN[region]}（${byTier[tier].length} 队）`}
                     <span className="tiny faint" style={{ marginLeft: 8, textTransform: 'none', letterSpacing: 0 }}>
                       {tier === 1
-                        ? '第一赛段 → 第二赛段 → 第三赛段，可争夺 国际赛 与 全球总决赛'
-                        : '联盟制，没有升降级：在这里做出成绩，一级联赛的俱乐部会来请你'}
+                        ? (eraOf(startYear) === 2026 ? '第一赛段 → 第二赛段 → 第三赛段，可争夺 国际赛 与 全球总决赛' : '春季赛 → 夏季赛，可争夺 MSI 与 全球总决赛')
+                        : relegatesIn(region, startYear)
+                          ? `有升降级：年末冠军升入 ${leagueLabel(startYear, region)}，一级联赛夏季赛末名降下来`
+                          : '联盟制，没有升降级：在这里做出成绩，一级联赛的俱乐部会来请你'}
                     </span>
                   </div>
                   <div className="team-pick">
@@ -447,7 +451,7 @@ export default function NewGame({ onHome,
       <div style={{ marginTop: 20 }}><Credit /></div>
       <p className="tiny muted" style={{ marginTop: 12, lineHeight: 1.8 }}>
         游戏内所有战队与选手均为真实人物。阵容、位置、英雄池与全部比赛数据取自
-        <b> Oracle's Elixir</b> 的逐场数据（2024–2026）；中文名、真名、国籍、居民赛区与生日取自 <b>Leaguepedia</b>。
+        <b> Oracle's Elixir</b> 的逐场数据（2015–2026；历史档的能力只用开档之前的比赛评）；中文名、真名、国籍、居民赛区与生日取自 <b>Leaguepedia</b>。
         八项能力由这些真实数据在同位置、同联赛内换算得出；其中「运营」是他在场时队伍十五分钟之后多赢了多少，
         不是任何人填的。查不到的资料留空，不编。合同、薪资与预算为游戏平衡的估算值。
         本作与 Riot Games 无关，未使用任何官方美术素材。

@@ -71,6 +71,17 @@ export const ERA_CN: Record<number, string> = {
  * 国际赛 (Tokyo) after LOCK//IN; it is listed for the day a 2023 start exists.
  */
 export const REAL_HOSTS: Record<number, { masters1: string; masters2: string; champions: string }> = {
+  // MSI and the Worlds final, where they were really played (2020's MSI was cancelled: the mid-season cup was online)
+  2016: { masters1: '—', masters2: '上海', champions: '洛杉矶' },
+  2017: { masters1: '—', masters2: '里约热内卢', champions: '北京' },
+  2018: { masters1: '—', masters2: '巴黎', champions: '仁川' },
+  2019: { masters1: '—', masters2: '台北', champions: '巴黎' },
+  2020: { masters1: '—', masters2: '线上', champions: '上海' },
+  2021: { masters1: '—', masters2: '雷克雅未克', champions: '雷克雅未克' },
+  2022: { masters1: '—', masters2: '釜山', champions: '旧金山' },
+  2023: { masters1: '—', masters2: '伦敦', champions: '首尔' },
+  2024: { masters1: '—', masters2: '成都', champions: '伦敦' },
+  2025: { masters1: '首尔', masters2: '温哥华', champions: '成都' },
   // First Stand São Paulo, MSI Daejeon, Worlds in North America (final at Barclays Center)
   2026: { masters1: '圣保罗', masters2: '大田', champions: '纽约' },
 }

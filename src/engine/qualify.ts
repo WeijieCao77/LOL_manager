@@ -18,7 +18,7 @@ import { swissRecord, MASTERS_8, STAGE_8, TRIPLE_12, projectNext
 } from './bracket'
 import { hostCity } from './hosts'
 import { programNext, programRounds } from './formats'
-import { EVENT_CN, EVENT_OF, eventSeeds, lplPoints, programFor, qualLine } from './programs2026'
+import { ANY_EVENT_CN as EVENT_CN, anyEventOf, anyEventSeeds as eventSeeds, anyPoints, anyProgramFor as programFor, anyQualLine, pointsNote } from './programsHist'
 import type { Competition, Fixture, GameState, StageKey } from './types'
 
 export interface QualStatus {
@@ -519,20 +519,20 @@ function qualificationLol(state: GameState): QualStatus | null {
   if (!slot) return null
   const comp = state.comps[compKey(slot, me.region)]
   if (!comp) return null
-  const ev = EVENT_OF[slot]
-  const rule = qualLine(me.region, slot)
+  const ev = anyEventOf(state, slot)
+  const rule = anyQualLine(state, me.region, slot)
   const lines = [rule]
-  if (me.region === 'LPL') {
-    const pts = lplPoints(state)
+  const pts = anyPoints(state, me.region)
+  if (pts) {
     const rank = Object.keys(pts).sort((a, b) => pts[b] - pts[a]).indexOf(state.myTeam) + 1
-    lines.push(`全年积分 ${pts[state.myTeam] ?? 0} 分${rank > 0 ? `（第 ${rank}）` : ''}。${LPL_POINTS_NOTE}`)
+    lines.push(`全年积分 ${pts[state.myTeam] ?? 0} 分${rank > 0 ? `（第 ${rank}）` : ''}。${pointsNote(state, me.region) || LPL_POINTS_NOTE}`)
   }
   if (comp.champion) {
     const seeds = eventSeeds(state, ev, me.region)
     const place = comp.finished.indexOf(state.myTeam) + 1
     if (!seeds) {
-      const rf = state.comps['qual:LPL']
-      if (rf?.teams.includes(state.myTeam)) return { event: EVENT_CN[ev], tone: 'info', headline: `${comp.name} ${ordinal(place)}：在 LPL 区域资格赛里争最后的名额。`, lines }
+      const rf = state.comps[`qual:${me.region}`]
+      if (rf?.teams.includes(state.myTeam)) return { event: EVENT_CN[ev], tone: 'info', headline: `${comp.name} ${ordinal(place)}：在 ${rf.name} 里争最后的名额。`, lines }
       return { event: EVENT_CN[ev], tone: 'info', headline: `${comp.name} ${ordinal(place)}：名额要等别的比赛打完才定。`, lines }
     }
     const i = seeds.indexOf(state.myTeam)

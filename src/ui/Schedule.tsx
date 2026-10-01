@@ -1,3 +1,6 @@
+import { relegatesIn } from '../engine/programsHist'
+import { T1_REGIONS } from '../engine/programs2026'
+import { leagueLabel } from '../engine/leagueNames'
 import { useState } from 'react'
 import { useGame } from './ctx'
 import { Panel, fmtDay, Crest } from './common'
@@ -55,8 +58,11 @@ export default function Schedule() {
   const { game, openMatch } = useGame()
   // 2023 has no First Stand; its 国际赛 is in the second slot and its LCQ in 第三赛段's
   const book = rulebookOf(game)
-  const INTL = INTL_ALL.filter((e) => !(book.lockin && e.key === 'masters1'))
+  // only the internationals this year's calendar has (no First Stand before 2025)
+  const INTL = INTL_ALL.filter((e) => !(book.lockin && e.key === 'masters1') && book.stages.some((s) => s.key === e.key))
   const INTERNATIONAL_START = book.internationalOpen
+  // the leagues that still swap a club with their second tier at the end of this year
+  const swapping = T1_REGIONS.filter((r) => relegatesIn(r, game.year) && Object.values(game.teams).filter((t) => t.region === r && t.tier === 2).length >= 2)
   const [scope, setScope] = useState<'mine' | 'all'>('mine')
   const [region, setRegion] = useState<Region | 'all'>('all')
   const me = game.myTeam
@@ -79,7 +85,7 @@ export default function Schedule() {
     const list = game.fixtures.slice().sort((a, b) => a.day - b.day).filter((f) => Math.abs(f.day - game.day) <= 10 && inRegion(f))
     const byStage = new Map<string, Row[]>()
     for (const f of list) {
-      const k = stageName(f.stage)
+      const k = stageName(f.stage, game)
       byStage.set(k, [...(byStage.get(k) ?? []), rowOf(f, f.teamA !== me && f.teamB !== me)])
     }
     for (const [title, rows] of byStage) groups.push({ key: title, title, day: rows[0].day, rows })
@@ -90,7 +96,7 @@ export default function Schedule() {
     const byStage = new Map<string, Row[]>()
     for (const f of mine) {
       if (intlKeys.has(f.comp as 'masters1')) continue
-      const k = stageName(f.stage)
+      const k = stageName(f.stage, game)
       byStage.set(k, [...(byStage.get(k) ?? []), rowOf(f)])
     }
     // a playoff we are out of still has a winner to find: its remaining ties
@@ -104,7 +110,7 @@ export default function Schedule() {
       const rest = game.fixtures.filter((f) => f.comp === comp.key && !f.played
         && f.label.startsWith('KO:') && f.teamA !== me && f.teamB !== me)
       if (!rest.length) continue
-      const k = stageName(comp.stage)
+      const k = stageName(comp.stage, game)
       byStage.set(k, [...(byStage.get(k) ?? []), ...rest.map((f) => rowOf(f, true))].sort((x, y) => x.day - y.day))
     }
     // The rounds of a regional playoff that have not been drawn are on the
@@ -119,7 +125,7 @@ export default function Schedule() {
       // a bracket whose draw has not been held has no ties, but its days are
       // known — every round shows as 待定 vs 待定 until the balls are out
       if (!comp.bracketStarted && comp.plannedStart == null) continue
-      const k = stageName(comp.stage)
+      const k = stageName(comp.stage, game)
       const rows = byStage.get(k) ?? []
       for (const r of eventRounds(game, comp)) {
         if (r.drawn) continue
@@ -205,7 +211,9 @@ export default function Schedule() {
           })}
         </div>
         <p className="tiny muted" style={{ marginBottom: 0, marginTop: 10 }}>
-          次级联赛与一级联赛并行。联盟制没有升降级：次级联赛的冠军是一座奖杯，往上走的是人。
+          {swapping.length
+            ? `次级联赛与一级联赛并行。${swapping.map((r) => leagueLabel(game.year, r)).join('、')} 今年还有升降级：年末次级联赛冠军升上来，夏季赛末名降下去。`
+            : '次级联赛与一级联赛并行。联盟制没有升降级：次级联赛的冠军是一座奖杯，往上走的是人。'}
         </p>
       </Panel>
 

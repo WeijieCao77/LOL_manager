@@ -80,7 +80,10 @@ export interface RR extends Base {
   /** last day of the table */
   end: number
   bo: 1 | 3 | 5
-  groups: (ctx: Ctx) => { name: string; teams: string[]; cycles: 1 | 2 }[]
+  /** cycles: how many times each pair in a group meets (a Bo2 league is played as two cycles of one game) */
+  groups: (ctx: Ctx) => { name: string; teams: string[]; cycles: number }[]
+  /** two groups that also play each other this many times (LPL 2016: a single round across) */
+  crossCycles?: number
   /** copy these teams' table rows in from another competition before the first game */
   carry?: (ctx: Ctx) => Competition | undefined
 }
@@ -186,17 +189,38 @@ function startRR(ctx: Ctx, p: RR, from: number): Fixture[] {
   const start = Math.max(p.start, from)
   const end = Math.max(p.end, start + 4)
   const out: Fixture[] = []
-  for (const g of groups) {
+  // the rounds across two groups, interleaved with each group's own (LPL 2016)
+  const across: [string, string][][] = []
+  if (p.crossCycles && groups.length === 2) {
+    const [g1, g2] = groups
+    const n = Math.min(g1.teams.length, g2.teams.length)
+    for (let c = 0; c < p.crossCycles; c++) {
+      for (let r = 0; r < n; r++) across.push(g1.teams.slice(0, n).map((a, i) => (c % 2 ? [g2.teams[(i + r) % n], a] : [a, g2.teams[(i + r) % n]]) as [string, string]))
+    }
+  }
+  for (const [gi, g] of groups.entries()) {
     let rounds: [string, string][][] = []
     for (let c = 0; c < g.cycles; c++) {
       for (const pairs of roundRobin(g.teams, rng)) rounds.push(c % 2 ? pairs.map(([a, b]) => [b, a] as [string, string]) : pairs)
     }
     rounds = rounds.filter((r) => r.length)
+    if (across.length) {
+      // every third round is played across; the first group's schedule carries the cross games,
+      // the second leaves those rounds empty so both groups stay on the same days
+      const cross = gi === 0 ? across.slice() : across.map(() => [] as [string, string][])
+      const mixed: [string, string][][] = []
+      const total = rounds.length + cross.length
+      for (let i = 0; i < total; i++) {
+        const wantCross = cross.length > 0 && (i % 3 === 2 || rounds.length === 0)
+        mixed.push(wantCross ? cross.shift()! : rounds.shift() ?? cross.shift()!)
+      }
+      rounds = mixed
+    }
     const step = rounds.length > 1 ? Math.max(1, (end - start) / (rounds.length - 1)) : 0
     const suffix = groups.length > 1 ? ` · ${g.name}` : ''
     rounds.forEach((pairs, i) => {
       const day = start + Math.round(i * step)
-      for (const [a, b] of pairs) out.push(fixture(state, comp, p.key, day, a, b, p.bo, `常规赛 第${i + 1}轮${suffix}`))
+      for (const [a, b] of pairs) out.push(fixture(state, comp, p.key, day, a, b, p.bo, `常规赛 第${i + 1}轮${across.length && !g.teams.includes(b) ? ' · 跨组' : suffix}`))
     })
   }
   return out

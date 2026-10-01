@@ -5,7 +5,7 @@ import Bracket from './Bracket'
 import { groupTable, sortStandings } from '../engine/league'
 import { DRAW_KIND_CN, drawsOf } from '../engine/draw'
 import { PLAYOFF_CUT } from '../engine/season'
-import { programFor } from '../engine/programs2026'
+import { anyProgramFor as programFor } from '../engine/programsHist'
 import { crossPoints } from '../engine/formats'
 import { stagesOf } from '../engine/rulebook'
 import { POINTS_NOTE, qualification } from '../engine/qualify'
@@ -181,7 +181,7 @@ export default function Standings() {
                   {c.groups.map((g, i) => (
                     <div key={i}>
                       <div className="nav-group" style={{ padding: '8px 13px 4px' }}>
-                        {c.groupNames?.[i] ?? ['Alpha', 'Omega'][i]} 组{c.format === 'program' ? '' : ' · 前 4 进季后赛'}
+                        {c.groupNames?.[i] ?? ['Alpha', 'Omega'][i]}{/[区组]$/.test(c.groupNames?.[i] ?? '') ? '' : ' 组'}{c.format === 'program' ? '' : ' · 前 4 进季后赛'}
                       </div>
                       <Table comp={c} members={g} cut={c.format === 'program' ? 0 : 4} />
                     </div>

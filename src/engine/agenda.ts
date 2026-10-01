@@ -199,7 +199,7 @@ export function agendaFor(state: GameState): AgendaItem[] {
       const q = qualification(state)
       items.push({
         key: 'intl', tone: 'info', go: 'standings',
-        text: q ? q.headline : `${stageName(state.stage)} 期间没我们的比赛，可以约训练赛。`,
+        text: q ? q.headline : `${stageName(state.stage, state)} 期间没我们的比赛，可以约训练赛。`,
       })
       if (open) {
         items.push({

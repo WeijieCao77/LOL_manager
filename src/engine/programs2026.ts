@@ -186,7 +186,7 @@ const lastChance: Template = {
   places: [W('最后机会赛'), L('最后机会赛')],
 }
 /** Four, single elimination. */
-const se4: Template = {
+export const se4: Template = {
   waves: [
     [{ name: '半决赛', slots: [{ a: S(1), b: S(4) }, { a: S(2), b: S(3) }] }],
     [{ name: '决赛', slots: [{ a: W('半决赛', 0), b: W('半决赛', 1) }] }],
@@ -194,7 +194,7 @@ const se4: Template = {
   places: [W('决赛'), L('决赛'), L('半决赛', 0), L('半决赛', 1)],
 }
 /** Eight, single elimination. */
-const se8: Template = {
+export const se8: Template = {
   waves: [
     [{ name: '八强赛', slots: [{ a: S(1), b: S(8) }, { a: S(4), b: S(5) }, { a: S(2), b: S(7) }, { a: S(3), b: S(6) }] }],
     [{ name: '半决赛', slots: [{ a: W('八强赛', 0), b: W('八强赛', 1) }, { a: W('八强赛', 2), b: W('八强赛', 3) }] }],
@@ -226,7 +226,7 @@ export const T1_REGIONS: Region[] = ['LPL', 'LCK', 'LEC', 'LCS', 'LCP', 'CBLOL']
 /** for seeding internationals when nothing better is known: the regions' standing in the world */
 export const REGION_ORDER: Region[] = ['LCK', 'LPL', 'LEC', 'LCS', 'LCP', 'CBLOL']
 
-const tier1 = (state: GameState, region: Region) =>
+export const tier1 = (state: GameState, region: Region) =>
   Object.values(state.teams).filter((t) => t.region === region && t.tier === 1)
     .sort((a, b) => b.rating - a.rating).map((t) => t.id)
 
@@ -236,18 +236,18 @@ const byTags = (state: GameState, region: Region, tags: string[]): string[] => {
 }
 
 export const ckey = (slot: string, region?: Region) => (region ? `${slot}:${region}` : slot)
-const done = (state: GameState, slot: string, region?: Region): Competition | undefined => {
+export const done = (state: GameState, slot: string, region?: Region): Competition | undefined => {
   const c = state.comps[ckey(slot, region)]
   return c?.champion ? c : undefined
 }
-const finished = (state: GameState, slot: string, region?: Region): string[] => done(state, slot, region)?.finished ?? []
+export const finished = (state: GameState, slot: string, region?: Region): string[] => done(state, slot, region)?.finished ?? []
 
 /**
  * Last year's ranking of a region's league, best first — the seeding for the
  * first stage. 2026 opens from the real groups; later years from the year
  * before (state.prevRank, written when a season is set up).
  */
-function lastYear(state: GameState, region: Region): string[] {
+export function lastYear(state: GameState, region: Region): string[] {
   const prev = state.prevRank?.[region]?.filter((id) => state.teams[id]?.tier === 1 && state.teams[id]?.region === region)
   const all = tier1(state, region)
   if (prev?.length) return [...prev, ...all.filter((id) => !prev.includes(id))]
@@ -264,7 +264,7 @@ function lastYear(state: GameState, region: Region): string[] {
   return all
 }
 
-const tableOf = (ctx: Ctx, key: string, group?: string) =>
+export const tableOf = (ctx: Ctx, key: string, group?: string) =>
   group ? ctx.res[key]?.groups?.[group] ?? [] : ctx.res[key]?.order ?? []
 
 /** the top four pick their opponents from the qualifiers, best first; seeds for de8 (1v8, 4v5, 2v7, 3v6) */
@@ -287,7 +287,7 @@ const LPL: Record<Slot, Program> = {
           return [
             { name: 'Ascend', teams: r.slice(0, 6), cycles: 2 },
             { name: 'Perseverance', teams: r.slice(6, 10), cycles: 2 },
-            { name: 'Nirvana', teams: r.slice(10, 14), cycles: 2 },
+            { name: 'Nirvana', teams: r.slice(10), cycles: 2 },
           ]
         },
       },
@@ -311,7 +311,7 @@ const LPL: Record<Slot, Program> = {
         kind: 'rr', key: 'rr', start: 93, end: 138, bo: 3,
         groups: (ctx) => {
           const r = finished(ctx.state, 'kickoff', 'LPL')
-          return [{ name: 'Ascend', teams: r.slice(0, 8), cycles: 2 }, { name: 'Nirvana', teams: r.slice(8, 14), cycles: 1 }]
+          return [{ name: 'Ascend', teams: r.slice(0, 8), cycles: 2 }, { name: 'Nirvana', teams: r.slice(8), cycles: 1 }]
         },
       },
       {

@@ -223,7 +223,7 @@ export default function Dashboard() {
       )}
 
       <Panel
-        title={`${stageName(game.stage)}${daysLeft > 0 ? ` · 还剩 ${daysLeft} 天` : ''}`}
+        title={`${stageName(game.stage, game)}${daysLeft > 0 ? ` · 还剩 ${daysLeft} 天` : ''}`}
         className={agenda.some((a) => a.tone === 'urgent') ? 'alert' : 'own'}
       >
         {agenda.length ? (
@@ -575,7 +575,7 @@ export default function Dashboard() {
               </table>
             </div>
           ) : (
-            <div className="empty">{stageName(game.stage)} 期间没有联赛。</div>
+            <div className="empty">{stageName(game.stage, game)} 期间没有联赛。</div>
           )}
         </Panel>
 

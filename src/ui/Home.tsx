@@ -114,7 +114,7 @@ export default function Home({ onOpen }: { onOpen: (m: Mode) => void }) {
             <h2>LOL 电竞经理</h2>
             <p className="lede">英雄联盟电竞经理模拟</p>
             <p className="blurb">
-              接手一支真实战队，从 2026 出发。
+              接手一支真实战队，从 2026 出发，或者回到 2016、2022 的真实世界。
               签人、训练、排兵、BP、谈赞助，打满五年可以收官领结局，
               也可以一直带到 2036。
               {HOME_COUNTS.players} 名选手和 {HOME_COUNTS.headCoaches} 名已收录主教练全是真人，没有程序生成的。

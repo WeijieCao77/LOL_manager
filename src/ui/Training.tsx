@@ -395,7 +395,7 @@ export default function Training() {
 
       <Panel
         tut="focus"
-        title={`训练计划 · ${stageName(game.stage)}`}
+        title={`训练计划 · ${stageName(game.stage, game)}`}
         actions={
           <div className="row" style={{ gap: 8 }}>
             <button className="sm" onClick={restTired}>让疲劳选手休息</button>

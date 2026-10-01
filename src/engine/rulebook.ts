@@ -99,6 +99,44 @@ const LOL_2026: Rulebook = {
   eventNames: { masters1: 'First Stand', masters2: 'MSI 季中冠军赛', champions: '全球总决赛' },
 }
 
+/**
+ * The years before 2025 (docs/调研-2016与2022赛制.md): no First Stand, a
+ * Spring split, MSI, a Summer split with the regional finals after it, Worlds.
+ * The engine's slots: Spring in 第二赛段 (stage1), MSI in masters2, Summer in
+ * 第三赛段 (stage2), Worlds in champions; kickoff and masters1 are absent.
+ * 2016's calendar stands for 2016–2018, 2022's for 2019–2024 (programsHist.ts eraOf).
+ */
+const LOL_2016: Rulebook = {
+  id: 'lol-2026',
+  stages: [
+    { key: 'preseason', name: '季前准备', start: 0, end: 11 },
+    { key: 'stage1', name: '春季赛', start: 12, end: 118 },
+    { key: 'masters2', name: 'MSI 季中冠军赛', start: 119, end: 138 },
+    { key: 'stage2', name: '夏季赛', start: 139, end: 266 },
+    { key: 'champions', name: '全球总决赛', start: 267, end: 305 },
+    { key: 'offseason', name: '休赛期', start: 306, end: SEASON_DAYS - 1 },
+  ],
+  leagueDays: { kickoff: [12, 12], stage1: [12, 113], stage2: [139, 248], challengers1: [28, 110], challengers2: [150, 240] },
+  internationalOpen: { masters1: 999, masters2: 124, champions: 272 },
+  lockin: false,
+  eventNames: { masters2: 'MSI 季中冠军赛', champions: '全球总决赛' },
+}
+const LOL_2022: Rulebook = {
+  ...LOL_2016,
+  stages: [
+    { key: 'preseason', name: '季前准备', start: 0, end: 8 },
+    { key: 'stage1', name: '春季赛', start: 9, end: 124 },
+    { key: 'masters2', name: 'MSI 季中冠军赛', start: 125, end: 150 },
+    { key: 'stage2', name: '夏季赛', start: 151, end: 266 },
+    { key: 'champions', name: '全球总决赛', start: 267, end: 312 },
+    { key: 'offseason', name: '休赛期', start: 313, end: SEASON_DAYS - 1 },
+  ],
+  leagueDays: { kickoff: [9, 9], stage1: [9, 113], stage2: [160, 253], challengers1: [28, 110], challengers2: [160, 240] },
+  internationalOpen: { masters1: 999, masters2: 129, champions: 271 },
+}
+/** the real-formats ruleset's calendar for a year: 2016's shape to 2018, 2022's to 2024, then 2026's */
+export const lolBookFor = (year: number): Rulebook => (year <= 2018 ? LOL_2016 : year <= 2024 ? LOL_2022 : LOL_2026)
+
 export const RULEBOOKS: Record<RulesetId, Rulebook> = {
   'vct-2025': CLASSIC,
   'vct-2026': { ...CLASSIC, id: 'vct-2026' },
@@ -106,9 +144,11 @@ export const RULEBOOKS: Record<RulesetId, Rulebook> = {
   'lol-2026': LOL_2026,
 }
 
-export const rulebookOf = (state: { rulesetId?: RulesetId }): Rulebook => RULEBOOKS[rulesetOf(state)]
-export const stagesOf = (state: { rulesetId?: RulesetId }): StageDef[] => rulebookOf(state).stages
-export const stageAtIn = (state: { rulesetId?: RulesetId }, day: number): StageKey =>
+/** a career's rulebook; under the real formats it follows the year the career is in */
+export const rulebookOf = (state: { rulesetId?: RulesetId; year?: number }): Rulebook =>
+  rulesetOf(state) === 'lol-2026' && state.year !== undefined ? lolBookFor(state.year) : RULEBOOKS[rulesetOf(state)]
+export const stagesOf = (state: { rulesetId?: RulesetId; year?: number }): StageDef[] => rulebookOf(state).stages
+export const stageAtIn = (state: { rulesetId?: RulesetId; year?: number }, day: number): StageKey =>
   stagesOf(state).find((s) => day >= s.start && day <= s.end)?.key ?? 'offseason'
 /** the classic calendar, for checks and copy that describe the ordinary year */
 export const CLASSIC_RULEBOOK = CLASSIC

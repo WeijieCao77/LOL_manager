@@ -28,7 +28,9 @@ import { dailyLife, weeklyLife } from './life'
 import { autoStarters, ensureCaller } from './world'
 import { CHAMPIONS_2025, drawRules, programRules } from './ruleset'
 import { stepProgram, WAVE_GAP as PROGRAM_GAP } from './formats'
-import { T1_REGIONS, fstSeeds, lplRegionalField, msiSeeds, programFor, seasonRanking, worldsSeeds } from './programs2026'
+import { T1_REGIONS, fstSeeds, lplRegionalField, msiSeeds, seasonRanking, worldsSeeds } from './programs2026'
+import { anyProgramFor, eraOf, eraTag, histMsiSeeds, histSeasonRanking, histTag, histWorldsSeeds, relegatesIn, rfField, rfRegions } from './programsHist'
+import { leagueLabel } from './leagueNames'
 import {
   championsGroupSquare, createPlayoffPick, drawChampionsGroups, drawChampionsPlayoffs, drawKickoffBracket, drawStageGroups,
   drawStageReshuffle, drawSwissRound, drawsThisYear, needsManager, nextPendingDraw, resetDrawSeq, resolvePicks, revealAll,
@@ -121,7 +123,7 @@ export const INTERNATIONAL_OPEN: Record<'masters1' | 'masters2' | 'champions', n
 export const stageAt = (day: number): StageKey =>
   STAGES.find((s) => day >= s.start && day <= s.end)?.key ?? 'offseason'
 
-export const stageName = (key: StageKey, state?: { rulesetId?: GameState['rulesetId'] }): string =>
+export const stageName = (key: StageKey, state?: { rulesetId?: GameState['rulesetId']; year?: number }): string =>
   (state ? stagesOf(state) : STAGES).find((s) => s.key === key)?.name ??
   ({ challengers1: '次级联赛 · 上半年', challengers2: '次级联赛 · 下半年', ascension: '次级联赛总决赛' } as Record<string, string>)[key] ??
   key
@@ -179,7 +181,8 @@ export function setupSeason(state: GameState, notes?: string[]): void {
   // last year's tables seed this year's first stage (LPL's groups, LCK Cup's) —
   // read before they are cleared
   if (programRules(state)) {
-    const rank = seasonRanking(state)
+    // ranked by the rules the year just over was played under
+    const rank = histTag(state) ? histSeasonRanking(state) : seasonRanking(state)
     if (Object.keys(rank).length) state.prevRank = rank
   }
   // a historical career: the year's real newcomers arrive and the clubs lean towards
@@ -217,10 +220,16 @@ export function setupSeason(state: GameState, notes?: string[]): void {
     // ---- lol-2026: each tier-one stage is a program of phases (programs2026.ts);
     // the second tier keeps its two splits of a table and a bracket
     if (programRules(state) && T1_REGIONS.includes(region)) {
-      for (const [slot, n] of [['kickoff', '第一赛段'], ['stage1', '第二赛段'], ['stage2', '第三赛段']] as const) {
-        const c = makeComp(state, slot, `${region} ${n}`, t1, region, 1)
+      // the year's shape: 2026's three stages, or before 2025 a Spring and a Summer split (programsHist.ts)
+      const era = eraOf(state.year)
+      const label = leagueLabel(state.year, region)
+      const slots = era === 2026
+        ? [['kickoff', '第一赛段'], ['stage1', '第二赛段'], ['stage2', '第三赛段']] as const
+        : [['stage1', '春季赛'], ['stage2', '夏季赛']] as const
+      for (const [slot, n] of slots) {
+        const c = makeComp(state, slot, `${label} ${n}`, t1, region, 1)
         c.format = 'program'
-        c.program = `${region}:${slot}`
+        c.program = era === 2026 ? `${region}:${slot}` : `${eraTag(era)}:${region}:${slot}`
       }
       if (t2.length >= 2) {
         const c1 = makeComp(state, 'challengers1', `${region} 次级联赛 · 上半年`, t2, region, 2)
@@ -1175,7 +1184,7 @@ function progressCompetitions(state: GameState, notes: string[] = [], autoPick =
  * the last phase over, its placings — and the stage is concluded like any other.
  */
 function runProgrammed(state: GameState, comp: Competition, notes: string[]): void {
-  const prog = programFor(state, comp)
+  const prog = anyProgramFor(state, comp)
   if (!prog) return
   for (let guard = 0; guard < 6; guard++) {
     const step = stepProgram(state, comp, prog, state.day + PROGRAM_GAP)
@@ -1215,6 +1224,11 @@ function openProgrammed(
  * once every third stage — and those Regional Finals — are.
  */
 function openInternationals(state: GameState): void {
+  const tag = histTag(state, 'LPL')
+  if (tag) {
+    openInternationalsHist(state, tag)
+    return
+  }
   const book = rulebookOf(state)
   const all = (slot: string) => T1_REGIONS.every((r) => state.comps[`${slot}:${r}`]?.champion)
   const flat = (x: Record<string, string[]>) => T1_REGIONS.flatMap((r) => x[r] ?? [])
@@ -1242,6 +1256,39 @@ function openInternationals(state: GameState): void {
   if (all('stage2') && msiDone && lplReady) {
     openProgrammed(state, 'champions', book.eventNames.champions, 'worlds',
       T1_REGIONS.flatMap((r) => worldsSeeds(state, r)))
+  }
+}
+
+/**
+ * The internationals before 2025 (programsHist.ts): MSI once every Spring is
+ * over; each region's Regional Finals once its Summer is; Worlds once every
+ * Summer and every Regional Finals is.
+ */
+function openInternationalsHist(state: GameState, tag: 'h16' | 'h22'): void {
+  const book = rulebookOf(state)
+  const all = (slot: string) => T1_REGIONS.every((r) => state.comps[`${slot}:${r}`]?.champion)
+  if (all('stage1')) {
+    openProgrammed(state, 'masters2', book.eventNames.masters2, `${tag}:msi`, T1_REGIONS.flatMap((r) => histMsiSeeds(state)[r]))
+  }
+  for (const region of rfRegions(tag)) {
+    const key = `qual:${region}`
+    if (state.comps[key] || !state.comps[`stage2:${region}`]?.champion) continue
+    const field = rfField(state, region)
+    if (field.length < 2) continue
+    const comp: Competition = {
+      key, name: `${leagueLabel(state.year, region)} 区域资格赛`, region, tier: 1, stage: 'stage2',
+      teams: field, standings: newStandings(field), finished: [],
+      format: 'program', program: `${tag}:rf:${region}`, minor: true, qualify: tag === 'h22' ? 2 : 1,
+    }
+    state.comps[key] = comp
+    state.news.push({
+      day: state.day, kind: 'league', important: field.includes(state.myTeam),
+      text: `${comp.name}：${field.map((t) => state.teams[t]?.name).join('、')} 争夺最后的全球总决赛名额。`,
+    })
+  }
+  const seeds = T1_REGIONS.map((r) => histWorldsSeeds(state, r))
+  if (all('stage2') && seeds.every(Boolean) && state.comps.masters2?.champion) {
+    openProgrammed(state, 'champions', book.eventNames.champions, `${tag}:worlds`, seeds.flatMap((s) => s!))
   }
 }
 
@@ -2146,7 +2193,7 @@ export function advanceDay(state: GameState, opts: AdvanceOpts = {}): DayReport 
 
   state.stage = stageAtIn(state, state.day)
   const stageChanged = state.stage !== prevStage
-  if (stageChanged) notes.push(`—— 进入 ${stageName(state.stage)} ——`)
+  if (stageChanged) notes.push(`—— 进入 ${stageName(state.stage, state)} ——`)
   // The pool rotates when a new window opens — or, in 2023–2025, on the day
   // Riot rotated it, which can fall inside a stage or on New Year's Day — say
   // which maps moved, or a manager walks into a veto to find a map he trained
@@ -2508,11 +2555,16 @@ function endSeason(state: GameState, rng: Rng, notes: string[] = []): void {
   // is people — a manager who wins down there is approached by a club up here (job offers),
   // and his best players are bought. The block below is the shooter's promotion rule, kept
   // for the historical entries that really had one (the LPL and LSPL of 2016–2017).
-  for (const region of PROMOTION ? REGIONS : []) {
+  // A career in the years before franchising plays the real year-end swap: the
+  // second tier's champion goes up and the Summer table's last goes down
+  // (近似: the real promotion series is not played — 决定 D69).
+  const histSwap = (region: Region) => programRules(state) && !!histTag(state, region) && relegatesIn(region, state.year)
+  for (const region of PROMOTION ? REGIONS : REGIONS.filter(histSwap)) {
     const chal = state.comps[compKey('challengers2', region)]
     const promoted = chal?.champion ? state.teams[chal.champion] : null
     if (!promoted) continue
     const tier1 = Object.values(state.teams).filter((t) => t.region === region && t.tier === 1)
+    const summerLast = histSwap(region) ? state.comps[compKey('stage2', region)]?.finished.slice(-1)[0] : undefined
     // A club that just came up is the one with the fewest champ points almost
     // by definition, so sorting the whole league sent it straight back down:
     // win 次级联赛总决赛, play one VCT season, and you are in 次级联赛 again
@@ -2520,7 +2572,7 @@ function endSeason(state: GameState, rng: Rng, notes: string[] = []): void {
     // inside its term is not a candidate, and the league picks its weakest
     // from the rest.
     const settled = tier1.filter((t) => t.ascendedYear === undefined || state.year - t.ascendedYear >= 2)
-    const relegated = (settled.length ? settled : tier1)
+    const relegated = summerLast ? state.teams[summerLast] : (settled.length ? settled : tier1)
       .sort((a, b) => a.champPoints - b.champPoints || a.rating - b.rating)[0]
     if (!relegated || relegated.id === promoted.id) continue
 
@@ -2563,7 +2615,7 @@ function endSeason(state: GameState, rng: Rng, notes: string[] = []): void {
     }
     state.news.push({
       day: state.day, kind: 'league', important: true,
-      text: `🎫 ${promoted.name} 升入 ${region}，${relegated.name} 降入次级联赛。`,
+      text: `🎫 ${promoted.name} 升入 ${leagueLabel(state.year + 1, region)}，${relegated.name} 降入次级联赛。`,
     })
     if (promoted.id === state.myTeam) {
       state.honours.push({ year: state.year, title: `晋级一级联赛 ${region}` })
