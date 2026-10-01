@@ -30,7 +30,7 @@ const mk = (tag: string, seed = 20260824): GameState => {
 
 // ---- the floor: a manager cannot strip his own squad below five
 {
-  const g = mk('WSIG')
+  const g = mk('HLEC')
   const start = squadOf(g, g.myTeam).length
   for (let i = 0; i < 12; i++) {
     const squad = squadOf(g, g.myTeam)
@@ -44,7 +44,7 @@ const mk = (tag: string, seed = 20260824): GameState => {
 
 // ---- a bid that cannot complete must not report that it did
 {
-  const g = mk('TYL')
+  const g = mk('TES')
   g.finances.balance = 50_000_000
   const seller = Object.values(g.teams).find((t) => t.id !== g.myTeam && squadOf(g, t.id).length === 5)!
   for (const p of Object.values(g.players)) if (!p.teamId) p.teamId = g.myTeam
@@ -68,7 +68,7 @@ const mk = (tag: string, seed = 20260824): GameState => {
 
 // ---- short-handed must be a catastrophe, not an edge
 {
-  const g = mk('TYL')
+  const g = mk('TES')
   const t = g.teams[g.myTeam]
   const map = Object.keys(t.mapPrefs)[0]
   const full = [...t.roster]
@@ -104,7 +104,7 @@ const mk = (tag: string, seed = 20260824): GameState => {
 
 // ---- and none of it drifts over a season of real play
 {
-  const g = mk('TYL', 99)
+  const g = mk('TES', 99)
   const rng = new Rng(3)
   let guard = 0
   const shortLineups: string[] = []
@@ -129,7 +129,7 @@ const mk = (tag: string, seed = 20260824): GameState => {
 }
 // ---- short-handed must look short-handed in the box score too
 {
-  const g = mk('TYL', 42)
+  const g = mk('TES', 42)
   const foe = Object.values(g.teams).find(t => t.id !== g.myTeam && squadOf(g, t.id).length >= 5)!
   const mine = g.teams[g.myTeam]
   const full = [...mine.roster]
@@ -158,7 +158,7 @@ const mk = (tag: string, seed = 20260824): GameState => {
 
 // ---- fatigue is charged to whoever actually walked out
 {
-  const g = mk('TE', 20260824)
+  const g = mk('WE', 20260824)
   const rng2 = new Rng(11)
   let ghosts = 0, subs = 0
   const before = new Map<string, number>()

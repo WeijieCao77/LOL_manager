@@ -40,7 +40,7 @@ import {
 } from '../src/engine/training'
 import { Rng, hashStr } from '../src/engine/rng'
 import { weightsFor } from '../src/engine/player'
-import { ATTR_KEYS } from '../src/engine/types'
+import { ATTR_KEYS, ROLES } from '../src/engine/types'
 import type { Attrs, Competition, GameState, Player } from '../src/engine/types'
 
 let bad = 0
@@ -74,27 +74,24 @@ const median = (xs: number[]) => {
   check('a regional title does not', (g.rivalry ?? 0) === 1, `rivalry=${g.rivalry}`)
 }
 
-// ---- automatic plans value the player's role and protect his condition
+// ---- automatic plans value the player's position and protect his condition
 {
   const g = mk()
-  const p = squadOf(g, g.myTeam).find((x) => x.role === '决斗者')!
+  const p = squadOf(g, g.myTeam).find((x) => x.role === '中单')!
   p.fatigue = 0
   p.potential = 99
-  p.attrs.aim = 70
-  p.attrs.reaction = 30
-  p.attrs.communication = 20
-  check('a duelist auto-focuses aim, not his lowest raw number',
-    recommendedTrainingFocus(p) === 'aim', recommendedTrainingFocus(p))
-  const roles: [Player['role'], (keyof Attrs)[]][] = [
-    ['先锋', ['awareness', 'utility']], ['控场', ['utility', 'awareness']], ['哨卫', ['awareness', 'aim']],
-  ]
-  for (const [role, top] of roles) {
-    const q = { ...p, role, attrs: { ...p.attrs, aim: 70, reaction: 70, awareness: 70, utility: 70, clutch: 70, teamwork: 70, communication: 70, igl: 70 } } as Player
+  // every number level: the plan must go to what the position is weighted on,
+  // not to whichever number happens to be lowest
+  for (const role of ROLES) {
+    const q = { ...p, role, roles: [role], attrs: Object.fromEntries(ATTR_KEYS.map((k) => [k, 70])) as unknown as Attrs } as Player
+    const w = weightsFor(q)
+    const top = ATTR_KEYS.filter((k) => w[k] === Math.max(...ATTR_KEYS.map((x) => w[x])))
     const pick = recommendedTrainingFocus(q)
     check(`a ${role} is pointed at ${top.join('/')}`, top.includes(pick as keyof Attrs), String(pick))
   }
-  const notCaller = { ...p, isIgl: false, attrs: { ...p.attrs, igl: 20 } } as Player
-  check('only the caller is ever pointed at 指挥', recommendedTrainingFocus(notCaller) !== 'igl')
+  const low = { ...p, attrs: { ...p.attrs, mechanics: 30 } } as Player
+  check('中单的操作被压到 30，训练建议就去练操作',
+    recommendedTrainingFocus(low) === 'mechanics' || weightsFor(low).mechanics < 0.1, String(recommendedTrainingFocus(low)))
   p.fatigue = REST_AT
   check('the shared auto-plan rests a tired player', recommendedTrainingFocus(p) === 'rest')
   p.fatigue = 0

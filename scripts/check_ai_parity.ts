@@ -59,7 +59,7 @@ const ai = (g: GameState, pick?: (t: Team) => boolean) =>
   check('three days before the rollover the turn is three days', cycleDays(g2) === 3, `${cycleDays(g2)}`)
   // a round whose date is known but whose tie is not: play a strong club
   // into a regional playoff and find the day it waits on the other bracket
-  const g3 = mk('PRX')
+  const g3 = mk('GEN')
   let found: string | null = null
   const rng = new Rng(5)
   for (let d = 0; d < 260 && !found; d++) {
@@ -113,7 +113,7 @@ const ai = (g: GameState, pick?: (t: Team) => boolean) =>
 
 // ---- the board asks the bottom half for one place, not a quarter of the table
 {
-  const g = mk('KBG')
+  const g = mk('DKC')
   const rng = new Rng(3)
   let guard = 0
   while (!g.objective && guard++ < 200) advanceDay(g, rng)

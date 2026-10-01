@@ -115,7 +115,7 @@ const bid = (g: GameState, p: Player) => {
 
 // ---- the AI plays TWO seasons inside the rule, across three worlds
 for (const seed of [7, 71, 717]) {
-  const g = mk('TYL', true, seed)
+  const g = mk('TES', true, seed)
   const before = new Map(Object.values(g.teams).map((t) => [t.id, importCount(g, t.id)]))
   const rng = new Rng(seed + 1)
   let guard = 0
