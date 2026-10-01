@@ -20,7 +20,7 @@ import { selectLineup, sheetFor } from '../engine/match'
 import { agentMod, agentRoleGaps, agentWarn, autoAgents, byPro, normalizeAgents, proLabel } from '../engine/agents'
 import { COMP_STYLE_CN, compStyle, famBonus, familiarity } from '../engine/comp'
 import type { CompStyle } from '../engine/comp'
-import { AGENT_ROLE, AGENTS, MAP_META, agentCn, mapCn } from '../engine/content'
+import { AGENT_ROLE, AGENTS, agentCn, draftLine, hotChampions, mapCn } from '../engine/content'
 import { ROLES } from '../engine/types'
 import { AgentIcon, Bar, Face, OvrBadge } from './common'
 import TacticSliders from './TacticSliders'
@@ -102,7 +102,8 @@ export default function MapPlan({
   const planned = !!game.mapAgents?.[cur]
   const oppTeam = opp ? game.teams[opp] : undefined
   const oppStyle = oppTeam ? sheetFor(game, oppTeam.id, cur).style : null
-  const meta = MAP_META[cur] ?? []
+  // the season's real draft: picked or banned in a tenth of the games or more
+  const meta = hotChampions()
 
   return (
     <div>
@@ -180,9 +181,9 @@ export default function MapPlan({
                         onChange={(e) => set(cur, p.id, e.target.value)}
                         style={{ maxWidth: 200 }}
                       >
-                        <optgroup label={`${mapCn(cur)} 常用`}>
+                        <optgroup label="版本热门（职业比赛选禁率 ≥10%）">
                           {byPro(p, meta.filter((x) => agentAvailable(game, x))).map((x) => (
-                            <option key={x} value={x}>{agentCn(x)}（{AGENT_ROLE[x]}）{proLabel(p, x)}</option>
+                            <option key={x} value={x}>{agentCn(x)}（{AGENT_ROLE[x]}）{[draftLine(x), proLabel(p, x) === '练满' ? '练满' : `熟练 ${proLabel(p, x)}`].filter(Boolean).join(' · ')}</option>
                           ))}
                         </optgroup>
                         {ROLES.map((r) => {

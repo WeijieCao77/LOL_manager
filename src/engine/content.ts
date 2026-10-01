@@ -90,6 +90,23 @@ export const presence = (a: string): number => {
 }
 
 /**
+ * 版本热门: picked or banned in at least a tenth of the season's real games
+ * (68 of 173 in 2026). The plan screen lists these first with their numbers, the
+ * way VAL MANAGER's lists each map's pro picks with how often they are run.
+ */
+export const HOT_PRESENCE = 0.1
+export const hotChampions = (): string[] =>
+  CHAMPIONS.filter((c) => presence(c.id) >= HOT_PRESENCE).sort((a, b) => presence(b.id) - presence(a.id)).map((c) => c.id)
+
+/** 「选 12% · 禁 30%」 — this season's real draft numbers for a champion, or '' */
+export const draftLine = (a: string): string => {
+  const m = championOf(a)?.meta
+  if (!m) return ''
+  const pct = (x: number) => `${Math.round(x * 100)}%`
+  return m.ban >= 0.01 ? `选 ${pct(m.pick)} · 禁 ${pct(m.ban)}` : `选 ${pct(m.pick)}`
+}
+
+/**
  * What the map is usually played with, most contested first — used to fill a
  * lineup automatically with something sensible and to tell the manager when a
  * hand-made pick is unusual. Read off the season's real drafts.

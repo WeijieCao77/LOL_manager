@@ -768,6 +768,10 @@ def main():
         b = find_bio(nm, pos, '')
         if not b or b.get('is_retired') == '1':
             continue                                             # 没档案的不放进自由人池：不知道他是不是还在打
+        if b.get('role') not in role_of:
+            # 档案上现在是教练 / 分析师：去年还在打，今年坐上了教练席（Smiley 在 Vivo Keyd Stars）。
+            # 他不在自由市场上——VAL MANAGER 的 nowCoach 是同一件事
+            continue
         attrs, eff = rate(nm, pos)
         overall = int(round(sum(attrs[k] * w for k, w in ROLE_WEIGHT[pos].items())))
         fa.append((overall, nm, pos, attrs, eff, b))

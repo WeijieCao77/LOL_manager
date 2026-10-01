@@ -146,6 +146,8 @@ def main() -> int:
         rows = bio.get(c['ign'].lower(), [])
         hit = [b for b in rows if role_of.get(b.get('role')) == c['pos'] and b.get('is_retired') != '1']
         b = hit[0] if len(hit) == 1 else (rows[0] if len(rows) == 1 else None)
+        # the only record under this name says he coaches now: not a prospect
+        c['staff'] = bool(b) and not hit and b.get('role') not in role_of
         c['born'] = (b or {}).get('birthdate') or None
         c['real'] = c.get('real') or (b or {}).get('name_cn') or (b or {}).get('real_name') or None
         c['country'] = c.get('country') or (b or {}).get('country')
@@ -174,6 +176,8 @@ def main() -> int:
     rows = []
     for c in cands:
         if not c['born'] and c['ign'].lower() in veterans:
+            continue
+        if c.get('staff'):
             continue
         age = (YEAR - int(c['born'][:4]) - (1 if tuple(int(x) for x in c['born'].split('-')[1:3]) > (1, 1) else 0)) if c['born'] else None
         if age is not None and not (15 <= age <= MAX_AGE):
