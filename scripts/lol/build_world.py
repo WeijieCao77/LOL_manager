@@ -79,6 +79,54 @@ WORLD_LEAGUES = {
         ('LSPL', 'LPL', 2, 'LSPL'), ('CK', 'LCK', 2, 'Challengers Korea'), ('EU CS', 'LEC', 2, 'EU CS'),
         ('NA CS', 'LCS', 2, 'NA CS'),
     ],
+    # 2017–2025：只给历史入口用（每年的真实名单、新人、能力），不做开局年份
+    2017: [
+        ('LPL', 'LPL', 1, 'LPL'), ('LCK', 'LCK', 1, 'LCK'), ('EU LCS', 'LEC', 1, 'EU LCS'),
+        ('NA LCS', 'LCS', 1, 'NA LCS'), ('LMS', 'LCP', 1, 'LMS'), ('CBLOL', 'CBLOL', 1, 'CBLOL'),
+        ('LSPL', 'LPL', 2, 'LSPL'), ('CK', 'LCK', 2, 'Challengers Korea'), ('EU CS', 'LEC', 2, 'EU CS'),
+        ('NA CS', 'LCS', 2, 'NA CS'),
+    ],
+    2018: [
+        ('LPL', 'LPL', 1, 'LPL'), ('LCK', 'LCK', 1, 'LCK'), ('EU LCS', 'LEC', 1, 'EU LCS'),
+        ('NA LCS', 'LCS', 1, 'NA LCS'), ('LMS', 'LCP', 1, 'LMS'), ('CBLOL', 'CBLOL', 1, 'CBLOL'),
+        ('LDL', 'LPL', 2, 'LDL'), ('CK', 'LCK', 2, 'Challengers Korea'), ('LCSA', 'LCS', 2, 'NA Academy'),
+    ],
+    2019: [
+        ('LPL', 'LPL', 1, 'LPL'), ('LCK', 'LCK', 1, 'LCK'), ('LEC', 'LEC', 1, 'LEC'),
+        ('LCS', 'LCS', 1, 'LCS'), ('LMS', 'LCP', 1, 'LMS'), ('CBLOL', 'CBLOL', 1, 'CBLOL'),
+        ('LDL', 'LPL', 2, 'LDL'), ('CK', 'LCK', 2, 'Challengers Korea'), ('LFL', 'LEC', 2, 'LFL'),
+        ('LCSA', 'LCS', 2, 'NA Academy'),
+    ],
+    2020: [
+        ('LPL', 'LPL', 1, 'LPL'), ('LCK', 'LCK', 1, 'LCK'), ('LEC', 'LEC', 1, 'LEC'),
+        ('LCS', 'LCS', 1, 'LCS'), ('PCS', 'LCP', 1, 'PCS'), ('CBLOL', 'CBLOL', 1, 'CBLOL'),
+        ('LDL', 'LPL', 2, 'LDL'), ('CK', 'LCK', 2, 'Challengers Korea'), ('LFL', 'LEC', 2, 'LFL'),
+        ('LCSA', 'LCS', 2, 'LCS Academy'),
+    ],
+    2021: [
+        ('LPL', 'LPL', 1, 'LPL'), ('LCK', 'LCK', 1, 'LCK'), ('LEC', 'LEC', 1, 'LEC'),
+        ('LCS', 'LCS', 1, 'LCS'), ('PCS', 'LCP', 1, 'PCS'), ('CBLOL', 'CBLOL', 1, 'CBLOL'),
+        ('LDL', 'LPL', 2, 'LDL'), ('LCKC', 'LCK', 2, 'LCK CL'), ('LFL', 'LEC', 2, 'LFL'),
+        ('LCSA', 'LCS', 2, 'LCS Academy'), ('CBLOLA', 'CBLOL', 2, 'CBLOL Academy'),
+    ],
+    2023: [
+        ('LPL', 'LPL', 1, 'LPL'), ('LCK', 'LCK', 1, 'LCK'), ('LEC', 'LEC', 1, 'LEC'),
+        ('LCS', 'LCS', 1, 'LCS'), ('PCS', 'LCP', 1, 'PCS'), ('CBLOL', 'CBLOL', 1, 'CBLOL'),
+        ('LDL', 'LPL', 2, 'LDL'), ('LCKC', 'LCK', 2, 'LCK CL'), ('LFL', 'LEC', 2, 'LFL'),
+        ('NACL', 'LCS', 2, 'NACL'), ('CBLOLA', 'CBLOL', 2, 'CBLOL Academy'),
+    ],
+    2024: [
+        ('LPL', 'LPL', 1, 'LPL'), ('LCK', 'LCK', 1, 'LCK'), ('LEC', 'LEC', 1, 'LEC'),
+        ('LCS', 'LCS', 1, 'LCS'), ('PCS', 'LCP', 1, 'PCS'), ('CBLOL', 'CBLOL', 1, 'CBLOL'),
+        ('LDL', 'LPL', 2, 'LDL'), ('LCKC', 'LCK', 2, 'LCK CL'), ('LFL', 'LEC', 2, 'LFL'),
+        ('NACL', 'LCS', 2, 'NACL'), ('CBLOLA', 'CBLOL', 2, 'CBLOL Academy'),
+    ],
+    2025: [
+        ('LPL', 'LPL', 1, 'LPL'), ('LCK', 'LCK', 1, 'LCK'), ('LEC', 'LEC', 1, 'LEC'),
+        ('LTA N', 'LCS', 1, 'LTA North'), ('LCP', 'LCP', 1, 'LCP'), ('LTA S', 'CBLOL', 1, 'LTA South'),
+        ('LCKC', 'LCK', 2, 'LCK CL'), ('LFL', 'LEC', 2, 'LFL'), ('NACL', 'LCS', 2, 'NACL'),
+        ('CD', 'CBLOL', 2, 'Circuito Desafiante'),
+    ],
     2022: [
         ('LPL', 'LPL', 1, 'LPL'), ('LCK', 'LCK', 1, 'LCK'), ('LEC', 'LEC', 1, 'LEC'),
         ('LCS', 'LCS', 1, 'LCS'), ('PCS', 'LCP', 1, 'PCS'), ('CBLOL', 'CBLOL', 1, 'CBLOL'),
@@ -105,6 +153,8 @@ INTERNATIONAL = {'MSI', 'WLDs', 'FST', 'EWC'}
 # 读进来时统一成那个世界的联赛代码。（2026 世界不需要。）
 HIST_ALIAS = {
     2016: {'OGN': 'LCK', 'LEC': 'EU LCS', 'LCS': 'NA LCS'},
+    2017: {'OGN': 'LCK', 'LEC': 'EU LCS', 'LCS': 'NA LCS'},
+    2018: {'LEC': 'EU LCS', 'LCS': 'NA LCS'},
     2022: {'CK': 'LCKC'},
 }
 # OE 会把老队名改成今天的组织名。历史世界里换回当年的叫法。
@@ -213,6 +263,7 @@ def read_year(year, wanted):
             row['league'] = ALIAS.get(row['league'], row['league'])
             if row['league'] not in wanted:
                 continue
+            row['oeteam'] = row['teamname']
             row['teamname'] = TEAM_NAMES.get(row['teamname'], row['teamname'])
             (teams if row['position'] == 'team' else players).append(row)
     return players, teams
@@ -691,7 +742,7 @@ def main():
                 salary = int(round(33000 * math.exp((overall - 55) / 12) * (0.14 if tier == 2 else 1), -3))
                 value = int(round(20000 * math.exp((overall - 55) / 10.5) * (1.25 if est_age <= 21 else 1.0 if est_age <= 25 else .7) * (0.2 if tier == 2 else 1), -3))
                 players_out.append(dict(
-                    id=pid, ign=nm, teamId=tid, region=region,
+                    id=pid, ign=nm, teamId=tid, region=region, hkey=f'{nm}|{pos}',
                     nat=COUNTRY_ISO.get((b or {}).get('country')),
                     residency=RESIDENCY_KEY.get((b or {}).get('residency')),
                     realName=((b or {}).get('name_cn') or (b or {}).get('real_name') or None),
@@ -736,6 +787,9 @@ def main():
         teams_out.append(dict(
             id=tid, name=tname, tag=TAG_ALIAS.get(tname) or tags.get(norm_name(tname)) or ''.join(w[0] for w in re.findall(r"[A-Za-z0-9']+", tname))[:4].upper(),
             region=region, tier=tier, league=label, rating=rating,
+            # OE's own name for the club (it carries a club's modern name back through the years): the key
+            # the historical entries follow a club by
+            oeName=next((k for k, v in TEAM_NAMES.items() if v == tname), tname),
             budget=int(round(wage * 1.3 + (rating - 60) * (60000 if tier == 1 else 8000), -3)),
             reputation=0,   # 按联赛内排名定，见下面 league_reputation
             roster=roster, coach=None, facilities=max(30, min(95, rating + rng.randrange(-6, 7) + (0 if tier == 1 else -12))),
@@ -857,7 +911,7 @@ def main():
             champs.update(r['agg']['champs'])
         region = RESIDENCY_KEY.get(b.get('residency')) or 'LEC'
         players_out.append(dict(
-            id=f'P{len(players_out) + 1}', ign=nm, teamId=None, region=region,
+            id=f'P{len(players_out) + 1}', ign=nm, teamId=None, region=region, hkey=f'{nm}|{pos}',
             nat=COUNTRY_ISO.get(b.get('country')), residency=RESIDENCY_KEY.get(b.get('residency')),
             realName=(b.get('name_cn') or b.get('real_name') or None), birth=birth, age=age, ageEstimated=birth is None,
             role=ROLE_CN[pos], roles=[ROLE_CN[pos]], isCaptain=False, games=int(round(eff)), attrs=attrs, overall=overall,

@@ -215,6 +215,8 @@ export interface VlrLine {
 }
 
 export interface Player {
+  /** who he is in the real years (`ign|position`, realHistory.ts) — historical careers only */
+  hkey?: string
   id: string
   ign: string
   teamId: string | null
@@ -611,6 +613,8 @@ export interface Sponsor {
 }
 
 export interface Team {
+  /** OE's name for the club, the key the historical entries follow it by (realHistory.ts) */
+  oeName?: string
   id: string
   name: string
   /** short form — EDG, XLG, KBG — used everywhere space is tight */

@@ -47,6 +47,7 @@ import { tickLife } from './managerLife'
 import type { Competition, Fixture, GameState, Player, Region, StageKey, Team, Tier } from './types'
 import { track } from './telemetry'
 import { recordMatch, scoutTitle, scoutWinter } from './scouting'
+import { openRealYear, retirementPrior } from './realHistory'
 import {
   DOUBLE_8, GROUPS, advanceTemplate, championsGroups, championsSeeds, decided, doubleFor,
   mastersSeeds, swissDone, swissNext, swissOutcome, templateDone, MASTERS_8, TRIPLE_12, TRIPLE_12_PLACES, STAGE_8, STAGE_8_PLACES, swissRoundOf, SWISS_ROUNDS, swissRecord
@@ -181,6 +182,9 @@ export function setupSeason(state: GameState, notes?: string[]): void {
     const rank = seasonRanking(state)
     if (Object.keys(rank).length) state.prevRank = rank
   }
+  // a historical career: the year's real newcomers arrive and the clubs lean towards
+  // their real rosters (realHistory.ts), before any competition is drawn up
+  openRealYear(state, notes ?? [])
   resetFixtureSeq(0)
   state.fixtures = []
   state.comps = {}
@@ -2713,6 +2717,10 @@ function endSeason(state: GameState, rng: Rng, notes: string[] = []): void {
     else if (p.overall >= club.rating - 2) announceP *= 0.5
     if (p.contractYears >= 3) announceP = 0
     else if (p.contractYears === 2) announceP *= 0.6
+    // a historical career: his real last season makes it likely, a real future unlikely
+    const prior = retirementPrior(state, p)
+    if (prior > 1) announceP = Math.max(announceP, 0.6)
+    else announceP *= prior
     // ...but the pool is closed. Everyone here is a real person and nobody is
     // invented to replace him, so at the real exit rate the world cannot field
     // five a side by 2030 (measured: 95 of 101 clubs short in 2035; with

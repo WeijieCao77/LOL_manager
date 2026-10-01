@@ -27,6 +27,7 @@
  */
 import { CHAMPIONS, INTL_TITLES, MASTERS_1, MASTERS_2, climbed } from './endings'
 import { finalYearOf } from './eras'
+import { REGIONAL_TITLE } from './leagueNames'
 import { isImport } from './imports'
 import { squadOf } from './roster'
 import { HOME_CLUBS } from './homeClubs'
@@ -59,7 +60,8 @@ export interface Achievement {
 const isIntl = (t: string) => (INTL_TITLES as readonly string[]).includes(t)
 const isMasters = (t: string) => t === MASTERS_1 || t === MASTERS_2
 const isChampions = (t: string) => t === CHAMPIONS
-const isRegional = (t: string) => /^(LPL|LCK|LEC|LCS|LCP|CBLOL) 第[一二三]赛段$/.test(t)
+// any year's name for the league and its stages (EU LCS 春季赛 in 2016, LEC 第一赛段 in 2026)
+const isRegional = (t: string) => REGIONAL_TITLE.test(t)
 
 export interface Facts {
   squad: Player[]

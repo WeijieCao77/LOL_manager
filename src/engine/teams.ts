@@ -20,6 +20,8 @@ export interface RawTeam {
   rating: number; budget: number; reputation: number; roster: string[]
   coach: { name: string; tactics: number; development: number; motivation: number; assistants?: string[] } | null
   facilities: number
+  /** OE's name for the club, the key the historical entries follow it by (realHistory.ts) */
+  oeName?: string
 }
 
 export const WORLD_TEAMS = teams as unknown as RawTeam[]

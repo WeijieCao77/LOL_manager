@@ -32,7 +32,7 @@ def main():
     for p in world['players']:
         use = {c: n * ROUNDS_PER_GAME for c, n in p.get('champUse', {}).items() if c in known}
         players.append(dict(
-            id=p['id'], ign=p['ign'], teamId=p['teamId'], region=p['region'],
+            id=p['id'], ign=p['ign'], teamId=p['teamId'], region=p['region'], hkey=p.get('hkey'),
             nat=p.get('nat'), residency=p.get('residency'), realName=p.get('realName'), birth=p.get('birth'),
             age=p['age'], ageEstimated=p.get('ageEstimated', False),
             role=p['role'], roles=p['roles'], flex=False,

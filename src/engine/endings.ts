@@ -28,6 +28,7 @@ import type { GameState, Player } from './types'
 import { seasonsOf } from './eras'
 import { squadOf } from './roster'
 import { isImport } from './imports'
+import { REGIONAL_TITLE } from './leagueNames'
 
 /** started at a second-tier club and has since run a first-tier one */
 export const climbed = (s: GameState): boolean => {
@@ -97,7 +98,8 @@ export const INTL_TITLES = [MASTERS_1, MASTERS_2, CHAMPIONS] as const
 const isIntl = (t: string) => (INTL_TITLES as readonly string[]).includes(t)
 const isChampions = (t: string) => t === CHAMPIONS
 /** A tier-1 regional trophy: a 第一赛段 or one of the two Stages. */
-const isRegional = (t: string) => /^(LPL|LCK|LEC|LCS|LCP|CBLOL) 第[一二三]赛段$/.test(t)
+// any year's name for the league and its stages (leagueNames.ts)
+const isRegional = (t: string) => REGIONAL_TITLE.test(t)
 const isChallengers = (t: string) => /^次级联赛 /.test(t)
 const isAscension = (t: string) => /^晋级一级联赛/.test(t)
 
