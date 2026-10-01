@@ -40,7 +40,7 @@ export interface DraftResult {
   log: string[]
 }
 
-type Step = { side: DraftSide; act: 'ban' | 'pick' }
+export type Step = { side: DraftSide; act: 'ban' | 'pick' }
 const seq = (s: string): Step[] => s.split(' ').map((t) => ({
   side: t[0] === 'B' ? 'blue' : 'red', act: t[1] === 'b' ? 'ban' : 'pick',
 }))
@@ -84,55 +84,118 @@ export interface DraftOptions {
   plan?: { side: DraftSide; picks: Record<string, string> }
 }
 
-export function runDraft(
-  state: GameState, blueFive: Player[], redFive: Player[], rng: Rng, opts: DraftOptions = {},
-): DraftResult {
-  const gone = new Set<string>(opts.used ?? [])
-  const fives: Record<DraftSide, Player[]> = { blue: blueFive, red: redFive }
-  const picks: Record<DraftSide, Record<string, string>> = { blue: {}, red: {} }
-  const bans: Record<DraftSide, string[]> = { blue: [], red: [] }
-  const mix: Record<DraftSide, StyleMix> = { blue: [0, 0, 0], red: [0, 0, 0] }
-  const log: string[] = []
-  const favoured = new Set(darlings(state.patch, 6))
-  const other = (s: DraftSide): DraftSide => (s === 'blue' ? 'red' : 'blue')
-  // Which champions exist on this date is asked once a draft, not once a
-  // candidate: it builds a Date, and a draft weighs a few thousand candidates —
-  // asked inside the loop it made a simulated season sixty times slower.
-  const exists = new Set(Object.values(AGENTS).flat().filter((c) => agentAvailable(state, c)))
-  const open = (c: string) => exists.has(c) && !gone.has(c)
-  const roleOf = (p: Player) => p.roles?.[0] ?? p.role
-  const poolFor = (p: Player) => (AGENTS[roleOf(p)] ?? []).filter(open)
-  const name = (s: DraftSide) => (s === 'blue' ? '蓝色方' : '红色方')
+/**
+ * A draft one step at a time, so the manager can make his own side's calls.
+ *
+ * `autoStep` is exactly what an AI club does on the step in hand — the same
+ * scoring and the same draws from the same generator in the same order — so a
+ * draft run through it with nobody intervening is the draft runDraft always
+ * made, and every number calibrated against it (check_match_shape,
+ * check_draft) holds. `ban` and `pick` are the manager's own moves; a step he
+ * leaves to his assistant is `autoStep`, which reads his pre-match sheet first.
+ */
+export class DraftSession {
+  readonly fives: Record<DraftSide, Player[]>
+  readonly picks: Record<DraftSide, Record<string, string>> = { blue: {}, red: {} }
+  readonly bans: Record<DraftSide, string[]> = { blue: [], red: [] }
+  readonly log: string[] = []
+  /** steps taken, an index into DRAFT_ORDER */
+  step = 0
+  private readonly gone: Set<string>
+  private readonly mix: Record<DraftSide, StyleMix> = { blue: [0, 0, 0], red: [0, 0, 0] }
+  private readonly favoured: Set<string>
+  private readonly exists: Set<string>
 
-  for (const step of DRAFT_ORDER) {
+  constructor(
+    state: GameState, blueFive: Player[], redFive: Player[], private readonly rng: Rng,
+    private readonly opts: DraftOptions = {},
+  ) {
+    this.gone = new Set<string>(opts.used ?? [])
+    this.fives = { blue: blueFive, red: redFive }
+    this.favoured = new Set(darlings(state.patch, 6))
+    // Which champions exist on this date is asked once a draft, not once a
+    // candidate: it builds a Date, and a draft weighs a few thousand candidates —
+    // asked inside the loop it made a simulated season sixty times slower.
+    this.exists = new Set(Object.values(AGENTS).flat().filter((c) => agentAvailable(state, c)))
+  }
+
+  /** the step to be taken now, or undefined when the draft is over */
+  get current(): Step | undefined { return DRAFT_ORDER[this.step] }
+  get done(): boolean { return this.step >= DRAFT_ORDER.length }
+  /** a champion nobody has banned or picked, in this series or this game */
+  open = (c: string): boolean => this.exists.has(c) && !this.gone.has(c)
+  /** champions of a man's own position still on the board */
+  poolFor = (p: Player): string[] => (AGENTS[p.roles?.[0] ?? p.role] ?? []).filter(this.open)
+  /** used in an earlier game of this series (无畏征召) */
+  usedBefore = (c: string): boolean => [...(this.opts.used ?? [])].includes(c)
+  /** what a club wants this man on this champion, before the match-up — the AI's own number */
+  comfortOf = (p: Player, c: string): number => comfort(p, c, this.favoured)
+
+  private name = (s: DraftSide) => (s === 'blue' ? '蓝色方' : '红色方')
+
+  /** the manager bans this champion on his side's ban step */
+  ban(c: string): boolean {
+    const st = this.current
+    if (!st || st.act !== 'ban' || !this.open(c)) return false
+    this.gone.add(c)
+    this.bans[st.side].push(c)
+    this.log.push(`${this.name(st.side)} 禁用 ${agentCn(c)}`)
+    this.step++
+    return true
+  }
+
+  /** the manager puts this man on this champion on his side's pick step */
+  pick(playerId: string, c: string): boolean {
+    const st = this.current
+    if (!st || st.act !== 'pick' || !this.open(c)) return false
+    const p = this.fives[st.side].find((x) => x.id === playerId)
+    if (!p || this.picks[st.side][p.id]) return false
+    this.take(st.side, p, c)
+    this.step++
+    return true
+  }
+
+  private take(side: DraftSide, p: Player, c: string): void {
+    this.picks[side][p.id] = c
+    this.gone.add(c)
+    this.mix[side] = add(this.mix[side], c)
+    this.log.push(`${this.name(side)} 选择 ${agentCn(c)}（${p.ign}）`)
+  }
+
+  /** the step in hand, the way an AI club takes it */
+  autoStep(): void {
+    const step = this.current
+    if (!step) return
+    this.step++
     const me = step.side
-    const them = other(me)
+    const them: DraftSide = me === 'blue' ? 'red' : 'blue'
+    const { rng, picks, fives, mix } = this
     if (step.act === 'ban') {
       // take away what they play best among what is strong, for a man who has not picked yet
       let best: { c: string; v: number } | null = null
       for (const p of fives[them]) {
         if (picks[them][p.id]) continue
-        for (const c of poolFor(p)) {
-          const v = comfort(p, c, favoured) + rng.range(0, 14)
+        for (const c of this.poolFor(p)) {
+          const v = comfort(p, c, this.favoured) + rng.range(0, 14)
           if (!best || v > best.v) best = { c, v }
         }
       }
-      if (!best) continue
-      gone.add(best.c)
-      bans[me].push(best.c)
-      log.push(`${name(me)} 禁用 ${agentCn(best.c)}`)
-      continue
+      if (!best) return
+      this.gone.add(best.c)
+      this.bans[me].push(best.c)
+      this.log.push(`${this.name(me)} 禁用 ${agentCn(best.c)}`)
+      return
     }
 
     // ---- a pick
     const waiting = fives[me].filter((p) => !picks[me][p.id])
-    if (!waiting.length) continue
+    if (!waiting.length) return
     let choice: { p: Player; c: string; v: number } | null = null
-    const planned = opts.plan?.side === me ? opts.plan.picks : undefined
+    const planned = this.opts.plan?.side === me ? this.opts.plan.picks : undefined
     if (planned) {
       // the manager's sheet first: whoever's planned champion is still there, most contested first
       const ready = waiting
-        .filter((p) => planned[p.id] && open(planned[p.id]))
+        .filter((p) => planned[p.id] && this.open(planned[p.id]))
         .sort((x, y) => presence(planned[y.id]) - presence(planned[x.id]))
       if (ready.length) choice = { p: ready[0], c: planned[ready[0].id], v: 0 }
     }
@@ -141,12 +204,12 @@ export function runDraft(
       const lean = norm(mix[me])
       const leaning = Math.max(...lean) - Math.min(...lean) > 0.05 ? lean.indexOf(Math.max(...lean)) : -1
       for (const p of waiting) {
-        for (const c of poolFor(p)) {
+        for (const c of this.poolFor(p)) {
           const style = agentStyle(c)
           const fit = leaning >= 0 && style ? (style[leaning] - 1) * 5 : 0
           const matchup = Object.keys(picks[them]).length
             ? counterN(norm(add(mix[me], c)), foe) * 6 : 0
-          const v = comfort(p, c, favoured) + fit + matchup + rng.range(0, 12)
+          const v = comfort(p, c, this.favoured) + fit + matchup + rng.range(0, 12)
           if (!choice || v > choice.v) choice = { p, c, v }
         }
       }
@@ -154,16 +217,27 @@ export function runDraft(
     if (!choice) {
       // nothing left in his own position's pool (only ever a tiny, banned-out pool): anything open
       const p = waiting[0]
-      const c = Object.values(AGENTS).flat().find((x) => open(x) && agentRoles(x).length > 0)
-      if (!c) continue
+      const c = Object.values(AGENTS).flat().find((x) => this.open(x) && agentRoles(x).length > 0)
+      if (!c) return
       choice = { p, c, v: 0 }
     }
-    picks[me][choice.p.id] = choice.c
-    gone.add(choice.c)
-    mix[me] = add(mix[me], choice.c)
-    log.push(`${name(me)} 选择 ${agentCn(choice.c)}（${choice.p.ign}）`)
+    this.take(me, choice.p, choice.c)
   }
-  return { blue: picks.blue, red: picks.red, bansBlue: bans.blue, bansRed: bans.red, log }
+
+  result(): DraftResult {
+    return {
+      blue: this.picks.blue, red: this.picks.red,
+      bansBlue: this.bans.blue, bansRed: this.bans.red, log: this.log,
+    }
+  }
+}
+
+export function runDraft(
+  state: GameState, blueFive: Player[], redFive: Player[], rng: Rng, opts: DraftOptions = {},
+): DraftResult {
+  const s = new DraftSession(state, blueFive, redFive, rng, opts)
+  while (!s.done) s.autoStep()
+  return s.result()
 }
 
 /** The five-champion shape of a finished side, for the panels that show it. */

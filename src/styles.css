@@ -3157,3 +3157,18 @@ button.primary .faint, button.primary .muted { color: rgba(255, 255, 255, .78); 
   font-size: var(--t-small); font-weight: 700; letter-spacing: .16em;
   margin-top: 4px;
 }
+
+/* ---------------------------------------------------------------- draft (DraftBoard.tsx) */
+.draft-board { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.draft-side { border: 1px solid var(--line); border-radius: 8px; padding: 10px; background: var(--panel-2); }
+.draft-side.blue { border-top: 3px solid hsl(210 70% 50%); }
+.draft-side.red { border-top: 3px solid hsl(0 65% 50%); }
+.draft-side.live { box-shadow: 0 0 0 2px var(--accent) inset; }
+.draft-slot { width: 20px; height: 20px; border-radius: 4px; border: 1px dashed var(--muted, #8894a3); background: var(--panel-3); opacity: .6; display: inline-block; }
+.draft-row { display: flex; align-items: center; gap: 6px; padding: 4px 4px; border-radius: 6px; min-height: 28px; }
+.draft-row .nm { font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.draft-row.on { background: var(--panel-3); outline: 1px solid var(--accent); cursor: pointer; }
+.draft-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 6px; max-height: 300px; overflow-y: auto; }
+.draft-opt { display: grid; grid-template-columns: 22px 1fr; grid-template-rows: auto auto; column-gap: 8px; align-items: center; text-align: left; padding: 6px 8px; }
+.draft-opt > :first-child { grid-row: span 2; }
+@media (max-width: 640px) { .draft-board { grid-template-columns: 1fr; } }

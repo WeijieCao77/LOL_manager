@@ -6,6 +6,7 @@ import { scoutedPotential } from '../engine/manager'
 import { analystEdge } from '../engine/staff'
 import { crestUrl, dossierOf, faceUrl } from '../engine/dossier'
 import { AGENT_ROLE, agentCn, canonAgent } from '../engine/content'
+import { agentStyle } from '../engine/comp'
 import type { GameState, Player, Role, Trait } from '../engine/types'
 
 export const money = (n: number): string => {
@@ -138,28 +139,34 @@ const assetBase = (): string =>
 export const mapImg = (map: string): string => `${assetBase()}maps/${map}.webp`
 
 /**
- * An agent's portrait icon, the way vlr.gg prints one in a scoreboard.
+ * A champion's badge: the first character of its Chinese name on the colour of
+ * how it plays — red leans early, violet fights, blue plays the long game.
  *
- * The filename strips everything non-alphabetic (KAY/O → KAYO.png), matching
- * what scripts/fetch_valorant_assets.ts wrote. The title carries the Chinese
- * name and the job, so hovering answers what the icon alone cannot.
+ * Drawn, not a portrait: this game uses none of Riot's art (策划稿 §十), and the
+ * portraits this component used to load were the shooter's agents, deleted
+ * with the rest of its assets, so every icon had become a broken image.
  */
 export function AgentIcon({
   name: raw, size = 24, title,
 }: { name: string; size?: number; title?: string }) {
-  // whatever spelling arrived, the file and the tables want the proper name
   const name = canonAgent(raw) ?? raw
+  const mix = agentStyle(name)
+  const hue = !mix ? 220 : mix[0] >= mix[1] && mix[0] >= mix[2] ? 4 : mix[1] >= mix[2] ? 275 : 210
+  const cn = agentCn(name)
   return (
-    <img
+    <span
       className="agent-icon"
-      src={`${assetBase()}agents/${name.replace(/[^A-Za-z]/g, '')}.webp`}
-      alt={agentCn(name)}
-      title={title ?? `${agentCn(name)}${AGENT_ROLE[name] ? `（${AGENT_ROLE[name]}）` : ''}`}
-      loading="lazy"
-      width={size}
-      height={size}
-      style={{ width: size, height: size, borderRadius: 4, background: 'var(--panel-3)', display: 'block' }}
-    />
+      role="img"
+      aria-label={cn}
+      title={title ?? `${cn}${AGENT_ROLE[name] ? `（${AGENT_ROLE[name]}）` : ''}`}
+      style={{
+        width: size, height: size, borderRadius: 4, display: 'inline-flex', alignItems: 'center',
+        justifyContent: 'center', flex: 'none', fontSize: Math.round(size * 0.55), fontWeight: 700,
+        color: '#fff', background: `hsl(${hue} 45% 38%)`, lineHeight: 1,
+      }}
+    >
+      {[...cn][0] ?? '?'}
+    </span>
   )
 }
 

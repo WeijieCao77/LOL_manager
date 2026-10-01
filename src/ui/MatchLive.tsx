@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { CompBoard } from './CompBoard'
 import { useGame } from './ctx'
-import { Crest, Face, Modal, OvrBadge, Roles } from './common'
+import { Crest, Face, Modal, OvrBadge, RoleTag, Roles } from './common'
 import RoundRibbon, { RibbonLegend } from './RoundRibbon'
-import MapVeto from './MapVeto'
+import DraftBoard from './DraftBoard'
+import TacticSliders from './TacticSliders'
+import { squadOf } from '../engine/roster'
 import MapPlan from './MapPlan'
 import { MatchSim } from '../engine/match'
 import { mapCn } from '../engine/content'
@@ -12,7 +14,7 @@ import { commitFixture, fixtureRng } from '../engine/season'
 import type { Fixture } from '../engine/types'
 import { track } from '../engine/telemetry'
 
-type Phase = 'choose' | 'bp' | 'watching' | 'timeout' | 'done'
+type Phase = 'choose' | 'draft' | 'between' | 'watching' | 'timeout' | 'done'
 
 const TICK_MS = 420
 
@@ -29,6 +31,8 @@ export default function MatchLive({
   const simRef = useRef<MatchSim | null>(null)
   const [, bump] = useState(0)
   const [phase, setPhase] = useState<Phase>('choose')
+  // 亲自 BP: each game's draft is the manager's to make; off, the assistant drafts from the sheet
+  const [manualBp, setManualBp] = useState(true)
   const rerender = useCallback(() => bump((x) => x + 1), [])
 
   if (!simRef.current) {
@@ -36,6 +40,7 @@ export default function MatchLive({
   }
   const sim = simRef.current
   const mySide: Side | null = sim.sideOf(game.myTeam)
+  const manual = manualBp && !!mySide && !fixture.scrim
   const a = game.teams[fixture.teamA]
   const b = game.teams[fixture.teamB]
 
@@ -79,25 +84,35 @@ export default function MatchLive({
     finishUp(false)
   }, [sim, finishUp])
 
+  /** on to the next game: its draft if the manager makes it, else straight in */
+  const toNextGame = useCallback(() => {
+    if (!sim.hasNextMap) { finishUp(true); return }
+    if (manual) { sim.openDraft(); setPhase('draft'); return }
+    sim.nextMap()
+    setPhase('watching')
+    rerender()
+  }, [sim, manual, finishUp, rerender])
+
   const step = useCallback(() => {
     const m = sim.current
     if (!m) {
-      if (!sim.nextMap()) {
-        finishUp(true)
-        return
-      }
+      if (!sim.hasNextMap) { finishUp(true); return }
+      if (manual) { sim.openDraft(); setPhase('draft'); return }
+      sim.nextMap()
       rerender()
       return
     }
     if (m.over) {
       sim.closeMap()
-      if (sim.decided || !sim.nextMap()) finishUp(true)
+      if (!sim.hasNextMap) { finishUp(true); return }
+      // between games of a series: change the five or the dials before the next draft
+      if (mySide && !fixture.scrim) { setPhase('between'); rerender(); return }
       rerender()
       return
     }
     m.playRound()
     rerender()
-  }, [sim, finishUp, rerender])
+  }, [sim, finishUp, rerender, manual, mySide, fixture.scrim])
 
   useEffect(() => {
     if (phase !== 'watching') return
@@ -118,26 +133,74 @@ export default function MatchLive({
     }
   }
 
-  // ---------------------------------------------------------------- choose
-  if (phase === 'bp') {
+  // ---------------------------------------------------------------- the draft
+  if (phase === 'draft') {
+    const session = sim.openDraft()
+    if (session && mySide) {
+      const blueIsA = sim.nextBlue === 'a'
+      return (
+        <Modal wide title={`${game.comps[fixture.comp]?.name ?? ''} · BO${fixture.bo} · 大比分 ${sim.wonA} - ${sim.wonB}`} onClose={skip} onBgClose={() => {}}>
+          <DraftBoard
+            session={session}
+            mySide={(mySide === 'a') === blueIsA ? 'blue' : 'red'}
+            blueTeam={blueIsA ? fixture.teamA : fixture.teamB}
+            redTeam={blueIsA ? fixture.teamB : fixture.teamA}
+            game={sim.played.length + 1}
+            onDone={() => { sim.nextMap(); setPhase('watching'); rerender() }}
+          />
+        </Modal>
+      )
+    }
+  }
+
+  // ---------------------------------------------------------------- between games
+  if (phase === 'between' && mySide) {
+    const last = sim.played[sim.played.length - 1]
+    const me = game.teams[game.myTeam]
+    const squad = squadOf(game, game.myTeam)
+    const ourWin = last && (mySide === 'a' ? last.scoreA > last.scoreB : last.scoreB > last.scoreA)
+    const swap = (from: string, to: string) => {
+      me.starters = me.starters.map((x) => (x === from ? to : x))
+      commit()
+      rerender()
+    }
     return (
-      <Modal title={`赛前 BP · BO${fixture.bo}`} onClose={() => setPhase('choose')} onBgClose={() => {}}>
-        <MapVeto
-          fixture={fixture}
-          onCancel={() => setPhase('choose')}
-          onDone={(maps, log) => {
-            game.vetoPlan = { fixtureId: fixture.id, maps, log }
-            // the sim decided its maps when it was built; rebuild it now that
-            // the manager has decided them instead. Nothing has been played.
-            game.agentPicks = undefined
-            simRef.current = new MatchSim(
-              game, fixture.teamA, fixture.teamB, fixture.bo,
-              fixtureRng(game, fixture), fixture.scrim,
-            )
-            commit()
-            setPhase('choose')
-          }}
-        />
+      <Modal wide title={`第 ${sim.played.length} 局结束 · 大比分 ${sim.wonA} - ${sim.wonB}`} onClose={skip} onBgClose={() => {}}>
+        {last && (
+          <p className="center small" style={{ marginTop: 0 }}>
+            {ourWin ? '拿下' : '输掉'}这一局：{Math.round(last.minutes ?? 0)} 分钟，击杀（我方在前）{mySide === 'a' ? `${last.killsA ?? 0} : ${last.killsB ?? 0}` : `${last.killsB ?? 0} : ${last.killsA ?? 0}`}。
+          </p>
+        )}
+        <div className="panel own">
+          <div className="panel-head"><h2>局间调整</h2></div>
+          <div className="panel-body">
+            <p className="tiny faint" style={{ marginTop: 0 }}>
+              下一局按这里的五个人和滑杆打。换人只能同位置换；无畏征召下，这个系列赛已经选过的英雄两边都不能再用。
+            </p>
+            {me.starters.map((id) => {
+              const p = game.players[id]
+              if (!p) return null
+              const same = squad.filter((x) => x.role === p.role && (x.id === id || !me.starters.includes(x.id)))
+              return (
+                <div key={id} className="row" style={{ gap: 8, alignItems: 'center', margin: '4px 0' }}>
+                  <RoleTag role={p.role} />
+                  <select value={id} onChange={(e) => swap(id, e.target.value)} disabled={same.length < 2}>
+                    {same.map((x) => <option key={x.id} value={x.id}>{x.ign}（{x.overall}）{x.fatigue >= 60 ? ' 疲劳' : ''}</option>)}
+                  </select>
+                </div>
+              )
+            })}
+            <div style={{ marginTop: 10 }}>
+              <TacticSliders game={game} commit={commit} compact map={sim.maps[0]} />
+            </div>
+          </div>
+        </div>
+        <div className="row" style={{ gap: 10, justifyContent: 'center', marginTop: 14 }}>
+          <button className="primary" onClick={toNextGame}>
+            {manual ? `进入第 ${sim.played.length + 1} 局 BP` : `开始第 ${sim.played.length + 1} 局`}
+          </button>
+          <button onClick={skip}>快进剩下的</button>
+        </div>
       </Modal>
     )
   }
@@ -153,21 +216,15 @@ export default function MatchLive({
         <p className="center small muted" style={{ marginTop: -6 }}>
           {fixture.label.replace(/^KO:\d+:/, '')}
         </p>
-        {!fixture.scrim && (
-          <div className="panel" style={{ marginTop: 14 }}>
-            <div className="panel-head">
-              <h2>地图 · {simRef.current!.maps.map(mapCn).join(' / ')}</h2>
-              <div className="spacer" style={{ flex: 1 }} />
-              <button className="sm" onClick={() => setPhase('bp')}>手动 BP</button>
-            </div>
-            <div className="panel-body">
-              <p className="tiny faint" style={{ margin: 0 }}>
-                {game.vetoPlan
-                  ? `你亲自 BP 的结果：${simRef.current!.vetoLog.join('，')}`
-                  : '已按战术磨合度自动 BP。想自己 ban 图点「手动 BP」。'}
-              </p>
-            </div>
-          </div>
+        {!fixture.scrim && mySide && (
+          <label className="row small" style={{ gap: 8, marginTop: 14, cursor: 'pointer', alignItems: 'flex-start' }}>
+            <input type="checkbox" checked={manualBp} onChange={(e) => setManualBp(e.target.checked)} style={{ width: 16, marginTop: 2 }} />
+            <span>
+              <b>观战时每局亲自 BP</b>
+              <span className="muted"> — 十禁十选，轮到我方时你来禁、你来选，也可以随时交给助教。
+                不勾的话助教按下面的预案代选：预案里的英雄还在就拿，被禁或被拿走了他自己挑。</span>
+            </span>
+          </label>
         )}
 
         {/* one plan per map: the five agents and the four dials together,
@@ -181,14 +238,17 @@ export default function MatchLive({
           </div>
           <div className="panel-body">
             <MapPlan
-              maps={simRef.current!.maps} mode="match"
+              maps={[...new Set(simRef.current!.maps)]} mode="match"
               opp={fixture.teamA === game.myTeam ? fixture.teamB : fixture.teamA}
             />
           </div>
         </div>
 
         <div className="row" style={{ gap: 10, justifyContent: 'center', marginTop: 18 }}>
-          <button className="primary" onClick={() => { watchedAt.current = Date.now(); setPhase('watching') }}>
+          <button className="primary" onClick={() => {
+            watchedAt.current = Date.now()
+            if (manual) { sim.openDraft(); setPhase('draft') } else setPhase('watching')
+          }}>
             观战（可临场调整 2 次）
           </button>
           <button onClick={skip}>快进到结果</button>

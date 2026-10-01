@@ -6,7 +6,7 @@ import { isArena } from './types'
 import {
   DIAL_SCALE, callBoost, compStyle, famBonus, familiarity, styleEdge, styleName, stylePurity, tacticEdge,
 } from './comp'
-import { fearlessDraft, runDraft } from './draft'
+import { DraftSession, fearlessDraft } from './draft'
 import type { DraftResult } from './draft'
 import { ROLES } from './types'
 import type { StyleMix } from './comp'
@@ -1004,25 +1004,54 @@ export class MatchSim {
     return teamId === this.aId ? 'a' : teamId === this.bId ? 'b' : null
   }
 
-  /** Begin the next map. Returns false when the match is already decided. */
-  nextMap(): boolean {
-    if (this.decided || this.mapIndex + 1 >= this.maps.length) return false
-    this.mapIndex++
-    const m = this.maps[this.mapIndex]
-    // Sides alternate through a series, the first game's blue side going to A
-    // (the higher seed or the home side, by how fixtures are written).
-    const blue: Side = this.mapIndex % 2 === 0 ? 'a' : 'b'
+  /** the next game's draft, opened ahead of it so the manager can make his own side's calls */
+  private pendingDraft: DraftSession | null = null
+
+  /** Is there another game to play in this series? */
+  get hasNextMap(): boolean {
+    return !this.decided && this.mapIndex + 1 < this.maps.length
+  }
+
+  /** which side drafts blue in the coming game (sides alternate, game one's blue to A) */
+  get nextBlue(): Side {
+    return (this.mapIndex + 1) % 2 === 0 ? 'a' : 'b'
+  }
+
+  /**
+   * Open the coming game's draft without starting the game: the five each
+   * side will field, 无畏征召's used champions, and the manager's sheet for the
+   * steps he leaves to his assistant. nextMap plays it out — whatever steps
+   * are still open, the AI's way — and builds the game from it.
+   */
+  openDraft(): DraftSession | null {
+    if (!this.hasNextMap) return null
+    if (this.pendingDraft) return this.pendingDraft
+    const m = this.maps[this.mapIndex + 1]
+    const blue = this.nextBlue
     const fiveA = selectLineup(this.state, this.aId)
     const fiveB = selectLineup(this.state, this.bId)
     const mine = this.sideOf(this.state.myTeam)
     const sheet = mine ? (this.state.agentPicks?.[m] ?? this.state.mapAgents?.[m]) : undefined
-    const draft = runDraft(
+    this.pendingDraft = new DraftSession(
       this.state, blue === 'a' ? fiveA : fiveB, blue === 'a' ? fiveB : fiveA, this.rng,
       {
         used: fearlessDraft(this.state) ? this.usedChamps : undefined,
         plan: mine && sheet ? { side: mine === blue ? 'blue' : 'red', picks: sheet } : undefined,
       },
     )
+    return this.pendingDraft
+  }
+
+  /** Begin the next map. Returns false when the match is already decided. */
+  nextMap(): boolean {
+    if (!this.hasNextMap) return false
+    const session = this.openDraft()!
+    this.pendingDraft = null
+    while (!session.done) session.autoStep()
+    this.mapIndex++
+    const m = this.maps[this.mapIndex]
+    const blue: Side = this.mapIndex % 2 === 0 ? 'a' : 'b'
+    const draft = session.result()
     this.lastDraft = draft
     const picksA = blue === 'a' ? draft.blue : draft.red
     const picksB = blue === 'a' ? draft.red : draft.blue
