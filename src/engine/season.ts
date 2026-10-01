@@ -184,7 +184,8 @@ export function setupSeason(state: GameState, notes?: string[]): void {
   }
   // a historical career: the year's real newcomers arrive and the clubs lean towards
   // their real rosters (realHistory.ts), before any competition is drawn up
-  openRealYear(state, notes ?? [])
+  // a club the pull emptied signs from the market like any club short of five
+  if (openRealYear(state, notes ?? [])) ensureMinimumRosters(state, new Rng(hashStr(`fill:${state.seed}:${state.year}`)))
   resetFixtureSeq(0)
   state.fixtures = []
   state.comps = {}

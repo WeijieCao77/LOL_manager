@@ -105,8 +105,8 @@ export function makeEntrant(key: string, year: number): Player | null {
  * leans towards its real roster. Called from setupSeason before anything is
  * drawn up, so the year's competitions see the clubs as they now are.
  */
-export function openRealYear(state: GameState, notes: string[]): void {
-  if (!HISTORY || !isHistoryCareer(state) || state.year > LAST_REAL_YEAR || state.year <= startYearOf(state)) return
+export function openRealYear(state: GameState, notes: string[]): boolean {
+  if (!HISTORY || !isHistoryCareer(state) || state.year > LAST_REAL_YEAR || state.year <= startYearOf(state)) return false
   const year = state.year
   // ---- the newcomers
   const came: string[] = []
@@ -173,6 +173,7 @@ export function openRealYear(state: GameState, notes: string[]): void {
   if (moved) {
     state.news.push({ day: state.day, kind: 'transfer', text: `休赛期的转会市场：${moved} 名选手换了东家。` })
   }
+  return true
 }
 
 /** a real retirement is likely in his last real season, unlikely while he really played on */

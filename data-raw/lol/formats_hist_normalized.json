@@ -1,0 +1,3904 @@
+{
+ "2016": {
+  "meta": {
+   "year": 2016,
+   "season": "Season 6",
+   "source": "data-raw/lol/formats_2016.json + scripts/cache/http_liquipedia_net（Liquipedia, CC BY-SA 3.0）",
+   "doc": "docs/调研-2016与2022赛制.md",
+   "game_region_map": {
+    "LPL": "LPL",
+    "LCK": "LCK",
+    "EU LCS": "LEC",
+    "NA LCS": "LCS",
+    "LMS": "LCP",
+    "CBLOL": "CBLOL"
+   },
+   "conventions": {
+    "待查": "数据缺失或矛盾，不要用猜测填",
+    "bo": "整数或 {阶段: bo}；Bo2 = 两局制，可以 1-1 平局",
+    "bo_source": "\"page\" = Format 原文；\"match_data\" = 由子页面每场比赛的地图数推出（两者冲突时以比赛数据为准，并在 todo 记录）",
+    "fearless": "2016 年没有无畏征召，全部 false",
+    "advance.to": "\"<stage_id>.<phase>.<slot>\"、赛事页名、eliminated、relegated",
+    "stage order": "各赛区 stages 按日历顺序排列（含赛季中段的升降级赛）"
+   },
+   "phase_types": [
+    "round_robin",
+    "groups",
+    "single_elim",
+    "double_elim",
+    "gauntlet",
+    "bo_series",
+    "points_race",
+    "promotion",
+    "unknown"
+   ]
+  },
+  "tier1": {
+   "LPL": [
+    {
+     "id": "lpl16_spring",
+     "name": "LPL 2016 Spring",
+     "source": "LPL/2016/Spring",
+     "start": "2016-01-14",
+     "end": "2016-04-23",
+     "teams": 12,
+     "location": "Shanghai",
+     "phases": [
+      {
+       "type": "groups",
+       "name": "Group Stage",
+       "end": "2016-04-10",
+       "source": "LPL/2016/Spring/Group Stage",
+       "bo": 3,
+       "bo_source": "page + match_data（96 场，每场 2–3 局）",
+       "groups": [
+        {
+         "name": "A",
+         "size": 6
+        },
+        {
+         "name": "B",
+         "size": 6
+        }
+       ],
+       "group_assignment": "待查",
+       "inner": {
+        "type": "round_robin",
+        "rounds": "double",
+        "bo": 3,
+        "scope": "within_group"
+       },
+       "cross": {
+        "type": "round_robin",
+        "rounds": "single",
+        "bo": 3,
+        "scope": "vs_other_group"
+       },
+       "matches_per_team": 16,
+       "advance": [
+        {
+         "ranks": "各组第 1",
+         "to": "lpl16_spring.playoffs.SF"
+        },
+        {
+         "ranks": "各组第 2",
+         "to": "lpl16_spring.playoffs.QF"
+        },
+        {
+         "ranks": "各组第 3",
+         "to": "lpl16_spring.playoffs.R1",
+         "note": "系列赛开局 1:0 领先（1-game advantage）"
+        },
+        {
+         "ranks": "各组第 4",
+         "to": "lpl16_spring.playoffs.R1"
+        },
+        {
+         "ranks": "各组第 5",
+         "to": "lpl16_summer_promo.qualifying_round"
+        },
+        {
+         "ranks": "各组第 6",
+         "to": "lpl16_summer_promo.elimination_match"
+        }
+       ],
+       "tiebreakers": "待查"
+      },
+      {
+       "type": "single_elim",
+       "name": "Playoffs",
+       "teams": 8,
+       "bo": 5,
+       "bracket_template": "Bracket/4L4DS",
+       "seeding": "R1：X 组第 3 vs Y 组第 4（跨组）；QF：Y 组第 2 vs（X3–Y4 胜者）；SF：X 组第 1 vs Y2 一侧胜者（Spring/Summer 两届对阵一致）",
+       "third_place_match": true,
+       "third_place_note": "bracket 有第 8 场且积分区分第 3/4 名（推断）",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "Mid-Season Invitational/2016"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 3500000,
+      "currency": "CNY",
+      "by_place": {
+       "1": 1500000,
+       "2": 800000,
+       "3": 500000,
+       "4": 300000,
+       "5-6": 200000
+      }
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "Mid-Season Invitational/2016",
+       "slots": 1,
+       "rule": "Spring 冠军"
+      }
+     ],
+     "championship_points": {
+      "1": 300,
+      "2": 200,
+      "3": 100,
+      "4": 80,
+      "5-6": 50,
+      "7-8": 40,
+      "9-12": 0
+     },
+     "todo": [
+      "Format 原文把第 5/6 名去向写成 LPL/2017/Spring/Promotion，奖金表写 LPL/2016/Summer/Promotion；按奖金表",
+      "积分：积分页表格 5-6 名 = 50，但积分页实际给 Snake、VG 各 60（不一致）"
+     ]
+    },
+    {
+     "id": "lpl16_summer_promo",
+     "name": "LPL 2016 Summer Promotion",
+     "source": "LPL/2016/Summer/Promotion",
+     "start": "2016-06-14",
+     "end": "2016-06-16",
+     "teams": 6,
+     "location": "Shanghai",
+     "phases": [
+      {
+       "type": "promotion",
+       "name": "Elimination Match + Qualifying Round",
+       "bo": 5,
+       "bracket_template": [
+        "Bracket/2L1D-1Q",
+        "Bracket/2-1Q-U-2-1Q"
+       ],
+       "participants": "LPL Spring 两组第 5、两组第 6（4 队）+ LSPL Spring 亚军、季军（2 队）",
+       "detail": [
+        "Bracket A：两支第 6 名打 Elimination Match，负者降入 LSPL；胜者对一支 LSPL 队，胜者进 LPL Summer",
+        "Bracket B：两支第 5 名对打，胜者进 LPL Summer；负者对另一支 LSPL 队，胜者进 LPL Summer"
+       ],
+       "actual": "M3 0-3 HYG；HYG 3-2 YM；OMG 3-0 EPA；EPA 3-1 MF → HYG、OMG、EPA 留在 LPL",
+       "advance": [
+        {
+         "ranks": "3 支胜者",
+         "to": "lpl16_summer"
+        },
+        {
+         "ranks": "3 支负者",
+         "to": "LSPL/2016/Summer",
+         "note": "relegated"
+        }
+       ]
+      }
+     ],
+     "fearless": false,
+     "todo": [
+      "日期矛盾：信息框 2016-06-14~16（晚于 Summer 5/26 开赛），奖金表的对阵日期为 2016-04-14/16，后者与时间线相符",
+      "页首介绍写 3 支 LPL 队 + 3 支 LSPL 队，但 EPA 是 LPL Spring A 组第 5；按 bracket 为 4 支 LPL 队 + 2 支 LSPL 队",
+      "哪支 LSPL 队（亚军/季军）进哪个 bracket 原文未写"
+     ]
+    },
+    {
+     "id": "lpl16_summer",
+     "name": "LPL 2016 Summer",
+     "source": "LPL/2016/Summer",
+     "start": "2016-05-26",
+     "end": "2016-08-26",
+     "teams": 12,
+     "location": "Shanghai",
+     "phases": [
+      {
+       "type": "groups",
+       "name": "Group Stage",
+       "end": "2016-08-07",
+       "bo": 3,
+       "bo_source": "page + match_data",
+       "groups": [
+        {
+         "name": "A",
+         "size": 6
+        },
+        {
+         "name": "B",
+         "size": 6
+        }
+       ],
+       "inner": {
+        "type": "round_robin",
+        "rounds": "double",
+        "bo": 3,
+        "scope": "within_group"
+       },
+       "cross": {
+        "type": "round_robin",
+        "rounds": "single",
+        "bo": 3,
+        "scope": "vs_other_group"
+       },
+       "matches_per_team": 16,
+       "advance": "同 Spring；各组第 5 → LPL 2017 Spring Promotion 的 Qualifying Round，各组第 6 → Elimination Round"
+      },
+      {
+       "type": "single_elim",
+       "name": "Playoffs",
+       "teams": 8,
+       "bo": 5,
+       "bracket_template": "Bracket/4L4DS",
+       "seeding": "同 Spring",
+       "third_place_match": true,
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "World Championship/2016",
+         "seed": "LPL1"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 3500000,
+      "currency": "CNY"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "World Championship/2016",
+       "slots": 1,
+       "rule": "Summer 冠军 = LPL1"
+      }
+     ],
+     "championship_points": {
+      "1": "qualified(Worlds)",
+      "2": 300,
+      "3": 200,
+      "4": 90,
+      "5-6": 70,
+      "7-8": 50,
+      "9-12": 0
+     },
+     "relegation": "各组第 5、6 名 → LPL/2017/Spring/Promotion（该页不在本批数据中，赛制待查）"
+    },
+    {
+     "id": "lpl16_points",
+     "name": "LPL Championship Points 2016",
+     "source": "LPL/2016/Championship Points",
+     "start": "2016-01-14",
+     "end": "2016-08-28",
+     "phases": [
+      {
+       "type": "points_race",
+       "events": [
+        "lpl16_spring",
+        "lpl16_summer"
+       ],
+       "advance": [
+        {
+         "ranks": "积分最高（Summer 冠军除外）",
+         "to": "World Championship/2016",
+         "seed": "LPL2"
+        },
+        {
+         "ranks": "积分第 3–6（冠军计第 1）",
+         "to": "lpl16_rf"
+        }
+       ],
+       "tiebreak": "待查"
+      }
+     ],
+     "international": [
+      {
+       "event": "World Championship/2016",
+       "slots": 1,
+       "rule": "积分第一（冠军除外）= LPL2"
+      }
+     ]
+    },
+    {
+     "id": "lpl16_rf",
+     "name": "LPL/2016 Regional Finals",
+     "source": "LPL/2016/Regional Finals",
+     "start": "2016-08-27",
+     "end": "2016-08-28",
+     "teams": 4,
+     "location": "Guangzhou",
+     "phases": [
+      {
+       "type": "gauntlet",
+       "bo": 5,
+       "bo_source": "page",
+       "bracket_template": "Bracket/2L2D-1Q",
+       "participants": "积分榜第 3–6 名（Summer 冠军算第 1、积分冠军算第 2）",
+       "seeding": "R1：四队中积分最低两队 → R2：胜者 vs 积分第 4 → 决赛：胜者 vs 积分第 3（擂台赛；LPL/LCK/EU/NA 四届对阵一致）",
+       "advance": [
+        {
+         "ranks": "决赛胜者",
+         "to": "World Championship/2016",
+         "seed": "LPL3"
+        },
+        {
+         "ranks": "其余 3 队",
+         "to": "eliminated"
+        }
+       ]
+      }
+     ],
+     "fearless": false,
+     "todo": [
+      "积分并列（Snake、VG 均 130）时如何排位待查"
+     ]
+    }
+   ],
+   "LCK": [
+    {
+     "id": "lck16_spring",
+     "name": "LCK 2016 Spring",
+     "source": "LCK/2016/Spring",
+     "start": "2016-01-13",
+     "end": "2016-04-23",
+     "teams": 10,
+     "location": "Seoul",
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 3,
+       "bo_source": "page + match_data（90 场）",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "lck16_spring.playoffs.final"
+        },
+        {
+         "ranks": "2",
+         "to": "lck16_spring.playoffs.R2"
+        },
+        {
+         "ranks": "3",
+         "to": "lck16_spring.playoffs.R1"
+        },
+        {
+         "ranks": "4-5",
+         "to": "lck16_spring.playoffs.wild_card"
+        },
+        {
+         "ranks": "6-8",
+         "to": "lck16_summer"
+        },
+        {
+         "ranks": "9-10",
+         "to": "lck16_summer_promo"
+        }
+       ]
+      },
+      {
+       "type": "gauntlet",
+       "name": "Playoffs (King of the Hill)",
+       "teams": 5,
+       "bo": {
+        "wild_card": 3,
+        "other": 5
+       },
+       "bracket_template": "Bracket/2L3D",
+       "seeding": "Wild Card：4 vs 5（Bo3）→ R1：3 vs 胜者 → R2：2 vs 胜者 → 决赛：1 vs 胜者",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "Mid-Season Invitational/2016"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 275000000,
+      "currency": "KRW",
+      "by_place": {
+       "1": 100000000,
+       "2": 60000000,
+       "3": 30000000,
+       "4": 20000000,
+       "5": 15000000,
+       "6-10": 10000000
+      }
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "Mid-Season Invitational/2016",
+       "slots": 1,
+       "rule": "Spring 冠军"
+      }
+     ],
+     "championship_points": {
+      "1": 90,
+      "2": 70,
+      "3": 50,
+      "4": 30,
+      "5-6": 10,
+      "7-10": 0
+     },
+     "todo": [
+      "Format 原文写 \"4th and 6th place → Wild Card\"、\"6th till 8th → stay\"，与积分表颜色和实际对阵（4 vs 5）不符，按 4–5 名处理"
+     ]
+    },
+    {
+     "id": "lck16_summer_promo",
+     "name": "LCK 2016 Summer Promotion",
+     "source": "LCK/2016/Summer/Promotion",
+     "start": "2016-04-28",
+     "end": "2016-04-29",
+     "teams": 4,
+     "location": "Seoul",
+     "phases": [
+      {
+       "type": "promotion",
+       "bo": 5,
+       "bracket_template": "Bracket/4-2Q",
+       "matches": 2,
+       "detail": "LCK Spring 第 10 vs Challengers Korea Spring 冠军；LCK Spring 第 9 vs CK 亚军；各一场 Bo5，胜者进 LCK Summer",
+       "actual": "SBENU 0-3 ESC Ever；Kongdoo 1-3 MVP → 两支 CK 队升级",
+       "advance": [
+        {
+         "ranks": "2 胜者",
+         "to": "lck16_summer"
+        },
+        {
+         "ranks": "2 负者",
+         "to": "CK/2016/Summer",
+         "note": "relegated"
+        }
+       ]
+      }
+     ],
+     "fearless": false,
+     "todo": [
+      "第 9/10 名对 CK 第 1/2 名的配对来自实际对阵，原文没写规则"
+     ]
+    },
+    {
+     "id": "lck16_summer",
+     "name": "LCK 2016 Summer",
+     "source": "LCK/2016/Summer",
+     "start": "2016-05-25",
+     "end": "2016-08-20",
+     "teams": 10,
+     "location": "Seoul",
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 3,
+       "bo_source": "page + match_data",
+       "advance": "同 Spring；第 9–10 → LCK/2017/Spring/Promotion"
+      },
+      {
+       "type": "gauntlet",
+       "name": "Playoffs",
+       "teams": 5,
+       "bo": {
+        "wild_card": 3,
+        "other": 5
+       },
+       "bracket_template": "Bracket/2L3D",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "World Championship/2016",
+         "seed": "LCK1"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 275000000,
+      "currency": "KRW"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "World Championship/2016",
+       "slots": 1,
+       "rule": "Summer 冠军 = LCK1"
+      }
+     ],
+     "championship_points": {
+      "1": "qualified(Worlds)",
+      "2": 90,
+      "3": 70,
+      "4": 40,
+      "5-6": 20,
+      "7-10": 0
+     },
+     "relegation": "第 9–10 名 → LCK/2017/Spring/Promotion（对手为 CK Summer 前 2；该页不在数据中）"
+    },
+    {
+     "id": "lck16_points",
+     "name": "LCK Championship Points 2016",
+     "source": "LCK/2016/Championship Points",
+     "phases": [
+      {
+       "type": "points_race",
+       "events": [
+        "lck16_spring",
+        "lck16_summer"
+       ],
+       "advance": [
+        {
+         "ranks": "积分最高（冠军除外）",
+         "to": "World Championship/2016",
+         "seed": "LCK2"
+        },
+        {
+         "ranks": "积分第 3–6",
+         "to": "lck16_rf"
+        }
+       ],
+       "tiebreak": "待查"
+      }
+     ],
+     "international": [
+      {
+       "event": "World Championship/2016",
+       "slots": 1,
+       "rule": "积分第一（冠军除外）= LCK2"
+      }
+     ]
+    },
+    {
+     "id": "lck16_rf",
+     "name": "LCK/2016 Regional Finals",
+     "source": "LCK/2016/Regional Finals",
+     "start": "2016-08-28",
+     "end": "2016-09-03",
+     "teams": 4,
+     "location": "Seoul",
+     "phases": [
+      {
+       "type": "gauntlet",
+       "bo": 5,
+       "bo_source": "page",
+       "bracket_template": "Bracket/2L2D-1Q",
+       "participants": "积分榜第 3–6 名（Summer 冠军算第 1、积分冠军算第 2）",
+       "seeding": "R1：四队中积分最低两队 → R2：胜者 vs 积分第 4 → 决赛：胜者 vs 积分第 3（擂台赛；LPL/LCK/EU/NA 四届对阵一致）",
+       "advance": [
+        {
+         "ranks": "决赛胜者",
+         "to": "World Championship/2016",
+         "seed": "LCK3"
+        },
+        {
+         "ranks": "其余 3 队",
+         "to": "eliminated"
+        }
+       ]
+      }
+     ],
+     "fearless": false,
+     "todo": [
+      "AF、JAG 同为 30 分时如何排位待查"
+     ]
+    }
+   ],
+   "EU LCS": [
+    {
+     "id": "eu16_spring",
+     "name": "EU LCS 2016 Spring",
+     "source": "LCS/Europe/2016/Spring",
+     "start": "2016-01-14",
+     "end": "2016-04-17",
+     "teams": 10,
+     "location": "Berlin",
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 1,
+       "bo_source": "page + match_data（90 场，每场 1 局）",
+       "matches_per_team": 18,
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "eu16_spring.playoffs.SF"
+        },
+        {
+         "ranks": "3-6",
+         "to": "eu16_spring.playoffs.QF"
+        },
+        {
+         "ranks": "7",
+         "to": "eu16_summer"
+        },
+        {
+         "ranks": "8-10",
+         "to": "eu16_summer_promo"
+        }
+       ]
+      },
+      {
+       "type": "single_elim",
+       "name": "Playoffs",
+       "teams": 6,
+       "bo": 5,
+       "bracket_template": [
+        "Bracket/2-2",
+        "Bracket/4"
+       ],
+       "seeding": "QF：3 vs 6、4 vs 5（Spring 实际对阵）；SF 重排种子，第 1 名打剩下的最低种子",
+       "third_place_match": true,
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "Mid-Season Invitational/2016"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 100000,
+      "currency": "USD",
+      "by_place": {
+       "1": 50000,
+       "2": 25000,
+       "3": 15000,
+       "4": 10000
+      }
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "Mid-Season Invitational/2016",
+       "slots": 1,
+       "rule": "Spring 冠军"
+      }
+     ],
+     "championship_points": {
+      "1": 90,
+      "2": 70,
+      "3": 50,
+      "4": 30,
+      "5-6": 10,
+      "7-10": 0
+     }
+    },
+    {
+     "id": "eu16_summer_promo",
+     "name": "EU LCS 2016 Summer Promotion",
+     "source": "LCS/Europe/2016/Summer/Promotion",
+     "start": "2016-03-24",
+     "end": "2016-03-27",
+     "teams": 5,
+     "location": "Berlin",
+     "phases": [
+      {
+       "type": "promotion",
+       "bo": 5,
+       "bracket_template": "Bracket/2L1D-1Q-2-1Q-U-2-1Q",
+       "participants": "EU LCS Spring 第 8–10 + EU CS Spring 前 2",
+       "detail": [
+        "Play-in：LCS 第 10 vs CS 第 2（负者回 CS）",
+        "资格赛：LCS 第 8 vs Play-in 胜者；LCS 第 9 vs CS 第 1 —— 两场胜者进 LCS Summer",
+        "败者组：资格赛两负者对打，胜者进 LCS Summer，负者回 CS"
+       ],
+       "actual": "Giants 3-2 CW；Splyce 3-2 Giants；Roccat 3-1 Huma；Giants 3-1 Huma → Splyce、Roccat、Giants 留在 LCS",
+       "advance": [
+        {
+         "ranks": "3 支",
+         "to": "eu16_summer"
+        },
+        {
+         "ranks": "2 支",
+         "to": "Challenger Series/Europe/2016/Summer",
+         "note": "relegated"
+        }
+       ]
+      }
+     ],
+     "fearless": false,
+     "todo": [
+      "种子落位由实际对阵 + 算出的常规赛名次（Splyce 8、Roccat 9、Giants 10）+ CS 名次（Huma 1、CW 2）推得，原文只有 \"Double Elimination Bo5\""
+     ]
+    },
+    {
+     "id": "eu16_summer",
+     "name": "EU LCS 2016 Summer",
+     "source": "LCS/Europe/2016/Summer",
+     "start": "2016-06-02",
+     "end": "2016-08-28",
+     "teams": 10,
+     "location": "Berlin",
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 2,
+       "bo_source": "match_data（9 周 × 10 场 = 90 场 Bo2，其中 33 场 1-1；另有 2 场 Bo1 加赛）",
+       "draws": true,
+       "points_rule": "待查",
+       "tiebreak_match": "Bo1（7/31 打了 2 场）",
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "eu16_summer.playoffs.SF"
+        },
+        {
+         "ranks": "3-6",
+         "to": "eu16_summer.playoffs.QF"
+        },
+        {
+         "ranks": "7",
+         "to": "EU LCS 2017 Spring"
+        },
+        {
+         "ranks": "8-10",
+         "to": "LCS/Europe/2017/Spring/Promotion"
+        }
+       ]
+      },
+      {
+       "type": "single_elim",
+       "name": "Playoffs",
+       "teams": 6,
+       "bo": 5,
+       "third_place_match": true,
+       "seeding": "SF 第 1 名打剩下的最低种子；QF 配对待查",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "World Championship/2016",
+         "seed": "EU1"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 100000,
+      "currency": "USD"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "World Championship/2016",
+       "slots": 1,
+       "rule": "Summer 冠军 = EU1"
+      }
+     ],
+     "championship_points": {
+      "1": "qualified(Worlds)",
+      "2": 90,
+      "3": 70,
+      "4": 40,
+      "5-6": 20,
+      "7-10": 0
+     },
+     "points_forfeit": "Summer 第 8–10 名清空全年积分（Origen 因此失去 Spring 的 70 分）",
+     "todo": [
+      "矛盾：Format 原文写 Summer 常规赛 \"All matches are Bo1\"，比赛数据为 Bo2（可平局）",
+      "Bo2 的排名规则（胜/平/负如何计分）页面未写",
+      "QF 配对：按算出的名次实际为 3v5、4v6，与 Spring 的 3v6、4v5 不同，名次或规则待核"
+     ]
+    },
+    {
+     "id": "eu16_points",
+     "name": "EU LCS Championship Points 2016",
+     "source": "LCS/Europe/2016/Championship Points",
+     "phases": [
+      {
+       "type": "points_race",
+       "events": [
+        "eu16_spring",
+        "eu16_summer"
+       ],
+       "advance": [
+        {
+         "ranks": "积分最高（冠军除外）",
+         "to": "World Championship/2016",
+         "seed": "EU2"
+        },
+        {
+         "ranks": "积分第 3–6",
+         "to": "eu16_rf"
+        }
+       ]
+      }
+     ],
+     "international": [
+      {
+       "event": "World Championship/2016",
+       "slots": 1,
+       "rule": "积分第一（冠军除外）= EU2"
+      }
+     ]
+    },
+    {
+     "id": "eu16_rf",
+     "name": "LCS/Europe/2016 Regional Finals",
+     "source": "LCS/Europe/2016/Regional Finals",
+     "start": "2016-09-03",
+     "end": "2016-09-05",
+     "teams": 4,
+     "location": "Berlin",
+     "phases": [
+      {
+       "type": "gauntlet",
+       "bo": 5,
+       "bo_source": "page",
+       "bracket_template": "Bracket/2L2D-1Q",
+       "participants": "积分榜第 3–6 名（Summer 冠军算第 1、积分冠军算第 2）",
+       "seeding": "R1：四队中积分最低两队 → R2：胜者 vs 积分第 4 → 决赛：胜者 vs 积分第 3（擂台赛；LPL/LCK/EU/NA 四届对阵一致）",
+       "advance": [
+        {
+         "ranks": "决赛胜者",
+         "to": "World Championship/2016",
+         "seed": "EU3"
+        },
+        {
+         "ranks": "其余 3 队",
+         "to": "eliminated"
+        }
+       ]
+      }
+     ],
+     "fearless": false,
+     "todo": []
+    }
+   ],
+   "NA LCS": [
+    {
+     "id": "na16_spring",
+     "name": "NA LCS 2016 Spring",
+     "source": "LCS/North America/2016/Spring",
+     "start": "2016-01-16",
+     "end": "2016-04-17",
+     "teams": 10,
+     "location": "Los Angeles",
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 1,
+       "bo_source": "match_data + 子页面 Format（主页面写 Bo3）",
+       "matches_per_team": 18,
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "na16_spring.playoffs.SF"
+        },
+        {
+         "ranks": "3-6",
+         "to": "na16_spring.playoffs.QF"
+        },
+        {
+         "ranks": "7",
+         "to": "na16_summer"
+        },
+        {
+         "ranks": "8-10",
+         "to": "na16_summer_promo"
+        }
+       ]
+      },
+      {
+       "type": "single_elim",
+       "name": "Playoffs",
+       "teams": 6,
+       "bo": 5,
+       "bracket_template": "Bracket/4L2DS",
+       "third_place_match": true,
+       "seeding": "QF 标注 \"Reseeding Matches\"：SF 第 1 名打剩下的最低种子",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "Mid-Season Invitational/2016"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 100000,
+      "currency": "USD",
+      "by_place": {
+       "1": 50000,
+       "2": 25000,
+       "3": 15000,
+       "4": 10000
+      }
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "Mid-Season Invitational/2016",
+       "slots": 1,
+       "rule": "Spring 冠军"
+      }
+     ],
+     "championship_points": {
+      "1": 90,
+      "2": 70,
+      "3": 50,
+      "4": 30,
+      "5-6": 10,
+      "7-10": 0
+     },
+     "todo": [
+      "矛盾：主页面 Format 写 \"Double Round Robin Bo3\"，子页面 Format 与比赛数据均为 Bo1",
+      "Spring QF 实际为 C9–TSM、TL–NRG，按算出的名次是 3v5、4v6；Summer 为 3v6、4v5"
+     ]
+    },
+    {
+     "id": "na16_summer_promo",
+     "name": "NA LCS 2016 Summer Promotion",
+     "source": "LCS/North America/2016/Summer/Promotion",
+     "start": "2016-04-06",
+     "end": "2016-04-08",
+     "teams": 5,
+     "location": "Los Angeles",
+     "phases": [
+      {
+       "type": "promotion",
+       "bo": 5,
+       "bracket_template": "Bracket/2L1D-1Q-2-1Q-U-2-1Q",
+       "participants": "NA LCS Spring 第 8–10 + NA CS Spring 前 2",
+       "detail": "结构同 EU：Play-in（LCS 第 10 vs CS 第 2）→ 两场资格赛（第 8 vs Play-in 胜者，第 9 vs CS 第 1）→ 两负者打败者组；共 3 队晋级",
+       "actual": "DIG 0-3 TDK；REN 3-0 TDK；TiP 3-1 Apex；TDK 0-3 Apex → REN、TiP、Apex 进 Summer",
+       "advance": [
+        {
+         "ranks": "3 支",
+         "to": "na16_summer"
+        },
+        {
+         "ranks": "2 支",
+         "to": "Challenger Series/North America/2016/Summer",
+         "note": "relegated"
+        }
+       ]
+      }
+     ],
+     "fearless": false,
+     "todo": [
+      "REN、TiP 常规赛同为 5-13，第 8/9 由 bracket 反推",
+      "Summer 开赛时 REN、TiP 的席位分别转给 EnVyUs、Phoenix1（积分页注）"
+     ]
+    },
+    {
+     "id": "na16_summer",
+     "name": "NA LCS 2016 Summer",
+     "source": "LCS/North America/2016/Summer",
+     "start": "2016-06-03",
+     "end": "2016-08-28",
+     "teams": 10,
+     "location": "Los Angeles",
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 3,
+       "bo_source": "page + match_data（90 场，2–3 局）",
+       "matches_per_team": 18,
+       "tiebreakers": [
+        "series",
+        "h2h series"
+       ],
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "na16_summer.playoffs.SF"
+        },
+        {
+         "ranks": "3-6",
+         "to": "na16_summer.playoffs.QF"
+        },
+        {
+         "ranks": "7",
+         "to": "NA LCS 2017 Spring"
+        },
+        {
+         "ranks": "8-10",
+         "to": "LCS/North America/2017/Spring/Promotion"
+        }
+       ]
+      },
+      {
+       "type": "single_elim",
+       "name": "Playoffs",
+       "teams": 6,
+       "bo": 5,
+       "bracket_template": "Bracket/4L2DS",
+       "third_place_match": true,
+       "seeding": "QF 3v6、4v5；SF 重排种子",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "World Championship/2016",
+         "seed": "NA1"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 100000,
+      "currency": "USD"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "World Championship/2016",
+       "slots": 1,
+       "rule": "Summer 冠军 = NA1"
+      }
+     ],
+     "championship_points": {
+      "1": "qualified(Worlds)",
+      "2": 90,
+      "3": 70,
+      "4": 40,
+      "5-6": 20,
+      "7-10": 0
+     },
+     "points_forfeit": "Summer 第 8–10 名清空全年积分（NRG）"
+    },
+    {
+     "id": "na16_points",
+     "name": "NA LCS Championship Points 2016",
+     "source": "LCS/North America/2016/Championship Points",
+     "phases": [
+      {
+       "type": "points_race",
+       "events": [
+        "na16_spring",
+        "na16_summer"
+       ],
+       "advance": [
+        {
+         "ranks": "积分最高（冠军除外）",
+         "to": "World Championship/2016",
+         "seed": "NA2"
+        },
+        {
+         "ranks": "积分第 3–6",
+         "to": "na16_rf"
+        }
+       ]
+      }
+     ],
+     "international": [
+      {
+       "event": "World Championship/2016",
+       "slots": 1,
+       "rule": "积分第一（冠军除外）= NA2"
+      }
+     ]
+    },
+    {
+     "id": "na16_rf",
+     "name": "LCS/North America/2016 Regional Finals",
+     "source": "LCS/North America/2016/Regional Finals",
+     "start": "2016-09-03",
+     "end": "2016-09-05",
+     "teams": 4,
+     "location": "United States",
+     "phases": [
+      {
+       "type": "gauntlet",
+       "bo": 5,
+       "bo_source": "page",
+       "bracket_template": "Bracket/2L2D-1Q",
+       "participants": "积分榜第 3–6 名（Summer 冠军算第 1、积分冠军算第 2）",
+       "seeding": "R1：四队中积分最低两队 → R2：胜者 vs 积分第 4 → 决赛：胜者 vs 积分第 3（擂台赛；LPL/LCK/EU/NA 四届对阵一致）",
+       "advance": [
+        {
+         "ranks": "决赛胜者",
+         "to": "World Championship/2016",
+         "seed": "NA3"
+        },
+        {
+         "ranks": "其余 3 队",
+         "to": "eliminated"
+        }
+       ]
+      }
+     ],
+     "fearless": false,
+     "todo": []
+    }
+   ],
+   "LMS": [
+    {
+     "id": "lms16_spring",
+     "name": "LMS 2016 Spring",
+     "source": "LMS/2016/Spring",
+     "start": "2016-01-14",
+     "end": "2016-04-12",
+     "teams": 8,
+     "location": "Taipei",
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 2,
+       "bo_source": "match_data（56 场，每场 2 局，每对交手 2 次）；页面 Format 为空",
+       "draws": true,
+       "points_rule": "待查",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "lms16_spring.playoffs.final"
+        },
+        {
+         "ranks": "2",
+         "to": "lms16_spring.playoffs.R2"
+        },
+        {
+         "ranks": "3-4",
+         "to": "lms16_spring.playoffs.R1"
+        },
+        {
+         "ranks": "5-6",
+         "to": "lms16_summer"
+        },
+        {
+         "ranks": "7-8",
+         "to": "lms16_summer_promo"
+        }
+       ]
+      },
+      {
+       "type": "gauntlet",
+       "name": "Playoffs",
+       "teams": 4,
+       "bo": "待查",
+       "bracket_template": "Bracket/2L2D",
+       "seeding": "R1：3 vs 4 → R2：2 vs 胜者 → 决赛：1 vs 胜者（由 bracket 对阵推断）",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "Mid-Season Invitational/2016"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 3000000,
+      "currency": "TWD",
+      "by_place": {
+       "1": 1500000,
+       "2": 600000,
+       "3": 400000,
+       "4": 200000,
+       "5": 120000,
+       "6": 80000,
+       "7-8": 50000
+      }
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "Mid-Season Invitational/2016",
+       "slots": 1,
+       "rule": "Spring 冠军"
+      }
+     ],
+     "championship_points": {
+      "1": 90,
+      "2": 70,
+      "3": 50,
+      "4": 30,
+      "5-6": 10,
+      "7-8": 0
+     },
+     "todo": [
+      "Format 一节为空；常规赛 Bo2 与季后赛结构全部由比赛数据/bracket 推出",
+      "结束日：信息框 4/12，MSI 页资格表写 4/17"
+     ]
+    },
+    {
+     "id": "lms16_summer_promo",
+     "name": "LMS 2016 Summer Promotion",
+     "source": "LMS/2016/Summer/Promotion",
+     "start": "2016-05-21",
+     "end": "2016-05-22",
+     "teams": 4,
+     "location": "Taipei",
+     "phases": [
+      {
+       "type": "promotion",
+       "bo": "待查",
+       "bracket_template": "Bracket/4-2Q",
+       "matches": 2,
+       "detail": "LMS Spring 第 7–8（XG、Cougar）各对一支 Elite Challenger Series 队（Taipei Berserkers、Flash Husky），胜者进 LMS Summer，负者进 ECS Summer",
+       "advance": [
+        {
+         "ranks": "2 胜者",
+         "to": "lms16_summer"
+        },
+        {
+         "ranks": "2 负者",
+         "to": "Elite Challenger Series/2016/Summer",
+         "note": "relegated"
+        }
+       ]
+      }
+     ],
+     "fearless": false,
+     "todo": [
+      "比分、Bo 数缺失；Format 为空；第 7/8 名各对 ECS 第几名待查"
+     ]
+    },
+    {
+     "id": "lms16_summer",
+     "name": "LMS 2016 Summer",
+     "source": "LMS/2016/Summer",
+     "start": "2016-06-09",
+     "end": "2016-08-21",
+     "teams": 8,
+     "location": "Taipei",
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 2,
+       "bo_source": "match_data（56 场 Bo2，15 场 1-1）",
+       "draws": true,
+       "points_rule": "待查",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "lms16_summer.playoffs.final"
+        },
+        {
+         "ranks": "2",
+         "to": "lms16_summer.playoffs.R2"
+        },
+        {
+         "ranks": "3-4",
+         "to": "lms16_summer.playoffs.R1"
+        },
+        {
+         "ranks": "5-6",
+         "to": "LMS 2017 Spring"
+        },
+        {
+         "ranks": "7-8",
+         "to": "待查",
+         "note": "表格标为降级色，去向页面未写"
+        }
+       ]
+      },
+      {
+       "type": "gauntlet",
+       "name": "Playoffs",
+       "teams": 4,
+       "bo": 5,
+       "bo_source": "比分 3-0 / 3-2 / 0-3",
+       "bracket_template": "Bracket/2L2D",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "World Championship/2016",
+         "seed": "LMS1"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 3000000,
+      "currency": "TWD"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "World Championship/2016",
+       "slots": 1,
+       "rule": "Summer 冠军 = LMS1"
+      }
+     ],
+     "championship_points": {
+      "1": "qualified(Worlds)",
+      "2": 90,
+      "3": 70,
+      "4": 40,
+      "5-6": 20,
+      "7-8": 0
+     }
+    },
+    {
+     "id": "lms16_points",
+     "name": "LMS Championship Points 2016",
+     "source": "LMS/2016/Championship Points",
+     "phases": [
+      {
+       "type": "points_race",
+       "events": [
+        "lms16_spring",
+        "lms16_summer"
+       ],
+       "advance": [
+        {
+         "ranks": "积分第 2–5（冠军计第 1）",
+         "to": "lms16_rf"
+        }
+       ],
+       "note": "LMS 没有\"积分第一直通\"名额"
+      }
+     ]
+    },
+    {
+     "id": "lms16_rf",
+     "name": "LMS Regional Finals 2016",
+     "source": "LMS/2016/Regional Finals",
+     "start": "2016-09-02",
+     "end": "2016-09-04",
+     "teams": 4,
+     "location": "Taipei",
+     "phases": [
+      {
+       "type": "single_elim",
+       "bo": 5,
+       "bracket_template": "Bracket/4-1Q",
+       "seeding": "积分第 2 vs 第 5、第 3 vs 第 4 → 决赛（由对阵推断）",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "World Championship/2016",
+         "seed": "LMS2"
+        }
+       ]
+      }
+     ],
+     "fearless": false,
+     "todo": [
+      "R1 J Team–Machi 的胜负字段与 R2 出场队伍（Machi）矛盾，录入错误"
+     ]
+    }
+   ],
+   "CBLOL": [
+    {
+     "id": "cblol16_s1",
+     "name": "CBLOL 2016 Split 1",
+     "source": "CBLOL/2016/Split 1",
+     "start": "2016-01-16",
+     "end": "2016-04-02",
+     "teams": 8,
+     "location": "São Paulo",
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "single",
+       "bo": 2,
+       "bo_source": "page + match_data（28 场 Bo2，13 场 1-1）",
+       "draws": true,
+       "points_rule": "Split 2 写明 胜 3 / 平 1 / 负 0；Split 1 未写（另有阵容不足 7 人的扣分）",
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "cblol16_s1.playoffs.SF"
+        },
+        {
+         "ranks": "3-6",
+         "to": "cblol16_s1.playoffs.QF"
+        },
+        {
+         "ranks": "7-8",
+         "to": "cblol16_s1.relegation_match"
+        }
+       ]
+      },
+      {
+       "type": "single_elim",
+       "name": "Playoffs",
+       "teams": 6,
+       "bo": {
+        "QF": 3,
+        "SF": 5,
+        "F": 5
+       },
+       "bo_source": "Format 写全部 Bo5；bracket 中 QF 标 bestof=3",
+       "bracket_template": "Bracket/4L2DS",
+       "third_place": "无季军赛，依次比 季后赛胜局数 → 获胜局总时长（短者优先）→ 常规赛名次",
+       "fifth_place_match": "QF 两负者打 Bo3，负者（第 6）进 Split 2 Promotion",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "International Wildcard Invitational/2016"
+        }
+       ]
+      },
+      {
+       "type": "bo_series",
+       "name": "Relegation Match",
+       "bo": "待查",
+       "participants": "第 7 vs 第 8",
+       "advance": [
+        {
+         "ranks": "胜者",
+         "to": "cblol16_s2_promo"
+        },
+        {
+         "ranks": "负者",
+         "to": "Circuito Desafiante/2016/Split 2",
+         "note": "relegated"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 150000,
+      "currency": "BRL",
+      "by_place": {
+       "1": 60000,
+       "2": 30000,
+       "3": 20000,
+       "4": 12500,
+       "5": 10000,
+       "6": 7500,
+       "7-8": 5000
+      }
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "International Wildcard Invitational/2016",
+       "slots": 1,
+       "rule": "Split 1 冠军（外卡赛区，MSI 无直通）"
+      }
+     ]
+    },
+    {
+     "id": "cblol16_s2_promo",
+     "name": "CBLOL 2016 Split 2 Promotion",
+     "source": "CBLOL/2016/Split 2/Promotion",
+     "start": "2016-04-09",
+     "end": "2016-04-10",
+     "teams": 4,
+     "location": "São Paulo",
+     "phases": [
+      {
+       "type": "promotion",
+       "bo": 5,
+       "bracket_template": "Bracket/4-2Q",
+       "matches": 2,
+       "detail": "CBLOL Split 1 第 6 与降级战胜者，各对一支 Circuito Desafiante Split 1 队；胜者进 Split 2",
+       "actual": "paiN 3-0 Overload；CNB 3-0 Brave",
+       "advance": [
+        {
+         "ranks": "2 胜者",
+         "to": "cblol16_s2"
+        },
+        {
+         "ranks": "2 负者",
+         "to": "Circuito Desafiante/2016/Split 2"
+        }
+       ]
+      }
+     ],
+     "fearless": false
+    },
+    {
+     "id": "cblol16_s2",
+     "name": "CBLOL 2016 Split 2",
+     "source": "CBLOL/2016/Split 2",
+     "start": "2016-05-19",
+     "end": "2016-07-09",
+     "teams": 8,
+     "location": "São Paulo",
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "single",
+       "bo": 2,
+       "bo_source": "page + match_data",
+       "draws": true,
+       "points_rule": {
+        "win": 3,
+        "draw": 1,
+        "loss": 0
+       },
+       "advance": [
+        {
+         "ranks": "1-4",
+         "to": "cblol16_s2.playoffs.SF"
+        },
+        {
+         "ranks": "5",
+         "to": "CBLOL 2017 Split 1"
+        },
+        {
+         "ranks": "6",
+         "to": "CBLOL/2017/Summer/Promotion"
+        },
+        {
+         "ranks": "7-8",
+         "to": "cblol16_s2.relegation"
+        }
+       ]
+      },
+      {
+       "type": "bo_series",
+       "name": "Relegation",
+       "bo": 3,
+       "participants": "第 7 vs 第 8",
+       "advance": [
+        {
+         "ranks": "胜者",
+         "to": "CBLOL/2017/Summer/Promotion"
+        },
+        {
+         "ranks": "负者",
+         "to": "BRCC/2017/Summer",
+         "note": "relegated"
+        }
+       ]
+      },
+      {
+       "type": "single_elim",
+       "name": "Playoffs",
+       "teams": 4,
+       "bo": 5,
+       "bracket_template": "Bracket/4",
+       "seeding": "SF 1v4、2v3（由对阵推断）",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "International Wildcard Qualifier/2016"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 160000,
+      "currency": "BRL"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "International Wildcard Qualifier/2016",
+       "slots": 1,
+       "rule": "Split 2 冠军 → IWCQ（不是 Worlds 直通）"
+      }
+     ],
+     "todo": [
+      "奖金表分项合计 161,000，信息框 160,000",
+      "2017 Promotion 的赛制不在数据中"
+     ]
+    }
+   ]
+  },
+  "tier2": {
+   "LSPL": [
+    {
+     "id": "lspl16_spring",
+     "name": "LSPL 2016 Spring",
+     "source": "LSPL/2016/Spring",
+     "start": "2016-01-18",
+     "end": "2016-04-12",
+     "teams": 16,
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 1,
+       "advance": [
+        {
+         "ranks": "1-4",
+         "to": "playoffs"
+        },
+        {
+         "ranks": "5-10",
+         "to": "LSPL/2016/Summer"
+        },
+        {
+         "ranks": "11-14",
+         "to": "LSPL/2016/Summer/Relegations"
+        },
+        {
+         "ranks": "15-16",
+         "to": "relegated"
+        }
+       ]
+      },
+      {
+       "type": "single_elim",
+       "teams": 4,
+       "bo": 5,
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "LPL/2016/Summer",
+         "note": "直接升入 LPL"
+        },
+        {
+         "ranks": "2-3",
+         "to": "lpl16_summer_promo"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 600000,
+      "currency": "CNY"
+     }
+    },
+    {
+     "id": "lspl16_summer",
+     "name": "LSPL 2016 Summer",
+     "source": "LSPL/2016/Summer",
+     "start": "2016-05-23",
+     "end": "2016-08-09",
+     "teams": 14,
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 1,
+       "advance": [
+        {
+         "ranks": "1-4",
+         "to": "playoffs"
+        },
+        {
+         "ranks": "5-8",
+         "to": "LSPL/2017/Spring"
+        },
+        {
+         "ranks": "9-12",
+         "to": "LSPL/2017/Spring/Relegations"
+        },
+        {
+         "ranks": "13-14",
+         "to": "relegated"
+        }
+       ]
+      },
+      {
+       "type": "single_elim",
+       "teams": 4,
+       "bo": 5,
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "LPL/2017/Spring",
+         "note": "原文写 \"LPL Summer\"，链接为 2017 Spring"
+        },
+        {
+         "ranks": "2-3",
+         "to": "LPL/2017/Spring/Promotion"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 600000,
+      "currency": "CNY"
+     }
+    }
+   ],
+   "Challengers Korea": [
+    {
+     "id": "ck16_spring",
+     "name": "CK Spring 2016",
+     "source": "CK/2016/Spring",
+     "start": "2016-01-18",
+     "end": "2016-04-16",
+     "teams": 8,
+     "phases": [
+      {
+       "type": "unknown",
+       "note": "Format 为空。奖金表 W/D/L 如 4/5/5（每队 14 场且有平局）→ 推断双循环 Bo2；前 4 进季后赛，对阵像擂台赛（4→3→2→1），Bo5",
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "lck16_summer_promo"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 60000000,
+      "currency": "KRW"
+     }
+    },
+    {
+     "id": "ck16_summer",
+     "name": "CK Summer 2016",
+     "source": "CK/2016/Summer",
+     "start": "2016-05-30",
+     "end": "2016-08-13",
+     "teams": 8,
+     "phases": [
+      {
+       "type": "unknown",
+       "note": "Format 为空。奖金表 W/L 1/6（每队 7 场）→ 推断单循环；第 5–6 名季后赛 0-2 出局（Bo3）；前 2 → LCK 2017 Spring Promotion",
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "LCK/2017/Spring/Promotion"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 60000000,
+      "currency": "KRW"
+     }
+    }
+   ],
+   "EU CS": [
+    {
+     "id": "eucs16_spring",
+     "name": "EU CS Spring 2016",
+     "source": "Challenger Series/Europe/2016/Spring",
+     "start": "2016-01-26",
+     "end": "2016-03-15",
+     "teams": 6,
+     "phases": [
+      {
+       "type": "unknown",
+       "note": "Format 为空。W/D/L 如 1/0/4 → 推断单循环 Bo2；前 4 进季后赛（SF/决赛 Bo5）",
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "eu16_summer_promo"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 22500,
+      "currency": "EUR"
+     }
+    },
+    {
+     "id": "eucs16_summer_q",
+     "name": "EU CS Summer 2016 Qualifiers",
+     "source": "Challenger Series/Europe/2016/Summer/Qualifiers",
+     "start": "2016-05-20",
+     "end": "2016-05-27",
+     "teams": 12,
+     "phases": [
+      {
+       "type": "groups",
+       "groups": 2,
+       "group_size": 6,
+       "inner": {
+        "type": "round_robin",
+        "rounds": "single",
+        "bo": "待查"
+       }
+      },
+      {
+       "type": "single_elim",
+       "bracket_template": "Bracket/4-2Q",
+       "note": "各组前 2 交叉对决，2 支胜者进 EU CS Summer"
+      }
+     ]
+    },
+    {
+     "id": "eucs16_summer",
+     "name": "EU CS Summer 2016",
+     "source": "Challenger Series/Europe/2016/Summer",
+     "start": "2016-06-07",
+     "end": "2016-07-19",
+     "teams": 6,
+     "phases": [
+      {
+       "type": "unknown",
+       "note": "同 Spring",
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "LCS/Europe/2017/Spring/Promotion"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 22500,
+      "currency": "EUR"
+     }
+    }
+   ],
+   "NA CS": [
+    {
+     "id": "nacs16_spring",
+     "name": "NA CS Spring 2016",
+     "source": "Challenger Series/North America/2016/Spring",
+     "start": "2016-01-27",
+     "end": "2016-03-16",
+     "teams": 6,
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "single",
+       "bo": 2
+      },
+      {
+       "type": "single_elim",
+       "teams": 4,
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "na16_summer_promo"
+        }
+       ]
+      }
+     ],
+     "qualifier": "Challenger Series/North America/2016/Spring/Qualifier（4 队 Bracket/4-2Q，出 2 队）",
+     "prize": {
+      "amount": 21000,
+      "currency": "USD"
+     }
+    },
+    {
+     "id": "nacs16_summer",
+     "name": "NA CS Summer 2016",
+     "source": "Challenger Series/North America/2016/Summer",
+     "start": "2016-06-08",
+     "end": "2016-07-20",
+     "teams": 6,
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "single",
+       "bo": 2
+      },
+      {
+       "type": "single_elim",
+       "teams": 4,
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "LCS/North America/2017/Spring/Promotion"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 21000,
+      "currency": "USD"
+     }
+    }
+   ]
+  },
+  "international": {
+   "Mid-Season Invitational/2016": {
+    "source": "Mid-Season Invitational/2016",
+    "start": "2016-05-04",
+    "end": "2016-05-15",
+    "location": "Shanghai (Shanghai Oriental Sports Center)",
+    "teams": 6,
+    "prize": {
+     "amount": 450000,
+     "currency": "USD",
+     "by_place": {
+      "1": 250000,
+      "2": 100000,
+      "3-4": 50000
+     }
+    },
+    "patch": "6.8",
+    "fearless": false,
+    "slots": {
+     "LPL": {
+      "n": 1,
+      "from": "lpl16_spring 1"
+     },
+     "LCK": {
+      "n": 1,
+      "from": "lck16_spring 1"
+     },
+     "EU LCS": {
+      "n": 1,
+      "from": "eu16_spring 1"
+     },
+     "NA LCS": {
+      "n": 1,
+      "from": "na16_spring 1"
+     },
+     "LMS": {
+      "n": 1,
+      "from": "lms16_spring 1"
+     },
+     "CBLOL": {
+      "n": 0,
+      "from": "无直通；Split 1 冠军打 IWCI"
+     }
+    },
+    "slots_outside_game": {
+     "International Wildcard Invitational/2016 冠军": 1,
+     "note": "IWCI 2016-04-16~23；实际冠军为 SuperMassive（TCL）；IWCI 参赛名单与赛制不在数据中"
+    },
+    "phases": [
+     {
+      "type": "round_robin",
+      "name": "Group Stage",
+      "start": "2016-05-04",
+      "end": "2016-05-08",
+      "rounds": "double",
+      "bo": 1,
+      "matches_per_team": 10,
+      "advance": [
+       {
+        "ranks": "1-4",
+        "to": "knockout"
+       },
+       {
+        "ranks": "5-6",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "single_elim",
+      "name": "Playoffs",
+      "start": "2016-05-13",
+      "end": "2016-05-15",
+      "teams": 4,
+      "bo": 5,
+      "seeding": "待查"
+     }
+    ]
+   },
+   "World Championship/2016": {
+    "source": "World Championship/2016",
+    "start": "2016-09-29",
+    "end": "2016-10-29",
+    "location": "Groups: San Francisco (Bill Graham Civic Auditorium)；Knockout: Chicago (Chicago Theatre) / New York (Madison Square Garden) / Los Angeles (Staples Center)",
+    "teams": 16,
+    "prize": {
+     "amount": 5070000,
+     "currency": "USD",
+     "note": "基础 2,130,000 + 冠军皮肤分成 2,940,000",
+     "split_pct": {
+      "1": 40,
+      "2": 15,
+      "3-4": 7.5,
+      "5-8": 4,
+      "9-12": 2.25,
+      "13-16": 1.25
+     }
+    },
+    "patch": "6.18",
+    "fearless": false,
+    "qualifiers": "5 个 Regional Finals（2016-08-27 ~ 09-05）+ 2 个 International Wildcard Qualifier",
+    "slots": {
+     "LCK": {
+      "n": 3,
+      "from": "Summer 冠军 + 积分第一 + Regional Finals"
+     },
+     "LPL": {
+      "n": 3,
+      "from": "同 LCK"
+     },
+     "EU LCS": {
+      "n": 3,
+      "from": "同 LCK"
+     },
+     "NA LCS": {
+      "n": 3,
+      "from": "同 LCK"
+     },
+     "LMS": {
+      "n": 2,
+      "from": "Summer 冠军 + Regional Finals（积分第 2–5）"
+     },
+     "CBLOL": {
+      "n": 0,
+      "from": "无直通；Split 2 冠军打 IWCQ（2016 实际 INTZ 经 IWCQ 晋级）"
+     }
+    },
+    "slots_outside_game": {
+     "IWCQ（两个外卡资格赛各出 1 队）": 2,
+     "note": "2016 实际为 Albus NoX Luna（LCL）与 INTZ（CBLOL）；IWCQ 参赛赛区、赛制、日期不在数据中"
+    },
+    "pools": {
+     "pool1": [
+      "LCK1 ROX",
+      "LPL1 EDG",
+      "NA1 TSM",
+      "LMS1 FW"
+     ],
+     "pool2": [
+      "LCK2 SKT",
+      "LCK3 SSG",
+      "LPL2 RNG",
+      "LPL3 IM",
+      "EU1 G2",
+      "EU2 H2K",
+      "NA2 CLG",
+      "LMS2 ahq"
+     ],
+     "pool3": [
+      "NA3 C9",
+      "EU3 Splyce",
+      "IWCQ ANX",
+      "IWCQ INTZ"
+     ],
+     "note": "EU1 在 Pool 2、LMS1 在 Pool 1，原因页面未写（待查）；分组抽签约束待查"
+    },
+    "phases": [
+     {
+      "type": "groups",
+      "name": "Group Stage",
+      "start": "2016-09-29",
+      "end": "2016-10-09",
+      "groups": 4,
+      "group_size": 4,
+      "inner": {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 1
+      },
+      "advance": [
+       {
+        "ranks": "每组前 2",
+        "to": "knockout"
+       },
+       {
+        "ranks": "每组后 2",
+        "to": "eliminated"
+       }
+      ],
+      "draw": "待查"
+     },
+     {
+      "type": "single_elim",
+      "name": "Knockout Stage",
+      "start": "2016-10-13",
+      "end": "2016-10-29",
+      "teams": 8,
+      "bo": 5,
+      "seeding": "待查"
+     }
+    ]
+   }
+  },
+  "other_events_fed": {
+   "International Wildcard Invitational/2016": "CBLOL Split 1 冠军（2016-04-16~23）；冠军进 MSI；赛事本身不在数据中",
+   "International Wildcard Qualifier/2016": "CBLOL Split 2 冠军；两个 IWCQ 各出 1 队进 Worlds；赛事本身不在数据中",
+   "2017 Spring Promotion（LPL/LCK/EU LCS/NA LCS/LMS/CBLOL）": "2016 夏季降级区球队 + 次级联赛前列；页面在 2017 命名空间，不在数据中"
+  }
+ },
+ "2022": {
+  "meta": {
+   "year": 2022,
+   "season": "Season 12",
+   "source": "data-raw/lol/formats_2022.json + scripts/cache/http_liquipedia_net（Liquipedia, CC BY-SA 3.0）",
+   "doc": "docs/调研-2016与2022赛制.md",
+   "game_region_map": {
+    "LPL": "LPL",
+    "LCK": "LCK",
+    "LEC": "LEC",
+    "LCS": "LCS",
+    "PCS": "LCP",
+    "CBLOL": "CBLOL"
+   },
+   "conventions": {
+    "待查": "数据缺失或矛盾，不要用猜测填",
+    "bo": "整数或 {阶段: bo}",
+    "bo_source": "\"page\" = Format 原文；\"match_data\" = 由子页面比赛的地图数推出",
+    "fearless": "2022 年没有无畏征召，全部 false",
+    "advance.to": "\"<stage_id>.<phase>.<slot>\"、赛事页名、eliminated、eliminated_for_split",
+    "stage order": "各赛区 stages 按日历顺序排列",
+    "promotion_relegation": "六个一级赛区 2022 年数据中都没有升降级"
+   },
+   "phase_types": [
+    "round_robin",
+    "groups",
+    "single_elim",
+    "double_elim",
+    "king_of_the_hill",
+    "points_race",
+    "unknown"
+   ]
+  },
+  "tier1": {
+   "LPL": [
+    {
+     "id": "lpl22_spring",
+     "name": "LPL 2022 Spring",
+     "source": "LPL/2022/Spring",
+     "start": "2022-01-10",
+     "end": "2022-04-23",
+     "teams": 17,
+     "location": "Shanghai / Hangzhou / Suzhou / Shenzhen（各队主场馆）",
+     "phases": [
+      {
+       "type": "round_robin",
+       "name": "Group Stage",
+       "end": "2022-03-25",
+       "rounds": "single",
+       "bo": 3,
+       "bo_source": "page + match_data（136 场 = 17 队单循环）",
+       "matches_per_team": 16,
+       "tiebreakers": [
+        "series_wins",
+        "game_diff",
+        "h2h"
+       ],
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "lpl22_spring.phase_two.UB_SF"
+        },
+        {
+         "ranks": "3-4",
+         "to": "lpl22_spring.koth.R3"
+        },
+        {
+         "ranks": "5-6",
+         "to": "lpl22_spring.koth.R2"
+        },
+        {
+         "ranks": "7-10",
+         "to": "lpl22_spring.koth.R1"
+        },
+        {
+         "ranks": "11-17",
+         "to": "eliminated_for_split"
+        }
+       ]
+      },
+      {
+       "type": "king_of_the_hill",
+       "name": "Playoffs Phase One",
+       "teams": 8,
+       "bo": 5,
+       "brackets": [
+        {
+         "seeds": [
+          3,
+          6,
+          7,
+          10
+         ],
+         "order": "R1：7 vs 10 → R2：6 vs 胜者 → R3：3 vs 胜者",
+         "winner_to": "对 2 号种子"
+        },
+        {
+         "seeds": [
+          4,
+          5,
+          8,
+          9
+         ],
+         "order": "R1：8 vs 9 → R2：5 vs 胜者 → R3：4 vs 胜者",
+         "winner_to": "对 1 号种子"
+        }
+       ],
+       "order_source": "首场配对由对阵推断（Spring：BLG–RA、EDG–FPX；Summer：OMG–FPX、LNG–BLG）",
+       "start": "2022-03-26"
+      },
+      {
+       "type": "double_elim",
+       "name": "Playoffs Phase Two",
+       "teams": 4,
+       "bo": 5,
+       "bracket_template": "Bracket/4L6DSU2L1D",
+       "seeding": "胜者组半决赛：1 号种子 vs 第二个 KotH 胜者、2 号种子 vs 第一个 KotH 胜者；败者组：两场半决赛负者先打，胜者对胜者组决赛负者；总决赛",
+       "end": "2022-04-23",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "Mid-Season Invitational/2022"
+        }
+       ]
+      }
+     ],
+     "side_selection": "拥有 Free Side Selection 的队可在 Bo5 中任选 3 局选边；KotH 最后一场与 Phase Two 败者组由掷硬币决定，其余给种子高者（总决赛给胜者组胜者）",
+     "prize": {
+      "amount": 4200000,
+      "currency": "CNY"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "Mid-Season Invitational/2022",
+       "slots": 1,
+       "rule": "Spring 冠军"
+      }
+     ],
+     "championship_points": {
+      "1": 90,
+      "2": 70,
+      "3": 50,
+      "4": 30,
+      "5-6": 20,
+      "7-8": 10,
+      "9-17": 0
+     }
+    },
+    {
+     "id": "lpl22_summer",
+     "name": "LPL 2022 Summer",
+     "source": "LPL/2022/Summer",
+     "start": "2022-06-10",
+     "end": "2022-09-01",
+     "teams": 17,
+     "location": "Shanghai / Hangzhou / Suzhou / Shenzhen",
+     "phases": [
+      {
+       "type": "round_robin",
+       "name": "Group Stage",
+       "end": "2022-08-14",
+       "rounds": "single",
+       "bo": 3,
+       "bo_source": "page + match_data（136 场）",
+       "matches_per_team": 16,
+       "tiebreakers": [
+        "series_wins",
+        "game_diff",
+        "h2h"
+       ],
+       "advance": "同 Spring（11–17 名本赛段出局）"
+      },
+      {
+       "type": "king_of_the_hill",
+       "name": "Playoffs Phase One",
+       "teams": 8,
+       "bo": 5,
+       "brackets": [
+        {
+         "seeds": [
+          3,
+          6,
+          7,
+          10
+         ],
+         "order": "R1：7 vs 10 → R2：6 vs 胜者 → R3：3 vs 胜者",
+         "winner_to": "对 2 号种子"
+        },
+        {
+         "seeds": [
+          4,
+          5,
+          8,
+          9
+         ],
+         "order": "R1：8 vs 9 → R2：5 vs 胜者 → R3：4 vs 胜者",
+         "winner_to": "对 1 号种子"
+        }
+       ],
+       "order_source": "首场配对由对阵推断（Spring：BLG–RA、EDG–FPX；Summer：OMG–FPX、LNG–BLG）",
+       "start": "2022-08-16"
+      },
+      {
+       "type": "double_elim",
+       "name": "Playoffs Phase Two",
+       "teams": 4,
+       "bo": 5,
+       "bracket_template": "Bracket/4L6DSU2L1D",
+       "seeding": "胜者组半决赛：1 号种子 vs 第二个 KotH 胜者、2 号种子 vs 第一个 KotH 胜者；败者组：两场半决赛负者先打，胜者对胜者组决赛负者；总决赛",
+       "end": "2022-09-01",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "World Championship/2022.group_stage",
+         "seed": "LPL1"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 4200000,
+      "currency": "CNY"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "World Championship/2022",
+       "slots": 1,
+       "rule": "Summer 冠军 = LPL1（直通小组赛）"
+      }
+     ],
+     "championship_points": {
+      "1": "qualified(Worlds)",
+      "2": 110,
+      "3": 80,
+      "4": 60,
+      "5-6": 40,
+      "7-8": 10,
+      "9-17": 0
+     }
+    },
+    {
+     "id": "lpl22_points",
+     "name": "LPL Championship Points 2022",
+     "source": "LPL/2022/Championship Points",
+     "phases": [
+      {
+       "type": "points_race",
+       "events": [
+        "lpl22_spring",
+        "lpl22_summer"
+       ],
+       "tiebreak": "同分比 Summer 积分",
+       "advance": [
+        {
+         "ranks": "积分最高（Summer 冠军除外）",
+         "to": "World Championship/2022.group_stage",
+         "seed": "LPL2"
+        },
+        {
+         "ranks": "其后 4 队",
+         "to": "lpl22_rf"
+        }
+       ]
+      }
+     ],
+     "international": [
+      {
+       "event": "World Championship/2022",
+       "slots": 1,
+       "rule": "积分第一（冠军除外）= LPL2"
+      }
+     ]
+    },
+    {
+     "id": "lpl22_rf",
+     "name": "LPL 2022 Regional Finals",
+     "source": "LPL/2022/Regional Finals",
+     "start": "2022-09-02",
+     "end": "2022-09-04",
+     "teams": 4,
+     "location": "Shanghai",
+     "phases": [
+      {
+       "type": "double_elim",
+       "bo": 5,
+       "bracket_template": "Bracket/2-1Q-U-2L1D-1Q",
+       "participants": "积分最高的 4 队（Summer 冠军与积分第一除外）；同分比 Summer 积分",
+       "seeding": "积分较高 2 队打胜者组（1 场），较低 2 队打败者组首轮；败者组决赛 = 胜者组负者 vs 败者组首轮胜者；没有总决赛",
+       "advance": [
+        {
+         "ranks": "胜者组胜者",
+         "to": "World Championship/2022.group_stage",
+         "seed": "LPL3"
+        },
+        {
+         "ranks": "败者组决赛胜者",
+         "to": "World Championship/2022.play_in",
+         "seed": "LPL4"
+        },
+        {
+         "ranks": "其余 2 队",
+         "to": "eliminated"
+        }
+       ],
+       "side_selection": "积分高者有 G1 选边权，败者组决赛掷硬币；之后上一局负方选边",
+       "actual": "胜者组 EDG 3-2 RNG（EDG = LPL3）；败者组 LNG 3-1 V5；RNG 3-2 LNG（RNG = LPL4）"
+      }
+     ],
+     "fearless": false
+    }
+   ],
+   "LCK": [
+    {
+     "id": "lck22_spring",
+     "name": "LCK 2022 Spring",
+     "source": "LCK/2022/Spring",
+     "start": "2022-01-12",
+     "end": "2022-04-02",
+     "teams": 10,
+     "location": "Seoul (LoL Park)；决赛 Goyang (KINTEX)",
+     "phases": [
+      {
+       "type": "round_robin",
+       "name": "Regular Season",
+       "end": "2022-03-20",
+       "rounds": "double",
+       "bo": 3,
+       "bo_source": "page + match_data",
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "lck22_spring.playoffs.SF"
+        },
+        {
+         "ranks": "3-6",
+         "to": "lck22_spring.playoffs.wild_card"
+        },
+        {
+         "ranks": "7-10",
+         "to": "eliminated_for_split"
+        }
+       ]
+      },
+      {
+       "type": "single_elim",
+       "name": "Playoffs",
+       "start": "2022-03-23",
+       "teams": 6,
+       "bo": 5,
+       "bracket_template": "Bracket/4L2DS",
+       "seeding": "Wild Card：3 vs 6、4 vs 5；标注 \"Reseeding Matches\"（半决赛 1 号种子打剩下最低种子）；无季军赛（bracket 只有 5 场）",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "Mid-Season Invitational/2022"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 375000000,
+      "currency": "KRW"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "Mid-Season Invitational/2022",
+       "slots": 1,
+       "rule": "Spring 冠军"
+      }
+     ],
+     "championship_points": {
+      "1": 90,
+      "2": 70,
+      "3": 50,
+      "4": 30,
+      "5": 20,
+      "6": 10,
+      "7-10": 0
+     },
+     "todo": [
+      "Format 写 \"6th till 10th are eliminated\"（应为 7–10）",
+      "没有季军赛时第 3/4 名（积分 50/30）怎么分待查"
+     ]
+    },
+    {
+     "id": "lck22_summer",
+     "name": "LCK 2022 Summer",
+     "source": "LCK/2022/Summer",
+     "start": "2022-06-15",
+     "end": "2022-08-28",
+     "teams": 10,
+     "location": "Seoul (LoL Park)；决赛 Gangneung (Gangneung Arena)",
+     "phases": [
+      {
+       "type": "round_robin",
+       "end": "2022-08-14",
+       "rounds": "double",
+       "bo": 3,
+       "bo_source": "page",
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "lck22_summer.playoffs.SF"
+        },
+        {
+         "ranks": "3-6",
+         "to": "lck22_summer.playoffs.wild_card"
+        },
+        {
+         "ranks": "7-10",
+         "to": "eliminated_for_split"
+        }
+       ]
+      },
+      {
+       "type": "single_elim",
+       "name": "Playoffs",
+       "start": "2022-08-17",
+       "teams": 6,
+       "bo": 5,
+       "bracket_template": "Bracket/4L2DS",
+       "seeding": "Wild Card：3 vs 6、4 vs 5（推断同 Spring）；常规赛第 1 名从 Wild Card 两个胜者中挑半决赛对手",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "World Championship/2022.group_stage",
+         "seed": "LCK1"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 375000000,
+      "currency": "KRW"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "World Championship/2022",
+       "slots": 1,
+       "rule": "Summer 冠军 = LCK1"
+      }
+     ],
+     "championship_points": {
+      "1": "qualified(Worlds)",
+      "2": 100,
+      "3": 80,
+      "4": 50,
+      "5": 30,
+      "6": 10,
+      "7-10": 0
+     },
+     "todo": [
+      "季后赛 bracket 在缓存中为空，Wild Card 配对未能核对"
+     ]
+    },
+    {
+     "id": "lck22_points",
+     "name": "LCK Championship Points 2022",
+     "source": "LCK/2022/Championship Points",
+     "phases": [
+      {
+       "type": "points_race",
+       "events": [
+        "lck22_spring",
+        "lck22_summer"
+       ],
+       "tiebreak": "同分比 Summer 积分",
+       "advance": [
+        {
+         "ranks": "积分最高（冠军除外）",
+         "to": "World Championship/2022.group_stage",
+         "seed": "LCK2"
+        },
+        {
+         "ranks": "其后 4 队",
+         "to": "lck22_rf"
+        }
+       ]
+      }
+     ],
+     "international": [
+      {
+       "event": "World Championship/2022",
+       "slots": 1,
+       "rule": "积分第一（冠军除外）= LCK2"
+      }
+     ],
+     "todo": [
+      "Format 中\"积分第一直通/其后 4 队进 Regional Finals\"的说明是被注释掉的 2021 文本；有效规则取自 LCK/2022/Regional Finals 页"
+     ]
+    },
+    {
+     "id": "lck22_rf",
+     "name": "LCK 2022 Regional Finals",
+     "source": "LCK/2022/Regional Finals",
+     "start": "2022-09-01",
+     "end": "2022-09-03",
+     "teams": 4,
+     "location": "Seoul",
+     "phases": [
+      {
+       "type": "double_elim",
+       "bo": 5,
+       "bracket_template": "Bracket/2-1Q-U-2L1D-1Q",
+       "participants": "积分最高的 4 队（Summer 冠军与积分第一除外）；同分比 Summer 积分",
+       "seeding": "积分较高 2 队打胜者组（1 场），较低 2 队打败者组首轮；败者组决赛 = 胜者组负者 vs 败者组首轮胜者；没有总决赛",
+       "advance": [
+        {
+         "ranks": "胜者组胜者",
+         "to": "World Championship/2022.group_stage",
+         "seed": "LCK3"
+        },
+        {
+         "ranks": "败者组决赛胜者",
+         "to": "World Championship/2022.play_in",
+         "seed": "LCK4"
+        },
+        {
+         "ranks": "其余 2 队",
+         "to": "eliminated"
+        }
+       ],
+       "actual": "积分页：DK = LCK3（胜者组），DRX = LCK4（败者组）；KT、DRX、KDF 同为 30 分，按 Summer 积分 KT、DRX 进入"
+      }
+     ],
+     "fearless": false
+    }
+   ],
+   "LEC": [
+    {
+     "id": "lec22_spring",
+     "name": "LEC 2022 Spring",
+     "source": "LEC/2022/Spring",
+     "start": "2022-01-14",
+     "end": "2022-04-10",
+     "teams": 10,
+     "location": "Berlin (LEC Studio)",
+     "phases": [
+      {
+       "type": "round_robin",
+       "end": "2022-03-06",
+       "rounds": "double",
+       "bo": 1,
+       "bo_source": "page + match_data（90 场 1 局）",
+       "matches_per_team": 18,
+       "advance": [
+        {
+         "ranks": "1-4",
+         "to": "lec22_spring.playoffs.UB_SF"
+        },
+        {
+         "ranks": "5-6",
+         "to": "lec22_spring.playoffs.LB_R1"
+        },
+        {
+         "ranks": "7-10",
+         "to": "eliminated_for_split"
+        }
+       ]
+      },
+      {
+       "type": "double_elim",
+       "name": "Playoffs",
+       "start": "2022-03-25",
+       "teams": 6,
+       "bo": 5,
+       "bracket_template": "Bracket/4U2L3D",
+       "seeding": "UB 半决赛两场（配对规则待查）；LB R1：5 vs 6；LB R2：LB R1 胜者 vs 一个 UB 半决赛负者；LB R3：另一个 UB 半决赛负者 vs 胜者；LB 决赛；总决赛",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "Mid-Season Invitational/2022"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 200000,
+      "currency": "EUR",
+      "by_place": {
+       "1": 80000,
+       "2": 50000,
+       "3": 30000,
+       "4": 20000,
+       "5": 12500,
+       "6": 7500
+      }
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "Mid-Season Invitational/2022",
+       "slots": 1,
+       "rule": "Spring 冠军"
+      }
+     ],
+     "championship_points": {
+      "1": 90,
+      "2": 70,
+      "3": 50,
+      "4": 30,
+      "5": 20,
+      "6": 10,
+      "7-10": 0,
+      "basis": "Spring 季后赛名次"
+     }
+    },
+    {
+     "id": "lec22_summer",
+     "name": "LEC 2022 Summer",
+     "source": "LEC/2022/Summer",
+     "start": "2022-06-17",
+     "end": "2022-09-11",
+     "teams": 10,
+     "location": "Berlin；决赛 Malmö (Malmö Arena)",
+     "phases": [
+      {
+       "type": "round_robin",
+       "end": "2022-08-14",
+       "rounds": "double",
+       "bo": 1,
+       "bo_source": "page",
+       "matches_per_team": 18,
+       "advance": [
+        {
+         "ranks": "1-6",
+         "to": "lec22_summer.playoffs",
+         "note": "名次只决定是否进季后赛；季后赛种子按全年积分"
+        },
+        {
+         "ranks": "7-10",
+         "to": "eliminated_for_split",
+         "note": "同时清空全年积分"
+        }
+       ]
+      },
+      {
+       "type": "double_elim",
+       "name": "Playoffs",
+       "start": "2022-08-26",
+       "teams": 6,
+       "bo": 5,
+       "bracket_template": "Bracket/4U2L3D",
+       "seeding": "6 支季后赛队按积分排：前 4 → UB 半决赛，5–6 → LB R1",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "World Championship/2022.group_stage",
+         "seed": "LEC1"
+        },
+        {
+         "ranks": "2",
+         "to": "World Championship/2022.group_stage",
+         "seed": "LEC2"
+        },
+        {
+         "ranks": "3",
+         "to": "World Championship/2022.play_in",
+         "seed": "LEC3"
+        },
+        {
+         "ranks": "4",
+         "to": "World Championship/2022.play_in",
+         "seed": "LEC4"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 200000,
+      "currency": "EUR"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "World Championship/2022",
+       "slots": 4,
+       "rule": "季后赛前 4；第 4 个名额是 LCL 让出的名额（Riot 按近两年国际赛成绩给欧洲）"
+      }
+     ],
+     "championship_points": {
+      "1": 120,
+      "2": 90,
+      "3": 70,
+      "4": 50,
+      "5": 30,
+      "6": 20,
+      "7-10": 0,
+      "basis": "Summer 常规赛名次",
+      "forfeit": "Summer 常规赛 7–10 名清空全部积分"
+     },
+     "todo": [
+      "季后赛 bracket 在缓存中为空",
+      "季后赛第 3/4 名如何区分（LB 决赛负者 = 3，LB R3 负者 = 4？）待查"
+     ]
+    },
+    {
+     "id": "lec22_points",
+     "name": "LEC Championship Points 2022",
+     "source": "LEC/2022/Championship Points",
+     "phases": [
+      {
+       "type": "points_race",
+       "events": [
+        "lec22_spring.playoffs",
+        "lec22_summer.regular_season"
+       ],
+       "use": "只用于 Summer 季后赛种子，不直接给 Worlds 名额"
+      }
+     ]
+    }
+   ],
+   "LCS": [
+    {
+     "id": "lcs22_lockin",
+     "name": "LCS 2022 Lock In",
+     "source": "LCS/2022/Lock In",
+     "start": "2022-01-14",
+     "end": "2022-01-30",
+     "teams": 10,
+     "location": "Los Angeles (LCS Studio)",
+     "phases": [
+      {
+       "type": "groups",
+       "groups": 2,
+       "group_size": 5,
+       "group_assignment": "2021 Summer 决赛两队（100 Thieves、TL）选秀式挑队",
+       "inner": {
+        "type": "round_robin",
+        "rounds": "single",
+        "bo": 1
+       },
+       "bo_source": "match_data（20 场 1 局）",
+       "advance": [
+        {
+         "ranks": "每组 1-4",
+         "to": "lcs22_lockin.playoffs.QF"
+        },
+        {
+         "ranks": "每组第 5",
+         "to": "eliminated"
+        }
+       ]
+      },
+      {
+       "type": "single_elim",
+       "name": "Playoffs",
+       "teams": 8,
+       "bo": {
+        "QF": 3,
+        "SF": 5,
+        "F": 5
+       },
+       "bracket_template": "Bracket/8",
+       "seeding": "待查"
+      }
+     ],
+     "prize": {
+      "amount": 150000,
+      "currency": "USD"
+     },
+     "fearless": false,
+     "international": [],
+     "note": "不输送任何国际赛名额，不计积分"
+    },
+    {
+     "id": "lcs22_spring",
+     "name": "LCS 2022 Spring",
+     "source": "LCS/2022/Spring",
+     "start": "2022-02-05",
+     "end": "2022-04-24",
+     "teams": 10,
+     "location": "Los Angeles；决赛 Houston (NRG Stadium)",
+     "phases": [
+      {
+       "type": "round_robin",
+       "end": "2022-03-27",
+       "rounds": "double",
+       "bo": 1,
+       "bo_source": "page + match_data",
+       "matches_per_team": 18,
+       "advance": [
+        {
+         "ranks": "1-4",
+         "to": "lcs22_spring.playoffs.UB_R1"
+        },
+        {
+         "ranks": "5-6",
+         "to": "lcs22_spring.playoffs.LB_R1"
+        },
+        {
+         "ranks": "7-10",
+         "to": "eliminated_for_split"
+        }
+       ]
+      },
+      {
+       "type": "double_elim",
+       "name": "Playoffs",
+       "start": "2022-04-02",
+       "teams": 6,
+       "bo": 5,
+       "bracket_template": "Bracket/4U4L1D",
+       "seeding": "UB R1 两场（1–4 名，配对待查）→ UB 决赛；LB R1：UB R1 两负者各对 5、6 名 → LB R2 → LB 决赛 vs UB 决赛负者 → 总决赛",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "Mid-Season Invitational/2022"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 200000,
+      "currency": "USD"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "Mid-Season Invitational/2022",
+       "slots": 1,
+       "rule": "Spring 冠军"
+      }
+     ]
+    },
+    {
+     "id": "lcs22_summer",
+     "name": "LCS 2022 Summer",
+     "source": "LCS/2022/Summer",
+     "start": "2022-06-18",
+     "end": "2022-09-11",
+     "teams": 10,
+     "location": "Los Angeles；决赛 Chicago (United Center)",
+     "phases": [
+      {
+       "type": "round_robin",
+       "end": "2022-08-14",
+       "rounds": "double",
+       "bo": 1,
+       "bo_source": "page",
+       "matches_per_team": 18,
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "lcs22_summer.playoffs.UB_SF"
+        },
+        {
+         "ranks": "3-6",
+         "to": "lcs22_summer.playoffs.UB_QF"
+        },
+        {
+         "ranks": "7-8",
+         "to": "lcs22_summer.playoffs.LB_R1"
+        },
+        {
+         "ranks": "9-10",
+         "to": "eliminated_for_split"
+        }
+       ]
+      },
+      {
+       "type": "double_elim",
+       "name": "Playoffs",
+       "start": "2022-08-20",
+       "teams": 8,
+       "bo": 5,
+       "bracket_template": "Bracket/4L2DSU4L2DSL1D",
+       "seeding": "待查",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "World Championship/2022.group_stage",
+         "seed": "LCS1"
+        },
+        {
+         "ranks": "2",
+         "to": "World Championship/2022.group_stage",
+         "seed": "LCS2"
+        },
+        {
+         "ranks": "3",
+         "to": "World Championship/2022.play_in",
+         "seed": "LCS3"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 200000,
+      "currency": "USD",
+      "by_place": {
+       "1": 100000,
+       "2": 50000,
+       "3": 30000,
+       "4": 20000
+      }
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "World Championship/2022",
+       "slots": 3,
+       "rule": "Summer 季后赛前 3"
+      }
+     ],
+     "todo": [
+      "Format 写常规赛 6/17 开始，信息框 6/18",
+      "季后赛 bracket 在缓存中为空；LCS 2022 数据中没有积分页"
+     ]
+    }
+   ],
+   "PCS": [
+    {
+     "id": "pcs22_spring",
+     "name": "PCS 2022 Spring",
+     "source": "PCS/2022/Spring",
+     "start": "2022-02-11",
+     "end": "2022-04-17",
+     "teams": 10,
+     "location": "待查",
+     "phases": [
+      {
+       "type": "round_robin",
+       "end": "2022-03-19",
+       "rounds": "double",
+       "bo": 1,
+       "bo_source": "page + match_data",
+       "matches_per_team": 18,
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "pcs22_spring.playoffs.UB_SF"
+        },
+        {
+         "ranks": "3-6",
+         "to": "pcs22_spring.playoffs.UB_QF"
+        },
+        {
+         "ranks": "7-8",
+         "to": "pcs22_spring.playoffs.LB_R1"
+        },
+        {
+         "ranks": "9-10",
+         "to": "eliminated_for_split"
+        }
+       ]
+      },
+      {
+       "type": "double_elim",
+       "name": "Playoffs",
+       "start": "2022-03-31",
+       "teams": 8,
+       "bo": 5,
+       "bracket_template": "Bracket/4L2DSU4L2DSL1D",
+       "seeding": "待查",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "Mid-Season Invitational/2022"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 80000,
+      "currency": "USD"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "Mid-Season Invitational/2022",
+       "slots": 1,
+       "rule": "Spring 冠军"
+      }
+     ],
+     "todo": [
+      "信息框 liquipediatier 字段混入 prize，奖金按 prizepoolusd = 80,000",
+      "季后赛 bracket 在缓存中为空",
+      "地点信息框为空"
+     ]
+    },
+    {
+     "id": "pcs22_summer",
+     "name": "PCS 2022 Summer",
+     "source": "PCS/2022/Summer",
+     "start": "2022-07-01",
+     "end": "2022-09-04",
+     "teams": 10,
+     "location": "待查",
+     "phases": [
+      {
+       "type": "round_robin",
+       "end": "2022-08-06",
+       "rounds": "double",
+       "bo": 1,
+       "bo_source": "page + match_data",
+       "matches_per_team": 18,
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "pcs22_summer.playoffs.UB_SF"
+        },
+        {
+         "ranks": "3-6",
+         "to": "pcs22_summer.playoffs.UB_QF"
+        },
+        {
+         "ranks": "7-8",
+         "to": "pcs22_summer.playoffs.LB_R1"
+        },
+        {
+         "ranks": "9-10",
+         "to": "eliminated_for_split"
+        }
+       ]
+      },
+      {
+       "type": "double_elim",
+       "name": "Playoffs",
+       "start": "2022-08-18",
+       "teams": 8,
+       "bo": 5,
+       "bracket_template": "Bracket/4L2DSU4L2DSL1D",
+       "seeding": "待查",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "World Championship/2022.group_stage",
+         "seed": "PCS1"
+        },
+        {
+         "ranks": "2",
+         "to": "World Championship/2022.play_in",
+         "seed": "PCS2"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 80000,
+      "currency": "USD"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "World Championship/2022",
+       "slots": 2,
+       "rule": "Summer 冠军（直通小组赛）+ 亚军（入围赛）"
+      }
+     ]
+    }
+   ],
+   "CBLOL": [
+    {
+     "id": "cblol22_s1",
+     "name": "CBLOL 2022 Split 1",
+     "source": "CBLOL/2022/Split 1",
+     "start": "2022-01-22",
+     "end": "2022-04-23",
+     "teams": 10,
+     "location": "São Paulo (Arena CBLOL)",
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 1,
+       "bo_source": "page + match_data（90 场）",
+       "advance": [
+        {
+         "ranks": "1-4",
+         "to": "cblol22_s1.playoffs.UB_SF"
+        },
+        {
+         "ranks": "5-6",
+         "to": "cblol22_s1.playoffs.LB_R1"
+        },
+        {
+         "ranks": "7-10",
+         "to": "eliminated_for_split"
+        }
+       ]
+      },
+      {
+       "type": "double_elim",
+       "name": "Playoffs",
+       "teams": 6,
+       "bo": 5,
+       "bracket_template": "Bracket/4U2L3D",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "Mid-Season Invitational/2022"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 400000,
+      "currency": "BRL"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "Mid-Season Invitational/2022",
+       "slots": 1,
+       "rule": "Split 1 冠军"
+      }
+     ],
+     "todo": [
+      "矛盾：Format 写季后赛 \"Single Elimination\"，bracket 为 4U2L3D 双败（Winners' Finals、Losers' Round 1–3、Grand Finals）"
+     ]
+    },
+    {
+     "id": "cblol22_s2",
+     "name": "CBLOL 2022 Split 2",
+     "source": "CBLOL/2022/Split 2",
+     "start": "2022-06-11",
+     "end": "2022-09-03",
+     "teams": 10,
+     "location": "São Paulo (Arena CBLOL)",
+     "phases": [
+      {
+       "type": "round_robin",
+       "end": "2022-08-07",
+       "rounds": "double",
+       "bo": 1,
+       "bo_source": "page",
+       "advance": [
+        {
+         "ranks": "1-4",
+         "to": "cblol22_s2.playoffs.UB_SF"
+        },
+        {
+         "ranks": "5-6",
+         "to": "cblol22_s2.playoffs.LB_R1"
+        },
+        {
+         "ranks": "7-10",
+         "to": "eliminated_for_split"
+        }
+       ]
+      },
+      {
+       "type": "double_elim",
+       "name": "Playoffs",
+       "start": "2022-08-13",
+       "teams": 6,
+       "bo": 5,
+       "bracket_template": "Bracket/4U2L3D",
+       "advance": [
+        {
+         "ranks": "1",
+         "to": "World Championship/2022.play_in",
+         "seed": "CBLOL1"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 400000,
+      "currency": "BRL"
+     },
+     "fearless": false,
+     "international": [
+      {
+       "event": "World Championship/2022",
+       "slots": 1,
+       "rule": "Split 2 冠军（入围赛）"
+      }
+     ]
+    }
+   ]
+  },
+  "tier2": {
+   "LDL": [
+    {
+     "id": "ldl22_spring",
+     "name": "LDL 2022 Spring",
+     "source": "LDL/2022/Spring",
+     "start": "2022-02-13",
+     "end": "2022-04-19",
+     "teams": 24,
+     "phases": [
+      {
+       "type": "groups",
+       "groups": 2,
+       "group_size": 12,
+       "inner": {
+        "type": "round_robin",
+        "rounds": "double",
+        "bo": "待查"
+       },
+       "note": "奖金表 W/L 合计 22 = 组内双循环",
+       "advance": [
+        {
+         "ranks": "前 12（分组名额待查）",
+         "to": "playoffs"
+        }
+       ]
+      },
+      {
+       "type": "double_elim",
+       "teams": 12,
+       "bo": 5,
+       "bracket_template": "Bracket/8L4DSSU2L1D",
+       "seeding": "待查"
+      }
+     ],
+     "prize": {
+      "amount": 800000,
+      "currency": "CNY",
+      "by_place": {
+       "1": 500000,
+       "2": 200000,
+       "3": 50000,
+       "4": 50000
+      }
+     }
+    },
+    {
+     "id": "ldl22_summer",
+     "name": "LDL 2022 Summer",
+     "source": "LDL/2022/Summer",
+     "start": "2022-06-19",
+     "end": "2022-08-28",
+     "teams": 24,
+     "phases": [
+      {
+       "type": "groups",
+       "groups": 2,
+       "note": "同 Spring；赛季中 Team Orange、TWELVE 因打假赛被取消资格"
+      },
+      {
+       "type": "double_elim",
+       "teams": 12,
+       "bo": 5,
+       "bracket_template": "Bracket/8L4DSSU2L1D"
+      }
+     ],
+     "prize": {
+      "amount": 800000,
+      "currency": "CNY"
+     }
+    }
+   ],
+   "LCK CL": [
+    {
+     "id": "lckcl22_spring",
+     "name": "LCK CL 2022 Spring",
+     "source": "LCK CL/2022/Spring",
+     "start": "2022-01-10",
+     "end": "2022-04-01",
+     "teams": 10,
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "quadruple",
+       "bo": 1,
+       "bo_source": "page + match_data（W/L 合计 36）"
+      },
+      {
+       "type": "single_elim",
+       "teams": 6,
+       "bo": 5,
+       "seeding": "前 2 轮空"
+      }
+     ],
+     "prize": {
+      "amount": 80000000,
+      "currency": "KRW"
+     }
+    },
+    {
+     "id": "lckcl22_summer",
+     "name": "LCK CL 2022 Summer",
+     "source": "LCK CL/2022/Summer",
+     "start": "2022-06-13",
+     "end": "2022-08-26",
+     "teams": 10,
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "待查",
+       "bo": "待查",
+       "note": "矛盾：Format 写双循环 Bo3；比赛数据为 180 场、每场 1 局（= 四循环 Bo1，与 Spring 相同）"
+      },
+      {
+       "type": "single_elim",
+       "teams": 6,
+       "bo": 5,
+       "seeding": "前 2 轮空"
+      }
+     ],
+     "prize": {
+      "amount": 80000000,
+      "currency": "KRW"
+     }
+    }
+   ],
+   "LFL": [
+    {
+     "id": "lfl22_promo",
+     "name": "LFL 2022 Promotion (Up & Down)",
+     "source": "LFL/2022/Promotion Tournament",
+     "start": "2021-09-20",
+     "end": "2021-09-24",
+     "teams": 4,
+     "phases": [
+      {
+       "type": "double_elim",
+       "bracket_template": "Bracket/4-1Q-U-2L1D-1Q",
+       "participants": "LFL 2021 积分末 2 + Div2 2021 积分前 2（不含青训队）",
+       "advance": [
+        {
+         "ranks": "2 支晋级",
+         "to": "LFL/2022/Spring"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "lfl22_spring",
+     "name": "LFL 2022 Spring",
+     "source": "LFL/2022/Spring",
+     "start": "2022-01-12",
+     "end": "2022-03-31",
+     "teams": 10,
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 1,
+       "advance": [
+        {
+         "ranks": "1-2",
+         "to": "playoffs.WB_final"
+        },
+        {
+         "ranks": "3-6",
+         "to": "playoffs.LB_R1"
+        }
+       ]
+      },
+      {
+       "type": "double_elim",
+       "teams": 6,
+       "bo": 5,
+       "advance": [
+        {
+         "ranks": "1-4",
+         "to": "European Masters/2022/Spring"
+        }
+       ]
+      }
+     ],
+     "championship_points": {
+      "1": 180,
+      "2": 135,
+      "3": 105,
+      "4": 75,
+      "5": 60,
+      "6": 45,
+      "7": 30,
+      "8": 18,
+      "9": 12,
+      "10": 0
+     },
+     "prize": {
+      "amount": 20000,
+      "currency": "EUR"
+     }
+    },
+    {
+     "id": "lfl22_summer",
+     "name": "LFL 2022 Summer",
+     "source": "LFL/2022/Summer",
+     "start": "2022-06-01",
+     "end": "2022-08-18",
+     "teams": 10,
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 1
+      },
+      {
+       "type": "double_elim",
+       "teams": 6,
+       "bo": 5,
+       "advance": [
+        {
+         "ranks": "1-4",
+         "to": "European Masters/2022/Summer"
+        }
+       ]
+      }
+     ],
+     "prize": {
+      "amount": 20000,
+      "currency": "EUR"
+     }
+    },
+    {
+     "id": "lfl22_cdf",
+     "name": "Coupe de France 2022",
+     "source": "LFL/2022/Coupe de France",
+     "start": "2022-10-17",
+     "end": "2022-11-11",
+     "teams": 24,
+     "phases": [
+      {
+       "type": "single_elim",
+       "bo": {
+        "R1": 3,
+        "other": 5
+       },
+       "note": "3 场公开预选（6 轮瑞士轮 Bo1 + 单败 Bo3）"
+      }
+     ],
+     "prize": {
+      "amount": 10000,
+      "currency": "EUR"
+     }
+    }
+   ],
+   "CBLOL Academy": [
+    {
+     "id": "cblola22_s1",
+     "name": "CBLOL Academy 2022 Split 1",
+     "source": "CBLOL/Academy/2022/Split 1",
+     "start": "2022-01-25",
+     "end": "2022-04-16",
+     "teams": 10,
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 1
+      },
+      {
+       "type": "single_elim",
+       "teams": 6,
+       "bo": 5,
+       "seeding": "前 2 轮空到半决赛"
+      }
+     ],
+     "prize": {
+      "amount": 100000,
+      "currency": "BRL"
+     }
+    },
+    {
+     "id": "cblola22_s2",
+     "name": "CBLOL Academy 2022 Split 2",
+     "source": "CBLOL/Academy/2022/Split 2",
+     "start": "2022-06-13",
+     "end": "2022-09-10",
+     "teams": 10,
+     "phases": [
+      {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 1
+      },
+      {
+       "type": "single_elim",
+       "teams": 6,
+       "bo": 5,
+       "seeding": "前 2 轮空到半决赛"
+      }
+     ],
+     "prize": {
+      "amount": 100000,
+      "currency": "BRL"
+     }
+    }
+   ]
+  },
+  "international": {
+   "Mid-Season Invitational/2022": {
+    "source": "Mid-Season Invitational/2022",
+    "start": "2022-05-10",
+    "end": "2022-05-29",
+    "location": "Busan（小组赛 Busan Esports Arena；Rumble 与淘汰赛 BEXCO）",
+    "teams": 11,
+    "prize": {
+     "amount": 250000,
+     "currency": "USD",
+     "split_pct": {
+      "1": 30,
+      "2": 20,
+      "3-4": 10,
+      "5": 7,
+      "6": 7,
+      "7-8": 3.33,
+      "9-10": 2.67,
+      "11": 1
+     }
+    },
+    "patch": "12.8",
+    "fearless": false,
+    "remote": "LPL 代表（RNG）因疫情在中国线上参赛，所有队伍统一按 35ms 延迟",
+    "slots": {
+     "LPL": {
+      "n": 1,
+      "from": "lpl22_spring 1"
+     },
+     "LCK": {
+      "n": 1,
+      "from": "lck22_spring 1"
+     },
+     "LEC": {
+      "n": 1,
+      "from": "lec22_spring 1"
+     },
+     "LCS": {
+      "n": 1,
+      "from": "lcs22_spring 1"
+     },
+     "PCS": {
+      "n": 1,
+      "from": "pcs22_spring 1"
+     },
+     "CBLOL": {
+      "n": 1,
+      "from": "cblol22_s1 1"
+     }
+    },
+    "slots_outside_game": {
+     "VCS": 1,
+     "LJL": 1,
+     "LLA": 1,
+     "LCO": 1,
+     "TCL": 1,
+     "LCL": 0,
+     "note": "LCL Spring 取消，无代表；VCS 冠军 GAM 因参加东南亚运动会弃权，由亚军 Saigon Buffalo 替补"
+    },
+    "phases": [
+     {
+      "type": "groups",
+      "name": "Group Stage",
+      "start": "2022-05-10",
+      "end": "2022-05-15",
+      "groups": 3,
+      "group_sizes": {
+       "A": 4,
+       "B": 4,
+       "C": 3
+      },
+      "inner": {
+       "A": {
+        "type": "round_robin",
+        "rounds": "double",
+        "bo": 1
+       },
+       "B": {
+        "type": "round_robin",
+        "rounds": "double",
+        "bo": 1
+       },
+       "C": {
+        "type": "round_robin",
+        "rounds": "quadruple",
+        "bo": 1
+       }
+      },
+      "draw": "待查",
+      "advance": [
+       {
+        "ranks": "每组前 2",
+        "to": "rumble"
+       },
+       {
+        "ranks": "其余",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "round_robin",
+      "name": "Rumble Stage",
+      "start": "2022-05-20",
+      "end": "2022-05-24",
+      "teams": 6,
+      "rounds": "double",
+      "bo": 1,
+      "advance": [
+       {
+        "ranks": "1-4",
+        "to": "knockout"
+       },
+       {
+        "ranks": "5-6",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "single_elim",
+      "name": "Knockout Stage",
+      "start": "2022-05-27",
+      "end": "2022-05-29",
+      "teams": 4,
+      "bo": 5,
+      "seeding": "Rumble 第 1 名挑第 3 或第 4 名作半决赛对手"
+     }
+    ]
+   },
+   "World Championship/2022": {
+    "source": "World Championship/2022",
+    "start": "2022-09-29",
+    "end": "2022-11-05",
+    "location": "Mexico City (Arena Esports Stadium) / New York (Hulu Theater) / Atlanta (State Farm Arena) / San Francisco (Chase Center)；各阶段对应哪座城市页面未写",
+    "teams": 24,
+    "prize": {
+     "amount": 2225000,
+     "currency": "USD"
+    },
+    "patch": "12.18",
+    "fearless": false,
+    "slots": {
+     "LPL": {
+      "n": 4,
+      "group_stage": 3,
+      "play_in": 1
+     },
+     "LCK": {
+      "n": 4,
+      "group_stage": 3,
+      "play_in": 1
+     },
+     "LEC": {
+      "n": 4,
+      "group_stage": 2,
+      "play_in": 2,
+      "note": "第 4 个名额由 LCL 让出"
+     },
+     "LCS": {
+      "n": 3,
+      "group_stage": 2,
+      "play_in": 1
+     },
+     "PCS": {
+      "n": 2,
+      "group_stage": 1,
+      "play_in": 1
+     },
+     "CBLOL": {
+      "n": 1,
+      "group_stage": 0,
+      "play_in": 1
+     }
+    },
+    "slots_outside_game": {
+     "VCS": {
+      "n": 2,
+      "group_stage": 1,
+      "play_in": 1
+     },
+     "LJL": {
+      "n": 1,
+      "play_in": 1
+     },
+     "LLA": {
+      "n": 1,
+      "play_in": 1
+     },
+     "LCO": {
+      "n": 1,
+      "play_in": 1
+     },
+     "TCL": {
+      "n": 1,
+      "play_in": 1
+     },
+     "LCL": {
+      "n": 0,
+      "note": "无法派队，名额给 LEC"
+     }
+    },
+    "draw": {
+     "play_in_pools": {
+      "pool1": [
+       "LPL4",
+       "LCK4",
+       "LEC3",
+       "PCS2"
+      ],
+      "pool2": [
+       "LEC4",
+       "LCS3",
+       "VCS2",
+       "LJL1"
+      ],
+      "pool3": [
+       "LCO1",
+       "TCL1",
+       "LLA1",
+       "CBLOL1"
+      ]
+     },
+     "group_pools": {
+      "pool1": [
+       "LPL1",
+       "LCK1",
+       "LEC1",
+       "LCS1"
+      ],
+      "pool2": [
+       "LPL2",
+       "LCK2",
+       "LEC2",
+       "PCS1"
+      ],
+      "pool3": [
+       "LPL3",
+       "LCK3",
+       "LCS2",
+       "VCS1"
+      ],
+      "pool4": "4 支入围赛晋级队，入围赛结束后直接各抽入一组"
+     },
+     "constraint": "同赛区不同组；例外：LEC3、LEC4 都晋级时 LEC4 不受此限"
+    },
+    "phases": [
+     {
+      "type": "groups",
+      "name": "Play-In Round 1",
+      "start": "2022-09-29",
+      "end": "2022-10-02",
+      "groups": 2,
+      "group_size": 6,
+      "inner": {
+       "type": "round_robin",
+       "rounds": "single",
+       "bo": 1
+      },
+      "advance": [
+       {
+        "ranks": "每组第 1",
+        "to": "group_stage"
+       },
+       {
+        "ranks": "每组第 2",
+        "to": "play_in_r2.final"
+       },
+       {
+        "ranks": "每组 3-4",
+        "to": "play_in_r2.R1"
+       },
+       {
+        "ranks": "每组 5-6",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "single_elim",
+      "name": "Play-In Round 2",
+      "start": "2022-10-03",
+      "end": "2022-10-04",
+      "teams": 6,
+      "bo": 5,
+      "seeding": "同组第 3 vs 第 4；胜者 vs 另一组第 2",
+      "advance": [
+       {
+        "ranks": "2 胜者",
+        "to": "group_stage"
+       },
+       {
+        "ranks": "4 负者",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "groups",
+      "name": "Group Stage",
+      "dates": [
+       "2022-10-07..10",
+       "2022-10-13..16"
+      ],
+      "groups": 4,
+      "group_size": 4,
+      "inner": {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 1
+      },
+      "tiebreak": "只为第 1/2 名加赛 Bo1；两队同分加赛一场；三队同分按相互战绩分 5 种情况；四队同分按获胜总时长排种子打单败；争 3/4 名只看相互战绩",
+      "advance": [
+       {
+        "ranks": "每组前 2",
+        "to": "knockout"
+       },
+       {
+        "ranks": "每组后 2",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "single_elim",
+      "name": "Knockout Stage",
+      "dates": [
+       "2022-10-20..23",
+       "2022-10-29..30",
+       "2022-11-05"
+      ],
+      "teams": 8,
+      "bo": 5,
+      "seeding": "小组第 1 对另一组第 2（具体抽签规则待查）",
+      "side_selection": "八强小组第 1 有 G1 选边权；之后各轮掷硬币；每局负方选下一局边"
+     }
+    ]
+   }
+  },
+  "other_events_fed": {
+   "European Masters/2022": "LFL Spring/Summer 前 4；赛事本身不在数据中"
+  }
+ }
+}

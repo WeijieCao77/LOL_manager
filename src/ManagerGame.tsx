@@ -23,6 +23,7 @@ import RetireCard from './ui/RetireCard'
 import QualifyPoster from './ui/QualifyPoster'
 import ChampionPoster from './ui/ChampionPoster'
 import { autosave, claimAutosave, hasAutosave, loadAutosave, loadGame, packState } from './engine/save'
+import { ensureHistory, isHistoryCareer } from './engine/realHistory'
 import { syncCallersWithWorld } from './engine/world'
 import { dateLabel, nextRealFixtureFor, nextScrimFor, stageName } from './engine/season'
 import { actionsForTurn, actionsLeft } from './engine/actions'
@@ -196,6 +197,8 @@ export default function ManagerGame({ onHome, testSaves = false }: { onHome: () 
 
   const start = useCallback((g: GameState) => {
     gameRef.current = g
+    // a historical career needs the real years it grows into before its first winter
+    if (isHistoryCareer(g)) void ensureHistory()
     // a career carries its own players: the world's caller corrections
     // (who is an IGL) are brought into it here, once per change of the data
     const synced = syncCallersWithWorld(g)

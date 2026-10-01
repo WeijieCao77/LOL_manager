@@ -26,11 +26,12 @@ import type { RawTeam } from './teams'
 import type { RawPlayer } from './world'
 
 /**
- * The past seasons a career can start in. Empty until their worlds are built:
- * the entries planned are 2016 (S6) and 2022 (S12), each rated on its own
- * era's matches by scripts/lol/build_world.py --year.
+ * The past seasons a career can start in: 2016 (S6) and 2022 (S12), each rated
+ * on the matches before it by scripts/lol/build_world.py --year Y --history.
+ * After its first day the world follows history where the manager leaves it
+ * alone (engine/realHistory.ts).
  */
-export const HISTORICAL_YEARS: readonly number[] = []
+export const HISTORICAL_YEARS: readonly number[] = [2016, 2022]
 export type StartYear = number
 export const DEFAULT_START_YEAR = 2026
 
@@ -40,7 +41,12 @@ export interface RawWorld {
   players: RawPlayer[]
 }
 
-export async function loadWorld(_year: number): Promise<RawWorld | null> {
+export async function loadWorld(year: number): Promise<RawWorld | null> {
+  // the real years a historical career grows into come with its world
+  const { ensureHistory } = await import('./realHistory')
+  await ensureHistory()
+  if (year === 2016) return (await import('../data/world_2016.json')).default as unknown as RawWorld
+  if (year === 2022) return (await import('../data/world_2022.json')).default as unknown as RawWorld
   return null
 }
 
@@ -54,6 +60,8 @@ export const midYearOf = (s: { startYear?: number }): number => startYearOf(s) +
 export const finalYearOf = (s: { startYear?: number }): number => startYearOf(s) + 10
 
 export const ERA_CN: Record<number, string> = {
+  2016: 'S6 · 2016 赛季起',
+  2022: 'S12 · 2022 赛季起',
   2026: '2026 赛季起',
 }
 
