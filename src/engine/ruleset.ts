@@ -21,18 +21,22 @@
  */
 import type { GameState } from './types'
 
-export type RulesetId = 'vct-2025' | 'vct-2026' | 'vct-2023'
+export type RulesetId = 'vct-2025' | 'vct-2026' | 'vct-2023' | 'lol-2026'
 
 export const RULESET_CN: Record<RulesetId, string> = {
   'vct-2025': '经典赛制',
   'vct-2026': '2026 赛制（抽签版）',
   'vct-2023': '（已停用）',
+  'lol-2026': '2026 真实赛制',
 }
 
 export const rulesetOf = (state: Pick<GameState, 'rulesetId'>): RulesetId => state.rulesetId ?? 'vct-2025'
 
 /** The 2026 rulebook, with its draws. */
 export const drawRules = (state: Pick<GameState, 'rulesetId'>): boolean => rulesetOf(state) === 'vct-2026'
+
+/** League's real year: every tier-one stage and international run as a program (engine/formats.ts, programs2026.ts) */
+export const programRules = (state: Pick<GameState, 'rulesetId'>): boolean => rulesetOf(state) === 'lol-2026'
 
 /**
  * The rulebook new careers are created with. The shell sets vct-2026 before
@@ -42,7 +46,7 @@ export const drawRules = (state: Pick<GameState, 'rulesetId'>): boolean => rules
  * setting rather than an argument threaded through every screen that can
  * start a game.
  */
-let current: RulesetId = 'vct-2025'
+let current: RulesetId = 'lol-2026'
 export const setCurrentRuleset = (id: RulesetId): void => { current = id }
 export const currentRuleset = (): RulesetId => current
 

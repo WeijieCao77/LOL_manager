@@ -62,7 +62,10 @@ export const ERA_CN: Record<number, string> = {
  * 国际赛 of the year, MSI 季中冠军赛 the second, then 全球总决赛. 2023 had one
  * 国际赛 (Tokyo) after LOCK//IN; it is listed for the day a 2023 start exists.
  */
-export const REAL_HOSTS: Record<number, { masters1: string; masters2: string; champions: string }> = {}
+export const REAL_HOSTS: Record<number, { masters1: string; masters2: string; champions: string }> = {
+  // First Stand São Paulo, MSI Daejeon, Worlds in North America (final at Barclays Center)
+  2026: { masters1: '圣保罗', masters2: '大田', champions: '纽约' },
+}
 
 /**
  * When each agent joined the game, year and month of the patch. Agents not

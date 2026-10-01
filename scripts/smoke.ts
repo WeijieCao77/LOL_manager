@@ -11,10 +11,10 @@ import { ratingOf } from '../src/engine/match'
 import { setCurrentRuleset } from '../src/engine/ruleset'
 import type { GameState } from '../src/engine/types'
 
-// RULESET=vct-2026 plays the season under the draw rulebook; the default is
-// the classic flow the rest of the audit was written against
+// The default is what a new career plays — lol-2026, the real year. RULESET=vct-2025
+// plays the classic flow that saves from before it still run on.
 const rulesetEnv = process.env.RULESET
-if (rulesetEnv === 'vct-2025' || rulesetEnv === 'vct-2026') setCurrentRuleset(rulesetEnv)
+if (rulesetEnv === 'vct-2025' || rulesetEnv === 'vct-2026' || rulesetEnv === 'lol-2026') setCurrentRuleset(rulesetEnv)
 
 const seasons = Number(process.argv[2] ?? 1)
 // The strongest club in the biggest league: a headless run makes no decisions at all, and a

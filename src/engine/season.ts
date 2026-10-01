@@ -26,7 +26,9 @@ import { defaultContract, resolveApplications } from './career'
 import { aiFacilityUpgrade, applyMatchFatigue, drillTick, markMapSeen, seasonRollover, weeklyTick } from './training'
 import { dailyLife, weeklyLife } from './life'
 import { autoStarters, ensureCaller } from './world'
-import { CHAMPIONS_2025, drawRules } from './ruleset'
+import { CHAMPIONS_2025, drawRules, programRules } from './ruleset'
+import { stepProgram, WAVE_GAP as PROGRAM_GAP } from './formats'
+import { T1_REGIONS, fstSeeds, lplRegionalField, msiSeeds, programFor, seasonRanking, worldsSeeds } from './programs2026'
 import {
   championsGroupSquare, createPlayoffPick, drawChampionsGroups, drawChampionsPlayoffs, drawKickoffBracket, drawStageGroups,
   drawStageReshuffle, drawSwissRound, drawsThisYear, needsManager, nextPendingDraw, resetDrawSeq, resolvePicks, revealAll,
@@ -173,6 +175,12 @@ const tier2Of = (state: GameState, region: Region) =>
 /** Build every fixture that can be known before a ball is thrown. */
 export function setupSeason(state: GameState, notes?: string[]): void {
   state.managerContract ??= defaultContract(state)
+  // last year's tables seed this year's first stage (LPL's groups, LCK Cup's) —
+  // read before they are cleared
+  if (programRules(state)) {
+    const rank = seasonRanking(state)
+    if (Object.keys(rank).length) state.prevRank = rank
+  }
   resetFixtureSeq(0)
   state.fixtures = []
   state.comps = {}
@@ -192,6 +200,23 @@ export function setupSeason(state: GameState, notes?: string[]): void {
     if (book.lockin) {
       const s1 = makeComp(state, 'stage1', region === LEGACY_2023_DOMESTIC ? '中国进化赛' : `${region} 联赛`, t1, region, 1)
       state.fixtures.push(...scheduleRegularSeason(s1, 'stage1', ...LD.stage1, 3, rng, '常规赛', Math.max(1, t1.length - 1)))
+      if (t2.length >= 2) {
+        const c1 = makeComp(state, 'challengers1', `${region} 次级联赛 · 上半年`, t2, region, 2)
+        state.fixtures.push(...scheduleRegularSeason(c1, 'challengers1', ...LD.challengers1, 3, rng, '常规赛'))
+        const c2 = makeComp(state, 'challengers2', `${region} 次级联赛 · 下半年`, t2, region, 2)
+        state.fixtures.push(...scheduleRegularSeason(c2, 'challengers2', ...LD.challengers2, 3, rng, '常规赛'))
+      }
+      continue
+    }
+
+    // ---- lol-2026: each tier-one stage is a program of phases (programs2026.ts);
+    // the second tier keeps its two splits of a table and a bracket
+    if (programRules(state) && T1_REGIONS.includes(region)) {
+      for (const [slot, n] of [['kickoff', '第一赛段'], ['stage1', '第二赛段'], ['stage2', '第三赛段']] as const) {
+        const c = makeComp(state, slot, `${region} ${n}`, t1, region, 1)
+        c.format = 'program'
+        c.program = `${region}:${slot}`
+      }
       if (t2.length >= 2) {
         const c1 = makeComp(state, 'challengers1', `${region} 次级联赛 · 上半年`, t2, region, 2)
         state.fixtures.push(...scheduleRegularSeason(c1, 'challengers1', ...LD.challengers1, 3, rng, '常规赛'))
@@ -574,6 +599,14 @@ export function markPatchSeen(state: GameState): void {
 export function settleCompetition(state: GameState, comp: Competition, notes: string[] = []): void {
   if (comp.awarded || !comp.champion) return
   comp.awarded = true
+  // a qualifier is a door, not a title: no prize, no honours, no board verdict
+  if (comp.minor) {
+    state.news.push({
+      day: state.day, kind: 'league', important: comp.teams.includes(state.myTeam),
+      text: `${comp.name} 结束：${comp.finished.slice(0, comp.qualify ?? 1).map((t) => state.teams[t]?.name).join('、')} 晋级。`,
+    })
+    return
+  }
 
   awardPrize(state, comp.stage, comp.finished)
 
@@ -933,6 +966,12 @@ function progressCompetitions(state: GameState, notes: string[] = [], autoPick =
     // stop this year's competition of the same name.
     if (drawsThisYear(state, comp.key).some((d) => !d.consumed)) continue
 
+    // ---- lol-2026: a program of phases (engine/formats.ts)
+    if (comp.format === 'program') {
+      runProgrammed(state, comp, notes)
+      continue
+    }
+
     // ---- 国际赛: the Swiss round, then the eight-team double elimination
     if (comp.format === 'masters') {
       const swiss = comp.swissSeeds ?? []
@@ -1096,6 +1135,10 @@ function progressCompetitions(state: GameState, notes: string[] = [], autoPick =
   }
 
   // international events unlock as their feeder stages conclude
+  if (programRules(state)) {
+    openInternationals(state)
+    return
+  }
   const book = rulebookOf(state)
   const OPEN = book.internationalOpen
   if (book.lockin) {
@@ -1117,6 +1160,81 @@ function progressCompetitions(state: GameState, notes: string[] = [], autoPick =
 
   const s2Done = REGIONS.every((r) => state.comps[compKey('stage2', r)]?.champion)
   if (s2Done) createChampions(state, CHAMPIONS, Math.max(state.day + 4, OPEN.champions))
+}
+
+/**
+ * Move a programmed stage on (engine/formats.ts): the next phase or round, or,
+ * the last phase over, its placings — and the stage is concluded like any other.
+ */
+function runProgrammed(state: GameState, comp: Competition, notes: string[]): void {
+  const prog = programFor(state, comp)
+  if (!prog) return
+  for (let guard = 0; guard < 6; guard++) {
+    const step = stepProgram(state, comp, prog, state.day + PROGRAM_GAP)
+    if (step.kind === 'wait') return
+    if (step.kind === 'fixtures') {
+      state.fixtures.push(...step.fixtures)
+      if (step.fixtures.length) return
+      continue
+    }
+    comp.finished = step.order
+    comp.champion = step.order[0]
+    concludeStage(state, comp, notes)
+    return
+  }
+}
+
+/** a programmed international, entered once its field is known */
+function openProgrammed(
+  state: GameState, key: 'masters1' | 'masters2' | 'champions', name: string, program: string, teams: string[],
+): void {
+  if (state.comps[key] || teams.length < 4) return
+  const comp = makeComp(state, key, name, teams)
+  comp.format = 'program'
+  comp.program = program
+  comp.city = hostCity(state, key)
+  state.news.push({
+    day: state.day, kind: 'league', important: teams.includes(state.myTeam),
+    text: `${name}（${comp.city}）参赛名单：${teams.map((t) => state.teams[t]?.tag).join('、')}。`,
+  })
+}
+
+/**
+ * The year's internationals under lol-2026, each as soon as its field is
+ * known: First Stand from the first stages, MSI from the second (and First
+ * Stand, whose champion's region sends its second seed straight to the
+ * bracket), LPL's Regional Finals once Split 3 and MSI are done, and Worlds
+ * once every third stage — and those Regional Finals — are.
+ */
+function openInternationals(state: GameState): void {
+  const book = rulebookOf(state)
+  const all = (slot: string) => T1_REGIONS.every((r) => state.comps[`${slot}:${r}`]?.champion)
+  const flat = (x: Record<string, string[]>) => T1_REGIONS.flatMap((r) => x[r] ?? [])
+  if (all('kickoff')) openProgrammed(state, 'masters1', book.eventNames.masters1 ?? 'First Stand', 'fst', flat(fstSeeds(state)))
+  if (all('stage1') && state.comps.masters1?.champion) {
+    openProgrammed(state, 'masters2', book.eventNames.masters2, 'msi', flat(msiSeeds(state)))
+  }
+  const msiDone = !!state.comps.masters2?.champion
+  if (msiDone && state.comps['stage2:LPL']?.champion && !state.comps['qual:LPL']) {
+    const field = lplRegionalField(state)
+    if (field.length >= 3) {
+      const comp: Competition = {
+        key: 'qual:LPL', name: 'LPL 区域资格赛', region: 'LPL', tier: 1, stage: 'stage2',
+        teams: field, standings: newStandings(field), finished: [],
+        format: 'program', program: 'qual:LPL', minor: true, qualify: field.length >= 4 ? 2 : 1,
+      }
+      state.comps[comp.key] = comp
+      state.news.push({
+        day: state.day, kind: 'league', important: field.includes(state.myTeam),
+        text: `LPL 区域资格赛：${field.map((t) => state.teams[t]?.name).join('、')} 争夺最后的全球总决赛名额。`,
+      })
+    }
+  }
+  const lplReady = !!state.comps['qual:LPL']?.champion || (msiDone && lplRegionalField(state).length < 3)
+  if (all('stage2') && msiDone && lplReady) {
+    openProgrammed(state, 'champions', book.eventNames.champions, 'worlds',
+      T1_REGIONS.flatMap((r) => worldsSeeds(state, r)))
+  }
 }
 
 /**
@@ -1144,6 +1262,8 @@ function keepBreaks(state: GameState): void {
     if (!days.length) continue
     const floor = Math.max(...days) + BREAK_AFTER_INTERNATIONAL
     for (const region of REGIONS) {
+      // a programmed stage is laid on the real calendar, whose gaps are the breaks
+      if (state.comps[compKey(next, region)]?.format === 'program') continue
       const rr = state.fixtures.filter((f) =>
         f.comp === compKey(next, region) && !f.played && !f.label.startsWith('KO:'))
       if (!rr.length || Math.min(...rr.map((f) => f.day)) >= floor) continue

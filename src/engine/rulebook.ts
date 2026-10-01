@@ -76,10 +76,34 @@ const VCT_2023: Rulebook = {
   eventNames: { masters2: 'MSI 季中冠军赛', champions: '全球总决赛' },
 }
 
+/**
+ * League of Legends 2026, on the real calendar (docs/调研-2026赛制.md §1). Each
+ * stage window is the widest a region runs: LPL's Split 1 ends 8 March, CBLOL's
+ * Split 2 on 10 October. The days inside a window come from the programs.
+ */
+const LOL_2026: Rulebook = {
+  id: 'lol-2026',
+  stages: [
+    { key: 'preseason', name: '季前准备', start: 0, end: 12 },
+    { key: 'kickoff', name: '第一赛段', start: 13, end: 73 },
+    { key: 'masters1', name: 'First Stand', start: 74, end: 85 },
+    { key: 'stage1', name: '第二赛段', start: 86, end: 171 },
+    { key: 'masters2', name: 'MSI 季中冠军赛', start: 172, end: 196 },
+    { key: 'stage2', name: '第三赛段', start: 197, end: 284 },
+    { key: 'champions', name: '全球总决赛', start: 285, end: 320 },
+    { key: 'offseason', name: '休赛期', start: 321, end: SEASON_DAYS - 1 },
+  ],
+  leagueDays: { kickoff: [13, 66], stage1: [86, 164], stage2: [202, 282], challengers1: [28, 130], challengers2: [172, 268] },
+  internationalOpen: { masters1: 74, masters2: 178, champions: 287 },
+  lockin: false,
+  eventNames: { masters1: 'First Stand', masters2: 'MSI 季中冠军赛', champions: '全球总决赛' },
+}
+
 export const RULEBOOKS: Record<RulesetId, Rulebook> = {
   'vct-2025': CLASSIC,
   'vct-2026': { ...CLASSIC, id: 'vct-2026' },
   'vct-2023': VCT_2023,
+  'lol-2026': LOL_2026,
 }
 
 export const rulebookOf = (state: { rulesetId?: RulesetId }): Rulebook => RULEBOOKS[rulesetOf(state)]

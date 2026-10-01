@@ -48,7 +48,7 @@ export default function App() {
   // mounts, so its first read of storage is the right namespace. The rulebook
   // is the same everywhere — a save without one named is the classic flow
   // and keeps it (engine/ruleset.ts)
-  setCurrentRuleset('vct-2026')
+  setCurrentRuleset('lol-2026')
   setSaveNamespace(mode === 'career-test' ? 'test' : '')
   const setMode = useCallback((m: Mode) => {
     try {

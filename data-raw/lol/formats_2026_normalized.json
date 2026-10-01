@@ -1,0 +1,2980 @@
+{
+ "meta": {
+  "year": 2026,
+  "source": "data-raw/lol/formats_2026.json + scripts/cache/http_liquipedia_net（Liquipedia, CC BY-SA 3.0）",
+  "doc": "docs/调研-2026赛制.md",
+  "conventions": {
+   "待查": "数据缺失或矛盾，不要用猜测填",
+   "bo": "整数或 {阶段: bo}",
+   "fearless": "true / false / \"待查\" / 说明字符串",
+   "advance.to": "\"<stage_id>.<phase>.<slot>\"、赛事页名、eliminated、eliminated_for_split、season_over",
+   "bracket_template": "Liquipedia Bracket 模板名，仅作结构参考",
+   "stage order": "各赛区 stages 已按日历顺序排列"
+  },
+  "phase_types": [
+   "round_robin",
+   "groups",
+   "group_battle",
+   "swiss",
+   "single_elim",
+   "double_elim",
+   "bo_series",
+   "knights_rivals",
+   "king_of_the_hill",
+   "gsl_groups",
+   "points_race",
+   "showmatch",
+   "cross_group_round_robin",
+   "unknown"
+  ]
+ },
+ "tier1": {
+  "LPL": [
+   {
+    "id": "lpl_s1",
+    "name": "LPL Split 1",
+    "source": "LPL/2026/Split 1",
+    "start": "2026-01-14",
+    "end": "2026-03-08",
+    "teams": 14,
+    "phases": [
+     {
+      "type": "groups",
+      "name": "Regular Season (Rumble Stage)",
+      "end": "2026-02-06",
+      "source": "LPL/2026/Split 1/Regular Season",
+      "seeding": "按 LPL 2025 全年成绩分组",
+      "groups": [
+       {
+        "name": "Ascend",
+        "size": 6,
+        "seeds": "2025 第1-6"
+       },
+       {
+        "name": "Perseverance",
+        "size": 4,
+        "seeds": "2025 第7-10"
+       },
+       {
+        "name": "Nirvana",
+        "size": 4,
+        "seeds": "2025 第11-14"
+       }
+      ],
+      "inner": {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 3,
+       "scope": "within_group"
+      },
+      "advance": [
+       {
+        "ranks": "Ascend 1-4",
+        "to": "lpl_s1.knockout.UB_QF",
+        "note": "按组内名次依次挑选胜者组八强对手"
+       },
+       {
+        "ranks": "Ascend 5-6",
+        "to": "lpl_s1.knights_rivals.R1"
+       },
+       {
+        "ranks": "Perseverance 1-2",
+        "to": "lpl_s1.knights_rivals.R1"
+       },
+       {
+        "ranks": "Perseverance 3-4",
+        "to": "lpl_s1.knights_rivals.R2"
+       },
+       {
+        "ranks": "Nirvana 1-2",
+        "to": "lpl_s1.knights_rivals.R2"
+       },
+       {
+        "ranks": "Nirvana 3-4",
+        "to": "eliminated_for_split",
+        "note": "仅本赛段出局，Split 2 仍参赛"
+       }
+      ],
+      "tiebreakers": [
+       "series_wins",
+       "game_diff",
+       "h2h_series_wins",
+       "h2h_game_diff",
+       "bo3_tiebreaker_match（仅当影响晋级或种子）"
+      ],
+      "first_selection": "每对首次相遇 G1 随机；第二次相遇 G1 给对方；G2-3 上局负方"
+     },
+     {
+      "type": "knights_rivals",
+      "name": "Knights Rivals",
+      "format": "hybrid_elimination",
+      "bo": 5,
+      "teams": 8,
+      "source": "LPL/2026/Split 1/Knockout Stage",
+      "bracket_template": "4-2Q-U-4L2D-2Q",
+      "rounds_detail": [
+       {
+        "round": "R1",
+        "teams": "Ascend 5-6 + Perseverance 1-2（2 场）",
+        "winners": "knockout",
+        "losers": "R3"
+       },
+       {
+        "round": "R2",
+        "teams": "Perseverance 3-4 + Nirvana 1-2（2 场）",
+        "winners": "R3",
+        "losers": "eliminated"
+       },
+       {
+        "round": "R3",
+        "teams": "R1 两负者 + R2 两胜者，重新排种子（2 场）",
+        "winners": "knockout",
+        "losers": "eliminated"
+       }
+      ],
+      "pairing": "待查：R1/R2 具体谁打谁原文未写",
+      "advance": [
+       {
+        "ranks": "R1 胜者 2 + R3 胜者 2",
+        "to": "lpl_s1.knockout"
+       }
+      ],
+      "first_selection": "Rumble 排名高者 G1 先选（Ascend > Perseverance > Nirvana）；之后上局负方"
+     },
+     {
+      "type": "double_elim",
+      "name": "Knockout Stage",
+      "teams": 8,
+      "bo": 5,
+      "bracket_template": "8U4L2DSL1D",
+      "seeding": "Ascend 1-4 依名次挑选 UB 八强对手（对手 = 4 支 Knights Rivals 晋级队）",
+      "first_selection": "UB 八强：Ascend 前四 G1 先选；其余 G1 掷硬币；总决赛：胜者组决赛胜者获 G1 map selection + side selection；之后上局负方",
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "First Stand Tournament/2026"
+       }
+      ]
+     }
+    ],
+    "location": "Shanghai",
+    "prize": {
+     "amount": 1600000,
+     "currency": "待查",
+     "by_place_cny": {
+      "1": 700000,
+      "2": 400000,
+      "3": 250000,
+      "4": 150000,
+      "5-6": 50000
+     }
+    },
+    "fearless": true,
+    "international": [
+     {
+      "event": "First Stand Tournament/2026",
+      "slots": 2,
+      "rule": "Split 1 冠亚军"
+     }
+    ],
+    "championship_points": {
+     "1": 80,
+     "2": 50,
+     "3": 40,
+     "4": 20,
+     "5-6": 10,
+     "7-8": 5,
+     "9-14": 0
+    }
+   },
+   {
+    "id": "lpl_s2",
+    "name": "LPL Split 2",
+    "source": "LPL/2026/Split 2",
+    "start": "2026-04-04",
+    "end": "2026-06-14",
+    "teams": 14,
+    "phases": [
+     {
+      "type": "groups",
+      "name": "Regular Season",
+      "source": "LPL/2026/Split 2/Regular Season",
+      "seeding": "按 Split 1 最终名次",
+      "groups": [
+       {
+        "name": "Ascend",
+        "size": 8,
+        "seeds": "Split 1 第1-8",
+        "inner": {
+         "type": "round_robin",
+         "rounds": "double",
+         "bo": 3
+        }
+       },
+       {
+        "name": "Nirvana",
+        "size": 6,
+        "seeds": "Split 1 第9-14",
+        "inner": {
+         "type": "round_robin",
+         "rounds": "single",
+         "bo": 3
+        }
+       }
+      ],
+      "advance": [
+       {
+        "ranks": "Ascend 1-4",
+        "to": "lpl_s2.knockout.UB_QF",
+        "note": "按名次挑选对手"
+       },
+       {
+        "ranks": "Ascend 5-8",
+        "to": "lpl_s2.knights_rivals"
+       },
+       {
+        "ranks": "Nirvana 1-4",
+        "to": "lpl_s2.knights_rivals"
+       },
+       {
+        "ranks": "Nirvana 5-6",
+        "to": "season_over",
+        "note": "2026 赛季结束，不进 Split 3"
+       }
+      ],
+      "tiebreakers": [
+       "series_wins",
+       "game_diff",
+       "h2h_series_wins",
+       "h2h_game_diff",
+       "bo3_tiebreaker_match（仅当影响晋级或种子）"
+      ],
+      "first_selection": "首次相遇 G1 掷硬币；Ascend 第二次相遇 G1 给对方；G2-3 上局负方",
+      "todo": [
+       "待查：Split 1 名次并列（5-6、7-8、9-10…）如何排成 1-14 来分组"
+      ]
+     },
+     {
+      "type": "bo_series",
+      "name": "Knights Rivals",
+      "teams": 8,
+      "matches": 4,
+      "bo": 5,
+      "bracket_template": "8-4Q",
+      "pairing": "\"based on Regular Season placements\"，具体配对待查",
+      "first_selection": "Ascend 队 G1 先选；之后上局负方",
+      "advance": [
+       {
+        "ranks": "4 胜者",
+        "to": "lpl_s2.knockout"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Knockout Stage",
+      "teams": 8,
+      "bo": 5,
+      "bracket_template": "8U4L2DSL1D",
+      "seeding": "Ascend 1-4 依名次挑选 UB 八强对手",
+      "first_selection": "同 Split 1",
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "Mid-Season Invitational/2026"
+       },
+       {
+        "ranks": "1",
+        "to": "Esports World Cup/2026"
+       },
+       {
+        "ranks": "1-12",
+        "to": "lpl_s3"
+       }
+      ]
+     }
+    ],
+    "location": "Shanghai",
+    "prize": {
+     "amount": 2800000,
+     "currency": "待查",
+     "by_place_cny": {
+      "1": 1300000,
+      "2": 700000,
+      "3": 300000,
+      "4": 200000,
+      "5-6": 150000
+     }
+    },
+    "fearless": true,
+    "international": [
+     {
+      "event": "Mid-Season Invitational/2026",
+      "slots": 2,
+      "rule": "Split 2 冠亚军；因 LPL 赢得 FST，LPL2 也直通 MSI Bracket Stage"
+     }
+    ],
+    "championship_points": {
+     "1": 110,
+     "2": 80,
+     "3": 50,
+     "4": 30,
+     "5-6": 15,
+     "7-8": 10,
+     "9-14": 0
+    }
+   },
+   {
+    "id": "lpl_s3",
+    "name": "LPL Split 3",
+    "source": "LPL/2026/Split 3",
+    "start": "2026-07-22",
+    "end": "2026-09-13",
+    "teams": 12,
+    "phases": [
+     {
+      "type": "groups",
+      "name": "Regular Season",
+      "source": "LPL/2026/Split 3/Regular Season",
+      "seeding": "按 Split 2 最终名次",
+      "groups": [
+       {
+        "name": "Ascend",
+        "size": 8,
+        "seeds": "Split 2 第1-8"
+       },
+       {
+        "name": "Nirvana",
+        "size": 4,
+        "seeds": "Split 2 第9-12"
+       }
+      ],
+      "inner": {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 3,
+       "scope": "within_group"
+      },
+      "advance": [
+       {
+        "ranks": "Ascend 1-2",
+        "to": "lpl_s3.playoffs.UB_SF"
+       },
+       {
+        "ranks": "Ascend 3-6",
+        "to": "lpl_s3.playoffs.UB_QF"
+       },
+       {
+        "ranks": "Ascend 7-8",
+        "to": "lpl_s3.knights_rivals"
+       },
+       {
+        "ranks": "Nirvana 1-2",
+        "to": "lpl_s3.knights_rivals"
+       },
+       {
+        "ranks": "Nirvana 3-4",
+        "to": "season_over"
+       }
+      ],
+      "tiebreakers": [
+       "series_wins",
+       "game_diff",
+       "h2h_series_wins",
+       "h2h_game_diff"
+      ],
+      "first_selection": "首次相遇 G1 掷硬币；第二次相遇 G1 给对方；G2-3 上局负方"
+     },
+     {
+      "type": "double_elim",
+      "name": "Knights Rivals",
+      "teams": 4,
+      "bo": 5,
+      "bracket_template": "4-2Q",
+      "source": "LPL/2026/Split 3/Playoffs",
+      "seeding": "\"based on Regular Season placements\"，具体对阵待查",
+      "first_selection": "Rumble 排名高者 G1 选边（Ascend > Nirvana）；之后上局负方选边",
+      "advance": [
+       {
+        "ranks": "2 晋级者",
+        "to": "lpl_s3.playoffs.LB_R1"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Season Playoffs",
+      "teams": 8,
+      "bo": 5,
+      "bracket_template": "4L2DSU4L2DSL1D",
+      "start": "2026-08-29",
+      "end": "2026-09-13",
+      "seeding": "Ascend 1-2 轮空到 UB 半决赛；Ascend 3-6 打 UB 八强；Knights Rivals 2 队进 LB R1。UB 八强配对待查",
+      "first_selection": "UB 八强：Ascend 排名高者 G1 先选；其余 G1 掷硬币；总决赛：胜者组决赛胜者获 G1 全部选择权；之后上局负方",
+      "advance": [
+       {
+        "ranks": "1",
+        "to": "World Championship/2026",
+        "seed": "LPL1"
+       }
+      ]
+     }
+    ],
+    "location": "Shenzhen",
+    "prize": {
+     "amount": 4000000,
+     "currency": "待查",
+     "by_place_cny": {
+      "1": 1700000,
+      "2": 1000000,
+      "3": 600000,
+      "4": 300000,
+      "5-6": 200000
+     }
+    },
+    "fearless": true,
+    "international": [
+     {
+      "event": "World Championship/2026",
+      "slots": 1,
+      "rule": "Split 3 冠军 = LPL1"
+     }
+    ],
+    "championship_points": {
+     "1": "qualified(Worlds)",
+     "2": 110,
+     "3": 80,
+     "4": 50,
+     "5-6": 30,
+     "7-8": 15,
+     "9-12": 0
+    }
+   },
+   {
+    "id": "lpl_points",
+    "name": "LPL Championship Points",
+    "source": "LPL/2026/Championship Points",
+    "start": null,
+    "end": "2026-09-13",
+    "teams": 14,
+    "phases": [
+     {
+      "type": "points_race",
+      "events": [
+       "lpl_s1",
+       "lpl_s2",
+       "lpl_s3"
+      ],
+      "tiebreak": "同分按 Split 3 名次",
+      "advance": [
+       {
+        "ranks": "积分最高（Split 3 冠军除外）",
+        "to": "World Championship/2026",
+        "seed": "LPL2"
+       },
+       {
+        "ranks": "其后最多 4 队",
+        "to": "lpl_rf"
+       },
+       {
+        "ranks": "另有凭积分进 DCGI 的一档",
+        "to": "Demacia Cup Global Invitational/2026",
+        "note": "名额数待查"
+       }
+      ]
+     }
+    ],
+    "international": [
+     {
+      "event": "World Championship/2026",
+      "slots": 1,
+      "rule": "积分第一（Split 3 冠军除外）= LPL2"
+     }
+    ]
+   },
+   {
+    "id": "lpl_rf",
+    "name": "LPL Regional Finals",
+    "source": "LPL/2026/Regional Finals",
+    "start": "2026-09-17",
+    "end": "2026-09-19",
+    "teams": 4,
+    "phases": [
+     {
+      "type": "double_elim",
+      "bo": 5,
+      "bracket_template": "2-1Q-U-2L1D-1Q",
+      "scenario": "applied：LPL 为 MSI 亚军赛区",
+      "seeding": "积分较高两队进胜者组（1 场），较低两队打败者组半决赛",
+      "advance": [
+       {
+        "ranks": "UB 决赛胜者",
+        "to": "World Championship/2026",
+        "seed": "LPL3"
+       },
+       {
+        "ranks": "LB 决赛胜者（UB 负者 vs LB 半决赛胜者）",
+        "to": "World Championship/2026",
+        "seed": "LPL4"
+       },
+       {
+        "ranks": "其余 2 队",
+        "to": "Demacia Cup Global Invitational/2026"
+       }
+      ],
+      "alternative_scenarios": [
+       {
+        "when": "LPL 不是 MSI 前二赛区",
+        "type": "king_of_the_hill",
+        "teams": 3,
+        "detail": "积分最高者坐决赛；另两队打半决赛；决赛胜者 = LPL3（无 LPL4）"
+       },
+       {
+        "when": "LPL 队夺 MSI 冠军、进了 Split 3 季后赛但未以 1/2 号种子晋级",
+        "type": "king_of_the_hill",
+        "teams": 4,
+        "detail": "MSI 冠军坐决赛；积分最高者进半决赛；另两队打四分之一决赛；决赛胜者 LPL3、负者 LPL4"
+       },
+       {
+        "when": "LPL 队夺 MSI 冠军且已以 1/2 号种子晋级；或 MSI 冠军未进 Split 3 季后赛；或 LPL 为 MSI 亚军赛区",
+        "type": "double_elim",
+        "teams": 4,
+        "detail": "即 applied 方案"
+       }
+      ],
+      "side_choice": "原文该段被 HTML 注释（UB 决赛/LB 半决赛积分高者选边，LB 决赛掷硬币，之后负方选边）——待查"
+     }
+    ],
+    "location": "Shanghai",
+    "prize": null,
+    "fearless": "待查",
+    "international": [
+     {
+      "event": "World Championship/2026",
+      "slots": 2,
+      "rule": "LPL3、LPL4（第 4 名额来自 MSI 亚军赛区奖励）"
+     }
+    ]
+   }
+  ],
+  "LCK": [
+   {
+    "id": "lck_opening",
+    "name": "LCK Season Opening",
+    "source": "LCK/2026/Season Opening",
+    "start": "2026-01-09",
+    "end": "2026-01-09",
+    "teams": 5,
+    "phases": [
+     {
+      "type": "showmatch",
+      "note": "5 支按位置组成的全明星队；奖品 500 LoL skins；非正式比赛，可不模拟"
+     }
+    ],
+    "location": "Seoul"
+   },
+   {
+    "id": "lck_cup",
+    "name": "LCK Cup",
+    "source": "LCK/2026/Cup",
+    "start": "2026-01-14",
+    "end": "2026-03-01",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "group_battle",
+      "name": "Group Battle",
+      "start": "2026-01-14",
+      "end": "2026-02-01",
+      "source": "LCK/2026/Cup/Group Battle",
+      "groups": [
+       {
+        "name": "Baron",
+        "teams": [
+         "GEN",
+         "T1",
+         "NS",
+         "DNS",
+         "BRO"
+        ]
+       },
+       {
+        "name": "Elder",
+        "teams": [
+         "HLE",
+         "DK",
+         "KT",
+         "BFX",
+         "DRX"
+        ]
+       }
+      ],
+      "group_assignment": "待查（原文只写 split into two groups）",
+      "schedule": "每队与对面组 5 队各打一场（跨组单循环）；第 3 周 Super Week = 两组同号种子对决",
+      "bo": {
+       "week1-2": 3,
+       "super_week": 5
+      },
+      "group_scoring": {
+       "bo3_win": 1,
+       "bo5_win": 2,
+       "winner_group": "组积分多者"
+      },
+      "advance": [
+       {
+        "ranks": "Winner Group 1-2",
+        "to": "lck_cup.playoffs.R2"
+       },
+       {
+        "ranks": "Loser Group 1",
+        "to": "lck_cup.playoffs.R1"
+       },
+       {
+        "ranks": "Winner Group 3-5 + Loser Group 2-4",
+        "to": "lck_cup.play_in",
+        "note": "这 6 队中胜场最多 2 队轮空到 Play-In R2"
+       },
+       {
+        "ranks": "Loser Group 5",
+        "to": "eliminated"
+       }
+      ],
+      "todo": [
+       "待查：组内排名规则；\"同号种子\"如何确定；组积分平局处理"
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Play-In",
+      "start": "2026-02-06",
+      "end": "2026-02-08",
+      "teams": 6,
+      "bo": "待查",
+      "bracket_template": "4L2D-2Q-U-2-1Q",
+      "source": "LCK/2026/Cup/Play-In",
+      "advance": [
+       {
+        "ranks": "3 队",
+        "to": "lck_cup.playoffs.R1",
+        "note": "数量由 bracket 模板（2Q+1Q）与季后赛 6 队容量推得，原文未写——待查"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "start": "2026-02-12",
+      "end": "2026-03-01",
+      "teams": 6,
+      "bo": 5,
+      "bracket_template": "4L2DSU2L3D",
+      "source": "LCK/2026/Cup/Playoffs",
+      "seeding": "Winner Group 1-2 进 R2；其余 4 队打 R1；具体配对待查",
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "First Stand Tournament/2026"
+       }
+      ]
+     }
+    ],
+    "location": "Seoul（LB 决赛与总决赛在香港 Kai Tak Arena）",
+    "prize": {
+     "amount": null,
+     "currency": "KRW",
+     "note": "待查"
+    },
+    "fearless": true,
+    "international": [
+     {
+      "event": "First Stand Tournament/2026",
+      "slots": 2,
+      "rule": "LCK Cup 冠亚军"
+     }
+    ]
+   },
+   {
+    "id": "lck_r12",
+    "name": "LCK Rounds 1-2",
+    "source": "LCK/2026/Rounds 1-2",
+    "start": "2026-04-01",
+    "end": "2026-05-31",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "round_robin",
+      "rounds": "double",
+      "bo": 3,
+      "advance": [
+       {
+        "ranks": "1-6",
+        "to": "lck_rtmsi"
+       }
+      ],
+      "carry_over": "战绩带入 Rounds 3-4",
+      "table_tiebreakers_hint": [
+       "series",
+       "game_diff",
+       "h2h_match_diff",
+       "h2h_game_score"
+      ]
+     }
+    ],
+    "fearless": true,
+    "notes": [
+     "子页面只写 Bo3 未写 Fearless；LCK/2026 主页面写 Bo3 Fearless"
+    ]
+   },
+   {
+    "id": "lck_rtmsi",
+    "name": "LCK Road to MSI",
+    "source": "LCK/2026/Road to MSI",
+    "start": "2026-06-06",
+    "end": "2026-06-14",
+    "teams": 6,
+    "phases": [
+     {
+      "type": "double_elim",
+      "bo": 5,
+      "bracket_template": "2-1Q-U-2L3D-1Q",
+      "rounds": 5,
+      "seeding": "Rounds 1-2 前 6；各轮配对与轮空待查",
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "Mid-Season Invitational/2026"
+       },
+       {
+        "ranks": "1",
+        "to": "Esports World Cup/2026"
+       }
+      ]
+     }
+    ],
+    "fearless": "待查",
+    "international": [
+     {
+      "event": "Mid-Season Invitational/2026",
+      "slots": 2,
+      "rule": "Road to MSI 前二"
+     }
+    ]
+   },
+   {
+    "id": "lck_r34",
+    "name": "LCK Rounds 3-4",
+    "source": "LCK/2026/Rounds 3-4",
+    "start": "2026-07-29",
+    "end": "2026-08-23",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "groups",
+      "seeding": "Rounds 1-2 第1-5 → Legend；第6-10 → Rise",
+      "groups": [
+       {
+        "name": "Legend",
+        "size": 5
+       },
+       {
+        "name": "Rise",
+        "size": 5
+       }
+      ],
+      "inner": {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 3,
+       "scope": "within_group"
+      },
+      "carry_over": "Rounds 1-2 战绩带入",
+      "advance": [
+       {
+        "ranks": "Legend 1-2",
+        "to": "lck_playoffs.UB_R2"
+       },
+       {
+        "ranks": "Legend 3-4",
+        "to": "lck_playoffs.UB_R1"
+       },
+       {
+        "ranks": "Legend 5",
+        "to": "lck_playin.R1"
+       },
+       {
+        "ranks": "Rise 1",
+        "to": "lck_playin.R1"
+       },
+       {
+        "ranks": "Rise 2-3",
+        "to": "lck_playin.R2"
+       },
+       {
+        "ranks": "Rise 4-5",
+        "to": "eliminated"
+       }
+      ]
+     }
+    ],
+    "fearless": true
+   },
+   {
+    "id": "lck_playin",
+    "name": "LCK Play-In",
+    "source": "LCK/2026/Play-In",
+    "start": "2026-08-26",
+    "end": "2026-08-28",
+    "teams": 4,
+    "phases": [
+     {
+      "type": "double_elim",
+      "bo": 5,
+      "bracket_template": "2-1Q-U-2L1D-1Q",
+      "matches": [
+       {
+        "round": "R1",
+        "match": "Legend #5 vs Rise #1",
+        "winner": "lck_playoffs.UB_R1",
+        "loser": "R3"
+       },
+       {
+        "round": "R2",
+        "match": "Rise #2 vs Rise #3",
+        "winner": "R3",
+        "loser": "eliminated"
+       },
+       {
+        "round": "R3",
+        "match": "R1 负者 vs R2 胜者",
+        "winner": "lck_playoffs.UB_R1"
+       }
+      ],
+      "note": "R1/R2 对阵来自 bracket 占位符；R3 组成由模板推断",
+      "advance": [
+       {
+        "ranks": "2 队",
+        "to": "lck_playoffs.UB_R1"
+       }
+      ]
+     }
+    ],
+    "fearless": true
+   },
+   {
+    "id": "lck_playoffs",
+    "name": "LCK Playoffs",
+    "source": "LCK/2026/Playoffs",
+    "start": "2026-08-29",
+    "end": "2026-09-13",
+    "teams": 6,
+    "phases": [
+     {
+      "type": "double_elim",
+      "bo": 5,
+      "bracket_template": "4L2DSU2L3D",
+      "matches": [
+       {
+        "round": "UB R1",
+        "match": "Legend #3 vs \"Selection\"；Legend #4 vs \"Remaining\"",
+        "note": "占位符暗示 Legend #3 从两支 Play-In 晋级队中挑对手——待查"
+       },
+       {
+        "round": "UB R2",
+        "match": "Legend #1 vs \"Selection\"；Legend #2 vs \"Remaining\""
+       },
+       {
+        "round": "LB R1",
+        "match": "UB R1 两负者"
+       },
+       {
+        "round": "LB R2",
+        "match": "UB R2 负者中种子较低者 vs LB R1 胜者"
+       },
+       {
+        "round": "LB R3",
+        "match": "UB R2 负者中种子较高者 vs LB R2 胜者"
+       },
+       {
+        "round": "UB Final / LB Final / Grand Final"
+       }
+      ],
+      "advance": [
+       {
+        "ranks": "1-3",
+        "to": "World Championship/2026"
+       },
+       {
+        "ranks": "4",
+        "to": "World Championship/2026",
+        "condition": "MSI 冠军 HLE 进前三时第 4 名递补 LCK4（已发生：DK）"
+       },
+       {
+        "ranks": "5-7",
+        "to": "Demacia Cup Global Invitational/2026"
+       }
+      ]
+     }
+    ],
+    "fearless": true,
+    "location": "Seoul（LB 决赛 9/12、总决赛 9/13 在 KSPO Dome）",
+    "international": [
+     {
+      "event": "World Championship/2026",
+      "slots": 4,
+      "rule": "季后赛前 3 + MSI 冠军名额（HLE 进前三则第 4 名递补）"
+     }
+    ]
+   }
+  ],
+  "LEC": [
+   {
+    "id": "lec_versus",
+    "name": "LEC Versus",
+    "source": "LEC/2026/Versus",
+    "start": "2026-01-17",
+    "end": "2026-03-01",
+    "teams": 12,
+    "phases": [
+     {
+      "type": "round_robin",
+      "name": "Regular Season",
+      "start": "2026-01-17",
+      "end": "2026-02-08",
+      "rounds": "single",
+      "bo": 1,
+      "matches_per_team": 11,
+      "fearless": "待查",
+      "advance": [
+       {
+        "ranks": "1-8",
+        "to": "lec_versus.playoffs"
+       },
+       {
+        "ranks": "9-12",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "start": "2026-02-16",
+      "end": "2026-03-01",
+      "teams": 8,
+      "bracket_template": "8U4L2DSL1D",
+      "bo": {
+       "R1": 3,
+       "R2": 3,
+       "other": 5
+      },
+      "fearless": true,
+      "seeding": "8 队全部从 UB 八强开始；配对待查",
+      "advance": [
+       {
+        "ranks": "1",
+        "to": "First Stand Tournament/2026"
+       }
+      ]
+     }
+    ],
+    "location": "Berlin",
+    "prize": {
+     "amount": null,
+     "note": "infobox 为注释掉的 <!--80,000-->，待查"
+    },
+    "teams_note": "10 支合作队 + 2 支受邀 ERL 队",
+    "international": [
+     {
+      "event": "First Stand Tournament/2026",
+      "slots": 1,
+      "rule": "Versus 冠军"
+     }
+    ]
+   },
+   {
+    "id": "lec_spring",
+    "name": "LEC Spring",
+    "source": "LEC/2026/Spring",
+    "start": "2026-03-28",
+    "end": "2026-06-07",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "round_robin",
+      "name": "Regular Season",
+      "start": "2026-03-28",
+      "end": "2026-05-10",
+      "rounds": "single",
+      "bo": 3,
+      "matches_per_team": 9,
+      "tiebreakers": [
+       "h2h_wins",
+       "h2h_game_win_pct",
+       "strength_of_victory",
+       "LEC Versus 排名"
+      ],
+      "advance": [
+       {
+        "ranks": "1-4",
+        "to": "lec_spring.playoffs.UB_SF"
+       },
+       {
+        "ranks": "5-6",
+        "to": "lec_spring.playoffs.LB_QF"
+       },
+       {
+        "ranks": "7-10",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "start": "2026-05-23",
+      "end": "2026-06-07",
+      "teams": 6,
+      "bo": 5,
+      "bracket_template": "4U4L1D",
+      "seeding": "UB 半决赛 #1 vs #4、#2 vs #3；LB 首轮 UB 半决赛负者 vs #6 / #5（bracket 注释占位）",
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "Mid-Season Invitational/2026"
+       },
+       {
+        "ranks": "1",
+        "to": "Esports World Cup/2026",
+        "note": "Format/奖金表=冠军；页首介绍写前二，矛盾"
+       }
+      ]
+     }
+    ],
+    "location": "Berlin",
+    "fearless": true,
+    "prize": {
+     "amount": null,
+     "note": "注释掉的 80,000，待查"
+    },
+    "international": [
+     {
+      "event": "Mid-Season Invitational/2026",
+      "slots": 2,
+      "rule": "Spring 冠亚军"
+     }
+    ]
+   },
+   {
+    "id": "lec_summer",
+    "name": "LEC Summer",
+    "source": "LEC/2026/Summer",
+    "start": "2026-07-24",
+    "end": "2026-09-20",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "showmatch",
+      "name": "Summer Showmatch",
+      "date": "2026-07-24",
+      "location": "Paris",
+      "bo": 1,
+      "teams": 2,
+      "source": "LEC/2026/Summer/Showmatch"
+     },
+     {
+      "type": "round_robin",
+      "name": "Regular Season",
+      "start": "2026-07-24",
+      "end": "2026-08-30",
+      "rounds": "single",
+      "bo": 3,
+      "matches_per_team": 9,
+      "tiebreakers": [
+       "h2h_wins",
+       "h2h_game_win_pct",
+       "strength_of_victory",
+       "LEC Spring 排名"
+      ],
+      "advance": [
+       {
+        "ranks": "1-4",
+        "to": "lec_summer.playoffs.UB_SF"
+       },
+       {
+        "ranks": "5-6",
+        "to": "lec_summer.playoffs.LB_QF"
+       },
+       {
+        "ranks": "7-10",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "start": "2026-09-05",
+      "end": "2026-09-20",
+      "teams": 6,
+      "bo": 5,
+      "bracket_template": "4U4L1D",
+      "seeding": "同 Spring",
+      "advance": [
+       {
+        "ranks": "1-3",
+        "to": "World Championship/2026"
+       },
+       {
+        "ranks": "4-5",
+        "to": "Demacia Cup Global Invitational/2026"
+       }
+      ]
+     }
+    ],
+    "location": "Berlin",
+    "fearless": true,
+    "prize": {
+     "amount": null,
+     "note": "注释掉的 80,000，待查"
+    },
+    "international": [
+     {
+      "event": "World Championship/2026",
+      "slots": 3,
+      "rule": "Summer 前三"
+     }
+    ],
+    "notes": [
+     "数据中没有 LEC Season Finals 页面"
+    ]
+   }
+  ],
+  "LCS": [
+   {
+    "id": "lcs_lockin",
+    "name": "LCS Lock-In",
+    "source": "LCS/2026/Lock-In",
+    "start": "2026-01-24",
+    "end": "2026-03-01",
+    "teams": 8,
+    "phases": [
+     {
+      "type": "swiss",
+      "name": "Swiss Stage",
+      "rounds": 3,
+      "bo": 3,
+      "source": "LCS/2026/Lock-In/Swiss Stage",
+      "table_tiebreakers_hint": [
+       "strength_of_victory",
+       "weighted_strength_of_victory"
+      ],
+      "advance": [
+       {
+        "ranks": "3-0",
+        "to": "lcs_lockin.playoffs.UB_SF",
+        "note": "从两支最差的 2-1 队中挑对手"
+       },
+       {
+        "ranks": "最好的 2-1",
+        "to": "lcs_lockin.playoffs.UB_SF",
+        "note": "打剩下那支 2-1"
+       },
+       {
+        "ranks": "1-2 中小局战绩最好者",
+        "to": "lcs_lockin.playoffs.LB",
+        "seed": 5
+       },
+       {
+        "ranks": "另两支 1-2",
+        "to": "last_chance_tiebreaker",
+        "note": "Bo1，胜者 6 号种子进 LB"
+       },
+       {
+        "ranks": "0-3",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "teams": 6,
+      "bo": 5,
+      "bracket_template": "4U4L1D",
+      "advance": [
+       {
+        "ranks": "1",
+        "to": "First Stand Tournament/2026"
+       },
+       {
+        "ranks": "2-3",
+        "to": "Americas Cup/2026"
+       }
+      ]
+     }
+    ],
+    "location": "Los Angeles",
+    "fearless": true,
+    "prize": {
+     "amount": null,
+     "note": "待查"
+    },
+    "international": [
+     {
+      "event": "First Stand Tournament/2026",
+      "slots": 1,
+      "rule": "Lock-In 冠军"
+     }
+    ]
+   },
+   {
+    "id": "lcs_spring",
+    "name": "LCS Spring",
+    "source": "LCS/2026/Spring",
+    "start": "2026-04-04",
+    "end": "2026-06-14",
+    "teams": 8,
+    "phases": [
+     {
+      "type": "round_robin",
+      "name": "Regular Season",
+      "start": "2026-04-04",
+      "end": "2026-05-17",
+      "rounds": "single",
+      "bo": 3,
+      "advance": [
+       {
+        "ranks": "1-4",
+        "to": "lcs_spring.playoffs.UB_SF"
+       },
+       {
+        "ranks": "5-6",
+        "to": "lcs_spring.playoffs.LB_QF"
+       },
+       {
+        "ranks": "7-8",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "start": "2026-05-23",
+      "end": "2026-06-14",
+      "teams": 6,
+      "bo": 5,
+      "bracket_template": "4U4L1D",
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "Mid-Season Invitational/2026"
+       },
+       {
+        "ranks": "1",
+        "to": "Esports World Cup/2026"
+       }
+      ]
+     }
+    ],
+    "location": "Los Angeles",
+    "fearless": true,
+    "international": [
+     {
+      "event": "Mid-Season Invitational/2026",
+      "slots": 2,
+      "rule": "Spring 前二"
+     }
+    ],
+    "notes": [
+     "Format 写 Playoffs \"May 23 - July 24\"，与 infobox edate 2026-06-14、MSI 6/28 开赛矛盾，待查"
+    ]
+   },
+   {
+    "id": "lcs_summer",
+    "name": "LCS Summer",
+    "source": "LCS/2026/Summer",
+    "start": "2026-07-25",
+    "end": "2026-10-04",
+    "teams": 8,
+    "phases": [
+     {
+      "type": "round_robin",
+      "name": "Regular Season",
+      "start": "2026-07-25",
+      "end": "2026-09-06",
+      "rounds": "single",
+      "bo": 3,
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "lcs_summer.playoffs.UB_SF"
+       },
+       {
+        "ranks": "3-6",
+        "to": "lcs_summer.playoffs.UB_QF"
+       },
+       {
+        "ranks": "7-8",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "start": "2026-09-12",
+      "end": "2026-10-04",
+      "teams": 6,
+      "bo": 5,
+      "bracket_template": "4L2DSU2L3D",
+      "side_pick": "常规赛第一在季后赛开始前选择 bracket 半区",
+      "advance": [
+       {
+        "ranks": "1-3",
+        "to": "World Championship/2026"
+       },
+       {
+        "ranks": "4-5",
+        "to": "Demacia Cup Global Invitational/2026"
+       }
+      ]
+     }
+    ],
+    "fearless": true,
+    "international": [
+     {
+      "event": "World Championship/2026",
+      "slots": 3,
+      "rule": "Summer 前三"
+     }
+    ]
+   }
+  ],
+  "LCP": [
+   {
+    "id": "lcp_s1",
+    "name": "LCP Split 1",
+    "source": "LCP/2026/Split 1",
+    "start": "2026-01-16",
+    "end": "2026-03-01",
+    "teams": 8,
+    "phases": [
+     {
+      "type": "round_robin",
+      "name": "Regular Season",
+      "rounds": "single",
+      "bo": 3,
+      "matches_per_team": 7,
+      "advance": [
+       {
+        "ranks": "1-6",
+        "to": "lcp_s1.playoffs"
+       },
+       {
+        "ranks": "7-8",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "variant": "hybrid",
+      "teams": 6,
+      "bo": 5,
+      "bracket_template": "4L2DSU2L1D",
+      "structure": "R1(2 场) → R2(2 场) → R3 Upper / R3 Lower → LB Final → Grand Final",
+      "seeding": "待查（哪几号种子进 R1/R2 未给）",
+      "advance": [
+       {
+        "ranks": "1",
+        "to": "First Stand Tournament/2026"
+       }
+      ]
+     }
+    ],
+    "location": "Taipei",
+    "fearless": true,
+    "prize": {
+     "amount": 80000,
+     "currency": "USD",
+     "by_place": {
+      "1": 26400,
+      "2": 16000,
+      "3": 11200,
+      "4": 8000
+     }
+    },
+    "international": [
+     {
+      "event": "First Stand Tournament/2026",
+      "slots": 1,
+      "rule": "Split 1 冠军"
+     }
+    ],
+    "championship_points": {
+     "regular_season": {
+      "1": 7,
+      "2": 6,
+      "3": 5,
+      "4": 4,
+      "5": 3,
+      "6": 2,
+      "7": 1,
+      "8": 0,
+      "per_game_win": 1,
+      "per_game_loss": -1
+     },
+     "playoffs": {
+      "1": 20,
+      "2": 15,
+      "3": 10,
+      "4": 5,
+      "5-6": 0
+     }
+    }
+   },
+   {
+    "id": "lcp_s2",
+    "name": "LCP Split 2",
+    "source": "LCP/2026/Split 2",
+    "start": "2026-04-04",
+    "end": "2026-06-07",
+    "teams": 8,
+    "phases": [
+     {
+      "type": "round_robin",
+      "name": "Regular Season",
+      "rounds": "single",
+      "bo": 3,
+      "matches_per_team": 7,
+      "advance": [
+       {
+        "ranks": "1-6",
+        "to": "lcp_s2.playoffs"
+       },
+       {
+        "ranks": "7-8",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "variant": "hybrid",
+      "teams": 6,
+      "bo": 5,
+      "bracket_template": "4L2DSU2L1D",
+      "seeding": "待查",
+      "advance": [
+       {
+        "ranks": "1",
+        "to": "Mid-Season Invitational/2026"
+       },
+       {
+        "ranks": "1",
+        "to": "Esports World Cup/2026"
+       }
+      ]
+     }
+    ],
+    "location": "Taipei",
+    "fearless": true,
+    "prize": {
+     "amount": 80000,
+     "currency": "USD"
+    },
+    "international": [
+     {
+      "event": "Mid-Season Invitational/2026",
+      "slots": 2,
+      "rule": "Split 2 冠军 + 积分（S1 常规赛/季后赛 + S2 常规赛/季后赛）最高者（冠军除外）；已发生：TSW 是冠军且积分第一 → DCG 递补"
+     }
+    ],
+    "championship_points": {
+     "regular_season": {
+      "1": 7,
+      "2": 6,
+      "3": 5,
+      "4": 4,
+      "5": 3,
+      "6": 2,
+      "7": 1,
+      "8": 0,
+      "per_game_win": 2,
+      "per_game_loss": -2
+     },
+     "playoffs": {
+      "1": 20,
+      "2": 15,
+      "3": 10,
+      "4": 5,
+      "5-6": 0
+     },
+     "reset_rule": "S1、S2 常规赛结束时小局得分部分为负的清零（名次分不清零）"
+    }
+   },
+   {
+    "id": "lcp_s3",
+    "name": "LCP Split 3",
+    "source": "LCP/2026/Split 3",
+    "start": "2026-07-24",
+    "end": "2026-08-30",
+    "teams": 8,
+    "phases": [
+     {
+      "type": "swiss",
+      "name": "Swiss Stage",
+      "start": "2026-07-25",
+      "end": "2026-08-09",
+      "wins_to_advance": 3,
+      "losses_to_eliminate": 3,
+      "bo": {
+       "R1": 3,
+       "R2": 3,
+       "R3_high(2-0)": 5,
+       "R3_mid(1-1)": 3,
+       "R3_low(0-2)": 5,
+       "R4": 5,
+       "R5(2-2)": 5,
+       "seeding_matches": 5
+      },
+      "rematch_rule": "除非别无选择，否则不重复交手",
+      "r4_structure": "High：两支 2-1；Middle：2-0 掉下的 2-1 vs 0-2 升上的 1-2；Low：两支 1-2",
+      "scenarios": [
+       {
+        "when": "Middle 中 2-1 队胜",
+        "detail": "其成 3-1 进种子赛；该 1-2 队淘汰；2-2 组剩 2 队，胜者 = 4 号种子。种子赛：两支 3-1 互打，负者 = 3 号种子；1-3 两队互打，胜者 +5 积分；3-0 vs 3-1 胜者：胜 1 号、负 2 号"
+       },
+       {
+        "when": "Middle 中 1-2 队胜",
+        "detail": "2-2 组 4 队，两场胜者 = 3/4 号种子；2-3 两队互打，胜者 +5 积分；3-0 vs 3-1：胜 1 号、负 2 号"
+       }
+      ],
+      "advance": [
+       {
+        "ranks": "3 胜的 4 队",
+        "to": "lcp_s3.playoffs"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "teams": 4,
+      "bo": 5,
+      "bracket_template": "4U2L1D",
+      "seeding": "种子 1-4 来自 Swiss 种子赛；配对待查",
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "World Championship/2026"
+       }
+      ]
+     }
+    ],
+    "location": "Taipei",
+    "fearless": true,
+    "prize": {
+     "amount": 80000,
+     "currency": "USD"
+    },
+    "international": [
+     {
+      "event": "World Championship/2026",
+      "slots": 3,
+      "rule": "Split 3 季后赛前二 + 全年积分最高（前二除外）"
+     }
+    ],
+    "championship_points": {
+     "swiss": {
+      "3-0": 50,
+      "3-1": 40,
+      "3-2": 30,
+      "2-3": "15(+5)",
+      "1-3": "3(+5)",
+      "0-3": 0
+     },
+     "playoffs": {
+      "1": "Worlds",
+      "2": "Worlds",
+      "3": 15,
+      "4": 0
+     },
+     "tiebreak": "同分看淘汰赛/季后赛名次"
+    }
+   },
+   {
+    "id": "lcp_points",
+    "name": "LCP Championship Points",
+    "source": "LCP/2026/Championship Points",
+    "start": null,
+    "end": "2026-08-30",
+    "teams": 8,
+    "phases": [
+     {
+      "type": "points_race",
+      "events": [
+       "lcp_s1",
+       "lcp_s2",
+       "lcp_s3"
+      ],
+      "advance": [
+       {
+        "ranks": "积分最高（S3 前二除外）",
+        "to": "World Championship/2026",
+        "seed": "LCP3"
+       },
+       {
+        "ranks": "次一档",
+        "to": "Demacia Cup Global Invitational/2026"
+       },
+       {
+        "ranks": "Guest 队中最低者",
+        "to": "LCP/2027/Promotion",
+        "path": "Free-for-All"
+       },
+       {
+        "ranks": "Guest 队中次低者（按母赛区规则）",
+        "to": "LCP/2027/Promotion",
+        "path": "Regional Merit"
+       }
+      ],
+      "notes": [
+       "GAM、CFO、SHG 为 Partner Team，不降级",
+       "Guest 降级细则见 LCP/2026/Promotion"
+      ]
+     }
+    ]
+   }
+  ],
+  "CBLOL": [
+   {
+    "id": "cblol_cup",
+    "name": "CBLOL Cup",
+    "source": "CBLOL/2026/Cup",
+    "start": "2026-01-17",
+    "end": "2026-03-01",
+    "teams": 8,
+    "phases": [
+     {
+      "type": "round_robin",
+      "name": "Regular Season",
+      "rounds": "single",
+      "bo": 1,
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "cblol_cup.playoffs.R2",
+        "note": "bye"
+       },
+       {
+        "ranks": "3-4",
+        "to": "cblol_cup.playoffs.R1"
+       },
+       {
+        "ranks": "5-6",
+        "to": "cblol_cup.play_in.UB"
+       },
+       {
+        "ranks": "7-8",
+        "to": "cblol_cup.play_in.LB"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Play-In",
+      "teams": 4,
+      "bracket_template": "2-1Q-U-2L1D-1Q",
+      "fearless": true,
+      "bo": {
+       "UB_final": 3,
+       "LB_semifinal": 3,
+       "LB_final": 5
+      },
+      "advance": [
+       {
+        "ranks": "UB final 胜者 + LB final 胜者",
+        "to": "cblol_cup.playoffs"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "teams": 6,
+      "bracket_template": "4L2DSU2L3D",
+      "fearless": true,
+      "bo": {
+       "UB_QF": 3,
+       "UB_SF": 3,
+       "other": 5
+      },
+      "seeding": "Play-In 两队落位待查",
+      "advance": [
+       {
+        "ranks": "1",
+        "to": "First Stand Tournament/2026"
+       },
+       {
+        "ranks": "2-3",
+        "to": "Americas Cup/2026"
+       }
+      ]
+     }
+    ],
+    "location": "São Paulo",
+    "prize": {
+     "amount": 20000,
+     "currency": "USD",
+     "by_place": {
+      "1": 10000,
+      "2": 6000,
+      "3": 4000
+     }
+    },
+    "international": [
+     {
+      "event": "First Stand Tournament/2026",
+      "slots": 1,
+      "rule": "Cup 冠军"
+     }
+    ]
+   },
+   {
+    "id": "cblol_s1",
+    "name": "CBLOL Split 1",
+    "source": "CBLOL/2026/Split 1",
+    "start": "2026-03-28",
+    "end": "2026-06-06",
+    "teams": 8,
+    "phases": [
+     {
+      "type": "round_robin",
+      "name": "Regular Season",
+      "rounds": "single",
+      "bo": 3,
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "cblol_s1.playoffs.R2"
+       },
+       {
+        "ranks": "3-6",
+        "to": "cblol_s1.playoffs.R1"
+       },
+       {
+        "ranks": "7-8",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "teams": 6,
+      "bo": 5,
+      "bracket_template": "4L2DSU2L3D",
+      "advance": [
+       {
+        "ranks": "1",
+        "to": "Mid-Season Invitational/2026"
+       },
+       {
+        "ranks": "1",
+        "to": "Esports World Cup/2026"
+       }
+      ]
+     }
+    ],
+    "location": "São Paulo",
+    "fearless": true,
+    "prize": {
+     "amount": 60000,
+     "currency": "USD",
+     "by_place": {
+      "1": 18000,
+      "2": 14000,
+      "3": 10000,
+      "4": 8000,
+      "5": 6000,
+      "6": 4000
+     }
+    },
+    "international": [
+     {
+      "event": "Mid-Season Invitational/2026",
+      "slots": 1,
+      "rule": "Split 1 冠军（唯一只有 1 个 MSI 名额的赛区）"
+     }
+    ]
+   },
+   {
+    "id": "cblol_s2",
+    "name": "CBLOL Split 2",
+    "source": "CBLOL/2026/Split 2",
+    "start": "2026-07-25",
+    "end": "2026-10-10",
+    "teams": 8,
+    "phases": [
+     {
+      "type": "round_robin",
+      "name": "Regular Season",
+      "rounds": "single",
+      "bo": 3,
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "cblol_s2.playoffs.R2"
+       },
+       {
+        "ranks": "3-6",
+        "to": "cblol_s2.playoffs.R1"
+       },
+       {
+        "ranks": "7-8",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "teams": 6,
+      "bo": 5,
+      "bracket_template": "4L2DSU2L3D",
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "World Championship/2026"
+       },
+       {
+        "ranks": "4",
+        "to": "Demacia Cup Global Invitational/2026"
+       }
+      ]
+     }
+    ],
+    "location": "São Paulo",
+    "fearless": "待查",
+    "prize": {
+     "amount": 60000,
+     "currency": "USD"
+    },
+    "international": [
+     {
+      "event": "World Championship/2026",
+      "slots": 2,
+      "rule": "Split 2 前二（第 2 名额为 2026-03-22 公布的追加名额）"
+     }
+    ]
+   }
+  ]
+ },
+ "tier2": {
+  "LCK CL": [
+   {
+    "id": "lckcl_kickoff",
+    "name": "LCK CL Kickoff",
+    "source": "LCK CL/2026/Kickoff",
+    "start": "2026-01-12",
+    "end": "2026-03-03",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "group_battle",
+      "start": "2026-01-12",
+      "end": "2026-01-29",
+      "bo": {
+       "week1-2": 3,
+       "super_week": 5
+      },
+      "group_scoring": {
+       "bo3_win": 1,
+       "bo5_win": 2
+      },
+      "advance": [
+       {
+        "ranks": "Winner Group 1-2",
+        "to": "playoffs.R2"
+       },
+       {
+        "ranks": "Loser Group 1",
+        "to": "playoffs.R1"
+       },
+       {
+        "ranks": "Winner Group 3-5 + Loser Group 2-4",
+        "to": "play_in",
+        "note": "最好的 2 队轮空到 Play-In R2"
+       },
+       {
+        "ranks": "Loser Group 5",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Play-In",
+      "start": "2026-02-02",
+      "end": "2026-02-04",
+      "bo": "待查"
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "start": "2026-02-09",
+      "end": "2026-03-03",
+      "bo": 5
+     }
+    ],
+    "location": "Seoul",
+    "prize": {
+     "amount": 10000000,
+     "currency": "KRW"
+    },
+    "fearless": true
+   },
+   {
+    "id": "lckcl_season",
+    "name": "LCK CL Season",
+    "source": "LCK CL/2026",
+    "start": "2026-03-30",
+    "end": "2026-09-15",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "round_robin",
+      "name": "Rounds 1-2",
+      "rounds": "double",
+      "bo": 3,
+      "end": "2026-05-29"
+     },
+     {
+      "type": "groups",
+      "name": "Rounds 3-4",
+      "end": "2026-08-21",
+      "groups": [
+       {
+        "name": "Challenge",
+        "size": 5
+       },
+       {
+        "name": "Trial",
+        "size": 5
+       }
+      ],
+      "inner": {
+       "type": "round_robin",
+       "rounds": "double",
+       "bo": 3
+      },
+      "carry_over": true,
+      "advance": [
+       {
+        "ranks": "Challenge 1-2",
+        "to": "playoffs.R2"
+       },
+       {
+        "ranks": "Challenge 3-4",
+        "to": "playoffs.R1"
+       },
+       {
+        "ranks": "Challenge 5 + Trial 1-3",
+        "to": "play_in"
+       },
+       {
+        "ranks": "Trial 4-5",
+        "to": "eliminated"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Play-In",
+      "teams": 4,
+      "bo": 5,
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "playoffs.R1"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "teams": 6,
+      "bo": 5,
+      "advance": [
+       {
+        "ranks": "奖金表第 1、2、4 行",
+        "to": "World Star Challengers Invitational/2026",
+        "note": "待查"
+       }
+      ]
+     }
+    ],
+    "prize": {
+     "amount": 87500000,
+     "currency": "KRW"
+    },
+    "fearless": "Play-In/Playoffs 子页面写 Fearless；主页面未写",
+    "promotion_relegation": "数据未提及"
+   }
+  ],
+  "LFL": [
+   {
+    "id": "lfl_promo",
+    "name": "LFL Promotion Tournament",
+    "source": "LFL/2026/Promotion Tournament",
+    "start": "2025-09-16",
+    "end": "2025-09-18",
+    "teams": 3,
+    "phases": [
+     {
+      "type": "double_elim",
+      "teams": 3,
+      "note": "LFL 2025 末名 + Div2 Summer 2025 冠军 + Div2 2025 积分最高",
+      "advance": [
+       {
+        "ranks": "1",
+        "to": "LFL/2026/Invitational"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "lfl_inv",
+    "name": "LFL Invitational",
+    "source": "LFL/2026/Invitational",
+    "start": "2026-01-21",
+    "end": "2026-03-06",
+    "teams": 20,
+    "phases": [
+     {
+      "type": "gsl_groups",
+      "groups": 5,
+      "group_size": 4,
+      "bo": 1,
+      "advance": [
+       {
+        "ranks": "每组前 2",
+        "to": "super_group"
+       }
+      ]
+     },
+     {
+      "type": "round_robin",
+      "name": "Super Group",
+      "teams": 10,
+      "rounds": "single",
+      "bo": 1,
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "playoffs.UB_final"
+       },
+       {
+        "ranks": "3-6",
+        "to": "playoffs.LB_SF"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "teams": 6,
+      "bo": 5,
+      "fearless": "hard_fearless（双方都不能再用已选英雄）",
+      "advance": [
+       {
+        "ranks": "1-3",
+        "to": "EMEA Masters/2026/Winter"
+       },
+       {
+        "ranks": "奖金表第 3-4 行",
+        "to": "LFL/2026/Spring + Summer",
+        "note": "待查"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "lfl_spring",
+    "name": "LFL Spring",
+    "source": "LFL/2026/Spring",
+    "start": "2026-04-08",
+    "end": "2026-06-03",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "round_robin",
+      "start": "2026-04-08",
+      "end": "2026-05-01",
+      "rounds": "single",
+      "bo": 1,
+      "advance": [
+       {
+        "ranks": "1-8",
+        "to": "playoffs"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "teams": 8,
+      "bo": {
+       "R1": 3,
+       "R2": 3,
+       "other": 5
+      },
+      "fearless": true,
+      "advance": [
+       {
+        "ranks": "1-2（format）/ 1-3（奖金表）",
+        "to": "EMEA Masters/2026/Spring",
+        "note": "矛盾，待查"
+       }
+      ]
+     }
+    ],
+    "championship_points": {
+     "1": 180,
+     "2": 135,
+     "3": 105,
+     "4": 75,
+     "5": 60,
+     "6": 45,
+     "7": 30,
+     "8": 18,
+     "9": 12,
+     "10": 0
+    }
+   },
+   {
+    "id": "lfl_summer",
+    "name": "LFL Summer",
+    "source": "LFL/2026/Summer",
+    "start": "2026-07-21",
+    "end": "2026-09-02",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "unknown",
+      "note": "Format 一节为空，待查",
+      "advance": [
+       {
+        "ranks": "奖金表 2-4 名标 qualified，第 1 名标 no",
+        "to": "EMEA Masters/2026/Summer"
+       }
+      ]
+     }
+    ],
+    "championship_points": {
+     "1": 240,
+     "2": 180,
+     "3": 140,
+     "4": 100,
+     "5": 80,
+     "6": 60,
+     "7": 40,
+     "8": 24,
+     "9": 16,
+     "10": 0
+    },
+    "promotion_relegation": "全年积分决定 LFL 2027 Winter 资格 / 2027 Promotion（含 Guest slot）；名次线待查"
+   }
+  ],
+  "NACL": [
+   {
+    "id": "nacl_presplit",
+    "name": "NACL Pre-Split Qualifier",
+    "source": "North American Challengers League/2026/Spring/Pre-Split Qualifier",
+    "start": "2026-02-21",
+    "end": "2026-03-08",
+    "teams": 56,
+    "phases": [
+     {
+      "type": "double_elim",
+      "advance": [
+       {
+        "ranks": "1",
+        "to": "nacl_spring",
+        "note": "替代退出的 Luminosity"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "nacl_spring",
+    "name": "NACL Spring",
+    "source": "North American Challengers League/2026/Spring",
+    "start": "2026-03-27",
+    "end": "2026-06-05",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "round_robin",
+      "rounds": "single",
+      "bo": 3,
+      "advance": [
+       {
+        "ranks": "1-6",
+        "to": "playoffs"
+       },
+       {
+        "ranks": "9-10",
+        "to": "nacl_summer_promo",
+        "note": "保级"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "teams": 6,
+      "bo": {
+       "R1": 3,
+       "R2": 3,
+       "other": 5
+      },
+      "seeding": "常规赛前 2 进第二轮；第 1 名选 bracket 半区"
+     }
+    ],
+    "prize": {
+     "amount": 40000,
+     "currency": "USD"
+    }
+   },
+   {
+    "id": "nacl_summer_promo",
+    "name": "NACL Summer Promotion Tournament",
+    "source": "North American Challengers League/2026/Summer/Promotion Tournament",
+    "start": "2026-06-17",
+    "end": "2026-06-20",
+    "teams": 6,
+    "phases": [
+     {
+      "type": "unknown",
+      "note": "Format 缺失，待查；Open Qualifier 5/16–5/30，41 队双败 Bo3，前 4 进 PT；PT 出 2 队进 Summer"
+     }
+    ]
+   },
+   {
+    "id": "nacl_summer",
+    "name": "NACL Summer",
+    "source": "North American Challengers League/2026/Summer",
+    "start": "2026-07-16",
+    "end": "2026-09-11",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "groups",
+      "name": "Regular Season",
+      "groups": 2,
+      "group_assignment": "Spring 前二（Conviction、CCG）选秀式挑队入组",
+      "inner": {
+       "type": "cross_group_round_robin",
+       "bo": 3,
+       "note": "只打对面组"
+      },
+      "advance": [
+       {
+        "ranks": "每组 1-3",
+        "to": "playoffs.R1"
+       },
+       {
+        "ranks": "每组 4-5",
+        "to": "last_chance_qualifier"
+       }
+      ]
+     },
+     {
+      "type": "bo_series",
+      "name": "Last-Chance Qualifier",
+      "bo": "5（主页）/ 3（子页），矛盾，待查",
+      "advance": [
+       {
+        "ranks": "胜者",
+        "to": "playoffs"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "teams": 8,
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "LCS/2027/Promotion Tournament"
+       },
+       {
+        "ranks": "1",
+        "to": "World Star Challengers Invitational/2026"
+       },
+       {
+        "ranks": "3-8",
+        "to": "NACL 2027 Spring"
+       },
+       {
+        "ranks": "9-10",
+        "to": "NACL 2027 Spring Promotion"
+       }
+      ]
+     }
+    ],
+    "prize": {
+     "amount": 40000,
+     "currency": "USD"
+    }
+   }
+  ],
+  "PCS": [
+   {
+    "id": "pcs_spring",
+    "name": "PCS Spring",
+    "source": "PCS/2026/Spring",
+    "start": "2026-04-27",
+    "end": "2026-06-03",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "swiss",
+      "name": "Open Qualifier",
+      "start": "2026-04-13",
+      "end": "2026-04-21",
+      "teams": 8,
+      "bo": 3,
+      "advance": [
+       {
+        "ranks": "1-4",
+        "to": "knockout"
+       },
+       {
+        "ranks": "5-6",
+        "to": "play_in"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Play-In + Knockout",
+      "bo": {
+       "default": 3,
+       "LB_final": 5,
+       "grand_final": 5
+      },
+      "note": "4 队直邀 + 6 队预选",
+      "advance": [
+       {
+        "ranks": "1",
+        "to": "Asia Masters/2026"
+       },
+       {
+        "ranks": "2",
+        "to": "Asia Masters/2026 Qualifier"
+       }
+      ]
+     }
+    ],
+    "fearless": true
+   },
+   {
+    "id": "pcs_summer",
+    "name": "PCS Summer",
+    "source": "PCS/2026/Summer",
+    "start": "2026-08-03",
+    "end": "2026-09-06",
+    "teams": 8,
+    "phases": [
+     {
+      "type": "double_elim",
+      "name": "Open Qualifier",
+      "start": "2026-07-20",
+      "end": "2026-07-22",
+      "teams": 4,
+      "bo": 3,
+      "advance": [
+       {
+        "ranks": "全部 4 队",
+        "to": "正赛（按名次定种子）"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "bo": {
+       "default": 3,
+       "LB_SF": 5,
+       "LB_final": 5,
+       "grand_final": 5
+      },
+      "advance": [
+       {
+        "ranks": "1（format）",
+        "to": "LCP/2027/Promotion",
+        "note": "CFO Academy / GZ Academy 不可参加升级赛，由下一名递补；奖金表实为 1st→WSCI、2nd→LCP Promotion"
+       }
+      ]
+     }
+    ],
+    "fearless": true
+   }
+  ],
+  "Circuito Desafiante": [
+   {
+    "id": "cd_s1",
+    "name": "CD Split 1",
+    "source": "Circuito Desafiante/2026/Split 1",
+    "start": "2026-03-30",
+    "end": "2026-06-07",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "round_robin",
+      "start": "2026-03-30",
+      "end": "2026-04-22",
+      "rounds": "single",
+      "bo": 1,
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "playoffs.R2"
+       },
+       {
+        "ranks": "3-6",
+        "to": "playoffs.R1"
+       },
+       {
+        "ranks": "7-8",
+        "to": "play_in.UB"
+       },
+       {
+        "ranks": "9-10",
+        "to": "play_in.LB"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Play-In",
+      "start": "2026-04-27",
+      "end": "2026-04-28",
+      "teams": 4,
+      "bo": {
+       "LB_final": 5,
+       "other": 3
+      },
+      "advance": [
+       {
+        "ranks": "UB 胜者",
+        "to": "playoffs",
+        "seed": 7
+       },
+       {
+        "ranks": "LB 胜者",
+        "to": "playoffs",
+        "seed": 8
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "start": "2026-05-04",
+      "end": "2026-06-07",
+      "teams": 8,
+      "bo": {
+       "UB_QF": 3,
+       "UB_SF": 3,
+       "other": 5
+      },
+      "advance": [
+       {
+        "ranks": "1-9",
+        "to": "cd_s2"
+       },
+       {
+        "ranks": "10",
+        "to": "CD Split 2 Promotion Tournament"
+       }
+      ]
+     }
+    ],
+    "fearless": "Play-In/Playoffs 是；常规赛未写"
+   },
+   {
+    "id": "cd_s2",
+    "name": "CD Split 2",
+    "source": "Circuito Desafiante/2026/Split 2",
+    "start": "2026-07-20",
+    "end": "2026-09-14",
+    "teams": 10,
+    "phases": [
+     {
+      "type": "round_robin",
+      "start": "2026-07-20",
+      "end": "2026-08-12",
+      "rounds": "single",
+      "bo": 3,
+      "advance": [
+       {
+        "ranks": "1-6",
+        "to": "playoffs",
+        "note": "前二是否轮空未写，待查"
+       },
+       {
+        "ranks": "7-8",
+        "to": "play_in.UB"
+       },
+       {
+        "ranks": "9-10",
+        "to": "play_in.LB"
+       }
+      ]
+     },
+     {
+      "type": "double_elim",
+      "name": "Play-In",
+      "start": "2026-08-11",
+      "end": "2026-08-12",
+      "bo": {
+       "LB_final": 5,
+       "other": 3
+      }
+     },
+     {
+      "type": "double_elim",
+      "name": "Playoffs",
+      "start": "2026-08-17",
+      "end": "2026-09-14",
+      "bo": {
+       "UB_QF": 3,
+       "UB_SF": 3,
+       "other": 5
+      },
+      "advance": [
+       {
+        "ranks": "1-2",
+        "to": "CBLOL/2027/Promotion Tournament"
+       },
+       {
+        "ranks": "3",
+        "to": "WSCI/2026"
+       },
+       {
+        "ranks": "3-8",
+        "to": "CD 2027 Split 1"
+       },
+       {
+        "ranks": "9",
+        "to": "CD 2027 Split 1 Qualifier"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "cd_promo",
+    "name": "CD Promotion Tournaments",
+    "source": "Circuito Desafiante/2026/Split 2/Promotion Tournament",
+    "start": "2026-06-02",
+    "end": "2026-06-09",
+    "teams": 4,
+    "phases": [
+     {
+      "type": "unknown",
+      "bo": 3,
+      "note": "4 队，全部 Bo3，1 队晋级；Split 1 版本 2025-09-15~19；Open Qualifier ≤64 队双败 Fearless，LB 决赛与总决赛 Bo5",
+      "advance": [
+       {
+        "ranks": "1",
+        "to": "下一赛段 CD"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "international": {
+  "First Stand Tournament/2026": {
+   "source": "First Stand Tournament/2026",
+   "start": "2026-03-16",
+   "end": "2026-03-22",
+   "location": "São Paulo (Riot Games Arena)",
+   "teams": 8,
+   "prize": {
+    "amount": 1000000,
+    "currency": "USD",
+    "split_pct": {
+     "1": 25,
+     "2": 15,
+     "3-4": 12.5,
+     "5-6": 10,
+     "7-8": 7.5
+    }
+   },
+   "patch": "26.5",
+   "fearless": true,
+   "slots": {
+    "LCK": {
+     "n": 2,
+     "from": "lck_cup 1-2"
+    },
+    "LPL": {
+     "n": 2,
+     "from": "lpl_s1 1-2"
+    },
+    "LEC": {
+     "n": 1,
+     "from": "lec_versus 1"
+    },
+    "LCS": {
+     "n": 1,
+     "from": "lcs_lockin 1"
+    },
+    "LCP": {
+     "n": 1,
+     "from": "lcp_s1 1"
+    },
+    "CBLOL": {
+     "n": 1,
+     "from": "cblol_cup 1"
+    }
+   },
+   "phases": [
+    {
+     "type": "gsl_groups",
+     "name": "Group Stage",
+     "start": "2026-03-16",
+     "end": "2026-03-20",
+     "groups": 2,
+     "group_size": 4,
+     "bo": 5,
+     "draw": {
+      "pool1": [
+       "LCK1",
+       "LPL1"
+      ],
+      "pool2": [
+       "LCP1",
+       "LEC1",
+       "LCS1",
+       "CBLOL1"
+      ],
+      "pool3": [
+       "LCK2",
+       "LPL2"
+      ],
+      "round1": "Pool1 vs Pool3；Pool2 vs Pool2",
+      "constraint": "每组同赛区最多 1 队",
+      "basis": "2026 Split 1 赛区成绩"
+     },
+     "advance": [
+      {
+       "ranks": "每组前 2",
+       "to": "knockout"
+      },
+      {
+       "ranks": "每组后 2",
+       "to": "eliminated"
+      }
+     ]
+    },
+    {
+     "type": "single_elim",
+     "name": "Knockout Stage",
+     "start": "2026-03-21",
+     "end": "2026-03-22",
+     "teams": 4,
+     "bo": 5,
+     "seeding": "待查",
+     "advance": [
+      {
+       "ranks": "冠军所属赛区",
+       "to": "Mid-Season Invitational/2026",
+       "effect": "该赛区获 MSI 第二个 Bracket Stage 直通名额（已发生：LPL）"
+      }
+     ]
+    }
+   ]
+  },
+  "Mid-Season Invitational/2026": {
+   "source": "Mid-Season Invitational/2026",
+   "start": "2026-06-28",
+   "end": "2026-07-12",
+   "location": "Daejeon (Daejeon Convention Center II)",
+   "teams": 11,
+   "prize": {
+    "amount": 2000000,
+    "currency": "USD",
+    "split_pct": {
+     "1": 25,
+     "2": 15,
+     "3": 12,
+     "4": 10,
+     "5-6": 8,
+     "7-8": 5.5,
+     "9": 4.5,
+     "10": 3.5,
+     "11": 3
+    }
+   },
+   "patch": "26.13",
+   "fearless": true,
+   "slots": {
+    "LPL": {
+     "n": 2,
+     "from": "lpl_s2 1-2",
+     "bracket_byes": 2
+    },
+    "LCK": {
+     "n": 2,
+     "from": "lck_rtmsi 1-2",
+     "bracket_byes": 1
+    },
+    "LEC": {
+     "n": 2,
+     "from": "lec_spring 1-2",
+     "bracket_byes": 1
+    },
+    "LCS": {
+     "n": 2,
+     "from": "lcs_spring 1-2",
+     "bracket_byes": 1
+    },
+    "LCP": {
+     "n": 2,
+     "from": "lcp_s2 冠军 + 积分最高（冠军除外）",
+     "bracket_byes": 1
+    },
+    "CBLOL": {
+     "n": 1,
+     "from": "cblol_s1 1",
+     "bracket_byes": 1
+    }
+   },
+   "phases": [
+    {
+     "type": "double_elim",
+     "name": "Play-In",
+     "start": "2026-06-28",
+     "end": "2026-07-01",
+     "teams": 4,
+     "bo": 5,
+     "participants": "LCK2、LEC2、LCS2、LCP2",
+     "seeding": "按 FST 2026 成绩排种子（细节待查）",
+     "advance": [
+      {
+       "ranks": "1",
+       "to": "bracket_stage"
+      }
+     ]
+    },
+    {
+     "type": "double_elim",
+     "name": "Bracket Stage",
+     "start": "2026-07-03",
+     "end": "2026-07-12",
+     "teams": 8,
+     "bo": 5,
+     "draw": {
+      "pool1": [
+       "LPL1",
+       "LEC1"
+      ],
+      "pool2": [
+       "LCK1",
+       "LCS1"
+      ],
+      "pool3": [
+       "LCP1",
+       "CBLOL1"
+      ],
+      "pool4": [
+       "LPL2",
+       "Play-In winner"
+      ],
+      "round1": "Pool1 vs Pool4；Pool2 vs Pool3",
+      "constraint": "同赛区在胜者组每个半区最多 1 队",
+      "basis": "FST 2026 成绩"
+     },
+     "advance": [
+      {
+       "ranks": "1",
+       "to": "World Championship/2026",
+       "condition": "须进入本赛区 Split 3/夏季季后赛"
+      },
+      {
+       "ranks": "2 所属赛区",
+       "to": "World Championship/2026",
+       "effect": "该赛区 Worlds 第 4 名额"
+      }
+     ]
+    }
+   ]
+  },
+  "World Championship/2026": {
+   "source": "World Championship/2026",
+   "start": "2026-10-15",
+   "end": "2026-11-14",
+   "location": "Play-In: Los Angeles (Riot Games Arena)；Swiss & Knockout: Allen, TX (Credit Union of Texas Event Center)；Final: NYC (Barclays Center)",
+   "teams": 19,
+   "prize": {
+    "amount": 5000000,
+    "currency": "USD",
+    "split_pct": {
+     "1": 20,
+     "2": 16,
+     "3-4": 8,
+     "5-8": 6,
+     "9-11": 3.5,
+     "12-14": 2.5,
+     "15-16": 1.8,
+     "17": 1,
+     "18": 0.8,
+     "19": 0.6
+    }
+   },
+   "patch": "26.20",
+   "fearless": true,
+   "slots": {
+    "LCK": {
+     "n": 4,
+     "from": "lck_playoffs 1-3 + MSI 冠军（HLE）/第 4 名递补"
+    },
+    "LPL": {
+     "n": 4,
+     "from": "S3 冠军 + 积分第一 + Regional Finals 2 队（第 4 名额 = MSI 亚军赛区）"
+    },
+    "LEC": {
+     "n": 3,
+     "from": "lec_summer 1-3"
+    },
+    "LCS": {
+     "n": 3,
+     "from": "lcs_summer 1-3"
+    },
+    "LCP": {
+     "n": 3,
+     "from": "lcp_s3 1-2 + 积分"
+    },
+    "CBLOL": {
+     "n": 2,
+     "from": "cblol_s2 1-2"
+    }
+   },
+   "play_in_seeds_draft": [
+    "LCS3",
+    "LEC3",
+    "LCP3",
+    "CBLOL2"
+   ],
+   "play_in_seeds_note": "仅见于页面 HTML 注释（草稿），待查",
+   "phases": [
+    {
+     "type": "double_elim",
+     "name": "Play-In",
+     "start": "2026-10-15",
+     "end": "2026-10-18",
+     "teams": 4,
+     "bo": 5,
+     "first_selection": "UB/LB 场次按抽签顺序；Qualifying Match（最后决定晋级的一场）改为 Right of Dual Selection，归胜者组决赛胜者",
+     "advance": [
+      {
+       "ranks": "1",
+       "to": "swiss"
+      }
+     ]
+    },
+    {
+     "type": "swiss",
+     "name": "Swiss Stage",
+     "dates": [
+      "2026-10-23..26",
+      "2026-10-28..31"
+     ],
+     "teams": 16,
+     "rounds": 5,
+     "wins_to_advance": 3,
+     "losses_to_eliminate": 3,
+     "bo": {
+      "advancement_or_elimination": 3,
+      "other": 1
+     },
+     "first_selection": "赛区种子高者；同种子按抽签顺序",
+     "draw_draft": {
+      "round1_pools": {
+       "pool1": [
+        "LCK1",
+        "LPL1",
+        "LCS1",
+        "LEC1"
+       ],
+       "pool2": [
+        "LCP1",
+        "CBLOL1",
+        "LCK2",
+        "LPL2"
+       ],
+       "pool3": [
+        "LCS2",
+        "LEC2",
+        "LCK3",
+        "LPL3"
+       ],
+       "pool4": [
+        "LCP2",
+        "LCK4",
+        "LPL4",
+        "Play-In winner"
+       ]
+      },
+      "round1": "Pool1 vs Pool4；Pool2 vs Pool3；R1 不打同赛区",
+      "later_rounds": "R2-R4 后按同战绩抽签",
+      "no_rematch": true,
+      "status": "HTML 注释草稿，待查"
+     },
+     "advance": [
+      {
+       "ranks": "3 胜",
+       "to": "knockout"
+      },
+      {
+       "ranks": "3 负",
+       "to": "eliminated"
+      }
+     ]
+    },
+    {
+     "type": "single_elim",
+     "name": "Knockout Stage",
+     "dates": [
+      "2026-11-03..08",
+      "2026-11-14"
+     ],
+     "teams": 8,
+     "bo": 5,
+     "first_selection": "QF：Swiss 战绩好者，相同按抽签顺序；SF/F：掷硬币",
+     "draw_draft": "QF 台上抽签：3-0 队分处两个半区，3-0 对 3-2，其余互配（HTML 注释草稿，待查）"
+    }
+   ]
+  }
+ },
+ "other_events_fed": {
+  "Esports World Cup/2026": "LPL S2 冠军、LCK Road to MSI 冠军、LEC Spring 冠军、LCS Spring 冠军、LCP S2 冠军、CBLOL S1 冠军；赛事本身不在数据中",
+  "Demacia Cup Global Invitational/2026": "LPL（Regional Finals 2 队 + 积分）、LCK 季后赛 5-7、LEC Summer 4-5、LCS Summer 4-5、LCP 积分、CBLOL S2 第 4；赛事本身不在数据中",
+  "Americas Cup/2026": "LCS Lock-In 2-3、CBLOL Cup 2-3；赛事本身不在数据中",
+  "World Star Challengers Invitational/2026": "LCK CL、NACL Summer 冠军、PCS Summer 冠军、CD Split 2 第 3；赛事本身不在数据中",
+  "EMEA Masters/2026": "LFL（Winter/Spring/Summer 三届）；赛事本身不在数据中",
+  "Asia Masters/2026": "PCS Spring 第 1（第 2 → Qualifier）；赛事本身不在数据中"
+ }
+}

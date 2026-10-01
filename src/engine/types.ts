@@ -812,6 +812,8 @@ export interface Fixture {
   pending?: boolean
   /** scrims skip the veto: the map and format are agreed in advance */
   scrim?: { map: string; format: 'first13' | 'full24' }
+  /** the phase of a programmed stage this game belongs to (engine/formats.ts) */
+  ph?: string
 }
 
 export interface StandingRow {
@@ -842,7 +844,15 @@ export interface Competition {
   bracketStarted?: boolean
   /** how the knockout is shaped — see engine/bracket.ts; absent means the
    *  old single elimination, which older saves and 次级联赛 still run */
-  format?: 'single' | 'double' | 'masters' | 'champions' | 'triple'
+  format?: 'single' | 'double' | 'masters' | 'champions' | 'triple' | 'program'
+  /** a stage run as a program of phases (engine/formats.ts): where it has got to */
+  prog?: import('./formats').ProgState
+  /** which program (engine/programs2026.ts) — looked up, not saved */
+  program?: string
+  /** a qualifier, not a title: no honours, no prize, no board verdict */
+  minor?: boolean
+  /** how many a qualifier sends on */
+  qualify?: number
   /** the playoff's seed order, once known */
   seeds?: string[]
   /** a 国际赛' eight Swiss-round teams, seeded */
@@ -919,7 +929,9 @@ export interface GameState {
   /** the world's caller data this save has been brought up to — see syncCallersWithWorld */
   callerSync?: string
   /** which rulebook this career plays by — see engine/ruleset.ts; absent is vct-2025 */
-  rulesetId?: 'vct-2025' | 'vct-2026' | 'vct-2023'
+  rulesetId?: 'vct-2025' | 'vct-2026' | 'vct-2023' | 'lol-2026'
+  /** last year's ranking of each tier-one league, best first — next year's first-stage seeding */
+  prevRank?: Partial<Record<Region, string[]>>
   /** every draw held in this career — see engine/draw.ts */
   draws?: import('./draw').DrawEvent[]
   /** a draw the manager has to hold — reveal or skip, or pick — before the clock moves */
