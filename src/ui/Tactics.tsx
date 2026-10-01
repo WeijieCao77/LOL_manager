@@ -10,7 +10,10 @@
  */
 import { useGame } from './ctx'
 import { Bar, Face, Panel, RoleTag } from './common'
-import { buildLineup, poolFor, selectLineup, sheetFor } from '../engine/match'
+import { buildLineup, poolFor, selectLineup, sheetFor, tacticsFor } from '../engine/match'
+import { PREP_FLOOR, READ_FULL, heatLabel, readOf } from '../engine/scouting'
+import { DIFFICULTY, difficultyOf, spec } from '../engine/difficulty'
+import { COMP_STYLE_CN } from '../engine/comp'
 import { familiarity } from '../engine/comp'
 import { MAPS, mapCn } from '../engine/content'
 import { mapReleased } from '../engine/eras'
@@ -39,6 +42,8 @@ export default function Tactics() {
         </p>
         <MapPlan maps={pool} mode="plan" />
       </Panel>
+
+      <ScoutPanel />
 
       <div className="grid c2">
         <Panel title="通用战术 · 没单独设置的图用这个">
@@ -136,5 +141,57 @@ export default function Tactics() {
         </p>
       </Panel>
     </>
+  )
+}
+
+/**
+ * 对手针对: how closely the league is watching, and how much of the way we play
+ * it has already read. See engine/scouting.ts for the numbers.
+ */
+function ScoutPanel() {
+  const { game } = useGame()
+  const heat = Math.round(game.scout?.heat ?? 0)
+  const map = poolFor(game)[0]
+  const nem = game.nemesis && game.nemesis.year === game.year ? game.teams[game.nemesis.teamId] : undefined
+  const max = spec(game).prepMax
+  const sheet = sheetFor(game, game.myTeam, map)
+  const r = readOf(game, map, sheet.agents, tacticsFor(game, game.myTeam, map))
+  const prep = max * (heat / 100) * (PREP_FLOOR + (1 - PREP_FLOOR) * r.read)
+  const seen = game.scout?.reads[map]
+  return (
+    <Panel
+      title="对手针对"
+      actions={<span className="tiny faint">难度：{DIFFICULTY[difficultyOf(game)].label}</span>}
+    >
+      <div className="row" style={{ gap: 10, alignItems: 'center' }}>
+        <span className="small muted" style={{ whiteSpace: 'nowrap' }}>针对度</span>
+        <Bar value={heat} color={heat >= 75 ? 'var(--accent)' : heat >= 45 ? 'var(--warn)' : 'var(--win)'} />
+        <span className="mono small">{heat}</span>
+        <b className="small" style={{ whiteSpace: 'nowrap' }}>{heatLabel(heat)}</b>
+      </div>
+      {nem && (
+        <p className="small" style={{ margin: '8px 0 0' }}>
+          ⚔️ 宿敌 <b>{nem.name}</b>：对我们的准备多四成，转会窗口每周都在买人。
+        </p>
+      )}
+      {heat > 0 && (
+        <div className="row wrap" style={{ gap: 6, marginTop: 10 }}>
+          <span className={`chip small${r.read >= 0.6 ? ' neg' : ''}`} title="按预案这套阵容的打法和现在的滑杆算">
+            被摸透 <b className="mono">{Math.round(r.read * 100)}%</b>
+          </span>
+          {seen && (
+            <span className="chip small muted">
+              他们看过的：{COMP_STYLE_CN[seen.key]?.label ?? seen.key} 连续 {Math.min(seen.nSheet, READ_FULL)} 局
+            </span>
+          )}
+          <span className="chip small">对手额外备战 <b className="mono">+{prep.toFixed(1)}</b></span>
+        </div>
+      )}
+      <p className="tiny muted" style={{ margin: '10px 0 0' }}>
+        赢得越多，对手越研究你。他们研究的是你的<b>打法</b>（这局最后拿到的英雄合起来是前期、团战、运营还是均衡）和<b>四条滑杆</b>：
+        同一种打法连打 {READ_FULL} 局就被摸透；换一种打法，或把一条滑杆拨动 10 以上，他们的准备就白做一部分。
+        赢一个系列赛针对度 +3，输一个 −8，拿冠军涨得更多。训练赛不算。
+      </p>
+    </Panel>
   )
 }

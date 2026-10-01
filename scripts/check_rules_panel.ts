@@ -19,6 +19,9 @@ import { TRUST_START } from '../src/engine/trust'
 import { SPONSOR_MAX, SPONSOR_SLOT_TIERS } from '../src/engine/commercial'
 import { TITLE_REP_WORTH } from '../src/engine/season'
 import { KEPT_GAIN, LISTED_COST, LOYALTY_NEW, RENEWAL_GAIN, TITLE_LOYALTY } from '../src/engine/loyalty'
+import { HEAT_LOSS, HEAT_TITLE, HEAT_WIN, HEAT_WINTER, NEMESIS_HEAT, NEMESIS_PREP, PREP_FLOOR, READ_FULL, DIAL_SAME } from '../src/engine/scouting'
+import { DIFFICULTY } from '../src/engine/difficulty'
+import { TRUSTED } from '../src/engine/season'
 
 const panel = readFileSync(new URL('../src/ui/Rules.tsx', import.meta.url), 'utf8')
 
@@ -56,6 +59,25 @@ says(`+${KEPT_GAIN}。前提是他自己没想走`, '挡掉报价给的归属感
 // season.ts: what a trophy is worth to your own name
 says(`赛区冠军 +${TITLE_REP_WORTH.regional}`, '赛区冠军的声望')
 says(`国际冠军 +${TITLE_REP_WORTH.international}`, '国际冠军的声望')
+
+// scouting.ts / difficulty.ts: 对手针对 and the three levels
+const D = DIFFICULTY
+says(`上限：普通 ${D.normal.prepMax}，困难 ${D.hard.prepMax}，职业 ${D.pro.prepMax}`, '三档备战上限')
+says(`(${Math.round(PREP_FLOOR * 100)}% + ${Math.round((1 - PREP_FLOOR) * 100)}% × 被摸透)`, '备战的保底和被摸透部分')
+says(`针对度 +${HEAT_WIN}`, '赢一个系列赛的针对度')
+says(`针对度 −${HEAT_LOSS}`, '输一个系列赛的针对度')
+says(`赛区冠军 +${HEAT_TITLE.regional}，国际赛冠军 +${HEAT_TITLE.international}`, '冠军的针对度')
+says(`针对度剩${HEAT_WINTER === 0.6 ? '六成' : HEAT_WINTER}`, '过冬剩下的针对度')
+says(`连打 ${READ_FULL} 局就被摸透`, '几局被摸透')
+says(`动 ${DIAL_SAME} 以上`, '滑杆算「变了」的幅度')
+says(`针对度 ≥${NEMESIS_HEAT}`, '宿敌的门槛')
+says(`×${NEMESIS_PREP}`, '宿敌的备战倍数')
+says(`普通难度在 ${D.normal.aiFamiliarity}，困难 ${D.hard.aiFamiliarity}，职业 ${D.pro.aiFamiliarity}`, 'AI 的打法熟练度')
+says(`超过 ${D.hard.topKnee} / ${D.pro.topKnee} 的部分只算一半 / 四成`, '困难和职业的顶端收益')
+says(`普通难度超过 ${D.normal.topKnee} 的部分算六成`, '普通的顶端收益')
+if (D.hard.topSlope !== 0.5 || D.pro.topSlope !== 0.4 || D.normal.topSlope !== 0.6) { bad++; console.log('FAIL 顶端收益的比例改了，面板里的「一半 / 四成 / 六成」也要改') }
+says(`每周不满 +${D.normal.payGrievance}（困难 +${D.hard.payGrievance}，职业 +${D.pro.payGrievance}）`, '加薪没兑现的每周不满')
+says(`信任度在 ${TRUSTED}% 以上`, '董事会不因连败下课的门槛')
 
 // the panel must not quietly become a wall of unsourced claims: every section
 // has to say what the thing DOES, not only what moves it

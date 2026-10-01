@@ -16,6 +16,8 @@ import { NEUTRAL, squadHarmony } from './bonds'
 import { isCoolingOff } from './clock'
 import { analystEdge } from './staff'
 import { skillMod } from './manager'
+import { flattenMacro, flattenTop } from './difficulty'
+import { prepEdge } from './scouting'
 import type {
   EdgeBreakdown, GameState, MapLine, MapScore, MatchResult, Player, Role, RoundLog, StageKey, Team,
 } from './types'
@@ -258,6 +260,8 @@ export function buildLineup(
    * the previews that only want to know what a club would field unopposed.
    */
   drafted?: { mine: Record<string, string>; theirs: Record<string, string> },
+  /** a game that counts — scrims teach nobody our tape (engine/scouting.ts) */
+  official = false,
 ): Lineup {
   const team = state.teams[teamId]
   const players = selectLineup(state, teamId)
@@ -306,6 +310,8 @@ export function buildLineup(
     wsum += w
   })
   base = wsum > 0 ? base / wsum : 55
+  // 困难 / 职业: past the knee a point of rating buys less (engine/difficulty.ts)
+  base = flattenTop(state, base)
 
   const avg = (k: keyof Player['attrs']) =>
     players.length ? players.reduce((s, p) => s + p.attrs[k], 0) / players.length : 55
@@ -323,10 +329,13 @@ export function buildLineup(
   const captain = callerOf(state, team.id, players)
   const macroOrder = players.slice().sort((x, y) =>
     Number(y.id === captain?.id) - Number(x.id === captain?.id) || y.attrs.macro - x.attrs.macro)
-  const teamMacro = macroOrder.length
+  // 运营 is an ability like the rest, so the difficulty's flatter top reaches it
+  // too — otherwise a five trained to 97 walks round the knee on the macro term.
+  // Its own knee, though: see DifficultySpec.macroKnee
+  const teamMacro = flattenMacro(state, macroOrder.length
     ? macroOrder.reduce((sum, pl, i) => sum + pl.attrs.macro * (MACRO_SHARE[i] ?? 0.1), 0) /
       macroOrder.reduce((sum, _pl, i) => sum + (MACRO_SHARE[i] ?? 0.1), 0)
-    : 55
+    : 55)
   const iglBonus = (teamMacro - 62) * MACRO_LATE
   // attributes say how well they can play together; bonds say whether they are
   const rapport = squadHarmony(state, team.id)
@@ -368,8 +377,12 @@ export function buildLineup(
   const missing = Math.max(0, 5 - players.length)
   const shortHanded = -missing * 18
 
+  // 对手针对: a contender who has studied our tape
+  const prep = oppId && oppSheet
+    ? prepEdge(state, teamId, oppId, map, oppSheet.agents, tacticsFor(state, oppId, map), official)
+    : 0
   const common = base + chemBonus + coachBonus + comp + mapPref + utilBonus + shortHanded +
-    famEdge + se.total
+    famEdge + se.total + prep
   const atk = common + te.tacticsAtk + styleAtk + (avg('laning') - 65) * 0.05
   const def = common + te.tacticsDef + styleDef + (avg('awareness') - 65) * 0.05 + iglBonus
 
@@ -386,6 +399,7 @@ export function buildLineup(
     style: (te.styleAtk + te.styleDef) / 2,
     matchup: (te.matchupAtk + te.matchupDef) / 2,
     familiarity: famEdge,
+    ...(prep ? { prep } : {}),
     version: se.version, mapFit: se.map, counter: se.counter,
     atk, def,
   }
@@ -949,6 +963,8 @@ export class MatchSim {
   private lastDraft: DraftResult | null = null
 
   readonly format: 'first13' | 'full24'
+  /** an agreed map with no veto is a scrim */
+  readonly scrim: boolean
 
   constructor(
     state: GameState, aId: string, bId: string, bo: 1 | 3 | 5, rng: Rng,
@@ -962,6 +978,7 @@ export class MatchSim {
     this.rng = rng
     this.need = Math.ceil(bo / 2)
     this.format = agreed?.format ?? 'first13'
+    this.scrim = !!agreed
     if (agreed) {
       // a scrim has no veto — both sides agreed the map when booking it
       this.maps = [agreed.map]
@@ -1010,8 +1027,8 @@ export class MatchSim {
     const picksA = blue === 'a' ? draft.blue : draft.red
     const picksB = blue === 'a' ? draft.red : draft.blue
     for (const c of [...Object.values(picksA), ...Object.values(picksB)]) this.usedChamps.add(c)
-    const A = buildLineup(this.state, this.aId, m, this.bId, { mine: picksA, theirs: picksB })
-    const B = buildLineup(this.state, this.bId, m, this.aId, { mine: picksB, theirs: picksA })
+    const A = buildLineup(this.state, this.aId, m, this.bId, { mine: picksA, theirs: picksB }, !this.scrim)
+    const B = buildLineup(this.state, this.bId, m, this.aId, { mine: picksB, theirs: picksA }, !this.scrim)
     for (const p of A.players) this.seenA.add(p.id)
     for (const p of B.players) this.seenB.add(p.id)
     this.current = new MapSim(m, A, B, this.rng, this.format, blue)

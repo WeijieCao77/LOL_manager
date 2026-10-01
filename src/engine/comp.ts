@@ -29,6 +29,7 @@
  */
 import { championOf } from './content'
 import type { GameState, Tactics } from './types'
+import { spec } from './difficulty'
 
 /** internal keys kept from the engine's origin: rush = 前期, control = 团战, hold = 运营 */
 export type CompStyle = 'rush' | 'hold' | 'control' | 'standard'
@@ -231,7 +232,8 @@ export const compKey = (agents: Record<string, string>): string => compStyle(Obj
 export function familiarity(
   state: GameState, teamId: string, _map: string, agents: Record<string, string>,
 ): number {
-  if (teamId !== state.myTeam) return FAM_BASE
+  // an AI club's usual style is practised; how practised is the difficulty's
+  if (teamId !== state.myTeam) return spec(state).aiFamiliarity
   return state.compPro?.[compKey(agents)]?.value ?? FAM_BASE
 }
 
