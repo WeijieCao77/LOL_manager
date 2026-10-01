@@ -112,11 +112,14 @@ export default function Transfers() {
           )}
         </Panel>
         <Panel><div className="stat"><span className="k">阵容人数</span><span className="v">{squad.length}</span></div></Panel>
-        {game.importLimit && (
+        {game.importLimit ? (
           <Panel><div className="stat"><span className="k">外援名额</span>
             <span className="v" style={importCount(game, game.myTeam) >= IMPORT_MAX ? { color: 'var(--warn)' } : undefined}>
               {importCount(game, game.myTeam)}/{IMPORT_MAX}
             </span></div></Panel>
+        ) : (
+          <Panel><div className="stat" title="真实规则：首发五人里最多两名非本赛区居民，第三名外援只能坐替补"><span className="k">外援（首发最多 2）</span>
+            <span className="v">{importCount(game, game.myTeam)} 人</span></div></Panel>
         )}
         <Panel><div className="stat"><span className="k">赛季薪资</span><span className="v">{money(bill)}</span></div></Panel>
         <Panel>
@@ -556,8 +559,8 @@ export default function Transfers() {
                         队长
                       </span>
                     )}
-                    {game.importLimit && isImport(p, me) && (
-                      <span className="tag warn" style={{ marginLeft: 6 }} title="来自其他赛区，占用外援名额">外援</span>
+                    {isImport(p, me) && (
+                      <span className="tag warn" style={{ marginLeft: 6 }} title={game.importLimit ? '来自其他赛区，占用外援名额' : '来自其他赛区：首发五人里最多两名外援'}>外援</span>
                     )}
                     {p.listed && <span className="tag" style={{ marginLeft: 6, borderColor: 'var(--warn)', color: 'var(--warn)' }}>挂牌</span>}
                   </td>

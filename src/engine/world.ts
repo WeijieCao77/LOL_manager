@@ -1,4 +1,5 @@
 import { seedAgentPro } from './agents'
+import { legalFive } from './imports'
 import { agentAvailable, startYearOf } from './eras'
 import { canonAgents, setMetaYear } from './content'
 import raw from '../data/world.json'
@@ -144,7 +145,8 @@ export function autoStarters(state: GameState, teamId: string): string[] {
     const drop = five.slice().sort((a, b) => fit(b) - fit(a) || confidentRating(a) - confidentRating(b))[0]
     if (drop && fit(p) < fit(drop)) five[five.indexOf(drop)] = p
   }
-  return five.map((p) => p.id)
+  // at most two non-residents on stage (imports.ts): a fit resident takes the weakest import's place
+  return legalFive(team, five, squad.filter((p) => !five.includes(p)), (p) => confidentRating(p) - fit(p) * 100).map((p) => p.id)
 }
 
 /** Extra cash some backgrounds bring with them. */

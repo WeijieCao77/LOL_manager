@@ -14,6 +14,7 @@ import { departureImpact, trustLabel, trustOf, trustOnBench } from '../engine/tr
 import { ATTR_CN, ATTR_KEYS, ROLES } from '../engine/types'
 import type { Player } from '../engine/types'
 import { useAction } from './useAction'
+import { fiveBlock } from '../engine/imports'
 import { fmtDay } from './common'
 import { careerDayOf, fromCareerDay, isCoolingOff } from '../engine/clock'
 import {
@@ -53,6 +54,9 @@ export default function Squad() {
         toast('首发已满 5 人，先移除一位。')
         return
       }
+      // at most two non-residents on stage (imports.ts); a third can sit on the bench
+      const why = fiveBlock(me, [...me.starters, p.id].map((id) => game.players[id]).filter(Boolean))
+      if (why) { toast(`${why}先换下一名外援。`); return }
       me.starters = [...me.starters, p.id]
     }
     commit()

@@ -6,6 +6,7 @@ import RoundRibbon, { RibbonLegend } from './RoundRibbon'
 import DraftBoard from './DraftBoard'
 import TacticSliders from './TacticSliders'
 import { squadOf } from '../engine/roster'
+import { fiveBlock } from '../engine/imports'
 import MapPlan from './MapPlan'
 import { MatchSim } from '../engine/match'
 import { mapCn } from '../engine/content'
@@ -160,7 +161,11 @@ export default function MatchLive({
     const squad = squadOf(game, game.myTeam)
     const ourWin = last && (mySide === 'a' ? last.scoreA > last.scoreB : last.scoreB > last.scoreA)
     const swap = (from: string, to: string) => {
-      me.starters = me.starters.map((x) => (x === from ? to : x))
+      const next = me.starters.map((x) => (x === from ? to : x))
+      // at most two non-residents on stage (imports.ts)
+      const why = fiveBlock(me, next.map((id) => game.players[id]).filter(Boolean))
+      if (why) { toast(why); return }
+      me.starters = next
       commit()
       rerender()
     }

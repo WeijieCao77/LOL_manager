@@ -1,4 +1,5 @@
 import { Rng, clamp } from './rng'
+import { STARTER_IMPORT_MAX, importsIn, legalFive } from './imports'
 import { MAPS, HIGHLIGHT_TEMPLATES as HL } from './content'
 import { realPool } from './eras'
 import { agentMod, autoAgents, normalizeAgents } from './agents'
@@ -180,6 +181,12 @@ export function selectLineup(state: GameState, teamId: string): Player[] {
       if (chosen.length >= 5) break
       chosen.push(p)
     }
+  }
+  // the referee's check: at most two non-residents on stage (imports.ts) — fit residents first
+  if (importsIn(team, chosen) > STARTER_IMPORT_MAX) {
+    const bench = team.roster.map((id) => state.players[id]).filter((p): p is Player => !!p && !chosen.includes(p))
+    const ok = (p: Player) => p.injuredUntil <= state.day && !isCoolingOff(state, p)
+    return legalFive(team, chosen, bench, (p) => effectiveRating(p, state.day) - (ok(p) ? 0 : 100))
   }
   return chosen
 }

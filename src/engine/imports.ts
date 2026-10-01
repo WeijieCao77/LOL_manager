@@ -21,6 +21,7 @@
  * renewals are retention, not recruitment — it simply cannot add more.
  */
 import { REGION_CN } from './types'
+import { currentMetaYear } from './content'
 import type { GameState, Player, Region, Team } from './types'
 
 export const IMPORT_MAX = 2
@@ -61,18 +62,41 @@ export const NAT_REGION: Record<string, Region> = {
 export const originOf = (p: Player): Region =>
   p.residency ?? NAT_REGION[(p.nat ?? '').toLowerCase()] ?? p.region
 
-/** Is this player an import for this club? */
-export const isImport = (p: Player, team: Team): boolean =>
-  originOf(p) !== team.region
+/**
+ * Is this player an import for this club? Two regional facts on top of origin
+ * (docs/调研-外援名额与居民规则.md §三):
+ *   - Hong Kong and Macao players may register in China or in LMS / PCS, and
+ *     switch freely: native to both.
+ *   - Oceania's league closed in 2020; from 2021 its players are North
+ *     American residents (those who had played the PCS may choose it): native
+ *     to LCS and LCP.
+ * The year is the game's (content.ts keeps it); a career's rules follow it.
+ */
+export const isImport = (p: Player, team: Team): boolean => {
+  const origin = originOf(p)
+  if (origin === team.region) return false
+  const nat = (p.nat ?? '').toLowerCase()
+  if ((nat === 'hk' || nat === 'mo') && (team.region === 'LPL' || team.region === 'LCP')) return false
+  if ((nat === 'au' || nat === 'nz') && currentMetaYear() >= 2021 && (team.region === 'LCS' || team.region === 'LCP')) return false
+  return true
+}
+
+/**
+ * From 2025 (LTA), one player from anywhere in the Americas counts as local in
+ * the Americas' leagues. Documented for 2025; 2026's LCS and CBLOL field
+ * rosters that need it (Shopify Rebellion: two Koreans and a Brazilian), so
+ * it is taken to stand.
+ */
+const americasPass = (team: Team, imports: Player[]): number =>
+  currentMetaYear() >= 2025 && (team.region === 'LCS' || team.region === 'CBLOL')
+    && imports.some((p) => originOf(p) === 'LCS' || originOf(p) === 'CBLOL') ? 1 : 0
 
 /** How many imports a club currently holds, bench included. */
 export const importCount = (state: GameState, teamId: string): number => {
   const team = state.teams[teamId]
   if (!team) return 0
-  return team.roster.reduce((n, id) => {
-    const p = state.players[id]
-    return p && isImport(p, team) ? n + 1 : n
-  }, 0)
+  const imports = team.roster.map((id) => state.players[id]).filter((p): p is Player => !!p && isImport(p, team))
+  return imports.length - americasPass(team, imports)
 }
 
 /**
@@ -93,3 +117,49 @@ export function importBlock(state: GameState, teamId: string, p: Player): string
 
 const regionCn = (r: Region): string =>
   REGION_CN[r]
+
+// ------------------------------------------------------------ the starting five
+
+/**
+ * The real rule (docs/调研-外援名额与居民规则.md §一, Riot 2014 onwards): at most
+ * two non-residents in the STARTING five. A third may sit on the bench; he
+ * cannot play at the same time as the other two. Always on, for every club —
+ * the roster cap above is an optional, stricter house rule on top.
+ */
+export const STARTER_IMPORT_MAX = 2
+
+export const importsIn = (team: Team, five: Player[]): number => {
+  const imports = five.filter((p) => isImport(p, team))
+  return imports.length - americasPass(team, imports)
+}
+
+/**
+ * A five made legal: while it fields more than two imports, the weakest import
+ * whose place a resident on the bench can take goes out — a resident of the
+ * same position first, else the best resident there is. With no resident to
+ * bring in the five stays as it is (a club must field somebody).
+ */
+export function legalFive(team: Team, five: Player[], bench: Player[], rate: (p: Player) => number): Player[] {
+  const out = five.slice()
+  const natives = bench.filter((p) => !out.includes(p) && !isImport(p, team)).sort((a, b) => rate(b) - rate(a))
+  while (importsIn(team, out) > STARTER_IMPORT_MAX && natives.length) {
+    // only a man whose leaving lowers the count (not the one the Americas pass already covers)
+    const cur = importsIn(team, out)
+    const imports = out.filter((p) => isImport(p, team) && importsIn(team, out.filter((x) => x !== p)) < cur).sort((a, b) => rate(a) - rate(b))
+    if (!imports.length) break
+    const sameRole = imports.find((p) => natives.some((n) => n.role === p.role))
+    const drop = sameRole ?? imports[0]
+    const inn = natives.find((n) => n.role === drop.role) ?? natives[0]
+    out[out.indexOf(drop)] = inn
+    natives.splice(natives.indexOf(inn), 1)
+  }
+  return out
+}
+
+/** Why this five may not start together, or null when it may. */
+export function fiveBlock(team: Team, five: Player[]): string | null {
+  const n = importsIn(team, five)
+  return n > STARTER_IMPORT_MAX
+    ? `首发最多 ${STARTER_IMPORT_MAX} 名外援（非本赛区居民），现在是 ${n} 名：${five.filter((p) => isImport(p, team)).map((p) => p.ign).join('、')}${americasPass(team, five.filter((p) => isImport(p, team))) ? '（其中一名美洲选手按本土算）' : ''}。`
+    : null
+}

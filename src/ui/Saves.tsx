@@ -160,12 +160,12 @@ export default function Saves() {
               game.importLimit = e.target.checked
               commit()
               toast(e.target.checked
-                ? '已开启外援限制：每队最多两名外区选手，AI 同样受限，只限新引进。'
-                : '已关闭外援限制。')
+                ? '已开启大名单外援限制：每队最多两名外区选手，AI 同样受限，只限新引进。'
+                : '已关闭大名单外援限制（首发最多两名外援仍然生效）。')
             }} />
           <span>
-            <b>限制外援</b>
-            <span className="muted"> — 每支俱乐部最多两名外区选手。只影响之后的签人，已有阵容不动。</span>
+            <b>大名单也限外援（更严）</b>
+            <span className="muted"> — 首发最多两名外援是真实规则、一直生效；这里再把大名单也限制到两名。只影响之后的签人，已有阵容不动。</span>
           </span>
         </label>
       </Panel>

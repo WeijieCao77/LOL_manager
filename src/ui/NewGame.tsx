@@ -433,10 +433,10 @@ export default function NewGame({ onHome,
         <input type="checkbox" checked={importLimit} style={{ width: 16, marginTop: 2 }}
           onChange={(e) => setImportLimit(e.target.checked)} />
         <span>
-          <b>限制外援</b>
+          <b>大名单也限外援（更严）</b>
           <span className="muted">
-            {' '}— 每支俱乐部最多两名外区选手（按国籍，含替补），AI 俱乐部同样受限。
-            只限新引进，已有阵容不受影响。
+            {' '}— 真实规则一直生效：首发五人里最多两名非本赛区居民，第三名外援只能坐替补。
+            勾上这个，大名单（含替补）也最多两名外援，AI 俱乐部同样受限；只限新引进，已有阵容不受影响。
           </span>
         </span>
       </label>
