@@ -175,7 +175,7 @@ def main() -> int:
     for c in cands:
         if not c['born'] and c['ign'].lower() in veterans:
             continue
-        age = (YEAR - int(c['born'][:4])) if c['born'] else None
+        age = (YEAR - int(c['born'][:4]) - (1 if tuple(int(x) for x in c['born'].split('-')[1:3]) > (1, 1) else 0)) if c['born'] else None
         if age is not None and not (15 <= age <= MAX_AGE):
             continue
         if age is None and c['league'] != 'LDL' and c['games'] < 30:

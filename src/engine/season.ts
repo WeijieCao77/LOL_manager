@@ -3,6 +3,7 @@ import {
   activePool, applyMatchStats, expectedShare, poolFor, poolPhaseOf, pruneMatchDetail, simulateMatch, stripRoundLogs,
 } from './match'
 import type { MatchResult } from './types'
+import { defaultContract as playerContract } from './types'
 import {
   CHAMP_POINTS, advanceBracket, applyResultToStandings, makeFixture, newStandings,
   resetFixtureSeq, scheduleRegularSeason, sortStandings, startBracket, respaceRounds, groupTable, scheduleGroupSeason
@@ -1983,7 +1984,7 @@ export function advanceDay(state: GameState, opts: AdvanceOpts = {}): DayReport 
   dailyLife(state, notes)
   for (const a of agentsReleasedToday(state)) {
     const line = `🆕 新英雄 ${agentName(a)} 加入游戏，可以进预案和训练了。`
-    state.news.push({ day: state.day, kind: 'league', text: line })
+    state.news.push({ day: state.day, kind: 'league', text: line, important: true })
     notes.push(line)
   }
   tickBirthdays(state, notes)
@@ -2737,6 +2738,9 @@ export function ensureMinimumRosters(state: GameState, rng: Rng): void {
       target.teamId = team.id
       target.contractYears = contractLength(target, rng, team.roster.map((id) => state.players[id]))
       target.salary = expectedSalary(target, team.tier)
+      // a fresh deal: the last club's clause and promised role don't come with him
+      target.contract = playerContract(target.salary, target.contractYears)
+      target.expiredYear = undefined
       team.roster.push(target.id)
       recordJoin(state, target, team.id)
       // offseason emergency signings go on the record like any other move

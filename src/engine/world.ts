@@ -1,4 +1,5 @@
 import { seedAgentPro } from './agents'
+import { agentAvailable } from './eras'
 import { canonAgents } from './content'
 import raw from '../data/world.json'
 import { dossierOf } from './dossier'
@@ -182,6 +183,9 @@ export function createNewGame(
   const s = seed ?? (hashStr(myTeamId + managerName + String(Date.now())) >>> 0)
   const rng = new Rng(s)
   const startYear = opts.year ?? 2026
+  // A 2016 career opens in January 2016: nobody plays a champion that does not
+  // exist yet, and nobody's pool holds one.
+  const released = (a: string) => agentAvailable({ year: startYear, day: 0 }, a)
   const rawPlayers = opts.world?.players ?? RAW.players
   const rawTeams = opts.world?.teams ?? WORLD_TEAMS
 
@@ -242,7 +246,9 @@ export function createNewGame(
   // 否则签进来的人会一个英雄都不会。
   // 生涯英雄表只在播种时用一次，不跟着存档走：531 人的表让一份存档多出 200 KB
   for (const p of Object.values(players)) {
-    p.agentPro = seedAgentPro(p)
+    // the recorded pool too: a year's champion table and the youth pool (built in 2026) both run past a January start
+    p.agentPool = p.agentPool.filter(released)
+    p.agentPro = seedAgentPro(p, released)
     delete p.agentUse
     delete p.agentR
     // the pipeline's working (his real per-game numbers, how 运营 was put together) never

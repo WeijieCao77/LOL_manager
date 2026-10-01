@@ -5,6 +5,7 @@ import { canonAgents } from './content'
 import { migrateLife } from './managerLife'
 import { seedAgentPro } from './agents'
 import { pruneMatchDetail, stripToTheBone } from './match'
+import { resetFixtureSeq } from './league'
 import { WORLD_TEAMS } from './teams'
 import { WORLD_PLAYERS } from './world'
 import type { GameState, TeamDrill } from './types'
@@ -320,6 +321,11 @@ function migrate(state: GameState): GameState {
     p.injuredUntil ??= 0
   }
   state.agentProGraded = true
+  // Fixture ids come from a counter in module memory that only a new season
+  // resets, so a page reload mid-season started again at F0 while F0…Fn were
+  // still on the calendar — two matches sharing an id share its random stream
+  // and its list key. Carry on from the highest id the save holds.
+  resetFixtureSeq(1 + (state.fixtures ?? []).reduce((m, f) => Math.max(m, Number(/^F(\d+)$/.exec(f.id)?.[1] ?? -1)), -1))
   // 练英雄 used to hold one learner; it holds up to five now. A save written
   // before that carries the old single-pick shape, and left alone it would
   // arrive at runDrill with no `picks` at all — a committed week that trains

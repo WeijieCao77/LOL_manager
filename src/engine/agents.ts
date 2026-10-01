@@ -111,7 +111,7 @@ export function proFromUse(rounds: number, total: number, r?: number, career?: n
  * 老存档还要把 rolePro 折进来：旧的「练位置」进度对那个位置的任何英雄都算数，
  * 所以按位置摊到该位置的全部英雄上——迁移只会给，不会拿走。
  */
-export function seedAgentPro(p: Player): Record<string, number> {
+export function seedAgentPro(p: Player, available: (agent: string) => boolean = () => true): Record<string, number> {
   const out: Record<string, number> = {}
   // 生涯表：键可能是 vlr 的 slug，先归一
   const use: [string, number][] = []
@@ -140,7 +140,8 @@ export function seedAgentPro(p: Player): Record<string, number> {
   const meta = new Set(Object.values(MAP_META).flat())
   const seed = hashStr(p.id ?? p.ign ?? '')
   for (const role of (p.roles?.length ? p.roles : [p.role])) {
-    const all = AGENTS[role] ?? []
+    // only what exists on the day he is seeded — a champion that ships later is learnt then
+    const all = (AGENTS[role] ?? []).filter(available)
     const width = hasTable ? 1 : POOL_PER_ROLE
     let want = width - all.filter((a) => (out[a] ?? 0) >= 100).length
     if (want <= 0 || !all.length) continue
@@ -158,6 +159,7 @@ export function seedAgentPro(p: Player): Record<string, number> {
       want--
     }
   }
+  for (const a of Object.keys(out)) if (!available(a)) delete out[a]
   return out
 }
 

@@ -141,6 +141,12 @@ RESIDENCY_KEY = {
 }
 
 
+
+def age_on_jan1(birth, year):
+    """岁数按游戏年 1 月 1 日算（赛季中生日会涨）；「年份相减」会把年后出生的人都算大一岁。"""
+    y, m, d = (int(x) for x in birth.split('-')[:3])
+    return year - y - (1 if (m, d) > (1, 1) else 0)
+
 def num(v):
     try:
         return float(v)
@@ -603,7 +609,7 @@ def main():
                 rng = random.Random(f'{Y}:{nm}:{pos}')
                 overall = int(round(sum(attrs[k] * w for k, w in ROLE_WEIGHT[pos].items())))
                 birth = (b or {}).get('birthdate') or None
-                age = (Y - int(birth[:4])) if birth else None
+                age = age_on_jan1(birth, Y) if birth else None
                 a = next(r['agg'] for r in by_player[(nm, pos)] if r['year'] == max(x['year'] for x in by_player[(nm, pos)]))
                 champs = collections.Counter(); champ_w = collections.Counter()
                 for r in by_player[(nm, pos)]:
@@ -769,7 +775,7 @@ def main():
     for overall, nm, pos, attrs, eff, b in fa[:100]:
         rng = random.Random(f'{Y}:{nm}:{pos}')
         birth = b.get('birthdate') or None
-        age = (Y - int(birth[:4])) if birth else 23
+        age = age_on_jan1(birth, Y) if birth else 23
         champs = collections.Counter()
         for r in by_player[(nm, pos)]:
             champs.update(r['agg']['champs'])
