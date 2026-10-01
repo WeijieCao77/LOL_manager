@@ -66,8 +66,20 @@ export interface LegendPhoto {
 
 export const DOSSIER = RAW as unknown as DossierFile
 
-export const dossierOf = (playerId: string): DossierEntry | undefined =>
-  DOSSIER.players[playerId]
+/**
+ * A historical career's ids, mapped to the 2026 ids its people and clubs are
+ * filed under (careerAssets.ts); null while the career is a 2026 one. Someone
+ * with no mapping has no entry — never the entry of whoever holds his id in 2026.
+ */
+let ALIAS: { player: (id: string) => string | null; team: (id: string) => string | null } | null = null
+export const setDossierAlias = (a: typeof ALIAS): void => { ALIAS = a }
+const playerKey = (id: string): string | null => (ALIAS ? ALIAS.player(id) : id)
+const clubKey = (id: string): string | null => (ALIAS ? ALIAS.team(id) : id)
+
+export const dossierOf = (playerId: string): DossierEntry | undefined => {
+  const k = playerKey(playerId)
+  return k ? DOSSIER.players[k] : undefined
+}
 
 export const titleCount = (playerId: string): number => dossierOf(playerId)?.t ?? 0
 
@@ -109,10 +121,11 @@ export const faceUrl = (file: string, v?: string): string => {
 
 /** The club crest, where we have one, stamped the same way. */
 export const crestUrl = (clubId: string | null | undefined): string | null => {
-  const v = clubId ? DOSSIER.logos?.[clubId] : undefined
-  if (!clubId || !v) return null
+  const k = clubId ? clubKey(clubId) : null
+  const v = k ? DOSSIER.logos?.[k] : undefined
+  if (!k || !v) return null
   const base = typeof import.meta.env !== 'undefined' ? import.meta.env.BASE_URL : './'
-  return `${base}logos/${clubId}.webp?v=${v}`
+  return `${base}logos/${k}.webp?v=${v}`
 }
 
 // ---------------------------------------------------------------- records

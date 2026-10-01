@@ -66,7 +66,12 @@ const store = new Map<string, string>()
 // gold / kill / objective numbers (-430 KB) and players lost the pipeline's
 // working (-52 KB). The browser's line is ~2,500 (check_saves holds that one),
 // so this leaves about 15%: thin. Compressing the save is the real answer.
-const BUDGET_KB = 2_200
+// 2,200 until 2026-10-01, when the stored string became deflate at fifteen bits
+// a character (saveCodec.ts): the same two seasons peak at ~240 KB stored. The
+// budget is a fifth of the browser's line, so an autosave, a manual save and
+// the tutorial's parked copy fit several times over; the JSON underneath is
+// still printed so its growth stays visible.
+const BUDGET_KB = 500
 
 let bad = 0
 const check = (name: string, ok: boolean, detail = '') => {
@@ -99,7 +104,7 @@ for (let s = 0; s < seasons; s++) {
   }
 }
 
-console.log(`\n最大 ${peak} KB（${peakDay}，预算 ${BUDGET_KB} KB）`)
+console.log(`\n最大 ${peak} KB（${peakDay}，预算 ${BUDGET_KB} KB；解压后的 JSON ${Math.round(JSON.stringify(peakState).length / 1024)} KB）`)
 for (const [k, v] of Object.entries(peakState)
   .map(([k, v]) => [k, partKb(v)] as [string, number])
   .filter(([, n]) => n >= 5)

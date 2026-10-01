@@ -22,8 +22,10 @@ import MidReview from './ui/MidReview'
 import RetireCard from './ui/RetireCard'
 import QualifyPoster from './ui/QualifyPoster'
 import ChampionPoster from './ui/ChampionPoster'
-import { autosave, claimAutosave, hasAutosave, loadAutosave, loadGame, packState } from './engine/save'
+import { autosave, claimAutosave, hasAutosave, loadAutosave, loadGame, packState, repairPastNames } from './engine/save'
+import { loadWorld, startYearOf } from './engine/eras'
 import { ensureHistory, isHistoryCareer } from './engine/realHistory'
+import { bindCareerAssets } from './engine/careerAssets'
 import { syncCallersWithWorld } from './engine/world'
 import { dateLabel, nextRealFixtureFor, nextScrimFor, stageName } from './engine/season'
 import { actionsForTurn, actionsLeft } from './engine/actions'
@@ -197,8 +199,14 @@ export default function ManagerGame({ onHome, testSaves = false }: { onHome: () 
 
   const start = useCallback((g: GameState) => {
     gameRef.current = g
-    // a historical career needs the real years it grows into before its first winter
-    if (isHistoryCareer(g)) void ensureHistory()
+    // photos and crests by who people are, not by an id a past world reuses
+    bindCareerAssets(g)
+    // a historical career needs the real years it grows into before its first winter,
+    // and its clubs' names from its own world (repairPastNames)
+    if (isHistoryCareer(g)) {
+      void ensureHistory()
+      void loadWorld(startYearOf(g)).then((w) => { if (w && gameRef.current === g && repairPastNames(g, w)) commit() })
+    }
     // a career carries its own players: the world's caller corrections
     // (who is an IGL) are brought into it here, once per change of the data
     const synced = syncCallersWithWorld(g)

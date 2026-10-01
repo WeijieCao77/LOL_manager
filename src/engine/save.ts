@@ -1,4 +1,5 @@
 import { assertCareerSave } from './saveShape'
+import { decodeSave, encodeSave } from './saveCodec'
 import { savePrefix as prefix, saveIndexKey as indexKey } from './saveKeys'
 export { setSaveNamespace, saveNamespace } from './saveKeys'
 import { canonAgents, setMetaYear } from './content'
@@ -6,6 +7,7 @@ import { migrateLife } from './managerLife'
 import { seedAgentPro } from './agents'
 import { pruneMatchDetail, stripToTheBone } from './match'
 import { resetFixtureSeq } from './league'
+import { startYearOf } from './eras'
 import { WORLD_TEAMS } from './teams'
 import { WORLD_PLAYERS } from './world'
 import type { GameState, TeamDrill } from './types'
@@ -73,12 +75,13 @@ export function packState(state: GameState): string {
     })
     return packed ? { ...f, result: { ...f.result, maps } } : f
   })
-  return JSON.stringify({ ...state, fixtures })
+  // stored deflated (saveCodec.ts): a tenth of the characters
+  return encodeSave(JSON.stringify({ ...state, fixtures }))
 }
 
 /** ...and back, whichever of the two shapes it was written in. */
 export function unpackState(raw: string): GameState {
-  const state: unknown = JSON.parse(raw)
+  const state: unknown = JSON.parse(decodeSave(raw))
   assertCareerSave(state)
   for (const f of state.fixtures ?? []) {
     for (const m of f.result?.maps ?? []) {
@@ -177,7 +180,7 @@ function healIndex(): SaveMeta[] {
     // front page of every career, offering to load three numbers.
     if (key === owner()) continue
     try {
-      const st = JSON.parse(localStorage.getItem(key) ?? '') as GameState
+      const st = JSON.parse(decodeSave(localStorage.getItem(key) ?? '')) as GameState
       // ...and anything else under this prefix that is not a career
       assertCareerSave(st)
       idx.push({
@@ -288,12 +291,16 @@ function migrate(state: GameState): GameState {
     }
   }
 
+  const past = startYearOf(state) < 2026
   for (const t of Object.values(state.teams)) {
     // A club's tag and name are the world file's to decide, not the save's.
     // They are display-only — nothing in a save is keyed on them — so a
     // correction (VNLG → VLG, which is what the org and its own crest say)
     // reaches careers already in progress instead of only new ones.
-    const canon = WORLD_TEAMS.find((w) => w.id === t.id)
+    // A past world numbers its clubs on its own (T12 is Saint Gaming in 2016,
+    // somebody else in 2026): its names come from its own world file, which
+    // repairPastNames applies once that file is loaded.
+    const canon = past ? undefined : WORLD_TEAMS.find((w) => w.id === t.id)
     if (canon) { t.tag = canon.tag; t.name = canon.name }
     t.champPoints ??= 0
     t.seasonPrize ??= 0
@@ -310,7 +317,7 @@ function migrate(state: GameState): GameState {
     // 熟练度从「会/不会」变成按生涯回合数分档：老档里的人没带着那张表，从
     // 世界数据里按 id 补上，再播一次并合并——只会抬高，练出来的一分不少。
     if (!state.agentProGraded) {
-      const canon = worldPlayer.get(p.id)
+      const canon = past ? undefined : worldPlayer.get(p.id)
       if (canon?.agentUse && !p.agentUse) { p.agentUse = canon.agentUse; p.agentR = canon.agentR }
       const graded = seedAgentPro(p)
       for (const [a, v] of Object.entries(graded)) p.agentPro[a] = Math.max(p.agentPro[a] ?? 0, v)
@@ -543,4 +550,19 @@ export function protectAutosaveFrom(
   } catch {
     return { failed: true, year: current.year, day: current.day }
   }
+}
+
+/**
+ * A past career's club names and tags, from its own world file. Saves loaded
+ * before 2026-10-01 had them overwritten from the 2026 world by id; this puts
+ * them back, and keeps any later correction to the past world's spellings
+ * reaching careers in progress, as the 2026 world's do.
+ */
+export function repairPastNames(state: GameState, world: { teams: { id: string; name: string; tag: string }[] }): number {
+  let fixed = 0
+  for (const w of world.teams) {
+    const t = state.teams[w.id]
+    if (t && (t.name !== w.name || t.tag !== w.tag)) { t.name = w.name; t.tag = w.tag; fixed++ }
+  }
+  return fixed
 }

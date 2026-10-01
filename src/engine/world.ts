@@ -1,5 +1,5 @@
 import { seedAgentPro } from './agents'
-import { agentAvailable } from './eras'
+import { agentAvailable, startYearOf } from './eras'
 import { canonAgents, setMetaYear } from './content'
 import raw from '../data/world.json'
 import { dossierOf } from './dossier'
@@ -200,7 +200,8 @@ export function createNewGame(
     // dossier has both for everyone. Overlaid here rather than rewritten into
     // world.json so the two files keep their jobs — world.json is what the
     // simulation reads, dossier.json is who these people are.
-    const d = dossierOf(rp.id)
+    // the dossier is filed under the 2026 world's ids: a past world's P1 is somebody else
+    const d = opts.world ? undefined : dossierOf(rp.id)
     players[rp.id] = {
       ...rp,
       nat: rp.nat || d?.nat || undefined,
@@ -455,6 +456,8 @@ export const CALLER_STAMP = hashStr(
  */
 export function syncCallersWithWorld(state: GameState): string[] {
   if (state.callerSync === CALLER_STAMP) return []
+  // a past world numbers its people on its own: the 2026 world's flags are about other men
+  if (startYearOf(state) < 2026) { state.callerSync = CALLER_STAMP; return [] }
   const notes: string[] = []
   const touched = new Set<string>()
   for (const w of WORLD_PLAYERS) {
