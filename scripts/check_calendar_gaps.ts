@@ -15,11 +15,16 @@
  */
 import { createNewGame } from '../src/engine/world'
 import { WORLD_TEAMS } from '../src/engine/teams'
-import { BREAK_AFTER_INTERNATIONAL, LEAGUE_DAYS, SEASON_DAYS, STAGES, advanceDay, setupSeason } from '../src/engine/season'
+import { BREAK_AFTER_INTERNATIONAL, LEAGUE_DAYS, SEASON_DAYS, advanceDay, setupSeason } from '../src/engine/season'
+import { currentRuleset, setCurrentRuleset } from '../src/engine/ruleset'
+import { stagesOf } from '../src/engine/rulebook'
 import type { GameState } from '../src/engine/types'
 
 const N = Number(process.argv[2] ?? 6)
-const WANT = Number(process.argv[3] ?? 20)
+// lol-2026 is the real calendar: First Stand ends 22 March and LEC Spring opens on the 28th, MSI
+// ends 12 July and LEC Summer opens on the 24th — at least five days. VALORANT's rulebooks keep twenty.
+const LOL = currentRuleset() === 'lol-2026'
+const WANT = Number(process.argv[3] ?? (LOL ? 5 : 20))
 let bad = 0
 const check = (ok: boolean, what: string) => { if (!ok) bad++; console.log(`  ${ok ? '✓' : '✗'} ${what}`) }
 const tags = ['GEN', 'BLG', 'FLY', 'FNC', 'DKC', 'TES', 'G2', 'TL']
@@ -33,7 +38,7 @@ function playAndReport(g: GameState, label: string, want: number): void {
     const days = g.fixtures.filter((f) => f.comp === key).map((f) => f.day)
     const nextDays = g.fixtures.filter((f) => f.stage === nextOf[key]).map((f) => f.day)
     const last = Math.max(...days)
-    const st = STAGES.find((s) => s.key === key)!
+    const st = stagesOf(g).find((s) => s.key === key)!
     check(days.length > 0 && last <= st.end, `${key} played ${Math.min(...days)}–${last}, inside its stage (ends ${st.end})`)
     if (nextDays.length) {
       const first = Math.min(...nextDays)
@@ -57,8 +62,10 @@ for (let i = 0; i < N; i++) {
 }
 
 // a season set up before the calendar changed: 第二赛段 from day 89, one
-// round every six days, as the saves of 2026-09-03 carry it
+// round every six days, as the saves of 2026-09-03 carry it — those saves are on
+// the classic rulebook, so this part plays that one
 {
+  setCurrentRuleset('vct-2025')
   const team = WORLD_TEAMS.find((t) => t.tag === 'DKC')!
   const g = createNewGame(team.id, 'cal', 4242)
   setupSeason(g)

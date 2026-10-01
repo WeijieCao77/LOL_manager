@@ -269,6 +269,9 @@ export function setupSeason(state: GameState, notes?: string[]): void {
     }
   }
   if (book.lockin) createLockIn(state)
+  // a programmed stage that waits on nothing is drawn up now, so the first day
+  // already has its groups and its fixtures
+  for (const c of Object.values(state.comps)) if (c.format === 'program') runProgrammed(state, c, notes ?? [])
   seedMarket(state, notes)
 }
 

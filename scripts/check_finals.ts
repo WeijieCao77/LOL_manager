@@ -10,6 +10,7 @@ import { createNewGame } from '../src/engine/world'
 import { WORLD_TEAMS } from '../src/engine/teams'
 import { advanceDay, setupSeason } from '../src/engine/season'
 import { Rng } from '../src/engine/rng'
+import { rulesetOf } from '../src/engine/ruleset'
 
 const me = WORLD_TEAMS.find(t => t.tag === 'TES')!
 const g = createNewGame(me.id, '审计经理', 20260824)
@@ -38,9 +39,12 @@ for (const f of finals) {
   const r = f.result ? ` ${f.result.mapsWonA}:${f.result.mapsWonB}` : ''
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${(g.comps[f.comp]?.name ?? f.comp).padEnd(22)} BO${f.bo}${r}`)
 }
-const wrongSemi = semis.filter(f => f.bo !== 3)
-if (wrongSemi.length) { bad++; console.log(`FAIL 半决赛出现非 BO3: ${wrongSemi.length} 场`) }
-else console.log(`ok   半决赛全部 BO3`)
+// VALORANT plays the rounds before a final best of three; League's playoffs are best of five throughout
+const semiBo = rulesetOf(g) === 'lol-2026' ? 5 : 3
+// (the second tiers still play the classic split of a table and a bracket — 策划稿 D62)
+const wrongSemi = semis.filter(f => f.bo !== semiBo && (semiBo === 3 || g.comps[f.comp]?.tier !== 2))
+if (wrongSemi.length) { bad++; console.log(`FAIL 半决赛出现非 BO${semiBo}: ${wrongSemi.length} 场`) }
+else console.log(`ok   半决赛全部 BO${semiBo}`)
 const long = finals.filter(f => f.result && f.result.maps.length > 3)
 console.log(`打满 4+ 图的决赛：${long.length} 场（证明 BO5 真在打，不是标签）`)
 if (finals.length && !long.length) console.log('     （本季恰好全是横扫，换个种子会出现长局）')

@@ -25,7 +25,7 @@ let guard = 0
 while (!found && g.day < SEASON_DAYS - 2 && guard++ < 500) {
   advanceDay(g)
   for (const comp of Object.values(g.comps)) {
-    if (comp.format !== 'double' || !comp.bracketStarted || comp.champion) continue
+    if ((comp.format !== 'double' && comp.format !== 'program') || !comp.bracketStarted || comp.champion) continue
     const ubf = g.fixtures.find((f) => f.comp === comp.key && f.played && f.label.endsWith(':胜者组决赛'))
     const lbf = g.fixtures.find((f) => f.comp === comp.key && f.label.endsWith(':败者组决赛'))
     if (ubf && !lbf) {
@@ -41,16 +41,18 @@ if (found) {
   const real = nextRealFixtureFor(g, g.myTeam)
   const next = nextInEvent(g)
   console.log(`  ${g.teams[found.loser].tag} lost the upper final of ${found.comp} on day ${found.day}; next real fixture day ${real?.day ?? '—'}`)
-  check('nextInEvent names the lower final', next?.round === '季后赛 败者组决赛', JSON.stringify(next && { comp: next.comp.key, day: next.day, round: next.round }))
+  check('nextInEvent names the lower final', next?.round === '季后赛 败者组决赛' || next?.round === '败者组决赛', JSON.stringify(next && { comp: next.comp.key, day: next.day, round: next.round }))
   const lbfDay = eventRounds(g, g.comps[found.comp]).find((r) => r.name === '败者组决赛')?.day
-  check('on the lower final\'s day — two waves after the upper final', !!next && next.day === lbfDay && lbfDay === found.day + 4, `${next?.day} vs ${lbfDay}`)
+  // the old brackets ran two days a wave; a programmed one runs on the real calendar
+  const programmed = g.comps[found.comp].format === 'program'
+  check('on the lower final\'s day', !!next && next.day === lbfDay && (programmed ? lbfDay! > found.day : lbfDay === found.day + 4), `${next?.day} vs ${lbfDay}`)
   check('and before whatever the fixture list says', !!next && (!real || next.day < real.day), `${next?.day} < ${real?.day}`)
   const rounds = eventRounds(g, g.comps[found.comp])
-  check('the playoff rounds are dated from the bracket, not from the league', rounds.length === 6 && rounds[0].day >= found.day - 4,
+  check('the playoff rounds are dated from the bracket, not from the league', programmed ? rounds.length >= 5 && rounds.every((r) => r.day >= found!.day - 30) : rounds.length === 6 && rounds[0].day >= found.day - 4,
     rounds.map((r) => `${r.name}@${r.day}${r.drawn ? '' : '?'}`).join(', '))
   // play on: the lower final actually arrives on that day with us in it
   let steps = 0
-  while (steps++ < 6 && !g.fixtures.some((f) => f.comp === found!.comp && f.label.endsWith(':败者组决赛'))) advanceDay(g)
+  while (steps++ < 20 && !g.fixtures.some((f) => f.comp === found!.comp && f.label.endsWith(':败者组决赛'))) advanceDay(g)
   const lbf = g.fixtures.find((f) => f.comp === found!.comp && f.label.endsWith(':败者组决赛'))
   check('the lower final is drawn on the projected day with us in it', !!lbf && lbf.day === lbfDay && (lbf.teamA === g.myTeam || lbf.teamB === g.myTeam),
     lbf ? `day ${lbf.day}, ${g.teams[lbf.teamA]?.tag} v ${g.teams[lbf.teamB]?.tag}` : 'none')

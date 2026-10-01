@@ -500,6 +500,29 @@ const CBLOL: Record<Slot, Program> = {
 
 export const REGION_PROGRAMS: Record<Region, Record<Slot, Program>> = { LPL, LCK, LEC, LCS, LCP, CBLOL }
 
+/** what each stage is, in a few lines, for the standings screen (docs/调研-2026赛制.md) */
+export const STAGE_BLURB: Record<string, string> = {
+  'LPL:kickoff': '按上一年成绩分三组（Ascend 6 / Perseverance 4 / Nirvana 4），组内双循环 BO3。Ascend 前四直接进淘汰赛；Ascend 5–6、Perseverance 全部、Nirvana 前二打骑士之路（BO5），四队晋级；Nirvana 3–4 本赛段出局。淘汰赛八队双败 BO5，Ascend 前四依次挑对手。前二去 First Stand。',
+  'LPL:stage1': '按第一赛段名次分组：前八 Ascend 双循环、后六 Nirvana 单循环，BO3。Ascend 前四进淘汰赛；Ascend 5–8 与 Nirvana 1–4 打骑士之路（单场 BO5），胜者晋级；Nirvana 末两名今年的比赛到此结束。前二去 MSI。',
+  'LPL:stage2': '第二赛段前十二名：前八 Ascend、后四 Nirvana，组内双循环 BO3。Ascend 前二直通胜者组半决赛、3–6 进胜者组八强；Ascend 7–8 与 Nirvana 前二打骑士之路（四队双败，两队进败者组）。冠军是 LPL 一号种子，全年积分第一是二号种子，之后积分前几名打区域资格赛争剩下的名额。',
+  'LCK:kickoff': 'Baron、Elder 两组只打对面组：前两周 BO3，第三周「超级周」同号种子 BO5。BO3 胜 +1、BO5 胜 +2 记到组里，组积分高的是胜组。胜组前二直通季后赛第二轮、败组第一进第一轮；胜组 3–5 与败组 2–4 打入围赛（三队晋级）；败组第五出局。季后赛六队双败 BO5，前二去 First Stand。',
+  'LCK:stage1': '十队双循环 BO3（Rounds 1-2）。前六打 Road to MSI（六队双败 BO5，前二种子轮空），前二去 MSI。战绩带入第三赛段。',
+  'LCK:stage2': '按前两轮名次分 Legend（1–5）和 Rise（6–10），带着前两轮的战绩组内双循环。Legend 前二直通季后赛第二轮、3–4 进第一轮；Legend 第五与 Rise 前三打入围赛（两队晋级）；Rise 4–5 出局。季后赛六队双败 BO5，前三去全球总决赛。',
+  'LEC:kickoff': 'Versus：单循环 BO1，前八进双败淘汰赛（前两轮 BO3，之后 BO5）。冠军去 First Stand。',
+  'LEC:stage1': '单循环 BO3，前六进季后赛：前四进胜者组半决赛，5–6 从败者组打起。前二去 MSI。',
+  'LEC:stage2': '单循环 BO3，前六进季后赛：前四进胜者组半决赛，5–6 从败者组打起。前三去全球总决赛。',
+  'LCS:kickoff': 'Lock-In：三轮瑞士轮 BO3。3-0 与三支 2-1 进胜者组半决赛；1-2 里成绩最好的是五号种子，另两支打一局定胜负的最后机会赛争六号种子；0-3 出局。季后赛六队双败 BO5，冠军去 First Stand。',
+  'LCS:stage1': '单循环 BO3，前四进胜者组半决赛、5–6 从败者组打起，7–8 出局。前二去 MSI。',
+  'LCS:stage2': '单循环 BO3，前二直通胜者组第二轮、3–6 从胜者组第一轮打起。前三去全球总决赛。',
+  'LCP:kickoff': '单循环 BO3，前六进季后赛（前二轮空到第二轮）。冠军去 First Stand。',
+  'LCP:stage1': '单循环 BO3，前六进季后赛（前二轮空到第二轮）。冠军去 MSI，另一个 MSI 名额给冠军之外积分最高的队。',
+  'LCP:stage2': '八队瑞士轮：三胜晋级、三负淘汰，决定命运的场次 BO5。四队进双败淘汰，前二去全球总决赛，第三个名额给积分最高的队。',
+  'CBLOL:kickoff': 'Cup：单循环 BO1。1–2 直通季后赛第二轮、3–4 进第一轮；5–8 打入围赛（两队晋级）。季后赛六队双败，冠军去 First Stand。',
+  'CBLOL:stage1': '单循环 BO3，前二直通第二轮、3–6 进第一轮，7–8 出局。冠军去 MSI（巴西只有一个 MSI 名额）。',
+  'CBLOL:stage2': '单循环 BO3，前二直通第二轮、3–6 进第一轮，7–8 出局。前二去全球总决赛。',
+}
+
+
 // ------------------------------------------------------------ points
 
 /** LPL's Championship Points: Split 1 and 2 placings, Split 3 below the champion (who is LPL1). */
@@ -669,6 +692,7 @@ const regionRank = (_state: GameState, r: Region): number => REGION_ORDER.indexO
 export function fstProgram(state: GameState): Program {
   const seeds = fstSeeds(state)
   return {
+    blurb: '两个 GSL 小组 BO5（一组里同赛区最多一队），各组前二进四强单败 BO5。冠军所在赛区的 MSI 二号种子直通正赛。',
     phases: [
       {
         kind: 'ko', key: 'grp', start: 74, end: 78, bo: 5, template: () => fstGroups,
@@ -698,6 +722,7 @@ export function msiProgram(state: GameState): Program {
   const ranked = T1_REGIONS.slice().sort((a, b) => best(a) - best(b) || regionRank(state, a) - regionRank(state, b))
   const playIn = ranked.filter((r) => r !== fr).map((r) => seeds[r][1]).filter(Boolean)
   return {
+    blurb: '各赛区一号种子和 First Stand 冠军赛区的二号种子直通正赛；其余二号种子打四队双败入围赛，一队晋级。正赛八队双败 BO5。冠军打进本赛区夏季季后赛就锁定一个全球总决赛名额；亚军所在赛区多一个全球总决赛名额。',
     phases: [
       { kind: 'ko', key: 'pi', start: 178, end: 181, bo: 5, template: () => de4('入围赛 '), seeds: () => playIn.slice(0, 4) },
       {
@@ -722,6 +747,7 @@ export function worldsProgram(state: GameState): Program {
   const playIn = (['LEC', 'LCS', 'LCP', 'CBLOL'] as Region[]).map((r) => per[r][per[r].length - 1]).filter(Boolean)
   const direct = T1_REGIONS.flatMap((r) => per[r].filter((id) => !playIn.includes(id)).map((id, i) => ({ id, seed: i + 1, r })))
   return {
+    blurb: 'LEC、LCS、LCP、CBLOL 的末位种子打四队双败入围赛，一队晋级。十六队瑞士轮五轮，三胜晋级、三负淘汰，决定命运的场次 BO3、其余 BO1。八强单败 BO5。',
     phases: [
       { kind: 'ko', key: 'pi', start: 287, end: 290, bo: 5, template: () => de4('入围赛 '), seeds: () => playIn },
       {
@@ -770,5 +796,6 @@ export function programFor(state: GameState, comp: Competition): Program | null 
   if (key === 'worlds') return worldsProgram(state)
   if (key === 'qual:LPL') return lplRegionalProgram(state)
   const [region, slot] = key.split(':') as [Region, Slot]
-  return REGION_PROGRAMS[region]?.[slot] ?? null
+  const p = REGION_PROGRAMS[region]?.[slot]
+  return p ? { ...p, blurb: STAGE_BLURB[key] } : null
 }

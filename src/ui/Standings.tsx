@@ -5,6 +5,8 @@ import Bracket from './Bracket'
 import { groupTable, sortStandings } from '../engine/league'
 import { DRAW_KIND_CN, drawsOf } from '../engine/draw'
 import { PLAYOFF_CUT } from '../engine/season'
+import { programFor } from '../engine/programs2026'
+import { crossPoints } from '../engine/formats'
 import { stagesOf } from '../engine/rulebook'
 import { POINTS_NOTE, qualification } from '../engine/qualify'
 import { ratingOf } from '../engine/match'
@@ -159,6 +161,15 @@ export default function Standings() {
               title={`${c.name}${c.champion ? ` · 冠军 ${game.teams[c.champion]?.name}` : ''}`}
               flush
             >
+              {c.format === 'program' && (
+                <p className="tiny faint" style={{ padding: '9px 13px', margin: 0, lineHeight: 1.7 }}>
+                  {programFor(game, c)?.blurb}
+                  {c.prog?.groups.gb && (() => {
+                    const pts = crossPoints(game, c, 'gb')
+                    return <> 组积分：{Object.entries(pts).map(([g, n]) => `${g} ${n}`).join(' · ')}。</>
+                  })()}
+                </p>
+              )}
               {c.format === 'triple' ? (
                 <p className="tiny faint" style={{ padding: '9px 13px', margin: 0 }}>
                   三败淘汰：十二队，输三场出局。胜者组、中段组、败者组三场决赛的冠军，即本赛区去 国际赛 的 1、2、3 号种子。
@@ -169,8 +180,10 @@ export default function Standings() {
                 <div className="grid c2" style={{ gap: 0 }}>
                   {c.groups.map((g, i) => (
                     <div key={i}>
-                      <div className="nav-group" style={{ padding: '8px 13px 4px' }}>{c.groupNames?.[i] ?? ['Alpha', 'Omega'][i]} 组 · 前 4 进季后赛</div>
-                      <Table comp={c} members={g} cut={4} />
+                      <div className="nav-group" style={{ padding: '8px 13px 4px' }}>
+                        {c.groupNames?.[i] ?? ['Alpha', 'Omega'][i]} 组{c.format === 'program' ? '' : ' · 前 4 进季后赛'}
+                      </div>
+                      <Table comp={c} members={g} cut={c.format === 'program' ? 0 : 4} />
                     </div>
                   ))}
                 </div>
@@ -191,6 +204,7 @@ export default function Standings() {
             </Panel>
           ) : (
             <Panel key={c.key} title={`${c.name}（国际赛事${c.city ? ` · ${c.city}` : ''}）${c.champion ? ` · 冠军 ${game.teams[c.champion]?.name}` : ''}`}>
+              {c.format === 'program' && <p className="tiny faint" style={{ marginTop: 0, lineHeight: 1.7 }}>{programFor(game, c)?.blurb}</p>}
               <Bracket comp={c} />
               <DrawHistory comp={c} />
               {!!c.champion && c.finished.length > 0 && (

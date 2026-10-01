@@ -33,6 +33,7 @@
 import { Rng, hashStr } from './rng'
 import { makeFixture, newStandings, roundRobin, sortStandings } from './league'
 import type { Competition, Fixture, GameState, StageKey } from './types'
+import { projectNext } from './bracket'
 
 // ------------------------------------------------------------ templates
 
@@ -117,6 +118,8 @@ export type Phase = RR | Cross | Swiss | KO
 
 export interface Program {
   phases: Phase[]
+  /** how the stage works, in a few lines, for the standings screen */
+  blurb?: string
   /** competitions that must be over before the first phase can be drawn up */
   after?: (state: GameState) => string[]
 }
@@ -452,6 +455,8 @@ export function stepProgram(state: GameState, comp: Competition, prog: Program, 
     if (!ps.started) {
       if (ps.phase === 0 && prog.after && prog.after(state).some((k) => !state.comps[k]?.champion)) return { kind: 'wait' }
       ps.started = true
+      // the bracket view opens with the first bracket or Swiss game
+      if (p.kind === 'ko' || p.kind === 'swiss') comp.bracketStarted = true
       const from = Math.max(day, p.start)
       if (p.kind === 'rr') return { kind: 'fixtures', fixtures: startRR(ctx, p, from) }
       if (p.kind === 'cross') return { kind: 'fixtures', fixtures: startCross(ctx, p, from) }
@@ -508,4 +513,80 @@ export function pickWeakest(state: GameState, pickers: string[], pool: string[])
     left.sort((a, b) => (state.teams[a]?.rating ?? 0) - (state.teams[b]?.rating ?? 0))
     return left.shift()!
   }).filter(Boolean)
+}
+
+// ------------------------------------------------------------ the calendar ahead
+
+export interface ProgramRound { name: string; day: number; drawn: boolean }
+
+/**
+ * Every bracket and Swiss round still to come in this stage, on its planned
+ * day — the phase under way and the ones after it. Table rounds are fixtures
+ * from the day their phase starts, so they need no projection.
+ */
+export function programRounds(state: GameState, comp: Competition, prog: Program): ProgramRound[] {
+  const ps = progOf(comp)
+  const ctx: Ctx = { state, comp, res: ps.res }
+  const out: ProgramRound[] = []
+  let wave = ps.wave
+  for (let i = ps.phase; i < prog.phases.length; i++) {
+    const p = prog.phases[i]
+    const fs = phaseFixtures(state, comp, p.key)
+    if (p.kind === 'ko') {
+      const t = p.template(ctx)
+      t.waves.forEach((w, k) => {
+        const drawn = fs.filter((f) => waveOf(f) === wave + k + 1)
+        out.push({
+          name: w.map((r) => r.name).join(' / '),
+          day: drawn.length ? Math.min(...drawn.map((f) => f.day)) : planned(p.start, p.start, p.end, k, t.waves.length),
+          drawn: drawn.length > 0,
+        })
+      })
+      wave += t.waves.length
+    } else if (p.kind === 'swiss') {
+      for (let r = 1; r <= p.rounds; r++) {
+        const drawn = fs.filter((f) => waveOf(f) === r)
+        out.push({
+          name: `瑞士轮 第${r}轮`,
+          day: drawn.length ? drawn[0].day : planned(p.start, p.start, p.end, r - 1, p.rounds),
+          drawn: drawn.length > 0,
+        })
+      }
+    }
+  }
+  return out
+}
+
+/**
+ * Where a club plays next in this stage when no fixture says so yet: the round
+ * its last result in the bracket under way feeds, on that round's planned day;
+ * or the next Swiss round while it is alive. Null when it is out of this phase.
+ */
+export function programNext(
+  state: GameState, comp: Competition, prog: Program, me: string,
+): { name: string; day: number } | null {
+  const ps = progOf(comp)
+  const p = prog.phases[ps.phase]
+  if (!p || !ps.started) return null
+  const ctx: Ctx = { state, comp, res: ps.res }
+  const fs = phaseFixtures(state, comp, p.key)
+  const tomorrow = state.day + 1
+  if (p.kind === 'ko') {
+    const seeds = ps.seeds[p.key] ?? []
+    if (!seeds.includes(me)) return null
+    const t = p.template(ctx)
+    const nx = projectNext(t.waves, seeds, fs, me)
+    if (!nx) return null
+    return { name: nx.name, day: planned(tomorrow, p.start, p.end, nx.wave - 1, t.waves.length) }
+  }
+  if (p.kind === 'swiss') {
+    const seeds = ps.seeds[p.key] ?? []
+    if (!seeds.includes(me)) return null
+    const r = swissRec(fs, me)
+    if ((p.win && r.w >= p.win) || (p.lose && r.l >= p.lose)) return null
+    const round = fs.length ? Math.max(...fs.map(waveOf)) : 0
+    if (round >= p.rounds) return null
+    return { name: `瑞士轮 第${round + 1}轮`, day: planned(tomorrow, p.start, p.end, round, p.rounds) }
+  }
+  return null
 }

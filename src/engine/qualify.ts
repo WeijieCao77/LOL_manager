@@ -17,6 +17,8 @@ import { CHAMPIONS, MASTERS_1, MASTERS_2 } from './endings'
 import { swissRecord, MASTERS_8, STAGE_8, TRIPLE_12, projectNext
 } from './bracket'
 import { hostCity } from './hosts'
+import { programNext, programRounds } from './formats'
+import { programFor } from './programs2026'
 import type { Competition, Fixture, GameState, StageKey } from './types'
 
 export interface QualStatus {
@@ -342,6 +344,10 @@ const GAP = 2
  * against whom. Dated from the event's first fixture.
  */
 export function eventRounds(state: GameState, comp: Competition): EventRound[] {
+  if (comp.format === 'program') {
+    const prog = programFor(state, comp)
+    return prog ? programRounds(state, comp, prog) : []
+  }
   const own = state.fixtures.filter((f) => f.comp === comp.key)
   // a regional stage's rounds are its playoffs, dated from the first
   // bracket day, not from the league's opening round months before
@@ -391,13 +397,20 @@ export function nextInEvent(state: GameState): NextIn | null {
   // the upper final knew it would play the lower final two days on, and the
   // top bar counted down to a league game nine weeks away all the same
   const regional = Object.values(state.comps)
-    .filter((c) => (c.format === 'double' || c.format === 'triple') && c.bracketStarted && !c.champion && c.teams.includes(me))
+    .filter((c) => (c.format === 'double' || c.format === 'triple' || c.format === 'program') && c.bracketStarted && !c.champion && c.teams.includes(me))
     .map((c) => c.key)
   for (const key of ['masters1', 'masters2', 'champions', ...regional]) {
     const comp = state.comps[key]
     if (!comp || comp.champion || !comp.teams.includes(me)) continue
     if (state.fixtures.some((f) => f.comp === key && !f.played && (f.teamA === me || f.teamB === me))) continue
     if (comp.finished.includes(me)) continue
+    // a programmed stage knows from its own template
+    if (comp.format === 'program') {
+      const prog = programFor(state, comp)
+      const nx = prog && programNext(state, comp, prog, me)
+      if (nx) return { comp, day: nx.day, round: nx.name }
+      continue
+    }
     const rounds = eventRounds(state, comp)
     const at = (name: string) => rounds.find((r) => r.name.split(' / ').includes(name) || r.name === name)
     const mine = state.fixtures.filter((f) => f.comp === key && f.played && (f.teamA === me || f.teamB === me))
