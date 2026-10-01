@@ -98,7 +98,7 @@ export function PatchPanel() {
     >
       {!patch ? (
         <p className="small muted" style={{ margin: 0 }}>
-          还没有版本调整。第一次调整在第一站大师赛结束后生效，冠军赛之后是休赛期大改。
+          还没有版本调整。第一次调整在 First Stand 结束后生效，全球总决赛之后是休赛期大改。
         </p>
       ) : (
         <>

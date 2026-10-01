@@ -103,7 +103,7 @@ const has = (g: GameState, key: string) => endingsFor(g).some((e) => e.key === k
   const h = mk()
   won(h, 2030, 'First Stand')
   won(h, 2030, 'MSI 季中冠军赛')
-  won(h, 2030, 'VCT China · 第二赛段')
+  won(h, 2030, 'LPL 第二赛段')
   check('赛区冠军不能顶替冠军赛', !has(h, 'perfectYear'))
 }
 
@@ -160,7 +160,7 @@ const has = (g: GameState, key: string) => endingsFor(g).some((e) => e.key === k
 
   const still = mk()
   won(still, 2030, CHAMPIONS); won(still, 2031, CHAMPIONS)
-  won(still, 2033, 'VCT China · 第二赛段')
+  won(still, 2033, 'LPL 第二赛段')
   still.year = 2034
   check('之后还有进账就不算', !has(still, 'icarus'))
 }
@@ -172,9 +172,10 @@ const has = (g: GameState, key: string) => endingsFor(g).some((e) => e.key === k
   const me = g.teams[g.myTeam]!
   // isImport reads NATIONALITY first and only falls back to region, so a
   // homegrown squad has to be homegrown by passport
-  for (const p of squadOf(g, g.myTeam)) { p.region = me.region; p.nat = undefined }
+  for (const p of squadOf(g, g.myTeam)) { p.region = me.region; p.nat = undefined; p.residency = me.region }
   check('全本土夺冠 →「本土主义」', has(g, 'homegrown'), `外援 ${factsOf(g).imports} 人`)
-  squadOf(g, g.myTeam)[0]!.nat = me.region === 'EMEA' ? 'kr' : 'fr'
+  // the import rule reads residency first (engine/imports.ts)
+  squadOf(g, g.myTeam)[0]!.residency = me.region === 'LCK' ? 'LPL' : 'LCK'
   check('签一个外援就没了', !has(g, 'homegrown'), `外援 ${factsOf(g).imports} 人`)
 }
 
@@ -185,7 +186,7 @@ const has = (g: GameState, key: string) => endingsFor(g).some((e) => e.key === k
   const g = mk()
   perfect(g, FINAL_YEAR - 2); perfect(g, FINAL_YEAR - 1); perfect(g, FINAL_YEAR)
   const me = g.teams[g.myTeam]!
-  for (const p of squadOf(g, g.myTeam)) { p.region = me.region; p.nat = undefined }
+  for (const p of squadOf(g, g.myTeam)) { p.region = me.region; p.nat = undefined; p.residency = me.region }
   const two = endingOf(g)
   check('战绩线给出「黄金之路」', two.dynasty?.key === 'golden')
   check('同一段生涯的故事线另有其人', two.story?.key === 'homegrown',
@@ -257,7 +258,7 @@ const has = (g: GameState, key: string) => endingsFor(g).some((e) => e.key === k
   g.teams[g.myTeam]!.tier = 1                    // 晋级
   g.year = FINAL_YEAR
   g.finished = true
-  won(g, 2035, `VCT ${g.teams[g.myTeam]!.region} · 第二赛段`)
+  won(g, 2035, `${g.teams[g.myTeam]!.region} 第二赛段`)
   check('升上去之后仍然算「从次级起步」', has(g, 'grassroots'))
 }
 

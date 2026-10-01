@@ -112,7 +112,7 @@ export default function MatchLive({
     if (!mySide || !map) return
     if (map.callTimeout(mySide, { kind, playerId })) {
       const label = kind === 'rush' ? '强攻' : kind === 'steady' ? '稳守' : '打核心'
-      toast(`暂停已用：${label}（持续 3 回合）`)
+      toast(`临场调整：${label}（接下来约 6 分钟）`)
       setPhase('watching')
       rerender()
     }
@@ -189,12 +189,12 @@ export default function MatchLive({
 
         <div className="row" style={{ gap: 10, justifyContent: 'center', marginTop: 18 }}>
           <button className="primary" onClick={() => { watchedAt.current = Date.now(); setPhase('watching') }}>
-            观战（可用 2 次暂停）
+            观战（可临场调整 2 次）
           </button>
           <button onClick={skip}>快进到结果</button>
         </div>
         <p className="tiny faint center" style={{ marginTop: 14, marginBottom: 0 }}>
-          观战与快进结果相同。每张图 2 次暂停，加时加 1 次。
+          观战与快进结果相同。每局可临场调整 2 次。
         </p>
       </Modal>
     )
@@ -243,20 +243,20 @@ export default function MatchLive({
 
       {phase === 'timeout' && map && mySide ? (
         <div className="panel own">
-          <div className="panel-head"><h2>暂停 · 剩余 {map.timeouts[mySide]} 次</h2></div>
+          <div className="panel-head"><h2>临场调整 · 剩余 {map.timeouts[mySide]} 次</h2></div>
           <div className="panel-body">
             {/* 先给他看清楚两边排了什么 —— 没有这个，下面那三个按钮只能靠猜 */}
             <CompBoard
               mine={mySide === 'a' ? map.A : map.B}
               theirs={mySide === 'a' ? map.B : map.A}
             />
-            <p className="small muted" style={{ marginTop: 0 }}>选择接下来 3 个回合的打法：</p>
+            <p className="small muted" style={{ marginTop: 0 }}>选择接下来三个节点（约 6 分钟）的打法：</p>
             <div className="row wrap" style={{ gap: 8, marginBottom: 14 }}>
               <button onClick={() => callTimeout('rush')}>
-                强攻 <span className="tiny faint">进攻端更强，但更容易被打穿</span>
+                强攻 <span className="tiny faint">主动开团抢资源，赢了滚雪球，输了被反打</span>
               </button>
               <button onClick={() => callTimeout('steady')}>
-                稳守 <span className="tiny faint">减少伤亡与波动，适合领先或缺钱</span>
+                稳守 <span className="tiny faint">少接团、稳住经济，适合领先或等后期</span>
               </button>
             </div>
             {/* The four dials used to sit here, set to the NEXT map — which
@@ -264,7 +264,7 @@ export default function MatchLive({
                 整」. They live in 赛前「各图预案」, one sheet per map, where
                 the map being edited is the one written above the sliders. */}
             <p className="tiny faint" style={{ marginTop: 0, marginBottom: 14 }}>
-              战术滑杆在赛前的「各图预案」里，一张图一套；暂停只管接下来 3 个回合。
+              战术滑杆在赛前的预案里；临场调整只管接下来三个节点。
             </p>
             <div className="small muted" style={{ marginBottom: 6 }}>或者围绕一名选手打：</div>
             <div className="row wrap" style={{ gap: 6 }}>
@@ -280,7 +280,7 @@ export default function MatchLive({
                   looking at the two sheets and leaving costs nothing. */}
               <button className="ghost sm" onClick={() => setPhase('watching')}>直接继续比赛</button>
               <p className="tiny faint" style={{ marginTop: 6, marginBottom: 0 }}>
-                只看一眼不花暂停，选了打法才用掉一次。
+                只看一眼不花次数，选了打法才用掉一次。
               </p>
             </div>
           </div>
@@ -292,7 +292,7 @@ export default function MatchLive({
             disabled={!canTimeout}
             onClick={() => setPhase('timeout')}
           >
-            叫暂停{map && mySide ? `（${map.timeouts[mySide]}）` : ''}
+            临场调整{map && mySide ? `（${map.timeouts[mySide]}）` : ''}
           </button>
           <button onClick={skip}>跳过剩余</button>
         </div>
@@ -304,7 +304,7 @@ export default function MatchLive({
           {map.calls[mySide]!.kind === 'rush' ? '强攻'
             : map.calls[mySide]!.kind === 'steady' ? '稳守'
             : `围绕 ${game.players[map.calls[mySide]!.playerId!]?.ign} 打`}
-          （剩 {map.calls[mySide]!.roundsLeft} 回合）
+          （还剩 {map.calls[mySide]!.roundsLeft} 个节点）
         </p>
       )}
 

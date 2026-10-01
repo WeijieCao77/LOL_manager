@@ -12,7 +12,6 @@ import { Bar, Condition, Face, money, OvrBadge, Panel, Roles, Stat, fmtDay } fro
 import { advanceDay, advanceToNextMatch, acceptJob, declineJob, makeScrim, scrimReply, nextRealFixtureFor, noticeHint, recentResultsFor, stageName } from '../engine/season'
 import { stagesOf } from '../engine/rulebook'
 import { nextInEvent, upcomingInternational } from '../engine/qualify'
-import type { ScrimFormat } from '../engine/season'
 import { poolFor } from '../engine/match'
 import { sortStandings } from '../engine/league'
 import { agendaFor, activityOn, logActivity } from '../engine/agenda'
@@ -40,8 +39,6 @@ export default function Dashboard() {
   const simStartRef = useRef(0)
   const [digest, setDigest] = useState<{ reports: DayReport[]; fromDay: number } | null>(null)
   const [scrimOpp, setScrimOpp] = useState<string>('')
-  const [scrimMap, setScrimMap] = useState<string>('')
-  const [scrimFmt, setScrimFmt] = useState<ScrimFormat>('full24')
   const me = game.teams[game.myTeam]
   const squad = squadOf(game, game.myTeam)
   const next = nextRealFixtureFor(game, game.myTeam)
@@ -597,9 +594,9 @@ export default function Dashboard() {
           <div className="tiny faint" style={{ margin: '0 0 12px', lineHeight: 1.85 }}>
             每人：<b style={{ color: 'var(--win)' }}>赢 状态 +0.4~2.2</b>／
             <b style={{ color: 'var(--accent)' }}>输 −0.4~2.2</b>，体能 −3.5~6.5，默契累积。
-            这张图熟练度 +0.6~1.0（上限 80），阵容熟练度 +6。
+            战术磨合度 +0.6~1.0（上限 80），打法熟练度 +6。
           </div>
-          <div className="grid c3" style={{ gap: 12, alignItems: 'end' }}>
+          <div className="grid c2" style={{ gap: 12, alignItems: 'end' }}>
             <div className="field">
               <label className="small muted">对手</label>
               <select value={scrimOpp} onChange={(e) => setScrimOpp(e.target.value)}>
@@ -611,35 +608,13 @@ export default function Dashboard() {
                 ))}
               </select>
             </div>
-            <div className="field">
-              <label className="small muted">场地</label>
-              <select value={scrimMap} onChange={(e) => setScrimMap(e.target.value)}>
-                <option value="">选择…</option>
-                {pool.map((m) => (
-                  <option key={m} value={m}>
-                    {mapCn(m)}（熟练度 {Math.round(me.mapPrefs[m] ?? 50)}）
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="field">
-              <label className="small muted">赛制</label>
-              <div className="seg">
-                {/* the short forms the activity log already uses; the line under
-                    the button spells out what each one means */}
-                <button className={scrimFmt === 'full24' ? 'on' : ''} onClick={() => setScrimFmt('full24')}>
-                  24 回合
-                </button>
-                <button className={scrimFmt === 'first13' ? 'on' : ''} onClick={() => setScrimFmt('first13')}>
-                  先到 13
-                </button>
-              </div>
-            </div>
+            {/* one rift and one way to play a game: nothing else to choose */}
+            <div className="field tiny faint">一局完整的对局，不计积分、不进个人数据，没有 BP，按「战术」页的预案打。</div>
           </div>
           <div className="row" style={{ gap: 10, marginTop: 14 }}>
             <button
               className="primary"
-              disabled={!scrimOpp || !scrimMap}
+              disabled={!scrimOpp}
               onClick={() => {
                 const reply = scrimReply(game, scrimOpp)
                 if (!reply.ok) {
@@ -647,21 +622,16 @@ export default function Dashboard() {
                   return
                 }
                 act('scrim', () => {
-                  makeScrim(game, scrimOpp, game.day + 1, scrimMap, scrimFmt)
-                  logActivity(game, 'scrim',
-                    `约战 ${game.teams[scrimOpp]?.name} @ ${scrimMap}（${scrimFmt === 'full24' ? '24 回合' : '先到 13'}）`)
-                  toast(`已约战 ${game.teams[scrimOpp]?.name}，明天在 ${scrimMap} 进行。`)
+                  makeScrim(game, scrimOpp, game.day + 1, pool[0], 'full24')
+                  logActivity(game, 'scrim', `约战 ${game.teams[scrimOpp]?.name}`)
+                  toast(`已约战 ${game.teams[scrimOpp]?.name}，明天打一局训练赛。`)
                   setScrimOpp('')
                 })
               }}
             >
               发起约战
             </button>
-            <span className="tiny faint">
-              {scrimFmt === 'full24'
-                ? '攻防各 12 回合，练完整两个半场。'
-                : '先到 13 分，接近正赛节奏。'}
-            </span>
+
           </div>
           <p className="tiny faint" style={{ marginTop: 10, marginBottom: 0 }}>
             快要和我们打正赛的队、实力远高于我们的队可能拒绝。

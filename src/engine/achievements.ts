@@ -25,7 +25,7 @@
  * they are knowable: a squad shows who is here now, and finances.log keeps
  * only the last 200 lines.
  */
-import { CHAMPIONS, INTL_TITLES, MASTERS_1, MASTERS_2 } from './endings'
+import { CHAMPIONS, INTL_TITLES, MASTERS_1, MASTERS_2, climbed } from './endings'
 import { finalYearOf } from './eras'
 import { isImport } from './imports'
 import { squadOf } from './roster'
@@ -65,11 +65,15 @@ export interface Facts {
   squad: Player[]
   honours: { year: number; title: string }[]
   imports: number
-  /** our own maps that finished 13-0 our way */
-  perfectMaps: number
-  /** our own maps that went to overtime and came home */
-  overtimeWins: number
-  /** series won on the last map — 2-1 or 3-2 */
+  /** our own games won with the other side on zero kills */
+  perfectGames: number
+  /** our own games won from 4,000 gold or more behind at fifteen minutes */
+  comebacks: number
+  /** our own games won inside 25 minutes */
+  quickWins: number
+  /** best-of-fives won 3-2 */
+  fiveGameWins: number
+  /** series won in the last game — 2-1 or 3-2 */
   deciders: number
   /** series won without dropping a map, in a best-of-three or longer */
   sweeps: number
@@ -86,8 +90,10 @@ export function factsOf(state: GameState): Facts {
   const me = state.teams[state.myTeam]
   const honours = state.honours ?? []
 
-  let perfectMaps = 0
-  let overtimeWins = 0
+  let perfectGames = 0
+  let comebacks = 0
+  let quickWins = 0
+  let fiveGameWins = 0
   let deciders = 0
   let sweeps = 0
   for (const f of state.fixtures ?? []) {
@@ -96,17 +102,19 @@ export function factsOf(state: GameState): Facts {
     const usB = f.teamB === state.myTeam
     if (!usA && !usB) continue
     for (const m of f.result.maps ?? []) {
-      const ours = usA ? m.scoreA : m.scoreB
-      const theirs = usA ? m.scoreB : m.scoreA
-      if (ours <= theirs) continue
-      if (theirs === 0 && ours >= 13) perfectMaps++
-      // a map only goes past 13 by going to overtime
-      if (ours > 13) overtimeWins++
+      const won = usA ? m.scoreA > m.scoreB : m.scoreB > m.scoreA
+      if (!won) continue
+      const theirKills = usA ? m.killsB : m.killsA
+      if (theirKills === 0) perfectGames++
+      // goldAt15 is team A's lead
+      if (m.goldAt15 != null && (usA ? -m.goldAt15 : m.goldAt15) >= 4000) comebacks++
+      if (m.minutes != null && m.minutes < 25) quickWins++
     }
     const ourMaps = usA ? f.result.mapsWonA : f.result.mapsWonB
     const theirMaps = usA ? f.result.mapsWonB : f.result.mapsWonA
     if (f.bo > 1 && ourMaps > theirMaps) {
       if (theirMaps === ourMaps - 1) deciders++
+      if (f.bo === 5 && theirMaps === 2) fiveGameWins++
       if (theirMaps === 0) sweeps++
     }
   }
@@ -129,7 +137,7 @@ export function factsOf(state: GameState): Facts {
     squad,
     honours,
     imports: me ? squad.filter((p) => isImport(p, me)).length : 0,
-    perfectMaps, overtimeWins, deciders, sweeps,
+    perfectGames, comebacks, quickWins, fiveGameWins, deciders, sweeps,
     perfectYears: [...intlBy.values()].filter((got) => INTL_TITLES.every((t) => got.has(t))).length,
     // 第一赛段 plus both Stages is every tier-1 trophy the region has to give
     regionalSweeps: [...regBy.values()].filter((got) => got.size >= 3).length,
@@ -161,20 +169,22 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     key: 'firstChallengers', scope: 'run', group: '冠军', title: '次级联赛冠军',
     brief: '第一次拿下 次级联赛 赛段冠军',
-    test: (_s, f) => won(f, (t) => /^次级联赛 /.test(t)),
+    // 「LPL 次级联赛 · 上半年」: the region comes first
+    test: (_s, f) => won(f, (t) => /次级联赛/.test(t)),
   },
   {
-    key: 'firstAscension', scope: 'run', group: '冠军', title: '晋升赛冠军',
-    brief: '第一次从次级联赛被一级联赛的俱乐部请走',
-    test: (_s, f) => won(f, (t) => /^晋级一级联赛/.test(t)),
+    // promotion is off (the leagues are franchised), so the way up is a job
+    key: 'firstAscension', scope: 'run', group: '冠军', title: '从次级联赛走上来',
+    brief: '在次级联赛执教起步，后来执掌一支一级联赛的俱乐部',
+    test: (s) => climbed(s),
   },
   {
-    key: 'firstMasters', scope: 'run', group: '冠军', title: '大师赛冠军',
-    brief: '第一次拿下 国际赛',
+    key: 'firstMasters', scope: 'run', group: '冠军', title: '国际赛冠军',
+    brief: '第一次拿下 First Stand 或 MSI',
     test: (_s, f) => won(f, isMasters),
   },
   {
-    key: 'firstChampions', scope: 'run', group: '冠军', title: '冠军赛冠军',
+    key: 'firstChampions', scope: 'run', group: '冠军', title: '世界冠军',
     brief: '第一次拿下 全球总决赛',
     hard: true,
     test: (_s, f) => won(f, isChampions),
@@ -189,7 +199,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     // not 'perfectYear': endings and achievements share one key namespace on
     // the profile, and there is an ending by that name
     key: 'perfectSeason', scope: 'run', group: '冠军', title: '全冠之年',
-    brief: '同一年拿下两站大师赛和冠军赛',
+    brief: '同一年拿下 First Stand、MSI 和全球总决赛',
     hard: true,
     test: (_s, f) => f.perfectYears > 0,
   },
@@ -227,24 +237,34 @@ export const ACHIEVEMENTS: Achievement[] = [
 
   // =================================================================== 赛场
   {
-    key: 'perfect', scope: 'run', group: '赛场', title: '十三比零',
-    brief: '在一张图上 13:0 零封对手',
+    key: 'perfect', scope: 'run', group: '赛场', title: '零封',
+    brief: '赢下一局，对手一个人头都没拿到',
     hard: true,
-    test: (_s, f) => f.perfectMaps > 0,
+    test: (_s, f) => f.perfectGames > 0,
   },
   {
-    key: 'overtime', scope: 'run', group: '赛场', title: '加时局',
-    brief: '赢下一张打进加时的地图',
-    test: (_s, f) => f.overtimeWins > 0,
+    key: 'overtime', scope: 'run', group: '赛场', title: '逆风翻盘',
+    brief: '15 分钟落后 4000 经济，最后赢下这一局',
+    test: (_s, f) => f.comebacks > 0,
   },
   {
-    key: 'decider', scope: 'run', group: '赛场', title: '决胜图',
-    brief: '在最后一张图上拿下系列赛',
+    key: 'quickWin', scope: 'run', group: '赛场', title: '速战速决',
+    brief: '25 分钟之内赢下一局',
+    test: (_s, f) => f.quickWins > 0,
+  },
+  {
+    key: 'decider', scope: 'run', group: '赛场', title: '决胜局',
+    brief: '在最后一局拿下系列赛',
     test: (_s, f) => f.deciders > 0,
   },
   {
+    key: 'fiveGames', scope: 'run', group: '赛场', title: '五局三胜',
+    brief: 'BO5 打满五局，最后拿下',
+    test: (_s, f) => f.fiveGameWins > 0,
+  },
+  {
     key: 'sweep', scope: 'run', group: '赛场', title: '干净利落',
-    brief: '一张图不丢地赢下一个系列赛',
+    brief: '一局不丢地赢下一个系列赛',
     test: (_s, f) => f.sweeps > 0,
   },
 
@@ -437,9 +457,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   // =============================================================== 生涯累计
   {
     key: 'allRegions', scope: 'life', group: '收藏', title: '走遍四大赛区',
-    brief: '在美洲、EMEA、太平洋、中国都执教过',
+    brief: '在 LPL、LCK、LEC、LCS 都执教过（含各自的次级联赛）',
     hard: true,
-    lifeTest: (r) => regionsManaged(r.clubs).length >= 4,
+    lifeTest: (r) => ['LPL', 'LCK', 'LEC', 'LCS'].every((x) => regionsManaged(r.clubs).includes(x)),
   },
   {
     key: 'careers5', scope: 'life', group: '收藏', title: '老江湖',

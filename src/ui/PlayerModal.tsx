@@ -422,8 +422,8 @@ function StatBlock({ title, s }: { title: string; s: Stats }) {
           <span>击杀 {s.kills}</span>
           <span>死亡 {s.deaths}</span>
           <span>助攻 {s.assists}</span>
-          <span>首杀差 {s.firstKills - s.firstDeaths > 0 ? '+' : ''}{s.firstKills - s.firstDeaths}</span>
-          <span>残局 {s.clutches}</span>
+          <span>先手差 {s.firstKills - s.firstDeaths > 0 ? '+' : ''}{s.firstKills - s.firstDeaths}</span>
+          <span>多杀 {s.clutches}</span>
           <span>MVP {s.mvps}</span>
         </div>
       </div>

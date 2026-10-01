@@ -97,7 +97,7 @@ function Verdict({ mine, theirs }: { mine: Lineup; theirs: Lineup }) {
     <p className={`compverdict${good ? ' is-good' : ' is-bad'}`}>
       {bits.join('；')}。
       <span className="tiny faint">
-        {' '}{good ? '顺着打' : '需要用暂停把节奏拽回来'}
+        {' '}{good ? '顺着打' : '需要临场调整把节奏拽回来'}
       </span>
     </p>
   )

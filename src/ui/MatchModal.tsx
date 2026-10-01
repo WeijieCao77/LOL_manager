@@ -175,7 +175,8 @@ export default function MatchModal({ fixture, onClose }: { fixture: Fixture; onC
 }
 
 /** Six axes computed from what the sim actually records for a map. */
-const PERF_AXES = ['火力', '输出', '生存', '突破', '串联', '残局']
+// 表现分 / 每分钟伤害 / 少死 / 先手击杀 / 助攻 / 一个节点里三杀以上
+const PERF_AXES = ['表现', '输出', '生存', '先手', '串联', '多杀']
 
 function perfOf(l: MapLine): number[] {
   const r = Math.max(1, l.rounds)

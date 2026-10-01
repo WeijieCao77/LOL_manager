@@ -29,6 +29,13 @@ import { seasonsOf } from './eras'
 import { squadOf } from './roster'
 import { isImport } from './imports'
 
+/** started at a second-tier club and has since run a first-tier one */
+export const climbed = (s: GameState): boolean => {
+  const tiers = (s.tenures ?? []).map((t) => s.teams[t.teamId]?.tier)
+  const first = s.startTier ?? tiers[0]
+  return first === 2 && (tiers.includes(1) || s.teams[s.myTeam]?.tier === 1)
+}
+
 export const FINAL_YEAR = 2036
 
 /**
@@ -230,34 +237,34 @@ export const ENDINGS: Ending[] = [
   // ================================================================== 王朝线
   {
     key: 'immortal', track: '王朝', title: '不朽',
-    brief: '连续五年包揽两站大师赛和冠军赛——十五座国际冠军',
+    brief: '连续五年包揽First Stand、MSI 和全球总决赛——十五座国际冠军',
     test: (_s, f) => f.perfectStreak >= 5,
-    text: (s, f) => `连续 ${f.perfectStreak} 年，两站大师赛和冠军赛全归${club(s)}。`
+    text: (s, f) => `连续 ${f.perfectStreak} 年，First Stand、MSI 和全球总决赛全归${club(s)}。`
       + `十五座国际奖杯。后来的人提起这十年，只会说那是一个时代。`,
   },
   {
     key: 'golden', track: '王朝', title: '黄金之路',
-    brief: '连续三年包揽两站大师赛和冠军赛——三年九冠',
+    brief: '连续三年包揽First Stand、MSI 和全球总决赛——三年九冠',
     test: (_s, f) => f.perfectStreak >= 3,
     text: (s, f) => `三年九座国际冠军，一座没让。${f.perfectYears.slice(0, 3).join('、')}，一年不落。`
       + `${club(s)}走完了所有人都以为只存在于理论里的路。`,
   },
   {
     key: 'perfectYear', track: '王朝', title: '全冠之年',
-    brief: '同一年拿下两站大师赛和冠军赛',
+    brief: '同一年拿下First Stand、MSI 和全球总决赛',
     test: (_s, f) => f.perfectYears.length > 0,
     text: (s, f) => `${f.perfectYears[0]} 年，这个赛季所有的国际奖杯都进了${club(s)}的柜子。`
       + `那一年打完，所有人的休赛期都只在研究一件事：怎么防住你。`,
   },
   {
     key: 'fivePeat', track: '王朝', title: '五连霸',
-    brief: '连续五年拿下冠军赛',
+    brief: '连续五年拿下全球总决赛',
     test: (_s, f) => f.champStreak >= 5,
     text: (s, f) => `连续 ${f.champStreak} 年世界冠军。${club(s)}已经不只是一支队伍的名字，而是一个时代的名字。`,
   },
   {
     key: 'threePeat', track: '王朝', title: '三连霸',
-    brief: '连续三年拿下冠军赛',
+    brief: '连续三年拿下全球总决赛',
     test: (_s, f) => f.champStreak >= 3,
     text: (s, f) => `连续 ${f.champStreak} 年世界冠军。十年下来，没人再怀疑${club(s)}属于哪个层级。`,
   },
@@ -270,23 +277,23 @@ export const ENDINGS: Ending[] = [
   },
   {
     key: 'defend', track: '王朝', title: '卫冕',
-    brief: '连续两年拿下冠军赛',
+    brief: '连续两年拿下全球总决赛',
     test: (_s, f) => f.champStreak >= 2,
     text: (s) => `蝉联世界冠军。第一座可以说是运气，第二座是${club(s)}`
       + `真的学会了怎么赢。`,
   },
   {
     key: 'summit', track: '王朝', title: '登顶',
-    brief: '拿下一次冠军赛',
+    brief: '拿下一次全球总决赛',
     test: (_s, f) => f.champYears.length > 0,
-    text: (s, f) => `${f.champYears[0]} 年，${club(s)}第一次举起了冠军赛奖杯。`
+    text: (s, f) => `${f.champYears[0]} 年，${club(s)}第一次举起了召唤师杯。`
       + `十年任期里，你做到了绝大多数经理做不到的事。`,
   },
   {
-    key: 'masterOnly', track: '王朝', title: '大师',
-    brief: '拿过大师赛，但始终没能拿下冠军赛',
+    key: 'masterOnly', track: '王朝', title: '季中霸主',
+    brief: '拿过 First Stand 或 MSI，但始终没能拿下全球总决赛',
     test: (_s, f) => f.intlTitles > 0 && f.champYears.length === 0,
-    text: (s, f) => `${f.intlTitles} 座大师赛奖杯，和一个始终没填上的空位。`
+    text: (s, f) => `${f.intlTitles} 座国际赛奖杯，和召唤师杯那个始终没填上的空位。`
       + `${club(s)}赢过所有人，只是从来没在最后那一天赢。`,
   },
   {
@@ -299,7 +306,7 @@ export const ENDINGS: Ending[] = [
   {
     key: 'ascend', track: '王朝', title: '升班马',
     brief: '从次级联赛起步，走进了一级联赛',
-    test: (_s, f) => f.promotions > 0,
+    test: (s) => climbed(s),
     text: (s) => `你在次级联赛接手了${club(s)}，最后站上了一级联赛的舞台。`
       + `那些年在空荡荡的赛场里打的比赛，现在都值了。`,
   },

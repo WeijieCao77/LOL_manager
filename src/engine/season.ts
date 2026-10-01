@@ -578,7 +578,7 @@ export function applyPatch(state: GameState, big: boolean, notes: string[] = [],
   // what the patch is FOR: the phase that follows the event just settled —
   // never the event itself, whose matches were played on the old numbers
   const after = stage === 'masters1' ? '第二赛段起'
-    : stage === 'masters2' ? '冠军赛起'
+    : stage === 'masters2' ? '第三赛段起'
     : stage === 'champions' ? `${state.year + 1} 赛季起`
     : '下一阶段起'
   state.patch = { ...rollPatch(state.patch, pool, state.day, name, big, rng), id, year: state.year, after }
