@@ -71,6 +71,20 @@ WORLD_LEAGUES = {
         ('LCKC', 'LCK', 2, 'LCK CL'), ('NACL', 'LCS', 2, 'NACL'), ('LFL', 'LEC', 2, 'LFL'),
         ('PCS', 'LCP', 2, 'PCS'), ('CD', 'CBLOL', 2, 'Circuito Desafiante'),
     ],
+    # 历史入口。赛区键沿用今天的六条线（引擎里的 LEC / LCS / LCP 就是当年的 EU LCS / NA LCS / LMS、PCS），
+    # 显示名用当年的叫法。2016 年还有升降级。
+    2016: [
+        ('LPL', 'LPL', 1, 'LPL'), ('LCK', 'LCK', 1, 'LCK'), ('EU LCS', 'LEC', 1, 'EU LCS'),
+        ('NA LCS', 'LCS', 1, 'NA LCS'), ('LMS', 'LCP', 1, 'LMS'), ('CBLOL', 'CBLOL', 1, 'CBLOL'),
+        ('LSPL', 'LPL', 2, 'LSPL'), ('CK', 'LCK', 2, 'Challengers Korea'), ('EU CS', 'LEC', 2, 'EU CS'),
+        ('NA CS', 'LCS', 2, 'NA CS'),
+    ],
+    2022: [
+        ('LPL', 'LPL', 1, 'LPL'), ('LCK', 'LCK', 1, 'LCK'), ('LEC', 'LEC', 1, 'LEC'),
+        ('LCS', 'LCS', 1, 'LCS'), ('PCS', 'LCP', 1, 'PCS'), ('CBLOL', 'CBLOL', 1, 'CBLOL'),
+        ('LDL', 'LPL', 2, 'LDL'), ('LCKC', 'LCK', 2, 'LCK CL'), ('LFL', 'LEC', 2, 'LFL'),
+        ('LCSA', 'LCS', 2, 'LCS Academy'), ('CBLOLA', 'CBLOL', 2, 'CBLOL Academy'),
+    ],
 }
 
 # 往年的联赛代码归到今天的哪条线上、相对那条线差多少（只用于给往年的数据定绝对水平）
@@ -80,10 +94,27 @@ LINEAGE = {
     'LDL': ('LPL', -11), 'LVP SL': ('LEC', -11), 'PRM': ('LEC', -11), 'TCL': ('LEC', -11),
     'NLC': ('LEC', -13), 'EM': ('LEC', -9), 'EUM': ('LEC', -9),
 }
-TIER2_DROP = {'LCKC': -13, 'NACL': -12, 'LFL': -10, 'PCS': -6, 'CD': -9}
+TIER2_DROP = {'LCKC': -13, 'NACL': -12, 'LFL': -10, 'PCS': -6, 'CD': -9,
+              # 历史入口的次级联赛：同一套落差（LSPL ≈ LDL，CK ≈ LCK CL，EU/NA CS ≈ ERL / NACL）
+              'LSPL': -11, 'CK': -13, 'EU CS': -11, 'NA CS': -12, 'LDL': -11, 'LCSA': -13, 'CBLOLA': -10}
 TIER2_MAX = 10         # 二级联赛最多收几支队：OE 的同一个联赛代码下常混着更低一级的队
 
 INTERNATIONAL = {'MSI', 'WLDs', 'FST', 'EWC'}
+
+# 历史入口：OE 的联赛代码前后不一致——2015 年韩国记作 OGN，同一年里欧美又零星混着今天的 LEC / LCS 代码。
+# 读进来时统一成那个世界的联赛代码。（2026 世界不需要。）
+HIST_ALIAS = {
+    2016: {'OGN': 'LCK', 'LEC': 'EU LCS', 'LCS': 'NA LCS'},
+    2022: {'CK': 'LCKC'},
+}
+# OE 会把老队名改成今天的组织名。历史世界里换回当年的叫法。
+HIST_TEAM_NAMES = {
+    2016: {'DN SOOPers': 'Afreeca Freecs'},
+    2022: {'DN SOOPers': 'Kwangdong Freecs', 'Dplus KIA': 'DWG KIA', 'HANJIN BRION': 'Fredit BRION',
+           'OKSavingsBank BRION': 'Fredit BRION', 'BNK FEARX': 'Liiv SANDBOX', 'DN Freecs': 'Kwangdong Freecs'},
+}
+# 开局名单取开季多少天内的出场：今天的世界看两个月，历史世界只看一个月（之后的是赛季中的换人、升降级）
+OPENING_DAYS = {False: 60, True: 30}
 
 MAJOR_LINES = {'LPL', 'LCK', 'LEC', 'EU LCS', 'LCS', 'NA LCS', 'LTA N'}
 RAPM_WINDOW = {0: 1.0, 1: .7, 2: .45}   # 距开局年几年 -> 权重
@@ -166,8 +197,12 @@ def norm_name(s):
 
 
 # ================================================================ 读 OE
+ALIAS = {}       # set in main(): the world year's HIST_ALIAS
+TEAM_NAMES = {}  # set in main(): the world year's HIST_TEAM_NAMES
+
+
 def read_year(year, wanted):
-    """一年的选手行与队伍行，只留 wanted 里的联赛。"""
+    """一年的选手行与队伍行，只留 wanted 里的联赛（联赛代码和队名先按世界年份换成当年的）。"""
     path = os.path.join(DATA, 'oracleselixir', f'{year}_OE.csv')
     if not os.path.exists(path):
         print(f'  ! 没有 {path}', file=sys.stderr)
@@ -175,17 +210,20 @@ def read_year(year, wanted):
     players, teams = [], []
     with open(path, encoding='utf-8', errors='replace') as fh:
         for row in csv.DictReader(fh):
+            row['league'] = ALIAS.get(row['league'], row['league'])
             if row['league'] not in wanted:
                 continue
+            row['teamname'] = TEAM_NAMES.get(row['teamname'], row['teamname'])
             (teams if row['position'] == 'team' else players).append(row)
     return players, teams
 
 
-def league_strength(years):
-    """一级赛区之间的强弱：国际赛里跨赛区的每一局，Bradley-Terry 拟合到对数几率上。"""
+def league_strength(years, home_years=()):
+    """一级赛区之间的强弱：国际赛里跨赛区的每一局，Bradley-Terry 拟合到对数几率上。
+    home_years 只用来认队伍的主场联赛，那几年的国际赛不进拟合（历史入口不能看开局之后的比赛）。"""
     games = collections.defaultdict(dict)
     home = collections.defaultdict(collections.Counter)
-    for y in years:
+    for y in sorted(set(years) | set(home_years)):
         path = os.path.join(DATA, 'oracleselixir', f'{y}_OE.csv')
         if not os.path.exists(path):
             continue
@@ -193,17 +231,25 @@ def league_strength(years):
             for row in csv.DictReader(fh):
                 if row['position'] != 'team':
                     continue
-                if row['league'] in INTERNATIONAL:
+                lg = ALIAS.get(row['league'], row['league'])
+                if lg in INTERNATIONAL and y not in years:
+                    continue
+                if lg in INTERNATIONAL:
                     games[(y, row['gameid'])][row['side']] = (row['teamname'], row['result'] == '1')
                 else:
-                    home[(y, row['teamname'])][row['league']] += 1
+                    home[(y, row['teamname'])][lg] += 1
     wins = collections.defaultdict(lambda: collections.Counter())
     for (y, _), sides in games.items():
         if len(sides) != 2:
             continue
         (ta, wa), (tb, _) = sides.values()
-        la = home[(y, ta)].most_common(1)[0][0] if home[(y, ta)] else None
-        lb = home[(y, tb)].most_common(1)[0][0] if home[(y, tb)] else None
+        # OE has no 2015 LPL at all: EDG's MSI is placed by where EDG played the year after
+        def home_of(t):
+            for yy in (y, y + 1, y - 1):
+                if home[(yy, t)]:
+                    return home[(yy, t)].most_common(1)[0][0]
+            return None
+        la, lb = home_of(ta), home_of(tb)
         la, lb = LINEAGE.get(la, (la, 0))[0], LINEAGE.get(lb, (lb, 0))[0]
         if not la or not lb or la == lb:
             continue
@@ -402,6 +448,8 @@ def main():
         sys.exit(f'还没有 {Y} 年的联赛表（WORLD_LEAGUES）')
     out_path = args.out or os.path.join(REPO, 'data-build', f'world_{Y}.json')
     world_leagues = WORLD_LEAGUES[Y]
+    ALIAS.update(HIST_ALIAS.get(Y, {}) if args.history else {})
+    TEAM_NAMES.update(HIST_TEAM_NAMES.get(Y, {}) if args.history else {})
     codes = {c for c, *_ in world_leagues}
     wanted = codes | set(LINEAGE) | INTERNATIONAL
 
@@ -410,14 +458,20 @@ def main():
     print(f'世界 {Y}；评分年份权重 {year_w}；数据目录 {DATA}', file=sys.stderr)
 
     # ---- 赛区强度 -> 联赛基准
-    bt, bt_n = league_strength(sorted(year_w))
+    # a historical world may not know the internationals of its own year: they had not been played
+    # ...but the year before may have no domestic games for some regions (OE has no 2015 LPL), so their
+    # home is read from the opening year's domestic tables too (league_strength looks a year either way)
+    bt, bt_n = league_strength(sorted(y for y in year_w if not args.history or y < Y) or sorted(year_w),
+                               home_years=(Y,) if args.history else ())
     base = {}
     for code, region, tier, _ in world_leagues:
         if tier == 1:
             base[code] = TOP_BASE + BT_SCALE * bt.get(code, BT_FLOOR)
+    # a second tier sits below its own region's first tier, whatever that league was called that year
+    t1code = {region: code for code, region, tier, _ in world_leagues if tier == 1}
     for code, region, tier, _ in world_leagues:
         if tier == 2:
-            base[code] = base[region] + TIER2_DROP.get(code, -11)
+            base[code] = base[t1code[region]] + TIER2_DROP.get(code, -11)
     for old, (line, off) in LINEAGE.items():
         if line in base and old not in base:
             base[old] = base[line] + off
@@ -427,8 +481,17 @@ def main():
     recs = []                       # (name, pos, league, year, n, z{feat}, agg)
     year_rows = {}
     rows_by_year = {}
+    opening_days = OPENING_DAYS[bool(args.history)]
     for y in sorted(year_w):
         players, teams = read_year(y, wanted)
+        if args.history and y == Y:
+            # its own year only as far as the opening month: no peeking at the season it starts
+            first = {}
+            for r in teams:
+                first[r['league']] = min(first.get(r['league'], '9999'), r['date'][:10])
+            from datetime import date as _d
+            keep = lambda r: (_d.fromisoformat(r['date'][:10]) - _d.fromisoformat(first.get(r['league'], r['date'][:10]))).days <= opening_days
+            players, teams = [r for r in players if keep(r)], [r for r in teams if keep(r)]
         rows_by_year[y] = (players, teams)
         if y == Y:
             year_rows = dict(players=players, teams=teams)
@@ -529,11 +592,15 @@ def main():
         return (date.fromisoformat(b) - date.fromisoformat(a)).days
 
     for r in year_rows['players']:
-        if r['league'] in codes and r['position'] in POS and days(season_start[r['league']], r['date'][:10]) <= 60:
+        if r['league'] in codes and r['position'] in POS and days(season_start[r['league']], r['date'][:10]) <= opening_days:
             opening[(r['league'], r['teamname'])][r['position']][(r.get('playername') or '').strip()] += 1
     n_splits = {lg: len({s for (l, _), ss in splits_of.items() if l == lg for s in ss}) for lg in codes}
     # 客队：联赛有多个赛段，而这支队只在其中一个出现（2026 LEC 冬季赛的两支 ERL 客队）
     guests = {k for k, ss in splits_of.items() if n_splits[k[0]] >= 2 and len(ss) == 1 and k[0] in {c for c, _, t, _ in world_leagues if t == 1}}
+    if args.history:
+        # promotion and relegation, and OE's patchy early years, put real members in one split only;
+        # the opening month already decides who was there
+        guests = set()
 
     # ---- 选手档案表
     bio = collections.defaultdict(list)
@@ -550,7 +617,8 @@ def main():
         hit = [c for c in cands if norm_name(c.get('current_team')) == norm_name(team)]
         if len(hit) == 1:
             return hit[0]
-        hit = [c for c in cands if role_of.get(c.get('role')) == pos and c.get('is_retired') != '1']
+        # in a historical world the retired were playing — Peanut, Duke and Fly were all on rosters in 2016
+        hit = [c for c in cands if role_of.get(c.get('role')) == pos and (args.history or c.get('is_retired') != '1')]
         if len(hit) == 1:
             return hit[0]
         return cands[0] if len(cands) == 1 else None          # 同名多人又分不清：留空，不猜
@@ -559,9 +627,12 @@ def main():
     tpath = os.path.join(DATA, 'raw', 'teams_en.json')
     if os.path.exists(tpath):
         raw = json.load(open(tpath, encoding='utf-8'))
-        for t in (raw.get('data', {}).get('teams') or []):
-            if t.get('code') and t.get('status') == 'active':
-                tags.setdefault(norm_name(t['name']), t['code'])
+        # active teams first, then the disbanded ones — a historical world is full of them
+        # (SK Telecom T1, ROX Tigers, H2K…), and Riot's table still carries their codes
+        for want in ('active', None):
+            for t in (raw.get('data', {}).get('teams') or []):
+                if t.get('code') and (want is None or t.get('status') == want):
+                    tags.setdefault(norm_name(t['name']), t['code'])
 
     # ---- 组装
     teams_out, players_out, used = [], [], set()
@@ -658,7 +729,8 @@ def main():
         # 队长：开局时每队运营最高的首发。这只是游戏里的一个职务（经理可以改任），
         # 不是在说现实里谁是指挥——那件事数据分不出来，本作不去指定。
         if mine:
-            first_five = [next(p for p in mine if p['role'] == ROLE_CN[q]) for q in POS]
+            # a roster missing a position (reported as a hole above) still gets a captain
+            first_five = [x for x in (next((p for p in mine if p['role'] == ROLE_CN[q]), None) for q in POS) if x]
             max(first_five, key=lambda p: p['attrs']['macro'])['isCaptain'] = True
         wage = sum(p['salary'] for p in mine)
         teams_out.append(dict(

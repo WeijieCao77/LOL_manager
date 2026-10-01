@@ -1,7 +1,7 @@
 import { assertCareerSave } from './saveShape'
 import { savePrefix as prefix, saveIndexKey as indexKey } from './saveKeys'
 export { setSaveNamespace, saveNamespace } from './saveKeys'
-import { canonAgents } from './content'
+import { canonAgents, setMetaYear } from './content'
 import { migrateLife } from './managerLife'
 import { seedAgentPro } from './agents'
 import { pruneMatchDetail, stripToTheBone } from './match'
@@ -321,6 +321,7 @@ function migrate(state: GameState): GameState {
     p.injuredUntil ??= 0
   }
   state.agentProGraded = true
+  setMetaYear(state.year)
   // Fixture ids come from a counter in module memory that only a new season
   // resets, so a page reload mid-season started again at F0 while F0…Fn were
   // still on the calendar — two matches sharing an id share its random stream

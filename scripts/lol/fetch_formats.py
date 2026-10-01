@@ -17,10 +17,23 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_liquipedia import API, OUT, sess, wikitext  # noqa: E402
 
-LEAGUES = {
-    'LPL': 'LPL', 'LCK': 'LCK', 'LEC': 'LEC', 'LCS': 'LCS', 'LCP': 'LCP', 'CBLOL': 'CBLOL',
-    'LCK CL': 'LCK CL', 'LFL': 'LFL', 'NACL': 'North American Challengers League', 'PCS': 'PCS',
-    'Circuito Desafiante': 'Circuito Desafiante',
+LEAGUES_BY_YEAR = {
+    2026: {
+        'LPL': 'LPL', 'LCK': 'LCK', 'LEC': 'LEC', 'LCS': 'LCS', 'LCP': 'LCP', 'CBLOL': 'CBLOL',
+        'LCK CL': 'LCK CL', 'LFL': 'LFL', 'NACL': 'North American Challengers League', 'PCS': 'PCS',
+        'Circuito Desafiante': 'Circuito Desafiante',
+    },
+    # the historical entries: the leagues as they were called that year
+    2016: {
+        # Liquipedia files the 2016 LCS under its regions and the Challengers under CK
+        'LPL': 'LPL', 'LCK': 'LCK', 'EU LCS': 'LCS/Europe', 'NA LCS': 'LCS/North America', 'LMS': 'LMS', 'CBLOL': 'CBLOL',
+        'LSPL': 'LSPL', 'Challengers Korea': 'CK', 'EU CS': 'Challenger Series/Europe', 'NA CS': 'Challenger Series/North America',
+    },
+    2022: {
+        'LPL': 'LPL', 'LCK': 'LCK', 'LEC': 'LEC', 'LCS': 'LCS', 'PCS': 'PCS', 'CBLOL': 'CBLOL',
+        'LDL': 'LDL', 'LCK CL': 'LCK CL', 'LFL': 'LFL', 'LCS Academy': 'LCS Academy League',
+        'CBLOL Academy': 'CBLOL/Academy',
+    },
 }
 INTERNATIONAL = ['First Stand Tournament/{y}', 'Mid-Season Invitational/{y}', 'World Championship/{y}']
 
@@ -52,7 +65,7 @@ def main() -> int:
     y = ap.parse_args().year
     s = sess()
     titles: dict[str, list[str]] = {}
-    for key, prefix in LEAGUES.items():
+    for key, prefix in LEAGUES_BY_YEAR[y].items():
         found = [t for t in prefix_pages(s, f'{prefix}/{y}') if t == f'{prefix}/{y}' or t.startswith(f'{prefix}/{y}/')]
         titles[key] = found
     titles['international'] = [t.format(y=y) for t in INTERNATIONAL]

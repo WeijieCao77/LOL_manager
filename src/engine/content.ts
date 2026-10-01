@@ -31,6 +31,8 @@ export interface Champion {
   fight: number
   /** pick / ban / win rate in the major leagues in the world's opening season */
   meta: { pick: number; ban: number; win: number | null } | null
+  /** every year's [pick, ban, win], by year */
+  metaBy?: Record<string, [number, number, number | null]>
 }
 
 export const CHAMPIONS = (raw as unknown as { champions: Champion[] }).champions
@@ -83,9 +85,32 @@ export const AGENT_ROLE: Record<string, Role> = Object.fromEntries(
 ) as Record<string, Role>
 export const agentRoles = (a: string): Role[] => championOf(a)?.positions ?? []
 
-/** How contested a champion is in the opening season's drafts: picks plus bans. */
+/**
+ * The year whose real drafts set the meta. A 2016 career drafts like 2016 did,
+ * and the year after like 2017 — every year's pick and ban rates are in the
+ * table (scripts/lol/build_champions.py). Set by the season clock
+ * (season.ts advanceDay, world.ts createNewGame, save.ts on load).
+ */
+const META_YEARS = [...new Set(CHAMPIONS.flatMap((c) => Object.keys(c.metaBy ?? {})).map(Number))].sort((a, b) => a - b)
+let metaYear = META_YEARS[META_YEARS.length - 1] ?? 2026
+export function setMetaYear(year: number): void {
+  // the nearest year with data, never ahead of the career
+  const y = [...META_YEARS].reverse().find((x) => x <= year) ?? META_YEARS[0]
+  if (y !== undefined) metaYear = y
+}
+export const currentMetaYear = (): number => metaYear
+
+/** this year's real pick / ban / win rates for a champion */
+export function metaOf(a: string): { pick: number; ban: number; win: number | null } | null {
+  const c = championOf(a)
+  const row = c?.metaBy?.[String(metaYear)]
+  if (row) return { pick: row[0], ban: row[1], win: row[2] }
+  return c?.meta ?? null
+}
+
+/** How contested a champion is in this year's drafts: picks plus bans. */
 export const presence = (a: string): number => {
-  const m = championOf(a)?.meta
+  const m = metaOf(a)
   return m ? m.pick + m.ban : 0
 }
 
@@ -100,7 +125,7 @@ export const hotChampions = (): string[] =>
 
 /** 「选 12% · 禁 30%」 — this season's real draft numbers for a champion, or '' */
 export const draftLine = (a: string): string => {
-  const m = championOf(a)?.meta
+  const m = metaOf(a)
   if (!m) return ''
   const pct = (x: number) => `${Math.round(x * 100)}%`
   return m.ban >= 0.01 ? `选 ${pct(m.pick)} · 禁 ${pct(m.ban)}` : `选 ${pct(m.pick)}`
@@ -111,9 +136,16 @@ export const draftLine = (a: string): string => {
  * lineup automatically with something sensible and to tell the manager when a
  * hand-made pick is unusual. Read off the season's real drafts.
  */
-export const MAP_META: Record<string, string[]> = {
-  召唤师峡谷: CHAMPIONS.slice().sort((a, b) => presence(b.id) - presence(a.id)).map((c) => c.id),
-}
+export const MAP_META: Record<string, string[]> = {}
+// read through a getter, so it is always the meta of the year the career is in
+const metaOrder = new Map<number, string[]>()
+Object.defineProperty(MAP_META, '召唤师峡谷', {
+  enumerable: true,
+  get: () => {
+    if (!metaOrder.has(metaYear)) metaOrder.set(metaYear, CHAMPIONS.slice().sort((a, b) => presence(b.id) - presence(a.id)).map((c) => c.id))
+    return metaOrder.get(metaYear)!
+  },
+})
 
 export const SPONSOR_NAMES = [
   'Hyperion Energy', 'Nexon Peripherals', 'Vertex Bank', 'Kaido Motors', 'BitStream',

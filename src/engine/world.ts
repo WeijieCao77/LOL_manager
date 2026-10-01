@@ -1,6 +1,6 @@
 import { seedAgentPro } from './agents'
 import { agentAvailable } from './eras'
-import { canonAgents } from './content'
+import { canonAgents, setMetaYear } from './content'
 import raw from '../data/world.json'
 import { dossierOf } from './dossier'
 import { Rng, clamp, hashStr } from './rng'
@@ -185,6 +185,7 @@ export function createNewGame(
   const s = seed ?? (hashStr(myTeamId + managerName + String(Date.now())) >>> 0)
   const rng = new Rng(s)
   const startYear = opts.year ?? 2026
+  setMetaYear(startYear)
   // A 2016 career opens in January 2016: nobody plays a champion that does not
   // exist yet, and nobody's pool holds one.
   const released = (a: string) => agentAvailable({ year: startYear, day: 0 }, a)

@@ -20,7 +20,11 @@ ROUNDS_PER_GAME = 20
 
 
 def main():
-    world = json.load(open(os.path.join(REPO, 'data-build', 'world_2026.json'), encoding='utf-8'))
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--year', type=int, default=2026)
+    year_arg = ap.parse_args().year
+    world = json.load(open(os.path.join(REPO, 'data-build', f'world_{year_arg}.json'), encoding='utf-8'))
     champs = json.load(open(os.path.join(REPO, 'data-build', 'champions.json'), encoding='utf-8'))
     known = {c['id'] for c in champs['champions']}
 
@@ -50,14 +54,19 @@ def main():
     meta = dict(world['meta'])
     meta['analysts'] = meta.get('analysts') or []   # 真实的分析师来自 Liquipedia；没记的不编
     out = dict(meta=meta, teams=world['teams'], players=players)
-    dst = os.path.join(REPO, 'src', 'data', 'world.json')
+    # the 2026 world is the one the game opens on; a historical one is its own file, loaded on demand
+    dst = os.path.join(REPO, 'src', 'data', 'world.json' if year_arg == 2026 else f'world_{year_arg}.json')
     json.dump(out, open(dst, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
     print(f'-> {dst}  {os.path.getsize(dst) // 1024} KB  {len(out["teams"])} 队 {len(players)} 人')
 
+    if year_arg != 2026:
+        return                                  # the champion table is written with the 2026 world
     cdst = os.path.join(REPO, 'src', 'data', 'champions.json')
     year = str(meta['season'])
+    # every year's real pick, ban and win rate: a career drafts to the meta of the year it is in
     slim = [dict(id=c['id'], cn=c['cn'], positions=c['positions'], since=c['since'],
-                 lean=c['lean'], fight=c['fight'], meta=c['meta'].get(year))
+                 lean=c['lean'], fight=c['fight'], meta=c['meta'].get(year),
+                 metaBy={y: [m['pick'], m['ban'], m['win']] for y, m in c['meta'].items() if m})
             for c in champs['champions']]
     json.dump(dict(season=meta['season'], champions=slim), open(cdst, 'w', encoding='utf-8'),
               ensure_ascii=False, separators=(',', ':'))

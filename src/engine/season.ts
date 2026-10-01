@@ -12,7 +12,7 @@ import { awardPrize, weeklyFinance } from './finance'
 import { aiTransferTick, refreshListings, resolveDueOffers, resolveEnquiries } from './transfer'
 import { offerGigs, resolveSponsorTalks, runGigsToday, streamWeek, settleSponsorDemands, sponsorWorth } from './commercial'
 import { offerBundle, settleLeagueSeason, tickLeagueOffer } from './leagueShare'
-import { MAP_META, agentCn, mapCn } from './content'
+import { MAP_META, agentCn, mapCn, setMetaYear } from './content'
 import { FAM_MATCH, FAM_SCRIM, learnComp, rollPatch } from './comp'
 import { CHAMPIONS, endingsFor, MASTERS_1, MASTERS_2, tenureCn } from './endings'
 import { agentAvailable, agentsReleasedToday, finalYearOf, midYearOf, realPool, seasonsOf, startYearOf } from './eras'
@@ -2065,6 +2065,8 @@ function formFromResult(state: GameState, ids: string[], result: MatchResult): v
 export const HEADLESS = { noDismissal: false }
 
 export function advanceDay(state: GameState, opts: AdvanceOpts = {}): DayReport {
+  // the drafts of the year the career is in (content.setMetaYear)
+  setMetaYear(state.year)
   // A career that has ended does not keep going. The sack screen has no close
   // button so a person cannot click past it, but nothing in the engine said so:
   // driven any other way the clock ran on for another season and a half,

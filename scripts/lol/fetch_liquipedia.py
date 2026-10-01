@@ -166,28 +166,39 @@ def infobox(text: str) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--players", action="store_true")
+    ap.add_argument("--year", type=int, default=2026)
     args = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     s = sess()
 
     if not args.players:
-        titles = [t for ts in LEAGUE_PAGES.values() for t in ts]
+        pages_by_league = LEAGUE_PAGES
+        if args.year != 2026:
+            # a historical year: every page of each league that year, earliest first, from fetch_formats.py
+            fm = json.load(open(OUT / f"formats_{args.year}.json", encoding="utf-8"))["pages"]
+            pages_by_league = {}
+            for t, v in sorted(fm.items(), key=lambda kv: kv[1].get("start") or "9999"):
+                if v["group"] != "international":
+                    pages_by_league.setdefault(v["group"], []).append(t)
+        LEAGUE_PAGES_Y = pages_by_league
+        titles = [t for ts in LEAGUE_PAGES_Y.values() for t in ts]
         pages = wikitext(s, titles)
         coaches: dict[str, dict] = {}
         found = {}
-        for league, ts in LEAGUE_PAGES.items():
+        for league, ts in LEAGUE_PAGES_Y.items():
             hit = [t for t in ts if t in pages]
             found[league] = hit
             for t in hit:                      # later splits overwrite earlier ones; the game opens in January, so keep the FIRST non-empty
                 for card in team_cards(pages[t]) + participants(pages[t]):
                     if card["staff"] and card["team"] not in coaches:
                         coaches[card["team"]] = dict(league=league, page=t, players=card["players"], staff=card["staff"])
+        dst = OUT / f"coaches_{args.year}.json"
         json.dump(dict(source="Liquipedia (CC BY-SA 3.0)，赛事页 TeamCard 的教练组", pages=found, teams=coaches),
-                  open(OUT / "coaches_2026.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+                  open(dst, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         for league, hit in found.items():
             n = sum(1 for c in coaches.values() if c["league"] == league)
-            print(f"  {league:20s} 页面 {len(hit)}/{len(LEAGUE_PAGES[league])}  有教练的队 {n}")
-        print(f"-> {OUT / 'coaches_2026.json'}  {len(coaches)} 支队")
+            print(f"  {league:20s} 页面 {len(hit)}/{len(LEAGUE_PAGES_Y[league])}  有教练的队 {n}")
+        print(f"-> {dst}  {len(coaches)} 支队")
         return 0
 
     cand = json.load(open(OUT / "prospect_candidates.json", encoding="utf-8"))

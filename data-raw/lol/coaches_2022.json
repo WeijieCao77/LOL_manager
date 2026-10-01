@@ -1,0 +1,2655 @@
+{
+ "source": "Liquipedia (CC BY-SA 3.0)，赛事页 TeamCard 的教练组",
+ "pages": {
+  "LFL": [
+   "LFL/2022/Promotion Tournament",
+   "LFL/2022/Spring",
+   "LFL/2022/Summer",
+   "LFL/2022/Coupe de France/Qualifier/1",
+   "LFL/2022/Coupe de France/Qualifier/2",
+   "LFL/2022/Coupe de France/Qualifier/3",
+   "LFL/2022/Coupe de France",
+   "LFL/2022/Championship Points",
+   "LFL/2022/Summer/Group Stage",
+   "LFL/2022/Spring/Group Stage",
+   "LFL/2022/Summer/Playoffs",
+   "LFL/2022/Spring/Playoffs",
+   "LFL/2022/Summer/Statistics",
+   "LFL/2022/Spring/Statistics",
+   "LFL/2022/Spring/Group Stage/Statistics",
+   "LFL/2022/Summer/Playoffs/Statistics",
+   "LFL/2022/Summer/Group Stage/Statistics",
+   "LFL/2022/Spring/Playoffs/Statistics",
+   "LFL/2022/Coupe de France/Statistics"
+  ],
+  "LPL": [
+   "LPL/2022/Spring",
+   "LPL/2022/Summer",
+   "LPL/2022/Regional Finals",
+   "LPL/2022/Championship Points",
+   "LPL/2022/Summer/Group Stage/Week 8-10",
+   "LPL/2022/Summer/Group Stage/Week 5-7",
+   "LPL/2022/Spring/Group Stage/Week 1-5",
+   "LPL/2022/Summer/Group Stage/Week 1-4",
+   "LPL/2022/Summer/Playoffs",
+   "LPL/2022/Spring/Group Stage/Week 6-9",
+   "LPL/2022/Spring/Playoffs",
+   "LPL/2022/Summer/Statistics",
+   "LPL/2022/Spring/Statistics",
+   "LPL/2022/Spring/Group Stage/Statistics",
+   "LPL/2022/Summer/Group Stage/Statistics",
+   "LPL/2022/Spring/Playoffs/Statistics",
+   "LPL/2022/Summer/Playoffs/Statistics"
+  ],
+  "LCK CL": [
+   "LCK CL/2022/Spring",
+   "LCK CL/2022/Summer",
+   "LCK CL/2022/Summer/Group Stage/Week 6-9",
+   "LCK CL/2022/Summer/Playoffs",
+   "LCK CL/2022/Spring/Group Stage/Week 6-9",
+   "LCK CL/2022/Spring/Playoffs",
+   "LCK CL/2022/Summer/Statistics",
+   "LCK CL/2022/Spring/Statistics",
+   "LCK CL/2022/Summer/Statistics/Playoffs",
+   "LCK CL/2022/Summer/Statistics/Group Stage",
+   "LCK CL/2022/Spring/Group Stage/Week 1-5",
+   "LCK CL/2022/Summer/Group Stage/Week 1-5"
+  ],
+  "LCK": [
+   "LCK/2022/Spring",
+   "LCK/2022/Summer",
+   "LCK/2022/Regional Finals",
+   "LCK/2022/Awards",
+   "LCK/2022/Championship Points",
+   "LCK/2022/Summer/Group Stage/Week 1-5",
+   "LCK/2022/Summer/Group Stage/Week 6-9",
+   "LCK/2022/Spring/Regular Season",
+   "LCK/2022/Summer/Playoffs",
+   "LCK/2022/Spring/Playoffs",
+   "LCK/2022/Summer/Statistics",
+   "LCK/2022/Spring/Statistics",
+   "LCK/2022/Spring/Regular Season/Statistics",
+   "LCK/2022/Summer/Playoffs/Statistics",
+   "LCK/2022/Spring/Playoffs/Statistics",
+   "LCK/2022/Summer/Group Stage/Statistics"
+  ],
+  "LEC": [
+   "LEC/2022/Spring",
+   "LEC/2022/Championship Points",
+   "LEC/2022/Summer",
+   "LEC/2022/Summer/Group Stage",
+   "LEC/2022/Spring/Group Stage",
+   "LEC/2022/Summer/Playoffs",
+   "LEC/2022/Spring/Playoffs",
+   "LEC/2022/Summer/Statistics",
+   "LEC/2022/Spring/Statistics",
+   "LEC/2022/Spring/Group Stage/Statistics",
+   "LEC/2022/Summer/Playoffs/Statistics",
+   "LEC/2022/Summer/Group Stage/Statistics",
+   "LEC/2022/Spring/Playoffs/Statistics"
+  ],
+  "LCS": [
+   "LCS/2022/Lock In",
+   "LCS/2022/Spring",
+   "LCS/2022/Summer",
+   "LCS/2022/Summer/Group Stage",
+   "LCS/2022/Spring/Group Stage",
+   "LCS/2022/Summer/Playoffs",
+   "LCS/2022/Spring/Playoffs",
+   "LCS/2022/Lock In/Group Stage",
+   "LCS/2022/Lock In/Playoffs",
+   "LCS/2022/Summer/Statistics",
+   "LCS/2022/Spring/Statistics",
+   "LCS/2022/Summer/Player Stats",
+   "LCS/2022/Lock In/Statistics",
+   "LCS/2022/Summer/Playoffs/Statistics",
+   "LCS/2022/Spring/Playoffs/Statistics",
+   "LCS/2022/Summer/Group Stage/Statistics",
+   "LCS/2022/Spring/Group Stage/Statistics"
+  ],
+  "CBLOL": [
+   "CBLOL/2022/Split 1",
+   "CBLOL/2022/Split 2",
+   "CBLOL/2022/Split 2/Group Stage",
+   "CBLOL/2022/Split 2/Playoffs",
+   "CBLOL/2022/Split 1/Group Stage",
+   "CBLOL/2022/Split 1/Playoffs",
+   "CBLOL/2022/Split 2/Statistics",
+   "CBLOL/2022/Split 1/Statistics",
+   "CBLOL/2022/Split 2/Statistics/Playoffs",
+   "CBLOL/2022/Split 2/Statistics/Group Stage"
+  ],
+  "CBLOL Academy": [
+   "CBLOL/Academy/2022/Split 1",
+   "CBLOL/Academy/2022/Split 2",
+   "CBLOL/Academy/2022/Split 2/Group Stage",
+   "CBLOL/Academy/2022/Split 1/Group Stage",
+   "CBLOL/Academy/2022/Split 2/Playoffs",
+   "CBLOL/Academy/2022/Split 1/Playoffs",
+   "CBLOL/Academy/2022/Split 1/Statistics"
+  ],
+  "PCS": [
+   "PCS/2022/Spring",
+   "PCS/2022/Summer",
+   "PCS/2022/Summer/Group Stage",
+   "PCS/2022/Spring/Group Stage",
+   "PCS/2022/Summer/Playoffs",
+   "PCS/2022/Spring/Playoffs",
+   "PCS/2022/Summer/Statistics",
+   "PCS/2022/Spring/Statistics",
+   "PCS/2022/Summer/Playoffs/Statistics",
+   "PCS/2022/Spring/Group Stage/Statistics",
+   "PCS/2022/Summer/Group Stage/Statistics",
+   "PCS/2022/Spring/Playoffs/Statistics"
+  ],
+  "LDL": [
+   "LDL/2022/Spring",
+   "LDL/2022/Summer",
+   "LDL/2022/Summer/Statistics",
+   "LDL/2022/Spring/Statistics"
+  ]
+ },
+ "teams": {
+  "IziDream": {
+   "league": "LFL",
+   "page": "LFL/2022/Promotion Tournament",
+   "players": [
+    "Shikari",
+    "Viking",
+    "Special",
+    "Seelame",
+    "Doss"
+   ],
+   "staff": [
+    {
+     "name": "Quaye",
+     "job": "head"
+    }
+   ]
+  },
+  "Team MCES": {
+   "league": "LFL",
+   "page": "LFL/2022/Promotion Tournament",
+   "players": [
+    "Doxy",
+    "Boukada",
+    "Tonerre",
+    "Tiger",
+    "Moopz"
+   ],
+   "staff": [
+    {
+     "name": "Galib",
+     "job": "head"
+    }
+   ]
+  },
+  "Team Oplon": {
+   "league": "LFL",
+   "page": "LFL/2022/Promotion Tournament",
+   "players": [
+    "Darlik",
+    "Yike",
+    "Twiizt",
+    "LaFleur",
+    "Stend"
+   ],
+   "staff": [
+    {
+     "name": "Nerroh",
+     "job": "head"
+    }
+   ]
+  },
+  "Elyandra Esport": {
+   "league": "LFL",
+   "page": "LFL/2022/Promotion Tournament",
+   "players": [
+    "Deimos",
+    "Habubu",
+    "Evaan",
+    "Blackrog",
+    "Akutsune"
+   ],
+   "staff": [
+    {
+     "name": "Damles",
+     "job": "head"
+    }
+   ]
+  },
+  "Misfits Premier": {
+   "league": "LFL",
+   "page": "LFL/2022/Spring",
+   "players": [
+    "Irrelevant",
+    "TynX",
+    "Czajek",
+    "Woolite",
+    "Vander"
+   ],
+   "staff": [
+    {
+     "name": "delord",
+     "job": "head"
+    }
+   ]
+  },
+  "Team BDS Academy": {
+   "league": "LFL",
+   "page": "LFL/2022/Spring",
+   "players": [
+    "Agresivoo",
+    "Sheo",
+    "Xico",
+    "Crownshot",
+    "Erdote"
+   ],
+   "staff": [
+    {
+     "name": "GotoOne",
+     "job": "head"
+    },
+    {
+     "name": "MenQ",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Vitality.Bee": {
+   "league": "LFL",
+   "page": "LFL/2022/Spring",
+   "players": [
+    "Szygenda",
+    "Skeanz",
+    "Diplex",
+    "Jeskla",
+    "Jactroll"
+   ],
+   "staff": [
+    {
+     "name": "Realistik",
+     "job": "head"
+    }
+   ]
+  },
+  "GamersOrigin": {
+   "league": "LFL",
+   "page": "LFL/2022/Spring",
+   "players": [
+    "Vizicsacsi",
+    "Karim kt",
+    "Ronaldo",
+    "SMILEY",
+    "Enjawve"
+   ],
+   "staff": [
+    {
+     "name": "Jesiz",
+     "job": "head"
+    }
+   ]
+  },
+  "GameWard": {
+   "league": "LFL",
+   "page": "LFL/2022/Spring",
+   "players": [
+    "Melonik",
+    "Akabane",
+    "Czekolad",
+    "Innaxe",
+    "Kamilius"
+   ],
+   "staff": [
+    {
+     "name": "Nicolas Perez",
+     "job": "assistant"
+    },
+    {
+     "name": "Malau",
+     "job": "assistant"
+    },
+    {
+     "name": "Chama",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Karmine Corp": {
+   "league": "LFL",
+   "page": "LFL/2022/Spring",
+   "players": [
+    "Cabochard",
+    "113",
+    "Saken",
+    "Rekkles",
+    "Hantera"
+   ],
+   "staff": [
+    {
+     "name": "Striker",
+     "job": "head"
+    },
+    {
+     "name": "Reha",
+     "job": "assistant"
+    }
+   ]
+  },
+  "LDLC OL": {
+   "league": "LFL",
+   "page": "LFL/2022/Spring",
+   "players": [
+    "Ragner",
+    "Yike",
+    "Eika",
+    "Exakick",
+    "Doss"
+   ],
+   "staff": [
+    {
+     "name": "Zeph",
+     "job": "head"
+    },
+    {
+     "name": "KiKi",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Solary": {
+   "league": "LFL",
+   "page": "LFL/2022/Spring",
+   "players": [
+    "Kio",
+    "Djoko",
+    "Scarlet",
+    "Asza",
+    "Steeelback"
+   ],
+   "staff": [
+    {
+     "name": "Just Jon",
+     "job": "head"
+    },
+    {
+     "name": "Rafa",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Mirage Elyandra": {
+   "league": "LFL",
+   "page": "LFL/2022/Spring",
+   "players": [
+    "Badlulu",
+    "Memento",
+    "RangJun",
+    "Cody Sun",
+    "Raxxo"
+   ],
+   "staff": [
+    {
+     "name": "Damles",
+     "job": "head"
+    },
+    {
+     "name": "Ultimatum",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Team GO": {
+   "league": "LFL",
+   "page": "LFL/2022/Summer",
+   "players": [
+    "NuQ",
+    "Karim kt",
+    "Ronaldo",
+    "SMILEY",
+    "Veignorem"
+   ],
+   "staff": [
+    {
+     "name": "Jesiz",
+     "job": "head"
+    }
+   ]
+  },
+  "KCrapules Agency": {
+   "league": "LFL",
+   "page": "LFL/2022/Coupe de France/Qualifier/1",
+   "players": [
+    "Anathar",
+    "Sami",
+    "Kuroneel",
+    "Vespa",
+    "Tchokez"
+   ],
+   "staff": [
+    {
+     "name": "Kyoukai",
+     "job": "assistant"
+    }
+   ]
+  },
+  "KCraqueleurs": {
+   "league": "LFL",
+   "page": "LFL/2022/Coupe de France/Qualifier/2",
+   "players": [
+    "Sorya",
+    "Roi DEMON",
+    "Godzilla",
+    "Pipey",
+    "EL BARDOOOO"
+   ],
+   "staff": [
+    {
+     "name": "Nobreak",
+     "job": "assistant"
+    }
+   ]
+  },
+  "TPAA": {
+   "league": "LFL",
+   "page": "LFL/2022/Coupe de France",
+   "players": [
+    "Twelve",
+    "White",
+    "Nafkelah",
+    "Avra",
+    "Obstinatus"
+   ],
+   "staff": [
+    {
+     "name": "Greedyz",
+     "job": "assistant"
+    }
+   ]
+  },
+  "PCS Taran": {
+   "league": "LFL",
+   "page": "LFL/2022/Coupe de France",
+   "players": [
+    "Misanthiel",
+    "Icarus",
+    "Evaan",
+    "Duck",
+    "Wixo0"
+   ],
+   "staff": [
+    {
+     "name": "Yong",
+     "job": "head"
+    },
+    {
+     "name": "Melrakki",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Lille Esport": {
+   "league": "LFL",
+   "page": "LFL/2022/Coupe de France",
+   "players": [
+    "Maynter",
+    "Stormax",
+    "Alan",
+    "Rift",
+    "Quixeth"
+   ],
+   "staff": [
+    {
+     "name": "Cook",
+     "job": "head"
+    }
+   ]
+  },
+  "Atletec": {
+   "league": "LFL",
+   "page": "LFL/2022/Coupe de France",
+   "players": [
+    "Deimos",
+    "Boukada",
+    "Simpli",
+    "Jujutw0",
+    "Akutsune"
+   ],
+   "staff": [
+    {
+     "name": "Wadi",
+     "job": "head"
+    },
+    {
+     "name": "Shac Nicholson",
+     "job": "assistant"
+    },
+    {
+     "name": "DIEMdodo",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Joblife": {
+   "league": "LFL",
+   "page": "LFL/2022/Coupe de France",
+   "players": [
+    "Wylenz",
+    "Migab",
+    "Serendip",
+    "Seelame",
+    "Benaset"
+   ],
+   "staff": [
+    {
+     "name": "Ashanome",
+     "job": "assistant"
+    }
+   ]
+  },
+  "BK ROG Esports": {
+   "league": "LFL",
+   "page": "LFL/2022/Coupe de France",
+   "players": [
+    "Satorius",
+    "Habubu",
+    "Zoiren",
+    "Koba",
+    "Absolute"
+   ],
+   "staff": [
+    {
+     "name": "Supernova",
+     "job": "head"
+    }
+   ]
+  },
+  "FC Nantes Esports": {
+   "league": "LFL",
+   "page": "LFL/2022/Coupe de France",
+   "players": [
+    "Seminol",
+    "Dopaminw",
+    "Reus",
+    "Filou",
+    "Cerecof"
+   ],
+   "staff": [
+    {
+     "name": "Galib",
+     "job": "head"
+    },
+    {
+     "name": "FROZENNN",
+     "job": "assistant"
+    }
+   ]
+  },
+  "beGenius ESC": {
+   "league": "LFL",
+   "page": "LFL/2022/Coupe de France",
+   "players": [
+    "TamoZ",
+    "Roulette",
+    "William4",
+    "Scripter",
+    "XERSUS7"
+   ],
+   "staff": [
+    {
+     "name": "Galdix",
+     "job": "head"
+    }
+   ]
+  },
+  "ViV Esport": {
+   "league": "LFL",
+   "page": "LFL/2022/Coupe de France",
+   "players": [
+    "Hiro",
+    "SkewMond",
+    "Mano",
+    "Bibou",
+    "Nsurr"
+   ],
+   "staff": [
+    {
+     "name": "Clampy",
+     "job": "head"
+    },
+    {
+     "name": "Horeus",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Bandes Jaunes": {
+   "league": "LFL",
+   "page": "LFL/2022/Coupe de France",
+   "players": [
+    "Sotsy",
+    "eaRyz",
+    "Artoria",
+    "matiaslaclasse",
+    "Blade40"
+   ],
+   "staff": [
+    {
+     "name": "Fara",
+     "job": "head"
+    }
+   ]
+  },
+  "Anyone's Legend": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "Zdz",
+    "Xiaohao",
+    "Maple",
+    "Betty",
+    "QiuQiu"
+   ],
+   "staff": [
+    {
+     "name": "Rui",
+     "job": "head"
+    },
+    {
+     "name": "Water",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Bilibili Gaming": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "Breathe",
+    "Weiwei",
+    "FoFo",
+    "Doggo",
+    "Crisp"
+   ],
+   "staff": [
+    {
+     "name": "Dian",
+     "job": "head"
+    },
+    {
+     "name": "Jzz",
+     "job": "analyst"
+    }
+   ]
+  },
+  "EDward Gaming": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "Flandre",
+    "Jiejie",
+    "Scout",
+    "Viper",
+    "Meiko"
+   ],
+   "staff": [
+    {
+     "name": "Maokai",
+     "job": "head"
+    },
+    {
+     "name": "Hua",
+     "job": "analyst"
+    }
+   ]
+  },
+  "FunPlus Phoenix": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "xiaolaohu",
+    "beichuan",
+    "Gori",
+    "Lwx",
+    "Hang"
+   ],
+   "staff": [
+    {
+     "name": "Steak",
+     "job": "head"
+    },
+    {
+     "name": "REFRA1N",
+     "job": "assistant"
+    },
+    {
+     "name": "Lyn",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Invictus Gaming": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "neny",
+    "XUN",
+    "Yuekai",
+    "xiaoyueji",
+    "Lucas"
+   ],
+   "staff": [
+    {
+     "name": "Loong",
+     "job": "head"
+    },
+    {
+     "name": "Liet",
+     "job": "assistant"
+    }
+   ]
+  },
+  "JD Gaming": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "369",
+    "Kanavi",
+    "Yagao",
+    "Hope",
+    "Missing"
+   ],
+   "staff": [
+    {
+     "name": "Homme",
+     "job": "head"
+    },
+    {
+     "name": "Xiasu",
+     "job": "assistant"
+    },
+    {
+     "name": "Vus5o",
+     "job": "analyst"
+    }
+   ]
+  },
+  "LGD Gaming": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "Fearness",
+    "Shad0w",
+    "YeG",
+    "Eric",
+    "Jinjiao"
+   ],
+   "staff": [
+    {
+     "name": "X1ri",
+     "job": "head"
+    },
+    {
+     "name": "Kabe",
+     "job": "assistant"
+    }
+   ]
+  },
+  "LNG Esports": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "Ale",
+    "Tarzan",
+    "Doinb",
+    "Light",
+    "Iwandy"
+   ],
+   "staff": [
+    {
+     "name": "Poppy",
+     "job": "assistant"
+    },
+    {
+     "name": "U",
+     "job": "assistant"
+    },
+    {
+     "name": "Rather",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Oh My God": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "shanji",
+    "AKi",
+    "Creme",
+    "Able",
+    "cold"
+   ],
+   "staff": [
+    {
+     "name": "NoName",
+     "job": "head"
+    },
+    {
+     "name": "BoBo",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Rare Atom": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "Cube",
+    "Leyan",
+    "Strive",
+    "iBoy",
+    "Zorah"
+   ],
+   "staff": [
+    {
+     "name": "Chris",
+     "job": "head"
+    },
+    {
+     "name": "doG8",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Royal Never Give Up": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "Bin",
+    "Wei",
+    "Xiaohu",
+    "gala",
+    "Ming"
+   ],
+   "staff": [
+    {
+     "name": "KenZhu",
+     "job": "head"
+    },
+    {
+     "name": "Tabe",
+     "job": "assistant"
+    },
+    {
+     "name": "Xiaobai",
+     "job": "assistant"
+    },
+    {
+     "name": "Sin",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Team WE": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "Biubiu",
+    "View",
+    "xiye",
+    "Stay",
+    "Kedaya"
+   ],
+   "staff": [
+    {
+     "name": "Assassin",
+     "job": "head"
+    },
+    {
+     "name": "Viod",
+     "job": "assistant"
+    }
+   ]
+  },
+  "ThunderTalk Gaming": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "New",
+    "Frigid",
+    "Captain",
+    "puff",
+    "southwind"
+   ],
+   "staff": [
+    {
+     "name": "Heart",
+     "job": "head"
+    },
+    {
+     "name": "AFei",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Top Esports": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "Zoom",
+    "Tian",
+    "knight",
+    "Jackeylove",
+    "zhuo"
+   ],
+   "staff": [
+    {
+     "name": "Crescent",
+     "job": "head"
+    },
+    {
+     "name": "byg97",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Ultra Prime": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "zs",
+    "H4cker",
+    "Cryin",
+    "Elk",
+    "ShiauC"
+   ],
+   "staff": [
+    {
+     "name": "Nick",
+     "job": "head"
+    },
+    {
+     "name": "Panda",
+     "job": "assistant"
+    },
+    {
+     "name": "ZYB",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Victory Five": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "Rich",
+    "Karsa",
+    "Rookie",
+    "Photic",
+    "ppgod"
+   ],
+   "staff": [
+    {
+     "name": "NoFe",
+     "job": "head"
+    },
+    {
+     "name": "Zero",
+     "job": "assistant"
+    },
+    {
+     "name": "TTS",
+     "job": "assistant"
+    },
+    {
+     "name": "Cluo",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Weibo Gaming": {
+   "league": "LPL",
+   "page": "LPL/2022/Spring",
+   "players": [
+    "TheShy",
+    "SofM",
+    "Angel",
+    "huanfeng",
+    "ON"
+   ],
+   "staff": [
+    {
+     "name": "Maizijian",
+     "job": "head"
+    },
+    {
+     "name": "Eimy",
+     "job": "assistant"
+    },
+    {
+     "name": "Easyhoon",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Freecs Challengers": {
+   "league": "LCK CL",
+   "page": "LCK CL/2022/Spring",
+   "players": [
+    "IlllIma",
+    "Citrus",
+    "BuLLDoG",
+    "Bull",
+    "Minit"
+   ],
+   "staff": [
+    {
+     "name": "Winged",
+     "job": "head"
+    },
+    {
+     "name": "Moon",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Brion Esports Challengers": {
+   "league": "LCK CL",
+   "page": "LCK CL/2022/Spring",
+   "players": [
+    "Soboro",
+    "Raptor",
+    "Feisty",
+    "Gamin",
+    "Loopy"
+   ],
+   "staff": [
+    {
+     "name": "Kite",
+     "job": "head"
+    },
+    {
+     "name": "MintTea",
+     "job": "assistant"
+    }
+   ]
+  },
+  "DAMWON Challengers": {
+   "league": "LCK CL",
+   "page": "LCK CL/2022/Spring",
+   "players": [
+    "Thanatos",
+    "Lucid",
+    "Pullbae",
+    "Rahel",
+    "Bible"
+   ],
+   "staff": [
+    {
+     "name": "Hachani",
+     "job": "head"
+    },
+    {
+     "name": "Woong",
+     "job": "assistant"
+    }
+   ]
+  },
+  "DRX Challengers": {
+   "league": "LCK CL",
+   "page": "LCK CL/2022/Spring",
+   "players": [
+    "Clear",
+    "Peach",
+    "SeTab",
+    "Pleata",
+    "Jun"
+   ],
+   "staff": [
+    {
+     "name": "Expession",
+     "job": "head"
+    },
+    {
+     "name": "Conus",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Gen.G Challengers": {
+   "league": "LCK CL",
+   "page": "LCK CL/2022/Spring",
+   "players": [
+    "Zest",
+    "Winner",
+    "Ophelia",
+    "Peyz",
+    "Lospa"
+   ],
+   "staff": [
+    {
+     "name": "Punch",
+     "job": "head"
+    }
+   ]
+  },
+  "HLE Challengers": {
+   "league": "LCK CL",
+   "page": "LCK CL/2022/Spring",
+   "players": [
+    "Rooster",
+    "Seonbi",
+    "Roamer",
+    "Cheoni",
+    "Baut"
+   ],
+   "staff": [
+    {
+     "name": "sayho",
+     "job": "head"
+    },
+    {
+     "name": "Jykim",
+     "job": "assistant"
+    }
+   ]
+  },
+  "KT Rolster Challengers": {
+   "league": "LCK CL",
+   "page": "LCK CL/2022/Spring",
+   "players": [
+    "Castle",
+    "PangSu",
+    "Mask",
+    "Noah",
+    "Rebel"
+   ],
+   "staff": [
+    {
+     "name": "Bory",
+     "job": "head"
+    },
+    {
+     "name": "Highness",
+     "job": "assistant"
+    }
+   ]
+  },
+  "NRF Challengers": {
+   "league": "LCK CL",
+   "page": "LCK CL/2022/Spring",
+   "players": [
+    "DnDn",
+    "Sylvie",
+    "FIESTA",
+    "vital",
+    "Blessing"
+   ],
+   "staff": [
+    {
+     "name": "Chelly",
+     "job": "head"
+    },
+    {
+     "name": "Chico",
+     "job": "assistant"
+    }
+   ]
+  },
+  "SANDBOX Challengers": {
+   "league": "LCK CL",
+   "page": "LCK CL/2022/Spring",
+   "players": [
+    "Meaning",
+    "HamBak",
+    "Ten10",
+    "KingKong",
+    "Prove"
+   ],
+   "staff": [
+    {
+     "name": "FanTaSy",
+     "job": "head"
+    },
+    {
+     "name": "Nova",
+     "job": "assistant"
+    }
+   ]
+  },
+  "T1 Challengers": {
+   "league": "LCK CL",
+   "page": "LCK CL/2022/Spring",
+   "players": [
+    "Photon",
+    "Forest",
+    "TolanD",
+    "Trigger",
+    "Kabbie"
+   ],
+   "staff": [
+    {
+     "name": "Roach",
+     "job": "head"
+    }
+   ]
+  },
+  "Nongshim Challengers": {
+   "league": "LCK CL",
+   "page": "LCK CL/2022/Summer",
+   "players": [
+    "DnDn",
+    "Sylvie",
+    "FIESTA",
+    "Jiwoo",
+    "Goliath"
+   ],
+   "staff": [
+    {
+     "name": "Chelly",
+     "job": "head"
+    },
+    {
+     "name": "Chico",
+     "job": "assistant"
+    },
+    {
+     "name": "Noblesse",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Brion Esports": {
+   "league": "LCK",
+   "page": "LCK/2022/Spring",
+   "players": [
+    "Morgan",
+    "UmTi",
+    "Lava",
+    "Hena",
+    "Delight"
+   ],
+   "staff": [
+    {
+     "name": "Edgar",
+     "job": "head"
+    },
+    {
+     "name": "Drinker",
+     "job": "assistant"
+    }
+   ]
+  },
+  "DAMWON Gaming": {
+   "league": "LCK",
+   "page": "LCK/2022/Spring",
+   "players": [
+    "Hoya",
+    "Canyon",
+    "ShowMaker",
+    "deokdam",
+    "Kellin"
+   ],
+   "staff": [
+    {
+     "name": "Daeny",
+     "job": "head"
+    },
+    {
+     "name": "Zefa",
+     "job": "assistant"
+    },
+    {
+     "name": "Bubbling",
+     "job": "assistant"
+    }
+   ]
+  },
+  "DRX": {
+   "league": "LCK",
+   "page": "LCK/2022/Spring",
+   "players": [
+    "Kingen",
+    "Pyosik",
+    "Zeka",
+    "Deft",
+    "BeryL"
+   ],
+   "staff": [
+    {
+     "name": "Kim",
+     "job": "head"
+    },
+    {
+     "name": "SSONG",
+     "job": "head"
+    },
+    {
+     "name": "Mowgli",
+     "job": "assistant"
+    },
+    {
+     "name": "Shine",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Freecs": {
+   "league": "LCK",
+   "page": "LCK/2022/Spring",
+   "players": [
+    "Kiin",
+    "Ellim",
+    "FATE",
+    "Teddy",
+    "Hoit"
+   ],
+   "staff": [
+    {
+     "name": "Cain",
+     "job": "head"
+    },
+    {
+     "name": "Spirit",
+     "job": "assistant"
+    },
+    {
+     "name": "Alvingo",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Gen.G": {
+   "league": "LCK",
+   "page": "LCK/2022/Spring",
+   "players": [
+    "Doran",
+    "Peanut",
+    "Chovy",
+    "Ruler",
+    "Lehends"
+   ],
+   "staff": [
+    {
+     "name": "Score",
+     "job": "head"
+    },
+    {
+     "name": "Mafa",
+     "job": "assistant"
+    },
+    {
+     "name": "Museong",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Hanwha Life Esports": {
+   "league": "LCK",
+   "page": "LCK/2022/Spring",
+   "players": [
+    "DuDu",
+    "OnFleek",
+    "Karis",
+    "SamD",
+    "Vsta"
+   ],
+   "staff": [
+    {
+     "name": "Kezman",
+     "job": "head"
+    },
+    {
+     "name": "suDal",
+     "job": "assistant"
+    },
+    {
+     "name": "Bibra",
+     "job": "assistant"
+    }
+   ]
+  },
+  "KT Rolster": {
+   "league": "LCK",
+   "page": "LCK/2022/Spring",
+   "players": [
+    "Rascal",
+    "Cuzz",
+    "Aria",
+    "Aiming",
+    "Life"
+   ],
+   "staff": [
+    {
+     "name": "Hirai",
+     "job": "head"
+    },
+    {
+     "name": "supreme",
+     "job": "assistant"
+    },
+    {
+     "name": "Acorn",
+     "job": "assistant"
+    },
+    {
+     "name": "Lee Hee-won",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Nongshim RedForce": {
+   "league": "LCK",
+   "page": "LCK/2022/Spring",
+   "players": [
+    "Canna",
+    "Dread",
+    "Bdd",
+    "Ghost",
+    "Effort"
+   ],
+   "staff": [
+    {
+     "name": "sBs",
+     "job": "head"
+    },
+    {
+     "name": "Comet",
+     "job": "assistant"
+    },
+    {
+     "name": "Noblesse",
+     "job": "assistant"
+    }
+   ]
+  },
+  "SANDBOX Gaming": {
+   "league": "LCK",
+   "page": "LCK/2022/Spring",
+   "players": [
+    "Dove",
+    "Croco",
+    "Clozer",
+    "Ice",
+    "Kael"
+   ],
+   "staff": [
+    {
+     "name": "Micro",
+     "job": "head"
+    },
+    {
+     "name": "Joker",
+     "job": "assistant"
+    },
+    {
+     "name": "Travel",
+     "job": "assistant"
+    },
+    {
+     "name": "PawN",
+     "job": "assistant"
+    }
+   ]
+  },
+  "T1": {
+   "league": "LCK",
+   "page": "LCK/2022/Spring",
+   "players": [
+    "Zeus",
+    "Oner",
+    "Faker",
+    "Gumayusi",
+    "Keria"
+   ],
+   "staff": [
+    {
+     "name": "Polt",
+     "job": "head"
+    },
+    {
+     "name": "Moment",
+     "job": "assistant"
+    },
+    {
+     "name": "Bengi",
+     "job": "assistant"
+    },
+    {
+     "name": "Gisepa",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Astralis": {
+   "league": "LEC",
+   "page": "LEC/2022/Spring",
+   "players": [
+    "WhiteKnight",
+    "Zanzarah",
+    "Dajor",
+    "Kobbe",
+    "promisq"
+   ],
+   "staff": [
+    {
+     "name": "AoD",
+     "job": "head"
+    },
+    {
+     "name": "iHansen",
+     "job": "assistant"
+    },
+    {
+     "name": "Arailla",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Excel Esports": {
+   "league": "LEC",
+   "page": "LEC/2022/Spring",
+   "players": [
+    "Finn",
+    "Markoon",
+    "Nukeduck",
+    "Patrik",
+    "Mikyx"
+   ],
+   "staff": [
+    {
+     "name": "YoungBuck",
+     "job": "head"
+    },
+    {
+     "name": "Nelson",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Fnatic": {
+   "league": "LEC",
+   "page": "LEC/2022/Spring",
+   "players": [
+    "Wunder",
+    "Razork",
+    "Humanoid",
+    "Upset",
+    "Hylissang"
+   ],
+   "staff": [
+    {
+     "name": "YamatoCannon",
+     "job": "head"
+    }
+   ]
+  },
+  "G2 Esports": {
+   "league": "LEC",
+   "page": "LEC/2022/Spring",
+   "players": [
+    "BrokenBlade",
+    "Jankos",
+    "caPs",
+    "Flakked",
+    "Targamas"
+   ],
+   "staff": [
+    {
+     "name": "Dylan Falco",
+     "job": "head"
+    },
+    {
+     "name": "Rodrigo",
+     "job": "analyst"
+    }
+   ]
+  },
+  "MAD Lions": {
+   "league": "LEC",
+   "page": "LEC/2022/Spring",
+   "players": [
+    "Armut",
+    "Elyoya",
+    "Reeker",
+    "UNF0RGIVEN",
+    "Kaiser"
+   ],
+   "staff": [
+    {
+     "name": "Mac",
+     "job": "head"
+    },
+    {
+     "name": "Kaas",
+     "job": "assistant"
+    },
+    {
+     "name": "Reignover",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Misfits Gaming": {
+   "league": "LEC",
+   "page": "LEC/2022/Spring",
+   "players": [
+    "HiRit",
+    "Shlatan",
+    "Vetheo",
+    "Neon",
+    "Mersa"
+   ],
+   "staff": [
+    {
+     "name": "Carter",
+     "job": "head"
+    },
+    {
+     "name": "xani",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Rogue": {
+   "league": "LEC",
+   "page": "LEC/2022/Spring",
+   "players": [
+    "Odoamne",
+    "Malrang",
+    "Larssen",
+    "Comp",
+    "Trymbi"
+   ],
+   "staff": [
+    {
+     "name": "fredy122",
+     "job": "head"
+    },
+    {
+     "name": "SeeEl",
+     "job": "assistant"
+    },
+    {
+     "name": "Arces",
+     "job": "analyst"
+    }
+   ]
+  },
+  "SK Gaming": {
+   "league": "LEC",
+   "page": "LEC/2022/Spring",
+   "players": [
+    "Jenax",
+    "Gilius",
+    "Sertuss",
+    "Jezu",
+    "Treatz"
+   ],
+   "staff": [
+    {
+     "name": "Swiffer",
+     "job": "head"
+    }
+   ]
+  },
+  "Team BDS": {
+   "league": "LEC",
+   "page": "LEC/2022/Spring",
+   "players": [
+    "Adam",
+    "Cinkrof",
+    "NUCLEARINT",
+    "xMatty",
+    "LIMIT"
+   ],
+   "staff": [
+    {
+     "name": "GrabbZ",
+     "job": "head"
+    },
+    {
+     "name": "Duffman",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Team Vitality": {
+   "league": "LEC",
+   "page": "LEC/2022/Spring",
+   "players": [
+    "Alphari",
+    "Selfmade",
+    "Perkz",
+    "Carzzy",
+    "Labrov"
+   ],
+   "staff": [
+    {
+     "name": "Mephisto",
+     "job": "head"
+    }
+   ]
+  },
+  "100 Thieves": {
+   "league": "LCS",
+   "page": "LCS/2022/Lock In",
+   "players": [
+    "Ssumday",
+    "Tenacity",
+    "Closer",
+    "Abbedagge",
+    "FBI"
+   ],
+   "staff": [
+    {
+     "name": "Reapered",
+     "job": "head"
+    },
+    {
+     "name": "Freeze",
+     "job": "assistant"
+    },
+    {
+     "name": "mithy",
+     "job": "assistant"
+    },
+    {
+     "name": "Kaimera",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Cloud9": {
+   "league": "LCS",
+   "page": "LCS/2022/Lock In",
+   "players": [
+    "Darshan",
+    "Blaber",
+    "Fudge",
+    "Zven",
+    "Isles"
+   ],
+   "staff": [
+    {
+     "name": "Max Waldo",
+     "job": "head"
+    },
+    {
+     "name": "Veigarv2",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Counter Logic Gaming": {
+   "league": "LCS",
+   "page": "LCS/2022/Lock In",
+   "players": [
+    "Jenkins",
+    "Contractz",
+    "Palafox",
+    "Luger",
+    "poome"
+   ],
+   "staff": [
+    {
+     "name": "Thinkcard",
+     "job": "head"
+    },
+    {
+     "name": "Croissant",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Dignitas": {
+   "league": "LCS",
+   "page": "LCS/2022/Lock In",
+   "players": [
+    "FakeGod",
+    "Exyu",
+    "River",
+    "Blue",
+    "Neo"
+   ],
+   "staff": [
+    {
+     "name": "Enatron",
+     "job": "head"
+    }
+   ]
+  },
+  "Evil Geniuses": {
+   "league": "LCS",
+   "page": "LCS/2022/Lock In",
+   "players": [
+    "Impact",
+    "Inspired",
+    "jojopyun",
+    "Danny",
+    "Vulcan"
+   ],
+   "staff": [
+    {
+     "name": "Turtle",
+     "job": "head"
+    },
+    {
+     "name": "SH4DOW",
+     "job": "assistant"
+    },
+    {
+     "name": "Draxyr",
+     "job": "assistant"
+    }
+   ]
+  },
+  "FlyQuest": {
+   "league": "LCS",
+   "page": "LCS/2022/Lock In",
+   "players": [
+    "Kumo",
+    "Josedeodo",
+    "toucouille",
+    "Johnsun",
+    "aphromoo"
+   ],
+   "staff": [
+    {
+     "name": "Loyota",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Golden Guardians": {
+   "league": "LCS",
+   "page": "LCS/2022/Lock In",
+   "players": [
+    "Tony Top",
+    "Ic0nic",
+    "Ryoma",
+    "Stixxay",
+    "Chime"
+   ],
+   "staff": [
+    {
+     "name": "Inero",
+     "job": "head"
+    },
+    {
+     "name": "Swip3rR",
+     "job": "assistant"
+    },
+    {
+     "name": "Spookz",
+     "job": "assistant"
+    },
+    {
+     "name": "ChuChuZ",
+     "job": "assistant"
+    },
+    {
+     "name": "HustlinbeasT",
+     "job": "assistant"
+    },
+    {
+     "name": "Jido",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Team Liquid": {
+   "league": "LCS",
+   "page": "LCS/2022/Lock In",
+   "players": [
+    "Bwipo",
+    "Bradley",
+    "Santorin",
+    "Bjergsen",
+    "Hans sama"
+   ],
+   "staff": [
+    {
+     "name": "Guilhoto",
+     "job": "head"
+    },
+    {
+     "name": "Kold",
+     "job": "assistant"
+    },
+    {
+     "name": "H4xDefender",
+     "job": "assistant"
+    }
+   ]
+  },
+  "TSM": {
+   "league": "LCS",
+   "page": "LCS/2022/Lock In",
+   "players": [
+    "V1per",
+    "Hyper",
+    "Takeover",
+    "Instinct",
+    "Yursan"
+   ],
+   "staff": [
+    {
+     "name": "Chawy",
+     "job": "head"
+    },
+    {
+     "name": "Curry",
+     "job": "assistant"
+    },
+    {
+     "name": "Kayys",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Immortals": {
+   "league": "LCS",
+   "page": "LCS/2022/Spring",
+   "players": [
+    "Revenge",
+    "Xerxe",
+    "PowerOfEvil",
+    "Arrow",
+    "Destiny"
+   ],
+   "staff": [
+    {
+     "name": "Malaclypse",
+     "job": "head"
+    },
+    {
+     "name": "Nightshare",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Flamengo Esports": {
+   "league": "CBLOL",
+   "page": "CBLOL/2022/Split 1",
+   "players": [
+    "Boal",
+    "Asta",
+    "Tutsz",
+    "Flare",
+    "Kuri"
+   ],
+   "staff": [
+    {
+     "name": "Snowlz",
+     "job": "head"
+    },
+    {
+     "name": "jUc",
+     "job": "assistant"
+    },
+    {
+     "name": "Riyev",
+     "job": "assistant"
+    }
+   ]
+  },
+  "FURIA Esports": {
+   "league": "CBLOL",
+   "page": "CBLOL/2022/Split 1",
+   "players": [
+    "fNb",
+    "Ranger",
+    "Envy",
+    "Netuno",
+    "RedBert"
+   ],
+   "staff": [
+    {
+     "name": "Maestro",
+     "job": "head"
+    },
+    {
+     "name": "ONMETA",
+     "job": "assistant"
+    },
+    {
+     "name": "Brandão",
+     "job": "analyst"
+    }
+   ]
+  },
+  "INTZ": {
+   "league": "CBLOL",
+   "page": "CBLOL/2022/Split 1",
+   "players": [
+    "Tyrin",
+    "Yampi",
+    "Kick",
+    "micaO",
+    "Decoy"
+   ],
+   "staff": [
+    {
+     "name": "Abaxial",
+     "job": "head"
+    },
+    {
+     "name": "Aoshi",
+     "job": "assistant"
+    },
+    {
+     "name": "Mills",
+     "job": "assistant"
+    }
+   ]
+  },
+  "KaBuM! e-Sports": {
+   "league": "CBLOL",
+   "page": "CBLOL/2022/Split 1",
+   "players": [
+    "Parang",
+    "Wiz",
+    "Hauz",
+    "Disave",
+    "Scuro"
+   ],
+   "staff": [
+    {
+     "name": "Nuddle",
+     "job": "head"
+    },
+    {
+     "name": "SrVenancio",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Liberty": {
+   "league": "CBLOL",
+   "page": "CBLOL/2022/Split 1",
+   "players": [
+    "Kiari",
+    "Disamis",
+    "Krastyel",
+    "Matsukaze",
+    "Wos"
+   ],
+   "staff": [
+    {
+     "name": "Kalec",
+     "job": "assistant"
+    },
+    {
+     "name": "Alocs",
+     "job": "assistant"
+    },
+    {
+     "name": "Eryon",
+     "job": "assistant"
+    }
+   ]
+  },
+  "LOUD": {
+   "league": "CBLOL",
+   "page": "CBLOL/2022/Split 1",
+   "players": [
+    "Robo",
+    "Tay",
+    "Tinowns",
+    "DudsTheBoy",
+    "Ceos"
+   ],
+   "staff": [
+    {
+     "name": "RafaP",
+     "job": "assistant"
+    },
+    {
+     "name": "Maximillius",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Miners.gg": {
+   "league": "CBLOL",
+   "page": "CBLOL/2022/Split 1",
+   "players": [
+    "DoRun",
+    "Croc",
+    "Anyyy",
+    "Celo",
+    "Hawk"
+   ],
+   "staff": [
+    {
+     "name": "Poli7ico",
+     "job": "assistant"
+    },
+    {
+     "name": "Furyz",
+     "job": "assistant"
+    },
+    {
+     "name": "Hypno",
+     "job": "analyst"
+    },
+    {
+     "name": "Bp",
+     "job": "analyst"
+    },
+    {
+     "name": "Pit",
+     "job": "analyst"
+    }
+   ]
+  },
+  "paiN Gaming": {
+   "league": "CBLOL",
+   "page": "CBLOL/2022/Split 1",
+   "players": [
+    "Wizer",
+    "Cariok",
+    "dyNquedo",
+    "Trigo",
+    "Damage"
+   ],
+   "staff": [
+    {
+     "name": "Dionrray",
+     "job": "assistant"
+    },
+    {
+     "name": "Xero",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Rensga eSports": {
+   "league": "CBLOL",
+   "page": "CBLOL/2022/Split 1",
+   "players": [
+    "Trap",
+    "Minerva",
+    "Goku",
+    "NinjaKiwi",
+    "Mocha"
+   ],
+   "staff": [
+    {
+     "name": "gafone",
+     "job": "head"
+    },
+    {
+     "name": "Hdef",
+     "job": "assistant"
+    }
+   ]
+  },
+  "RED Canids": {
+   "league": "CBLOL",
+   "page": "CBLOL/2022/Split 2",
+   "players": [
+    "Guigo",
+    "Aegis",
+    "Grevthar",
+    "TitaN",
+    "Jojo"
+   ],
+   "staff": [
+    {
+     "name": "WarL0cK",
+     "job": "head"
+    }
+   ]
+  },
+  "Flamengo Academy": {
+   "league": "CBLOL Academy",
+   "page": "CBLOL/Academy/2022/Split 1",
+   "players": [
+    "SuperCleber",
+    "Sting",
+    "lynkez",
+    "kksh",
+    "Gyeong"
+   ],
+   "staff": [
+    {
+     "name": "Patron",
+     "job": "assistant"
+    }
+   ]
+  },
+  "FURIA Academy": {
+   "league": "CBLOL Academy",
+   "page": "CBLOL/Academy/2022/Split 1",
+   "players": [
+    "Zemnas",
+    "Goot",
+    "Elicit",
+    "Focus",
+    "zay"
+   ],
+   "staff": [
+    {
+     "name": "Neki",
+     "job": "assistant"
+    }
+   ]
+  },
+  "INTZ Academy": {
+   "league": "CBLOL Academy",
+   "page": "CBLOL/Academy/2022/Split 1",
+   "players": [
+    "Hidan",
+    "Soweto",
+    "Muja",
+    "Juzo",
+    "Woodboy"
+   ],
+   "staff": [
+    {
+     "name": "Jockster",
+     "job": "assistant"
+    },
+    {
+     "name": "Strazzi",
+     "job": "analyst"
+    }
+   ]
+  },
+  "KaBuM! Academy": {
+   "league": "CBLOL Academy",
+   "page": "CBLOL/Academy/2022/Split 1",
+   "players": [
+    "Bankai",
+    "scary",
+    "Titeito",
+    "Stepz",
+    "Guigs"
+   ],
+   "staff": [
+    {
+     "name": "Zuao",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Liberty Academy": {
+   "league": "CBLOL Academy",
+   "page": "CBLOL/Academy/2022/Split 1",
+   "players": [
+    "Yupps",
+    "Drake",
+    "Thunder",
+    "Ravenzin",
+    "scamber"
+   ],
+   "staff": [
+    {
+     "name": "Galfi",
+     "job": "head"
+    },
+    {
+     "name": "Benchima",
+     "job": "assistant"
+    }
+   ]
+  },
+  "LOUD Academy": {
+   "league": "CBLOL Academy",
+   "page": "CBLOL/Academy/2022/Split 1",
+   "players": [
+    "Makes",
+    "Enel",
+    "Aithusa",
+    "Miss",
+    "Vahvel"
+   ],
+   "staff": [
+    {
+     "name": "Samyy",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Miners.gg Academy": {
+   "league": "CBLOL Academy",
+   "page": "CBLOL/Academy/2022/Split 1",
+   "players": [
+    "Reversed",
+    "Hugato",
+    "Piloto",
+    "Raiden",
+    "Lawi"
+   ],
+   "staff": [
+    {
+     "name": "Doran",
+     "job": "assistant"
+    },
+    {
+     "name": "Pit",
+     "job": "analyst"
+    }
+   ]
+  },
+  "paiN Academy": {
+   "league": "CBLOL Academy",
+   "page": "CBLOL/Academy/2022/Split 1",
+   "players": [
+    "SkyBart",
+    "Accez",
+    "Blacky",
+    "griff",
+    "ProDelta"
+   ],
+   "staff": [
+    {
+     "name": "Sarkis",
+     "job": "head"
+    },
+    {
+     "name": "Ti0ben",
+     "job": "assistant"
+    }
+   ]
+  },
+  "RED Academy": {
+   "league": "CBLOL Academy",
+   "page": "CBLOL/Academy/2022/Split 1",
+   "players": [
+    "Promise",
+    "NiT Cesar",
+    "LLKO",
+    "Sorahed",
+    "Telas"
+   ],
+   "staff": [
+    {
+     "name": "Urs",
+     "job": "assistant"
+    },
+    {
+     "name": "Mitohara",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Rensga Academy": {
+   "league": "CBLOL Academy",
+   "page": "CBLOL/Academy/2022/Split 1",
+   "players": [
+    "Edger",
+    "Mousty",
+    "Marf",
+    "Devourer",
+    "Harumi"
+   ],
+   "staff": [
+    {
+     "name": "Neki",
+     "job": "assistant"
+    },
+    {
+     "name": "Brandão",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Beyond Gaming": {
+   "league": "PCS",
+   "page": "PCS/2022/Spring",
+   "players": [
+    "Liang",
+    "Husha",
+    "Minji",
+    "Wako",
+    "Kino"
+   ],
+   "staff": [
+    {
+     "name": "Benny",
+     "job": "head"
+    },
+    {
+     "name": "Wulala",
+     "job": "assistant"
+    }
+   ]
+  },
+  "CTBC Flying Oyster": {
+   "league": "PCS",
+   "page": "PCS/2022/Spring",
+   "players": [
+    "Rest",
+    "Gemini",
+    "M1ssion",
+    "Atlen",
+    "Koala"
+   ],
+   "staff": [
+    {
+     "name": "Achie",
+     "job": "head"
+    },
+    {
+     "name": "Kevin Miller",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Deep Cross Gaming": {
+   "league": "PCS",
+   "page": "PCS/2022/Spring",
+   "players": [
+    "Leaky",
+    "Hana",
+    "Nestea",
+    "Cryscata",
+    "Woody"
+   ],
+   "staff": [
+    {
+     "name": "Enzz",
+     "job": "head"
+    }
+   ]
+  },
+  "Frank Esports": {
+   "league": "PCS",
+   "page": "PCS/2022/Spring",
+   "players": [
+    "Kirt",
+    "Holo",
+    "Pretender",
+    "MnM",
+    "K2"
+   ],
+   "staff": [
+    {
+     "name": "Skywalk",
+     "job": "head"
+    },
+    {
+     "name": "Jazkit",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Impunity": {
+   "league": "PCS",
+   "page": "PCS/2022/Spring",
+   "players": [
+    "Quiet",
+    "tako",
+    "Faith",
+    "Blaze",
+    "pinwei"
+   ],
+   "staff": [
+    {
+     "name": "Jayz",
+     "job": "head"
+    }
+   ]
+  },
+  "J Team": {
+   "league": "PCS",
+   "page": "PCS/2022/Spring",
+   "players": [
+    "Driver",
+    "Kongyue",
+    "Uniboy",
+    "Lilv",
+    "Enso"
+   ],
+   "staff": [
+    {
+     "name": "BigWei",
+     "job": "head"
+    }
+   ]
+  },
+  "Hurricane Gaming": {
+   "league": "PCS",
+   "page": "PCS/2022/Spring",
+   "players": [
+    "ICU",
+    "aoliao",
+    "qiaqia",
+    "BangTwo",
+    "EnHoa"
+   ],
+   "staff": [
+    {
+     "name": "Sen",
+     "job": "head"
+    }
+   ]
+  },
+  "Meta Falcon Team": {
+   "league": "PCS",
+   "page": "PCS/2022/Spring",
+   "players": [
+    "Taco",
+    "665",
+    "Wen",
+    "Whale",
+    "Renhao"
+   ],
+   "staff": [
+    {
+     "name": "Lx2",
+     "job": "head"
+    }
+   ]
+  },
+  "PSG Talon": {
+   "league": "PCS",
+   "page": "PCS/2022/Spring",
+   "players": [
+    "Hanabi",
+    "Juhan",
+    "Bay",
+    "Unified",
+    "Kaiwing"
+   ],
+   "staff": [
+    {
+     "name": "CorGi",
+     "job": "head"
+    },
+    {
+     "name": "Tom",
+     "job": "assistant"
+    },
+    {
+     "name": "Maru",
+     "job": "assistant"
+    }
+   ]
+  },
+  "SEM9": {
+   "league": "PCS",
+   "page": "PCS/2022/Spring",
+   "players": [
+    "Shiromine",
+    "Arashi",
+    "Lezar",
+    "Clayx",
+    "Felia"
+   ],
+   "staff": [
+    {
+     "name": "Axin",
+     "job": "head"
+    }
+   ]
+  },
+  "Dewish Team": {
+   "league": "PCS",
+   "page": "PCS/2022/Summer",
+   "players": [
+    "Lacunae",
+    "WSL",
+    "xiaotu",
+    "BangTwo",
+    "EnHoa"
+   ],
+   "staff": [
+    {
+     "name": "Sen",
+     "job": "head"
+    }
+   ]
+  },
+  "Bilibili Gaming Junior": {
+   "league": "LDL",
+   "page": "LDL/2022/Summer",
+   "players": [
+    "Myths",
+    "can",
+    "Steel",
+    "Rise",
+    "Jwei"
+   ],
+   "staff": [
+    {
+     "name": "616",
+     "job": "head"
+    },
+    {
+     "name": "Hunter",
+     "job": "assistant"
+    },
+    {
+     "name": "July",
+     "job": "analyst"
+    }
+   ]
+  },
+  "MAX": {
+   "league": "LDL",
+   "page": "LDL/2022/Summer",
+   "players": [
+    "Garvey",
+    "KennyChan",
+    "Crush3",
+    "Medzz",
+    "Xiaguang"
+   ],
+   "staff": [
+    {
+     "name": "士力架",
+     "job": "head"
+    },
+    {
+     "name": "XiaoLv",
+     "job": "assistant"
+    }
+   ]
+  }
+ }
+}

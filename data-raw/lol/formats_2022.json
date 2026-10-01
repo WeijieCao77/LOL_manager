@@ -1,0 +1,1498 @@
+{
+ "source": "Liquipedia (CC BY-SA 3.0)，赛事页 Format 一节与信息框",
+ "year": 2022,
+ "pages": {
+  "LPL/2022/Summer": {
+   "group": "LPL",
+   "start": "2022-06-10",
+   "end": "2022-09-01",
+   "prize": "4,200,000",
+   "teams": "17",
+   "location": "Shanghai",
+   "format": "*'''Group Stage''' - ''June 10<sup>th</sup> - August 14<sup>th</sup>, 2022''\n** Single round robin\n** All matches are {{Abbr/Bo3}}\n** Top 10 advanced to [[LPL/2022/Summer/Playoffs|Playoffs]]\n*** {{bgcolortext|byeup|''1st and 2nd place''}} advance to the Semfinals of the Playoffs.\n*** {{bgcolortext|seedup|''3rd and 4th place''}} advance to the Quarterfinals of the Playoffs.\n*** {{bgcolortext|up|''5th and 6th place''}} advance to Round 2 of the Playoffs.\n*** {{bgcolortext|stayup|''7th till 10th place''}} advance to Round 1 of the Playoffs.\n*** {{bgcolortext|stay|''11th till 17th place''}} are eliminated from this split.\n** Tiebreakers\n*** If two or more teams have won the same number of matches, the tie will be broken by the order:\n***# Games differential\n***# Head-to-head results\n\n*'''Playoffs''' - ''August 16<sup>th</sup> - September 1<sup>st</sup>, 2022''\n** '''''Phase One: King-of-the-Hill'''''\n*** 3rd - 10th seeded teams from Group Stage are divided into two brackets to play a King-of-the-Hill format\n**** 3rd, 6th, 7th and 10th seed are in one bracket (the first bracket), the other 4 seeds are in the other\n**** The winners advance to Phase Two\n**** The winner of the first bracket faces 2nd seed team in the Double-Elimination Stage, the other faces the 1st seed\n** '''''Phase Two: Double-Elimination'''''\n*** Four teams play in a Double-Elimination format to compete for the championship\n** All matches are {{Abbr/Bo5}}\n** Winner qualifies for [[World_Championship/2022|World Championship 2022]] Main Event as the first seed.",
+   "qualifies": [
+    "World_Championship/2022"
+   ],
+   "children": [
+    "Group Stage/Week_8-10",
+    "Group_Stage/Week_1-4",
+    "Group_Stage/Week_5-7",
+    "Playoffs"
+   ]
+  },
+  "LPL/2022/Spring": {
+   "group": "LPL",
+   "start": "2022-01-10",
+   "end": "2022-04-23",
+   "prize": "4,200,000",
+   "teams": "17",
+   "location": "Shanghai",
+   "format": "*'''Group Stage''' - ''January 10th - March 25th, 2022''\n** Single round robin\n** All matches are {{Abbr/Bo3}}\n** Top 10 advanced to [[LPL/2022/Spring/Playoffs|Playoffs]]\n*** {{bgcolortext|byeup|''1st and 2nd place''}} advance to the Semfinals of the Playoffs.\n*** {{bgcolortext|seedup|''3rd and 4th place''}} advance to the Quarterfinals of the Playoffs.\n*** {{bgcolortext|up|''5th and 6th place''}} advance to Round 2 of the Playoffs.\n*** {{bgcolortext|stayup|''7th till 10th place''}} advance to Round 1 of the Playoffs.\n*** {{bgcolortext|stay|''11th till 17th place''}} are eliminated from this split.\n** Tiebreakers\n*** If two or more teams have won the same number of matches, the tie will be broken by the order:\n***# Games differential\n***# Head-to-head results\n\n*'''Playoffs''' - ''March 26th - April 23rd, 2022''\n** '''''Phase One: King-of-the-Hill'''''\n*** 3rd - 10th seeded teams from Group Stage are divided into two brackets to play a King-of-the-Hill format\n**** 3rd, 6th, 7th and 10th seed are in one bracket (the first bracket), the other 4 seeds are in the other\n**** The winners advance to Phase Two\n**** The winner of the first bracket faces 2nd seed team in the Double-Elimination Stage, the other faces the 1st seed\n** '''''Phase Two: Double-Elimination'''''\n*** Four teams play in a Double-Elimination format to compete for the championship\n** All matches are {{Abbr/Bo5}}\n** Winner qualifies for [[Mid-Season Invitational/2022|Mid-Season Invitational 2022]]\n\n*'''Free Side Selection Privilege'''\n** The teams have Free Side Selection Privilege can choose which '''''three''''' games of the {{Abbr/Bo5}} series to pick the side\n** At the last match of Playoffs ''Phase One'' and the lower bracket matches of Playoffs ''Phase Two'', the Free Side Selection Privilege will be determined by coin toss. Besides that, the higher seeded teams (in Grand Finals, the upper bracket winner) will have the Free Side Selection Privilege.",
+   "qualifies": [
+    "Mid-Season Invitational/2022"
+   ],
+   "children": [
+    "Group Stage/Week_6-9",
+    "Group_Stage/Week_1-5",
+    "Playoffs"
+   ]
+  },
+  "LPL/2022/Regional Finals": {
+   "group": "LPL",
+   "start": "2022-09-02",
+   "end": "2022-09-04",
+   "prize": null,
+   "teams": "4",
+   "location": "Shanghai",
+   "format": "* '''Participants'''\n** 4 teams with highest [[LPL/2022/Championship_Points|Championship Points]] besides the [[LPL/2022/Summer|LPL Summer 2022 Champion]] (as the region's 1st seed) and the team with the highest Championship Points (as the region's 2nd seed) will play a double-elimination format.\n*** If two teams have the same point, the team with higher Summer Split points will be ranked higher.\n* '''Format'''\n** Two teams with higher points begin in the Upper Bracket, the other two in the Lower Bracket.\n*** Winner of Upper Bracket qualifies for the [[World_Championship/2022/Group_Stage|Group Stage]] of World Championship 2022 as the region's 3rd seed.\n*** Winner of Lower Bracket qualifies for the [[World_Championship/2022/Play-In|Play-In Stage]] of World Championship 2022 as the region's 4th seed.\n** All matches are {{Abbr/Bo5}}.\n* '''Side Choice Previlege'''\n** Teams with higher champion points will have the Side Choice Previlege\n** In the Lower Bracket Finals, the Side Choice Previlege will be determined by coin toss.\n** Teams with Side Choice Previlege can choose the side in game 1, after that, the team lost can choose the side in the next game.",
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Championship Points": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* The champion of the Summer Split will automatically qualify for [[World_Championship/2022|World Championship 2022]] Main Event as the first seed.\n* The team that has accrued the most championship points other than the Summer Split champion throughout the 2022 Season will qualify for [[World_Championship/2022|World Championship 2022]] Main Event as the second seed.\n* The third seed, determined at the [[LPL/2022/Regional_Finals|Regional Finals]], will also qualify for [[World_Championship/2022|World Championship 2022]] Main Event.\n* The forth seed, determined at the [[LPL/2022/Regional_Finals|Regional Finals]], will qualify for [[World_Championship/2022|World Championship 2022]] Play-In Stage.",
+   "qualifies": [
+    "World_Championship/2022"
+   ],
+   "children": []
+  },
+  "LPL/2022/Summer/Group Stage/Week 8-10": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Summer/Group Stage/Week 5-7": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Spring/Group Stage/Week 1-5": {
+   "group": "LPL",
+   "start": null,
+   "end": "March 25, 2022 - 14:00 {{Abbr/CET}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Summer/Group Stage/Week 1-4": {
+   "group": "LPL",
+   "start": null,
+   "end": "August 14, 2022 - 19:00 {{Abbr/CST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Summer/Playoffs": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Spring/Group Stage/Week 6-9": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Spring/Playoffs": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Summer/Statistics": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Spring/Statistics": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Spring/Group Stage/Statistics": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Summer/Group Stage/Statistics": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Spring/Playoffs/Statistics": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2022/Summer/Playoffs/Statistics": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Summer": {
+   "group": "LCK",
+   "start": "2022-06-15",
+   "end": "2022-08-28",
+   "prize": "375,000,000",
+   "teams": "10",
+   "location": "Seoul",
+   "format": "*'''Group Stage''' - ''June 15<sup>th</sup> - August 14<sup>th</sup>, 2022''\n**Double Round Robin {{Abbr/Bo3}}\n*** {{bgcolortext|seedup|''1st and 2nd place''}} advance to the Semifinals of the Playoffs.\n*** {{bgcolortext|up|''3rd till 6th place''}} advance to the Wild Card Round of the Playoffs.\n*** {{bgcolortext|stay|''6th till 10th place''}} are eliminated from this split.\n*'''Playoffs''' - ''August 17<sup>th</sup> - 28<sup>th</sup>, 2022''\n** Single Elimination\n** 1st placed team from group stage can choose the opponent from first round\n** All matches are {{Abbr/Bo5}} \n** Winner qualifies for [[World Championship/2022|World Championship 2022]]",
+   "qualifies": [
+    "World Championship/2022"
+   ],
+   "children": [
+    "Group_Stage/Week_1-5",
+    "Group_Stage/Week_6-9"
+   ]
+  },
+  "LCK/2022/Spring": {
+   "group": "LCK",
+   "start": "2022-01-12",
+   "end": "2022-04-02",
+   "prize": "375,000,000",
+   "teams": "10",
+   "location": "Seoul",
+   "format": "*'''Regular Season''' - ''January 12th - March 20th, 2022''\n**Double Round Robin {{Abbr/Bo3}}\n*** {{bgcolortext|seedup|''1st and 2nd place''}} advance to the Semifinals of the Playoffs.\n*** {{bgcolortext|up|''3rd till 6th place''}} advance to the Wild Card Round of the Playoffs.\n*** {{bgcolortext|stay|''6th till 10th place''}} are eliminated from this split.\n*'''Playoffs''' - ''March 23rd - April 2nd, 2022''\n** Single Elimination\n** All matches are {{Abbr/Bo5}} \n** Winner qualifies for [[Mid-Season Invitational/2022|Mid-Season Invitational 2022]]",
+   "qualifies": [
+    "Mid-Season Invitational/2022"
+   ],
+   "children": [
+    "Regular Season"
+   ]
+  },
+  "LCK/2022/Regional Finals": {
+   "group": "LCK",
+   "start": "2022-09-01",
+   "end": "2022-09-03",
+   "prize": null,
+   "teams": "4",
+   "location": "Seoul",
+   "format": "* '''Participants'''\n** 4 teams with highest [[LCK/2022/Championship_Points|Championship Points]] besides the [[LCK/2022/Summer|LCK Summer 2022 Champion]] (as the region's {{Ordinal|1}} seed) and the team with the highest Championship Points (as the region's {{Ordinal|2}} seed) will play a double-elimination format.\n*** If two teams have the same point, the team with higher Summer Split points will be ranked higher.\n* '''Format'''\n** Two teams with higher points begin in the Upper Bracket, the other two in the Lower Bracket.\n*** Winner of Upper Bracket qualifies for the [[World_Championship/2022/Group_Stage|Group Stage]] of World Championship 2022 as the region's {{Ordinal|3}} seed.\n*** Winner of Lower Bracket qualifies for the [[World_Championship/2022/Play-In|Play-In Stage]] of World Championship 2022 as the region's {{Ordinal|4}} seed.\n** All matches are {{Abbr/Bo5}}.",
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Awards": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": "Gwangmyeong",
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Championship Points": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Teams are awarded points based on their performances in their respective Spring and Summer Split.\n<!--** The team who wins [[LCK/2021/Summer|Summer Split]] will qualify for the Group Stage as the region's first seed.\n** The team with the highest Championship Points will qualify for the Group Stage as the region's second seed.\n** The following four teams ranked by Championship Points will qualify for [[LCK/2021/Regional Finals|Regional Finals]].\n** Teams cannot make changes to their roster and will participate in the Regional Finals with their [[LCK/2021/Summer|Summer Round 2]] roster.-->\n* '''Tiebreaker'''\n** In the event that multiple teams are tied in the Championship Point standings at the conclusion of the Summer Split, then the team that gained the most Championship Points in the Summer Split will win the tiebreaker.",
+   "qualifies": [
+    "LCK/2021/Regional Finals"
+   ],
+   "children": []
+  },
+  "LCK/2022/Summer/Group Stage/Week 1-5": {
+   "group": "LCK",
+   "start": null,
+   "end": "August 14, 2022 - 20:00 {{Abbr/KST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Summer/Group Stage/Week 6-9": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Spring/Regular Season": {
+   "group": "LCK",
+   "start": null,
+   "end": "March 20, 2022 - 18:00 {{Abbr/KST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Summer/Playoffs": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Spring/Playoffs": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Summer/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Spring/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Spring/Regular Season/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Summer/Playoffs/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Spring/Playoffs/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2022/Summer/Group Stage/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2022/Summer": {
+   "group": "LEC",
+   "start": "2022-06-17",
+   "end": "2022-09-11",
+   "prize": "200,000",
+   "teams": "10",
+   "location": "Berlin",
+   "format": "* '''Group Stage''' - ''June 17<sup>th</sup> - August 14<sup>th</sup>, 2022''\n**Double Round Robin\n**Each team plays 18 matches\n**All matches are {{Abbr/Bo1}}\n\n* '''[[LEC/2022/Championship_Points|Championship Points]]'''\n**Teams are awarded points based on their performances in their respective Spring Playoffs and Summer Regular Season.\n**Points determine playoff seeding after participants are determined by summer placement.\n**If a team finishes in 7th-10th in summer they lose all of their points.\n**1st to 6th place will play the Playoffs\n\n* '''Playoffs''' - ''August 26<sup>th</sup> - September 11<sup>th</sup>, 2022''\n** Double Elimination\n** All matches are {{Abbr/Bo5}} \n** Top 4 teams qualify for [[World Championship/2022|World Championship 2022]]",
+   "qualifies": [
+    "World Championship/2022"
+   ],
+   "children": [
+    "Group Stage"
+   ]
+  },
+  "LEC/2022/Spring": {
+   "group": "LEC",
+   "start": "2022-01-14",
+   "end": "2022-04-10",
+   "prize": "200,000",
+   "teams": "10",
+   "location": "Berlin",
+   "format": "* '''Group Stage''' - ''January 14th - March 6th, 2022''\n**Double Round Robin\n**Each team plays 18 matches\n**All matches are {{Abbr/Bo1}}\n**1st to 6th place will play the Playoffs\n***1st to 4th place are seeded into Semifinals\n***5th and 6th place are seeded into Losers' Round 1\n* '''Playoffs''' - ''March 25th - April 10th, 2022''\n** Double Elimination\n** All matches are {{Abbr/Bo5}} \n** Winner qualifies for [[Mid-Season Invitational/2022|Mid-Season Invitational 2022]]",
+   "qualifies": [
+    "Mid-Season Invitational/2022"
+   ],
+   "children": [
+    "Group Stage"
+   ]
+  },
+  "LEC/2022/Championship Points": {
+   "group": "LEC",
+   "start": "2022-01-14",
+   "end": "2022-09-11",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Teams are awarded points based on their performances in their respective Spring Playoffs and Summer Regular Season.\n* Points determine playoff seeding after participants are determined by summer placement.\n* If a team finishes in 7th-10th in summer they lose all of their points.\n\n{{HiddenDataBox\n|sdate=2022-01-14\n|edate=2022-09-11\n}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2022/Summer/Group Stage": {
+   "group": "LEC",
+   "start": null,
+   "end": "August 14, 2022 - 21:00 {{Abbr/CEST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2022/Spring/Group Stage": {
+   "group": "LEC",
+   "start": null,
+   "end": "March 7, 2022 - 21:00 {{Abbr/CET}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2022/Summer/Playoffs": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2022/Spring/Playoffs": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2022/Summer/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2022/Spring/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2022/Spring/Group Stage/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2022/Summer/Playoffs/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2022/Summer/Group Stage/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2022/Spring/Playoffs/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Summer": {
+   "group": "LCS",
+   "start": "2022-06-18",
+   "end": "2022-09-11",
+   "prize": "200,000",
+   "teams": "10",
+   "location": "Los Angeles",
+   "format": "* '''Group Stage''' - ''June 17<sup>th</sup> - August 14<sup>th</sup>, 2022''\n** Double Round Robin\n** Each team plays 18 matches.\n**All matches are {{Abbr/Bo1}}\n**1st to 8th place will play the Playoffs\n***1st and 2nd place are seeded into Semifinals\n***3rd to 6th place are seeded into Upper Bracket Quarterfinals\n***7th and 8th place are seeded into Lower Bracket Round 1\n\n* '''Playoffs ''' - ''August 20<sup>th</sup> - September 11<sup>th</sup>, 2022''\n** Double Elimination\n** All matches are {{Abbr/Bo5}} \n** Top 3 teams qualify for [[World Championship/2022|World Championship 2022]]",
+   "qualifies": [
+    "World Championship/2022"
+   ],
+   "children": [
+    "Group Stage"
+   ]
+  },
+  "LCS/2022/Spring": {
+   "group": "LCS",
+   "start": "2022-02-05",
+   "end": "2022-04-24",
+   "prize": "200,000",
+   "teams": "10",
+   "location": "Los Angeles",
+   "format": "* '''Group Stage''' - ''February 5th - March 27th, 2022''\n** Double Round Robin\n** Each team plays 18 matches.\n**All matches are {{Abbr/Bo1}}\n*** {{bgcolortext|seedup|''1st till 4th place''}} advance to the Upper-bracket of Playoffs.\n*** {{bgcolortext|up|''5th and 6th place''}} advance to the Lower-bracket of Playoffs.\n\n* '''Playoffs ''' - ''April 2nd - April 24th, 2022''\n** Double Elimination\n** All matches are {{Abbr/Bo5}} \n** Winner qualifies for [[Mid-Season Invitational/2022|Mid-Season Invitational 2022]]",
+   "qualifies": [
+    "Mid-Season Invitational/2022"
+   ],
+   "children": [
+    "Group Stage"
+   ]
+  },
+  "LCS/2022/Lock In": {
+   "group": "LCS",
+   "start": "2022-01-14",
+   "end": "2022-01-30",
+   "prize": "150,000",
+   "teams": "10",
+   "location": "Los Angeles",
+   "format": "* '''Group Stage'''\n** Teams are drafted into 2 groups by the Summer 2021 finalists: {{team|100 Thieves}} and {{team|tl}}\n** All 10 teams participate\n** Top 4 teams from each group go to playoffs\n\n* '''Playoffs'''\n** 8 Teams qualify\n** Single elimination\n** Quarterfinals are {{Abbr/Bo3}}\n** Semi-finals and grand finals are {{Abbr/Bo5}}\n* '''Game related changes'''\n** The [[File:Dragon icon chemtech.png|20px]] Chemtech Drake was disabled on January 24th, 2022.",
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Summer/Group Stage": {
+   "group": "LCS",
+   "start": null,
+   "end": "August 14, 2022 - 20:00 {{Abbr/PDT}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Spring/Group Stage": {
+   "group": "LCS",
+   "start": null,
+   "end": "March 27, 2022 - 19:30 {{Abbr/EDT}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Summer/Playoffs": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Spring/Playoffs": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Lock In/Group Stage": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Lock In/Playoffs": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Summer/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Spring/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Summer/Player Stats": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Lock In/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Summer/Playoffs/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Spring/Playoffs/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Summer/Group Stage/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2022/Spring/Group Stage/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2022/Summer": {
+   "group": "PCS",
+   "start": "2022-07-01",
+   "end": "2022-09-04",
+   "prize": "|liquipediatier=2",
+   "teams": "10",
+   "location": null,
+   "format": "* '''Group Stage''' - ''July 1st - August 6th, 2022''\n**Double Round Robin\n**Each team plays 18 matches\n**All matches are {{Abbr/Bo1}}\n**1st to 8th place will play the playoffs\n***1st and 2nd place are seeded into Semifinals\n***3rd to 6th place are seeded into Quarterfinals\n***7th and 8th place are seeded into Losers' Round 1\n* '''Playoffs''' - ''August 18th - September 4th, 2022''\n** Double Elimination\n** All matches are {{Abbr/Bo5}}\n** Winner and the runner-up qualify for [[World Championship/2022|World Championship 2022]]",
+   "qualifies": [
+    "World Championship/2022"
+   ],
+   "children": [
+    "Group_Stage"
+   ]
+  },
+  "PCS/2022/Spring": {
+   "group": "PCS",
+   "start": "2022-02-11",
+   "end": "2022-04-17",
+   "prize": "|liquipediatier=2",
+   "teams": "10",
+   "location": null,
+   "format": "* '''Group Stage''' - ''February 11th - March 19th, 2022''\n**Double Round Robin\n**Each team plays 18 matches\n**All matches are {{Abbr/Bo1}}\n**1st to 8th place will play the playoffs\n***1st and 2nd place are seeded into Semifinals\n***3rd to 6th place are seeded into Quarterfinals\n***7th and 8th place are seeded into Losers' Round 1\n* '''Playoffs''' - ''March 31st - April 17th, 2022''\n** Double Elimination\n** All matches are {{Abbr/Bo5}}\n** Winner qualifies for [[Mid-Season Invitational/2022|Mid-Season Invitational 2022]]",
+   "qualifies": [
+    "Mid-Season Invitational/2022"
+   ],
+   "children": [
+    "Group_Stage"
+   ]
+  },
+  "PCS/2022/Summer/Group Stage": {
+   "group": "PCS",
+   "start": null,
+   "end": "August 6, 2022 - 21:00 {{Abbr/CST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2022/Spring/Group Stage": {
+   "group": "PCS",
+   "start": null,
+   "end": "March 19, 2022 - 21:00 {{Abbr/CST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2022/Summer/Playoffs": {
+   "group": "PCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2022/Spring/Playoffs": {
+   "group": "PCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2022/Summer/Statistics": {
+   "group": "PCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2022/Spring/Statistics": {
+   "group": "PCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2022/Summer/Playoffs/Statistics": {
+   "group": "PCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2022/Spring/Group Stage/Statistics": {
+   "group": "PCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2022/Summer/Group Stage/Statistics": {
+   "group": "PCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2022/Spring/Playoffs/Statistics": {
+   "group": "PCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2022/Split 1": {
+   "group": "CBLOL",
+   "start": "2022-01-22",
+   "end": "2022-04-23",
+   "prize": "400,000",
+   "teams": "10",
+   "location": "São Paulo",
+   "format": "* '''Group Stage'''\n**Double Round Robin, {{Abbr/Bo1}}\n*** {{bgcolortext|seedup|''1st till 4th place''}} advance to the Playoffs Upperbracket.\n*** {{bgcolortext|up|''5th and 6th place''}} advance to the Playoffs Lowerbracket.\n*** {{bgcolortext|stay|''7th till 10th place''}} are eliminated from this split.\n* '''Playoffs''' \n** Single Elimination\n** All matches are {{Abbr/Bo5}} \n** Winner qualifies for [[Mid-Season Invitational/2022|2022 Mid-Season Invitational]]",
+   "qualifies": [
+    "Mid-Season Invitational/2022"
+   ],
+   "children": []
+  },
+  "CBLOL/2022/Split 2": {
+   "group": "CBLOL",
+   "start": "2022-06-11",
+   "end": "2022-09-03",
+   "prize": "400,000",
+   "teams": "10",
+   "location": "São Paulo",
+   "format": "* '''Group Stage''' - ''June 11th - August 7th, 2022''\n**Double Round Robin, {{Abbr/Bo1}}\n*** {{bgcolortext|seedup|''1st till 4th place''}} advance to the Playoffs Upperbracket.\n*** {{bgcolortext|up|''5th and 6th place''}} advance to the Playoffs Lowerbracket.\n*** {{bgcolortext|stay|''7th till 10th place''}} are eliminated from this split.\n* '''Playoffs''' - ''August 13th - September 3rd, 2022''\n** Double Elimination\n** All matches are {{Abbr/Bo5}} \n** Winner qualifies for [[World_Championship/2022|2022 World Championship]]",
+   "qualifies": [
+    "World_Championship/2022"
+   ],
+   "children": []
+  },
+  "CBLOL/2022/Split 2/Group Stage": {
+   "group": "CBLOL",
+   "start": null,
+   "end": "August 7, 2022 - 17:00 {{Abbr/BRT}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2022/Split 2/Playoffs": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2022/Split 1/Group Stage": {
+   "group": "CBLOL",
+   "start": null,
+   "end": "March 20, 2022 - 17:00 {{Abbr/BRT}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2022/Split 1/Playoffs": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2022/Split 2/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2022/Split 1/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2022/Split 2/Statistics/Playoffs": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2022/Split 2/Statistics/Group Stage": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LDL/2022/Summer": {
+   "group": "LDL",
+   "start": "2022-06-19",
+   "end": "2022-08-28",
+   "prize": "800,000",
+   "teams": "24",
+   "location": "China",
+   "format": "*'''Group Stage'''\n**Double Round-Robin\n**24 teams are drawn into 2 groups",
+   "qualifies": [],
+   "children": []
+  },
+  "LDL/2022/Spring": {
+   "group": "LDL",
+   "start": "2022-02-13",
+   "end": "2022-04-19",
+   "prize": "800000",
+   "teams": "24",
+   "location": "China",
+   "format": "*'''Group Stage'''\n**Double Round-Robin\n**24 teams are drawn into 2 groups",
+   "qualifies": [],
+   "children": []
+  },
+  "LDL/2022/Summer/Statistics": {
+   "group": "LDL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LDL/2022/Spring/Statistics": {
+   "group": "LDL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2022/Summer": {
+   "group": "LCK CL",
+   "start": "2022-06-13",
+   "end": "2022-08-26",
+   "prize": "80,000,000",
+   "teams": "10",
+   "location": "Seoul",
+   "format": "*'''Group Stage'''\n** Double Round Robin\n** All matches are {{Abbr/Bo3}}\n** Top 6 from regular season qualify for Playoffs\n\n*'''Playoffs'''\n**Top 6 from Group Stage\n** Single Elimination bracket.\n*** Top 2 from Group stage get a bye\n** Games are {{Abbr/Bo5}}.",
+   "qualifies": [],
+   "children": [
+    "Group_Stage/Week 1-5",
+    "Group_Stage/Week 6-9"
+   ]
+  },
+  "LCK CL/2022/Spring": {
+   "group": "LCK CL",
+   "start": "2022-01-10",
+   "end": "2022-04-01",
+   "prize": "80,000,000",
+   "teams": "10",
+   "location": "Seoul",
+   "format": "*'''Group Stage'''\n** Quadruple Round Robin\n** All matches are {{Abbr/Bo1}}\n** Top 6 from regular season qualify for Playoffs\n\n*'''Playoffs'''\n**Top 6 from Group Stage\n** Single Elimination bracket.\n*** Top 2 from Group stage get a bye\n** Games are {{Abbr/Bo5}}.",
+   "qualifies": [],
+   "children": [
+    "Group_Stage",
+    "Playoffs"
+   ]
+  },
+  "LCK CL/2022/Summer/Group Stage/Week 6-9": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2022/Summer/Group Stage/Week 1-5": {
+   "group": "LCK CL",
+   "start": "July 14, 2022 - 15:00 {{Abbr/KST}}",
+   "end": "August 12, 2022 - 15:00 {{Abbr/KST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2022/Summer/Playoffs": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2022/Spring/Group Stage/Week 6-9": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2022/Spring/Playoffs": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2022/Summer/Statistics": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2022/Spring/Group Stage/Week 1-5": {
+   "group": "LCK CL",
+   "start": "February 16, 2022 - 22:00 {{Abbr/KST}}",
+   "end": "March 18, 2022 - 15:00 {{Abbr/CET}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2022/Spring/Statistics": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2022/Summer/Statistics/Playoffs": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2022/Summer/Statistics/Group Stage": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Coupe de France": {
+   "group": "LFL",
+   "start": "2022-10-17",
+   "end": "2022-11-11",
+   "prize": "10000",
+   "teams": "24",
+   "location": "Paris",
+   "format": "* '''Playoffs''' - ''October 17th - November 11th, 2022''\n** Single Elimination\n** Round 1 matches are {{Abbr/Bo3}}, all of the remaining matches are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Summer": {
+   "group": "LFL",
+   "start": "2022-06-01",
+   "end": "2022-08-18",
+   "prize": "20000",
+   "teams": "10",
+   "location": "Boulogne-Billancourt",
+   "format": "* '''Group Stage''' - ''June 1st - July 28th, 2022''\n**Double Round Robin\n**Each team plays 18 matches\n**All matches are {{Abbr/Bo1}}\n**1st to 6th place will play the Playoffs\n***1st and 2nd place are seeded into Winners' Finals\n*** 3rd to 6th place are seeded into Losers' Round 1\n* '''Playoffs''' - ''August 13th - August 18th, 2022''\n** Double Elimination\n** All matches are {{Abbr/Bo5}}\n** Top 4 teams qualify for [[European Masters/2022/Summer|EU Masters Summer]]",
+   "qualifies": [
+    "European Masters/2022/Summer"
+   ],
+   "children": [
+    "Group_Stage"
+   ]
+  },
+  "LFL/2022/Spring": {
+   "group": "LFL",
+   "start": "2022-01-12",
+   "end": "2022-03-31",
+   "prize": "20000",
+   "teams": "10",
+   "location": "Nice",
+   "format": "* '''Group Stage''' - ''January 12th - March 10th, 2022''\n**Double Round Robin\n**Each team plays 18 matches\n**All matches are {{Abbr/Bo1}}\n**1st to 6th place will play the Playoffs\n***1st and 2nd place are seeded into Winners' Finals\n*** 3rd to 6th place are seeded into Losers' Round 1\n* '''Playoffs''' - ''March 16th - March 31st, 2022''\n** Double Elimination\n** All matches are {{Abbr/Bo5}}\n** The 4 best teams qualify for [[European Masters/2022/Spring|EU Masters Spring]]",
+   "qualifies": [
+    "European Masters/2022/Spring"
+   ],
+   "children": [
+    "Group_Stage"
+   ]
+  },
+  "LFL/2022/Promotion Tournament": {
+   "group": "LFL",
+   "start": "2021-09-20",
+   "end": "2021-09-24",
+   "prize": "|sdate=2021-09-20",
+   "teams": "4",
+   "location": null,
+   "format": "* Four teams:\n** Bottom 2 from the [[LFL/2021/Championship_Points|LFL 2021 Season]]\n** Top 2 from the [[LFL_Division_2/2021/Championship_Points|LFL Division 2 2021 Season]], excluding the LFL Academy teams.\n* Winners qualify for the [[LFL/2022/Spring|LFL 2022 Season]]",
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Championship Points": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Summer/Group Stage": {
+   "group": "LFL",
+   "start": null,
+   "end": "July 28, 2022 - 23:00 {{Abbr/CEST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Coupe de France/Qualifier/1": {
+   "group": "LFL",
+   "start": "2022-10-01",
+   "end": "2022-10-02",
+   "prize": "|prizepoolusd=",
+   "teams": "38",
+   "location": null,
+   "format": "* 6 rounds of Swiss Stage\n* Swiss Stage matches in {{Abbr/Bo1}}\n* Single Elimination bracket in {{Abbr/Bo3}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Coupe de France/Qualifier/2": {
+   "group": "LFL",
+   "start": "2022-10-08",
+   "end": "2022-10-09",
+   "prize": "|prizepoolusd=",
+   "teams": "34",
+   "location": null,
+   "format": "* 6 rounds of Swiss Stage\n* Swiss Stage matches in {{Abbr/Bo1}}\n* Single Elimination bracket in {{Abbr/Bo3}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Coupe de France/Qualifier/3": {
+   "group": "LFL",
+   "start": "2022-10-15",
+   "end": "2022-10-16",
+   "prize": "|prizepoolusd=",
+   "teams": "38",
+   "location": null,
+   "format": "* 6 rounds of Swiss Stage\n* Swiss Stage matches in {{Abbr/Bo1}}\n* Single Elimination bracket in {{Abbr/Bo3}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Spring/Group Stage": {
+   "group": "LFL",
+   "start": null,
+   "end": "March 10, 2022 - 23:00 {{Abbr/CET}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Summer/Playoffs": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Spring/Playoffs": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Summer/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Spring/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Spring/Group Stage/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Summer/Playoffs/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Summer/Group Stage/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Spring/Playoffs/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2022/Coupe de France/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/Academy/2022/Split 1": {
+   "group": "CBLOL Academy",
+   "start": "2022-01-25",
+   "end": "2022-04-16",
+   "prize": "100,000",
+   "teams": "10",
+   "location": "Brazil",
+   "format": "* '''Group Stage'''\n**Double Round Robin\n**Each team plays 18 matches\n**All matches are {{Abbr/Bo1}}\n**1st to 6th place will play the Playoffs\n***1st and 2nd receive playoff byes into the semifinals\n* '''Playoffs'''\n** Single Elimination\n** All matches are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/Academy/2022/Split 2": {
+   "group": "CBLOL Academy",
+   "start": "2022-06-13",
+   "end": "2022-09-10",
+   "prize": "100,000",
+   "teams": "10",
+   "location": "São Paulo",
+   "format": "* '''Group Stage'''\n**Double Round Robin\n**Each team plays 18 matches\n**All matches are {{Abbr/Bo1}}\n**1st to 6th place will play the Playoffs\n***1st and 2nd receive playoff byes into the semifinals\n* '''Playoffs'''\n** Single Elimination\n** All matches are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/Academy/2022/Split 2/Group Stage": {
+   "group": "CBLOL Academy",
+   "start": null,
+   "end": "August 9, 2022 - 17:00 {{Abbr/PST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/Academy/2022/Split 1/Group Stage": {
+   "group": "CBLOL Academy",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/Academy/2022/Split 2/Playoffs": {
+   "group": "CBLOL Academy",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/Academy/2022/Split 1/Playoffs": {
+   "group": "CBLOL Academy",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/Academy/2022/Split 1/Statistics": {
+   "group": "CBLOL Academy",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Mid-Season Invitational/2022": {
+   "group": "international",
+   "start": "2022-05-10",
+   "end": "2022-05-29",
+   "prize": "250,000",
+   "teams": "11",
+   "location": "Busan",
+   "format": "* '''Group Stage''' - ''May 10th - 15th, 2022''\n** Eleven teams are split into one group of three and two groups of four teams\n** Group A & B will play in a Double Round-Robin format\n** Group C will play in a Quadruple Round-Robin format\n** {{Bgcolortext|up|Top two teams}} per group advance to the next stage\n** {{Bgcolortext|down|Bottom two teams}} are eliminated\n** All matches are {{Abbr/Bo1}}\n\n* '''Rumble Stage''' - ''May 20th - 24th, 2022''\n** Six remaining teams play in another Double Round-Robin format \n** {{Bgcolortext|up|Top four teams}} advance to Knockout Stage\n** {{Bgcolortext|down|Bottom two teams}} are eliminated\n** All matches are {{Abbr/Bo1}}\n\n* '''Knockout Stage''' - ''May 27th - 29th, 2022''\n** The first place team of Rumble Stage will choose to face either the third or fourth place team\n** Single-Elimination bracket\n** All matches are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": [
+    "Rumble_Stage"
+   ]
+  },
+  "World Championship/2022": {
+   "group": "international",
+   "start": "2022-09-29",
+   "end": "2022-11-05",
+   "prize": "2,225,000",
+   "teams": "24",
+   "location": "San Francisco",
+   "format": "* '''Qualification'''\n** 24 teams from professional leagues will qualify for the event.\n** LPL, LCK, LEC will have 4 slots, while LCS will have 3 slots, PCS and VCS will have 2 slots, remaining slots will be one each for CBLOL, LJL, LLA, LCO and TCL.<ref name=\"lolesports20220721\"/>\n\n* '''Play-In Round 1''' - ''September 29<sup>th</sup> - October 2<sup>nd</sup>''\n** Twelve teams are divided into two groups where they play a Single Round Robin format.\n** All matches are played in a {{Abbr/Bo1}}.\n** <span class=\"bg-seedup\">Top teams</span> in each group advance to Group Stage.\n** <span class=\"bg-up\">2nd</span>, <span class=\"bg-stayup\">3rd and 4th teams</span> in each group advance to Play-In: Round 2.\n** <span class=\"bg-down\">Bottom 2 teams</span> in each group are eliminated.\n\n* '''Play-In Round 2''' - ''October 3<sup>rd</sup> - 4<sup>th</sup>''\n**Six teams from Play-In: Round 1.\n**The 3rd and 4th placed teams of the same group of Round 1 face each other, winners compete against the 2nd placed team of the other group.\n**All matches are played in a {{Abbr/Bo5}}.\n**Two winners will advance to Group Stage.\n**Four losers will be eliminated.\n\n* '''Group Stage''' - ''October 7<sup>th</sup> - 10<sup>th</sup> and 13<sup>th</sup> - 16<sup>th</sup>''\n** Four teams from the Play-In Stage join twelve teams with direct entry from China, South Korea, Europe, North America, Southeast Asia and Vietnam.\n** All sixteen teams are divided into four groups where they play a Double Round Robin format.\n** All matches are played in a {{Abbr/Bo1}}.\n**<span class=\"bg-up\">Top two teams</span> in each group advance to Knockout Stage.\n**<span class=\"bg-down\">Bottom two teams</span> in each group are eliminated.\n** <span class=\"mw-customtoggle-Tiebreaker\" style=\"border-bottom:1px dotted;\">''Click here for information about tiebreaker rules''</span>\n<div class=\"toccolours mw-collapsible mw-collapsed\" id=\"mw-customcollapsible-Tiebreaker\" style=\"margin-top:10px;\">\n* If teams are tied and competing for 3rd and 4th place, there will not be any additional matches, the placement will be determined by their head-to-head result. If teams an identical head-to-head record, they will share the 3rd place.\n* No tiebreaker game will be played if the tiebreaker would not decide either the first or second place position in the group.\n* In other circumstances: \n** If there are '''two''' teams have an equal amount of points, an additional tiebreaker match will be played.\n** If there are '''three''' teams have an equal amount of points, five circumstances will be considered based on the records against each of the other teams in the tie:\n*** ''Each team in the tiebreaker has a record of 2-2: the two teams with highest winning time will play against each other, winner will face the other team. (Group A)''\n*** The teams have 3-1, 2-2 and 1-3 records: the 2-2 and 1-3 teams will play against each other, winner will face the 3-1 team.\n*** The teams are with two 3-1 and one 0-4 records: the team that is 0-4 will be awarded the lowest standing being decided by the tiebreaker and a new tiebreaker is declared amongst the two teams with an aggregate record of 3-1 utilizing the two-way tie procedure set.\n*** One team has 4-0 and the others are 1-3: The team that is 4-0 is automatically granted the highest seed available in the tiebreaker, and a new tiebreaker is declared amongst the two teams with an aggregate record of 1-3 utilizing the two-way tie procedure set.\n*** The teams are with 4-0, 2-2 and 0-4 record: the tie will be broken by the aggregate record.\n** If there are '''four''' teams have an equal amount of points, the teams will be drawn into a single elimination bracket based on the cumulative game victory time for the individual teams.\n*** The seeds will be given in order to the teams that won their games the quickest. The four teams will be split into two first-round matches: quickest team faces slowest team and 2nd team faces 3rd team. \n*** The losing teams will be eliminated from the tournament. The winning teams play a match to determine the first and second seeds of the group.\n* Side selection for a head-to-head tiebreaker matchup will be awarded to the team with the lower total game victory time.\n* All tiebreaker matches are {{abbr/Bo1}}\n</div>\n\n* '''Knockout Stage''' - ''October 20<sup>th</sup> - 23<sup>rd</sup>, October 29<sup>th</sup> - 30<sup>th</sup> and November 5<sup>th</sup>''\n** Eight teams play in a single elimination bracket where 1st placed team of each group faces 2nd placed team from another group.\n** Side Selection Privilege\n*** Teams with Side Selection Privilege can choose the side in game 1, after that, the losing team can choose the side in the next game.\n*** In Quarterfinals, 1st placed team from each group will have the Side Choice Previlege.\n*** In the following matches, the Side Choice Previlege will be determined by coin flip.\n** All matches are {{Abbr/Bo5}}.\n\n* '''Patch Information'''\n** Worlds 2022 will be played on [https://www.leagueoflegends.com/en-gb/news/game-updates/patch-12-18-notes/ Patch 12.18].\n** [[File:Champion icon Udyr 2022.png|20px|link=]] [https://euw.leagueoflegends.com/en-gb/champions/udyr/ Udyr] was disabled for this tournament due to the ''\"New Champions and VGUs must be enabled for playoffs in all four of the top regions in order to be playable at the next international tournament.\"'' policy.<ref name=\"Udyr banned\">{{cite web|url=https://na.leagueoflegends.com/en-us/news/dev/dev-balancing-for-pro-play/|title=/dev: Balancing for Pro Play|author=Summoner's Rift Team|publisher=Riot Games|date=2020-08-19|language={{Flag|usuk}}English}}</ref>\n* '''Game related changes'''\n** [[File:Champion_icon_Orianna.png|20px|link=]] [https://euw.leagueoflegends.com/en-gb/champions/orianna/ Orianna] was disabled during the October 10th matches.<ref name=\"Orianna disabled\">{{cite web |url=https://twitter.com/lolesports/status/1579476329468424194|title=Due to a recently discovered bug, Orianna will be disabled for Worlds 2022 until further notice|author=LoL Esports|publisher=Twitter|language={{Flag|usuk}}English}}</ref> <ref name=\"Orianna re-enabled\">{{cite web|url=https://twitter.com/lolesports/status/1579985320220598272|title=The Orianna bug has been resolved and the champion will be re-enabled for Worlds|author=LoL Esports|publisher=Twitter|language={{Flag|usuk}}English}}</ref>\n===Worlds Draw Show===\n* The Worlds Draw Show will be held after [[LCS/2022/Summer/Playoffs|LCS Championship Grand Finals]] to place teams into groups for the Play-In Stage and the Group Stage of the 2022 World Championship.<ref name=\"lolesports20220902\">{{cite web|url=https://lolesports.com/article/tune-in-for-the-worlds-2022-draw-show!/blte31d58b71aa77fd8|title=Tune in for the Worlds 2022 Draw Show!|author=LoL Esports Staff|publisher=lolesports.com|date=2022-09-02|language={{Flag|usuk}} English}}</ref>\n** <span class=\"mw-customtoggle-Draw\" style=\"border-bottom:1px dotted;\">''Click here for detailed information about Worlds Draw Show''</span>\n<div class=\"toccolours mw-collapsible mw-collapsed\" id=\"mw-customcollapsible-Draw\" style=\"margin-top:10px;\">\n* Teams are splited into 3 seed pools to ensure quality groups.\n* '''Play-In Draw'''\n** 12 teams are splited into 3 pools\n*** '''Pool 1''' will consist of LPL4 (''RNG''), LCK4 (''DRX''), LEC3 (''FNC''), and PCS2 (''BYG'').\n*** '''Pool 2''' will consist of LEC4 (''MAD''), LCS3 (''EG''), VCS2 (''SGB''), and LJL1 (''DFM'').\n*** '''Pool 3''' will consist of LCO1 (''CHF''), TCL1 (''IW''), LLA1 (''ISG''), and CBLOL1 (''LLL'').\n* '''Groups Draw'''\n** 12 teams are splited into 3 pools\n*** '''Pool 1''' will consist of LPL1 (''JDG''), LCK1 (''GEN''), LEC1 (''RGE''), and LCS1 (''C9'').\n*** '''Pool 2''' will consist of LPL2 (''TES''), LCK2 (''T1''), LEC2 (''G2''), and PCS1 (''CFO'').\n*** '''Pool 3''' will consist of LPL3 (''EDG''), LCK3 (''DK''), LCS2 (''100''), and VCS1 (''GAM'').\n* The winners from the Play-In Stage will be drawn directly into each of the four groups once Play-Ins concludes and will not be part of the Draw Show.\n* No team may be in the same group as another team from their region. \n** '''Note''': In the scenario where both the LEC 3rd (''FNC'') and 4th seeded (''MAD'') teams advance to the Group Stage, the 4th seeded team will not be subject to the rule preventing a Group from having more than one team from the same region in it. <ref name=\"lolesports20220909\">{{cite web|url=https://www.lolesportsmedia.com/Competitive-Operations-Update-Worlds-2022-Group-Draw|title=Competitive Operations Update: Worlds 2022 Group Draw |author=LoL Esports|publisher=lolesportsmedia.com|date=2022-09-09|language={{Flag|usuk}} English}}</ref>\n** In the scenario where either LEC team is eliminated from the competition during the Play-In Stage, the rule will remain in place.\n</div>",
+   "qualifies": [],
+   "children": [
+    "Group_Stage",
+    "Play-In"
+   ]
+  }
+ }
+}

@@ -21,7 +21,7 @@
  * the match-up against what the other side has shown. When it bans, it takes
  * away what the other side plays best among what is strong.
  */
-import { AGENTS, agentCn, agentRoles, presence } from './content'
+import { AGENTS, agentCn, agentRoles, currentMetaYear, presence } from './content'
 import { agentStyle, counterN, darlings, styleMix } from './comp'
 import type { StyleMix } from './comp'
 import { agentAvailable } from './eras'
@@ -49,12 +49,18 @@ export const DRAFT_ORDER: Step[] = seq(
   'Bb Rb Bb Rb Bb Rb Bp Rp Rp Bp Bp Rp Rb Bb Rb Bb Rp Bp Bp Rp',
 )
 
-const MAX_PRESENCE = Math.max(0.01, ...Object.values(AGENTS).flat().map(presence))
+// the most contested champion of the year whose meta is in force (content.setMetaYear)
+const maxPresence = new Map<number, number>()
+const MAX_PRESENCE = (): number => {
+  const y = currentMetaYear()
+  if (!maxPresence.has(y)) maxPresence.set(y, Math.max(0.01, ...Object.values(AGENTS).flat().map(presence)))
+  return maxPresence.get(y)!
+}
 
 /** How much a club wants this man on this champion, before the match-up is read. */
 function comfort(p: Player, champ: string, patchFavours: Set<string>): number {
   const pro = p.agentPro?.[champ] ?? 0
-  return pro * 0.55 + (presence(champ) / MAX_PRESENCE) * 42 + (patchFavours.has(champ) ? 8 : 0)
+  return pro * 0.55 + (presence(champ) / MAX_PRESENCE()) * 42 + (patchFavours.has(champ) ? 8 : 0)
 }
 
 const add = (m: StyleMix, c: string): StyleMix => {

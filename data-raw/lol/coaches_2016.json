@@ -1,0 +1,1719 @@
+{
+ "source": "Liquipedia (CC BY-SA 3.0)，赛事页 TeamCard 的教练组",
+ "pages": {
+  "LPL": [
+   "LPL/2016/Spring/Promotion",
+   "LPL/2016/Spring",
+   "LPL/2016/Championship Points",
+   "LPL/2016/Summer",
+   "LPL/2016/Summer/Promotion",
+   "LPL/2016/Regional Finals",
+   "LPL/2016/Spring/Group Stage",
+   "LPL/2016/Summer/Group Stage",
+   "LPL/2016/Summer/Group Stage/Week 6-10",
+   "LPL/2016/Spring/Playoffs",
+   "LPL/2016/Summer/Playoffs",
+   "LPL/2016/Summer/Group Stage/Week 1-5",
+   "LPL/2016/Regional Finals/Statistics"
+  ],
+  "LCK": [
+   "LCK/2016/Spring/Promotion",
+   "LCK/2016/Spring",
+   "LCK/2016/Summer/Promotion",
+   "LCK/2016/Summer",
+   "LCK/2016/Regional Finals",
+   "LCK/2016/Championship Points",
+   "LCK/2016/Summer/Group Stage",
+   "LCK/2016/Spring/Group Stage",
+   "LCK/2016/Spring/Playoffs",
+   "LCK/2016/Summer/Playoffs",
+   "LCK/2016/Summer/Statistics",
+   "LCK/2016/Spring/Statistics",
+   "LCK/2016/Spring/Playoffs/Statistics",
+   "LCK/2016/Spring/Group Stage/Statistics",
+   "LCK/2016/Summer/Group Stage/Statistics",
+   "LCK/2016/Summer/Playoffs/Statistics",
+   "LCK/2016/Spring/Promotion/Statistics",
+   "LCK/2016/Summer/Promotion/Statistics",
+   "LCK/2016/Regional Finals/Statistics"
+  ],
+  "CBLOL": [
+   "CBLOL/2016/Split 1/Promotion",
+   "CBLOL/2016/Split 1",
+   "CBLOL/2016/Split 2/Promotion",
+   "CBLOL/2016/Split 2",
+   "CBLOL/2016/Split 2/Group Stage",
+   "CBLOL/2016/Split 1/Group Stage",
+   "CBLOL/2016/Split 1/Playoffs",
+   "CBLOL/2016/Split 2/Statistics",
+   "CBLOL/2016/Split 1/Statistics",
+   "CBLOL/2016/Split 2/Relegation",
+   "CBLOL/2016/Split 2/Playoffs",
+   "CBLOL/2016/Split 2/Promotion/Statistics",
+   "CBLOL/2016/Split 1/Playoffs/Statistics",
+   "CBLOL/2016/Split 1/Group Stage/Statistics",
+   "CBLOL/2016/Split 2/Group Stage/Statistics",
+   "CBLOL/2016/Split 2/Playoffs/Statistics"
+  ],
+  "EU LCS": [
+   "LCS/Europe/2016/Spring",
+   "LCS/Europe/2016/Summer/Promotion",
+   "LCS/Europe/2016/Summer",
+   "LCS/Europe/2016/Regional Finals",
+   "LCS/Europe/2016/Championship Points",
+   "LCS/Europe/2016/Spring/Promotion",
+   "LCS/Europe/2016/Summer/Group Stage",
+   "LCS/Europe/2016/Spring/Group Stage",
+   "LCS/Europe/2016/Summer/Playoffs",
+   "LCS/Europe/2016/Spring/Playoffs",
+   "LCS/Europe/2016/Spring/Statistics",
+   "LCS/Europe/2016/Summer/Statistics",
+   "LCS/Europe/2016/Regional Finals/Statistics",
+   "LCS/Europe/2016/Summer/Playoffs/Statistics",
+   "LCS/Europe/2016/Spring/Group Stage/Statistics",
+   "LCS/Europe/2016/Spring/Playoffs/Statistics",
+   "LCS/Europe/2016/Summer/Group Stage/Statistics"
+  ],
+  "LMS": [
+   "LMS/2016/Spring",
+   "LMS/2016/Championship Points",
+   "LMS/2016/Summer/Promotion",
+   "LMS/2016/Summer",
+   "LMS/2016/Regional Finals",
+   "LMS/2016/Summer/Group Stage",
+   "LMS/2016/Spring/Group Stage",
+   "LMS/2016/Spring/Playoffs",
+   "LMS/2016/Regional Finals/Statistics",
+   "LMS/2016/Summer/Playoffs"
+  ],
+  "NA LCS": [
+   "LCS/North America/2016/Spring",
+   "LCS/North America/2016/Championship Points",
+   "LCS/North America/2016/Summer/Promotion",
+   "LCS/North America/2016/Summer",
+   "LCS/North America/2016/Regional Finals",
+   "LCS/North America/2016/Spring/Promotion",
+   "LCS/North America/2016/Summer/Group Stage",
+   "LCS/North America/2016/Spring/Group Stage",
+   "LCS/North America/2016/Spring/Playoffs",
+   "LCS/North America/2016/Summer/Playoffs",
+   "LCS/North America/2016/Regional Finals/Statistics"
+  ],
+  "LSPL": [
+   "LSPL/2016/Spring",
+   "LSPL/2016/Spring/Group Stage/Week 1-5",
+   "LSPL/2016/Spring/Group Stage/Week 6-10",
+   "LSPL/2016/Spring/Playoffs",
+   "LSPL/2016/Summer",
+   "LSPL/2016/Summer/Group Stage/Week 1-5",
+   "LSPL/2016/Summer/Group Stage/Week 6-10",
+   "LSPL/2016/Summer/Playoffs"
+  ],
+  "Challengers Korea": [
+   "CK/2016/Spring",
+   "CK/2016/Summer"
+  ],
+  "EU CS": [
+   "Challenger Series/Europe/2016/Spring",
+   "Challenger Series/Europe/2016/Summer/Qualifiers",
+   "Challenger Series/Europe/2016/Summer"
+  ],
+  "NA CS": [
+   "Challenger Series/North America/2016/Spring",
+   "Challenger Series/North America/2016/Summer",
+   "Challenger Series/North America/2016/Summer/Qualifier",
+   "Challenger Series/North America/2016/Spring/Qualifier",
+   "Challenger Series/North America/2016/Spring/Group Stage",
+   "Challenger Series/North America/2016/Spring/Playoffs",
+   "Challenger Series/North America/2016/Summer/Group Stage",
+   "Challenger Series/North America/2016/Summer/Playoffs",
+   "Challenger Series/North America/2016/Summer/Statistics",
+   "Challenger Series/North America/2016/Spring/Statistics"
+  ]
+ },
+ "teams": {
+  "Royal Never Give Up": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring/Promotion",
+   "players": [
+    "LetMe",
+    "Mlxg",
+    "Xiaohu",
+    "Wuxx",
+    "Ley"
+   ],
+   "staff": [
+    {
+     "name": "VicaL",
+     "job": "head"
+    }
+   ]
+  },
+  "Team WE": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring/Promotion",
+   "players": [
+    "Aluka",
+    "Spirit",
+    "Xiye",
+    "Mystic",
+    "Conan"
+   ],
+   "staff": [
+    {
+     "name": "HooN",
+     "job": "head"
+    }
+   ]
+  },
+  "Unlimited Potential": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring/Promotion",
+   "players": [
+    "Loong",
+    "Eimy",
+    "Punished",
+    "Skatch",
+    "Heart"
+   ],
+   "staff": [
+    {
+     "name": "Rui",
+     "job": "head"
+    }
+   ]
+  },
+  "Team King": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring/Promotion",
+   "players": [
+    "inSec",
+    "hu1",
+    "Corn",
+    "NaMei",
+    "Zero"
+   ],
+   "staff": [
+    {
+     "name": "NoName",
+     "job": "head"
+    }
+   ]
+  },
+  "2144 Danmu Gaming": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring/Promotion",
+   "players": [
+    "Sky",
+    "Ayue",
+    "DearSatan",
+    "Yjin",
+    "Muyi"
+   ],
+   "staff": [
+    {
+     "name": "Choi",
+     "job": "head"
+    }
+   ]
+  },
+  "Newbee": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring/Promotion",
+   "players": [
+    "Khan",
+    "Moon",
+    "Luo",
+    "Candy",
+    "YuZhe"
+   ],
+   "staff": [
+    {
+     "name": "Chaox",
+     "job": "head"
+    }
+   ]
+  },
+  "Team WE Future": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring/Promotion",
+   "players": [
+    "957",
+    "CjLear",
+    "Naranja",
+    "PentaQ",
+    "Savoki"
+   ],
+   "staff": [
+    {
+     "name": "KinQi",
+     "job": "head"
+    }
+   ]
+  },
+  "Young Glory": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring/Promotion",
+   "players": [
+    "Profit",
+    "illuSioN",
+    "Fly",
+    "q1ushu1",
+    "killyou"
+   ],
+   "staff": [
+    {
+     "name": "PoohManDu",
+     "job": "head"
+    }
+   ]
+  },
+  "EDward Gaming": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring",
+   "players": [
+    "Koro1",
+    "Clearlove",
+    "PawN",
+    "Deft",
+    "Meiko"
+   ],
+   "staff": [
+    {
+     "name": "RapidStar",
+     "job": "head"
+    },
+    {
+     "name": "Maokai",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Qiao Gu Reapers": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring",
+   "players": [
+    "V",
+    "Swift",
+    "Doinb",
+    "Uzi",
+    "Mor"
+   ],
+   "staff": [
+    {
+     "name": "BanBazi",
+     "job": "head"
+    }
+   ]
+  },
+  "Invictus Gaming": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring",
+   "players": [
+    "Zz1tai",
+    "Kid",
+    "Rookie",
+    "Rain",
+    "Kitties"
+   ],
+   "staff": [
+    {
+     "name": "Chris",
+     "job": "head"
+    }
+   ]
+  },
+  "LGD Gaming": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring",
+   "players": [
+    "MaRin",
+    "Eimy",
+    "We1less",
+    "imp",
+    "Pyl"
+   ],
+   "staff": [
+    {
+     "name": "Heart",
+     "job": "head"
+    }
+   ]
+  },
+  "Masters 3": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring",
+   "players": [
+    "yolo",
+    "Scenery",
+    "Raphael",
+    "PentaQ",
+    "Savoki"
+   ],
+   "staff": [
+    {
+     "name": "Vita",
+     "job": "head"
+    }
+   ]
+  },
+  "Oh My God": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring",
+   "players": [
+    "Xiyang",
+    "Quan",
+    "Icon",
+    "S1mlz",
+    "Five"
+   ],
+   "staff": [
+    {
+     "name": "BSYY",
+     "job": "head"
+    }
+   ]
+  },
+  "Snake Esports": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring",
+   "players": [
+    "Flandre",
+    "Zzr",
+    "TANK",
+    "kRYST4L",
+    "Ella"
+   ],
+   "staff": [
+    {
+     "name": "Zhu Kai",
+     "job": "head"
+    },
+    {
+     "name": "Chief",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Vici Gaming": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring",
+   "players": [
+    "Loong",
+    "DanDy",
+    "Easyhoon",
+    "Endless",
+    "Caveman"
+   ],
+   "staff": [
+    {
+     "name": "Homme",
+     "job": "head"
+    }
+   ]
+  },
+  "Energy Pacemaker.All": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring",
+   "players": [
+    "GimGoon",
+    "Crisis",
+    "Republic",
+    "Moon",
+    "JieZou"
+   ],
+   "staff": [
+    {
+     "name": "Insence",
+     "job": "head"
+    }
+   ]
+  },
+  "Hyper Youth Gaming": {
+   "league": "LPL",
+   "page": "LPL/2016/Spring",
+   "players": [
+    "ss17God",
+    "Chimin",
+    "Gosu",
+    "xQ",
+    "x1u"
+   ],
+   "staff": [
+    {
+     "name": "Ronaldo",
+     "job": "head"
+    },
+    {
+     "name": "Veronica",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Game Talents": {
+   "league": "LPL",
+   "page": "LPL/2016/Summer",
+   "players": [
+    "GimGoon",
+    "WuShuang",
+    "Republic",
+    "PentaQ",
+    "Savoki"
+   ],
+   "staff": [
+    {
+     "name": "Vitamin",
+     "job": "head"
+    }
+   ]
+  },
+  "Saint Gaming": {
+   "league": "LPL",
+   "page": "LPL/2016/Summer",
+   "players": [
+    "Acorn",
+    "March",
+    "Snoopy",
+    "Styz",
+    "x1u"
+   ],
+   "staff": [
+    {
+     "name": "if",
+     "job": "head"
+    }
+   ]
+  },
+  "I May": {
+   "league": "LPL",
+   "page": "LPL/2016/Summer",
+   "players": [
+    "AmazingJ",
+    "Avoidless",
+    "Athena",
+    "Jinjiao",
+    "Road"
+   ],
+   "staff": [
+    {
+     "name": "Kezman",
+     "job": "head"
+    }
+   ]
+  },
+  "Young Miracles": {
+   "league": "LPL",
+   "page": "LPL/2016/Summer/Promotion",
+   "players": [
+    "Clowz",
+    "Marilyn",
+    "Viper",
+    "Ning",
+    "Ming"
+   ],
+   "staff": [
+    {
+     "name": "PDD",
+     "job": "head"
+    }
+   ]
+  },
+  "MF Gaming": {
+   "league": "LPL",
+   "page": "LPL/2016/Summer/Promotion",
+   "players": [
+    "Zoom",
+    "Ori",
+    "Elinke",
+    "Mushroom",
+    "Xintai"
+   ],
+   "staff": [
+    {
+     "name": "firebathero",
+     "job": "head"
+    }
+   ]
+  },
+  "Incredible Miracle": {
+   "league": "LCK",
+   "page": "LCK/2016/Spring/Promotion",
+   "players": [
+    "Expession",
+    "TusiN",
+    "Frozen",
+    "S0NSTAR",
+    "IgNar"
+   ],
+   "staff": [
+    {
+     "name": "Hirai",
+     "job": "assistant"
+    },
+    {
+     "name": "Micro",
+     "job": "assistant"
+    }
+   ]
+  },
+  "SBENU Sonicboom": {
+   "league": "LCK",
+   "page": "LCK/2016/Spring/Promotion",
+   "players": [
+    "Soul",
+    "Flaw",
+    "SaSin",
+    "Nuclear",
+    "Secret"
+   ],
+   "staff": [
+    {
+     "name": "Gerrard",
+     "job": "assistant"
+    },
+    {
+     "name": "Wi Dae-yun",
+     "job": "assistant"
+    }
+   ]
+  },
+  "ESC Ever": {
+   "league": "LCK",
+   "page": "LCK/2016/Spring/Promotion",
+   "players": [
+    "Crazyplay",
+    "JgRyan",
+    "Athena",
+    "Police",
+    "LokeN"
+   ],
+   "staff": [
+    {
+     "name": "PanDa",
+     "job": "assistant"
+    },
+    {
+     "name": "Cho Gye-hyeon",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Afreeca Freecs": {
+   "league": "LCK",
+   "page": "LCK/2016/Spring",
+   "players": [
+    "ikssu",
+    "LirA",
+    "Mickey",
+    "Sangyoon",
+    "SnowFlower"
+   ],
+   "staff": [
+    {
+     "name": "Kang Hyun-jong",
+     "job": "head"
+    },
+    {
+     "name": "Jung Je-seung",
+     "job": "assistant"
+    }
+   ]
+  },
+  "CJ Entus": {
+   "league": "LCK",
+   "page": "LCK/2016/Spring",
+   "players": [
+    "Untara",
+    "Bubbling",
+    "Sky",
+    "Kramer",
+    "MadLife"
+   ],
+   "staff": [
+    {
+     "name": "Reach",
+     "job": "head"
+    },
+    {
+     "name": "Cain",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Jin Air Green Wings": {
+   "league": "LCK",
+   "page": "LCK/2016/Spring",
+   "players": [
+    "TrAce",
+    "Winged",
+    "Kuzan",
+    "Pilot",
+    "Chei"
+   ],
+   "staff": [
+    {
+     "name": "H-Dragon",
+     "job": "head"
+    },
+    {
+     "name": "Sweet",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Kongdoo Monster": {
+   "league": "LCK",
+   "page": "LCK/2016/Spring",
+   "players": [
+    "Hipo",
+    "Crush",
+    "Edge",
+    "SSol",
+    "GuGer"
+   ],
+   "staff": [
+    {
+     "name": "Chunco",
+     "job": "head"
+    },
+    {
+     "name": "Micro",
+     "job": "assistant"
+    }
+   ]
+  },
+  "KT Rolster": {
+   "league": "LCK",
+   "page": "LCK/2016/Spring",
+   "players": [
+    "Ssumday",
+    "Score",
+    "Fly",
+    "Arrow",
+    "Hachani"
+   ],
+   "staff": [
+    {
+     "name": "Lee Ji-hun",
+     "job": "head"
+    },
+    {
+     "name": "ZanDarc",
+     "job": "assistant"
+    }
+   ]
+  },
+  "ROX Tigers": {
+   "league": "LCK",
+   "page": "LCK/2016/Spring",
+   "players": [
+    "Smeb",
+    "Peanut",
+    "Kuro",
+    "PraY",
+    "GorillA"
+   ],
+   "staff": [
+    {
+     "name": "NoFe",
+     "job": "head"
+    },
+    {
+     "name": "SSONG",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Samsung Galaxy": {
+   "league": "LCK",
+   "page": "LCK/2016/Spring",
+   "players": [
+    "CuVee",
+    "Ambition",
+    "Crown",
+    "CoreJJ",
+    "Stitch"
+   ],
+   "staff": [
+    {
+     "name": "Edgar",
+     "job": "head"
+    },
+    {
+     "name": "Kim Jung-su",
+     "job": "assistant"
+    }
+   ]
+  },
+  "SK Telecom T1": {
+   "league": "LCK",
+   "page": "LCK/2016/Spring",
+   "players": [
+    "Duke",
+    "Bengi",
+    "Blank",
+    "Faker",
+    "Bang"
+   ],
+   "staff": [
+    {
+     "name": "cCarter",
+     "job": "head"
+    },
+    {
+     "name": "KkOma",
+     "job": "assistant"
+    },
+    {
+     "name": "PoohManDu",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Longzhu Gaming": {
+   "league": "LCK",
+   "page": "LCK/2016/Spring",
+   "players": [
+    "Expession",
+    "Chaser",
+    "Coco",
+    "Cpt Jack",
+    "Pure"
+   ],
+   "staff": [
+    {
+     "name": "Hirai",
+     "job": "head"
+    },
+    {
+     "name": "Lustboy",
+     "job": "assistant"
+    },
+    {
+     "name": "Supreme",
+     "job": "assistant"
+    }
+   ]
+  },
+  "INTZ Red": {
+   "league": "CBLOL",
+   "page": "CBLOL/2016/Split 1/Promotion",
+   "players": [
+    "Robo",
+    "Caos",
+    "Brucer",
+    "SacyR",
+    "Eryon"
+   ],
+   "staff": [
+    {
+     "name": "Neki",
+     "job": "assistant"
+    }
+   ]
+  },
+  "KaBuM! Black": {
+   "league": "CBLOL",
+   "page": "CBLOL/2016/Split 1/Promotion",
+   "players": [
+    "element",
+    "Danagorn",
+    "Vash",
+    "Matsukaze",
+    "Espeon"
+   ],
+   "staff": [
+    {
+     "name": "etsblade",
+     "job": "assistant"
+    }
+   ]
+  },
+  "JAYOB e-Sports": {
+   "league": "CBLOL",
+   "page": "CBLOL/2016/Split 1/Promotion",
+   "players": [
+    "SkyBart",
+    "Turtle",
+    "Goku",
+    "pdr",
+    "Baiano"
+   ],
+   "staff": [
+    {
+     "name": "Von",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Big Gods": {
+   "league": "CBLOL",
+   "page": "CBLOL/2016/Split 1/Promotion",
+   "players": [
+    "Ranger",
+    "Fafnyr",
+    "Snowlz",
+    "Luskka",
+    "BocaJR"
+   ],
+   "staff": [
+    {
+     "name": "Yaltz",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Santos Dexterity": {
+   "league": "CBLOL",
+   "page": "CBLOL/2016/Split 1/Promotion",
+   "players": [
+    "Pizzayolo",
+    "Zuao",
+    "prZo",
+    "Theusma",
+    "Anjinho"
+   ],
+   "staff": [
+    {
+     "name": "Preston",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Giants Gaming": {
+   "league": "EU LCS",
+   "page": "LCS/Europe/2016/Spring",
+   "players": [
+    "Smittyj",
+    "Wisdom",
+    "xPePii",
+    "Sonstar",
+    "G0DFRED"
+   ],
+   "staff": [
+    {
+     "name": "Lozark",
+     "job": "head"
+    }
+   ]
+  },
+  "Team ROCCAT": {
+   "league": "EU LCS",
+   "page": "LCS/Europe/2016/Spring",
+   "players": [
+    "fredy122",
+    "Airwaks",
+    "Betsy",
+    "Tabzz",
+    "Noxiak"
+   ],
+   "staff": [
+    {
+     "name": "ImSoFresh",
+     "job": "head"
+    },
+    {
+     "name": "GrabbZ",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Unicorns Of Love": {
+   "league": "EU LCS",
+   "page": "LCS/Europe/2016/Spring",
+   "players": [
+    "Vizicsacsi",
+    "Loulex",
+    "Fox",
+    "Steeelback",
+    "Hylissang"
+   ],
+   "staff": [
+    {
+     "name": "Sheepy",
+     "job": "head"
+    }
+   ]
+  },
+  "Splyce": {
+   "league": "EU LCS",
+   "page": "LCS/Europe/2016/Spring",
+   "players": [
+    "Wunderwear",
+    "Trashy",
+    "Sencux",
+    "Kobbe",
+    "Nisbeth"
+   ],
+   "staff": [
+    {
+     "name": "YamatoCannon",
+     "job": "head"
+    }
+   ]
+  },
+  "G2 Esports": {
+   "league": "EU LCS",
+   "page": "LCS/Europe/2016/Spring",
+   "players": [
+    "Kikis",
+    "Trick",
+    "Perkz",
+    "Emperor",
+    "Hybrid"
+   ],
+   "staff": [
+    {
+     "name": "YoungBuck",
+     "job": "head"
+    }
+   ]
+  },
+  "Team Vitality": {
+   "league": "EU LCS",
+   "page": "LCS/Europe/2016/Spring",
+   "players": [
+    "Cabochard",
+    "Shook",
+    "Nukeduck",
+    "Hjarnan",
+    "kaSing"
+   ],
+   "staff": [
+    {
+     "name": "Shaunz",
+     "job": "head"
+    }
+   ]
+  },
+  "Huma": {
+   "league": "EU LCS",
+   "page": "LCS/Europe/2016/Summer/Promotion",
+   "players": [
+    "Werlyb",
+    "Rudy",
+    "Godbro",
+    "HolyPhoenix",
+    "je suis kaas"
+   ],
+   "staff": [
+    {
+     "name": "Kubz",
+     "job": "head"
+    }
+   ]
+  },
+  "Copenhagen Wolves": {
+   "league": "EU LCS",
+   "page": "LCS/Europe/2016/Summer/Promotion",
+   "players": [
+    "Wickd",
+    "k0u",
+    "Caedrel",
+    "P1noy",
+    "SirNukesAlot"
+   ],
+   "staff": [
+    {
+     "name": "Mo Si Ting",
+     "job": "head"
+    }
+   ]
+  },
+  "Gambit Gaming": {
+   "league": "EU LCS",
+   "page": "LCS/Europe/2016/Spring/Promotion",
+   "players": [
+    "Cabochard",
+    "Diamondprox",
+    "Betsy",
+    "P1noy",
+    "GoSu Pepper"
+   ],
+   "staff": [
+    {
+     "name": "Shaunz",
+     "job": "head"
+    }
+   ]
+  },
+  "SK Gaming": {
+   "league": "EU LCS",
+   "page": "LCS/Europe/2016/Spring/Promotion",
+   "players": [
+    "fredy122",
+    "Svenskeren",
+    "Fox",
+    "CandyPanda",
+    "Noxiak"
+   ],
+   "staff": [
+    {
+     "name": "Arvindir",
+     "job": "head"
+    }
+   ]
+  },
+  "mousesports": {
+   "league": "EU LCS",
+   "page": "LCS/Europe/2016/Spring/Promotion",
+   "players": [
+    "Beansu",
+    "Dan",
+    "Jinsh",
+    "Sedrion",
+    "MounTain"
+   ],
+   "staff": [
+    {
+     "name": "Inero",
+     "job": "head"
+    }
+   ]
+  },
+  "Gamers2": {
+   "league": "EU LCS",
+   "page": "LCS/Europe/2016/Spring/Promotion",
+   "players": [
+    "Smittyj",
+    "Kikis",
+    "PerkZ",
+    "Jesse",
+    "Hybrid"
+   ],
+   "staff": [
+    {
+     "name": "ocelote",
+     "job": "head"
+    }
+   ]
+  },
+  "ahq e-Sports Club": {
+   "league": "LMS",
+   "page": "LMS/2016/Spring",
+   "players": [
+    "Ziv",
+    "Mountain",
+    "Westdoor",
+    "AN",
+    "Albis"
+   ],
+   "staff": [
+    {
+     "name": "Backstairs",
+     "job": "head"
+    }
+   ]
+  },
+  "Hong Kong Esports": {
+   "league": "LMS",
+   "page": "LMS/2016/Spring",
+   "players": [
+    "MapleSnow",
+    "DinTer",
+    "chillyz",
+    "GodKwai",
+    "Olleh"
+   ],
+   "staff": [
+    {
+     "name": "Revo",
+     "job": "head"
+    }
+   ]
+  },
+  "Taipei Assassins": {
+   "league": "LMS",
+   "page": "LMS/2016/Spring",
+   "players": [
+    "Morning",
+    "Achie",
+    "FoFo",
+    "BeBe",
+    "Jay"
+   ],
+   "staff": [
+    {
+     "name": "Sim",
+     "job": "head"
+    }
+   ]
+  },
+  "Machi Esports": {
+   "league": "LMS",
+   "page": "LMS/2016/Spring",
+   "players": [
+    "BoBo",
+    "Taizan",
+    "Apex",
+    "Dee",
+    "Dreamer"
+   ],
+   "staff": [
+    {
+     "name": "Grey",
+     "job": "head"
+    }
+   ]
+  },
+  "Midnight Sun Esports": {
+   "league": "LMS",
+   "page": "LMS/2016/Spring",
+   "players": [
+    "Julian",
+    "Wulala",
+    "M1ssion",
+    "Payne",
+    "SkuLL"
+   ],
+   "staff": [
+    {
+     "name": "NeXAbc",
+     "job": "head"
+    }
+   ]
+  },
+  "eXtreme Gamers": {
+   "league": "LMS",
+   "page": "LMS/2016/Spring",
+   "players": [
+    "Nexus",
+    "Yo",
+    "SuwaKo",
+    "LBB",
+    "Suki"
+   ],
+   "staff": [
+    {
+     "name": "Atu",
+     "job": "head"
+    }
+   ]
+  },
+  "Flash Wolves": {
+   "league": "LMS",
+   "page": "LMS/2016/Summer",
+   "players": [
+    "MMD",
+    "Karsa",
+    "Maple",
+    "NL",
+    "SwordArT"
+   ],
+   "staff": [
+    {
+     "name": "Steak",
+     "job": "head"
+    }
+   ]
+  },
+  "Team Mist": {
+   "league": "LMS",
+   "page": "LMS/2016/Summer",
+   "players": [
+    "Rins",
+    "Benny",
+    "Zor",
+    "Breeze",
+    "Rain"
+   ],
+   "staff": [
+    {
+     "name": "Cyo",
+     "job": "head"
+    }
+   ]
+  },
+  "Cloud9": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring",
+   "players": [
+    "Balls",
+    "Rush",
+    "Jensen",
+    "Sneaky",
+    "Bunny FuFuu"
+   ],
+   "staff": [
+    {
+     "name": "LemonNation",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Counter Logic Gaming": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring",
+   "players": [
+    "Darshan",
+    "Xmithie",
+    "Huhi",
+    "Stixxay",
+    "aphromoo"
+   ],
+   "staff": [
+    {
+     "name": "Zikzlol",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Echo Fox": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring",
+   "players": [
+    "kfo",
+    "Hard",
+    "Froggen",
+    "KEITH",
+    "Big"
+   ],
+   "staff": [
+    {
+     "name": "Cop",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Team Dignitas": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring",
+   "players": [
+    "BillyBoss",
+    "Kirei",
+    "Shiphtur",
+    "Apollo",
+    "KiWiKiD"
+   ],
+   "staff": [
+    {
+     "name": "Raz",
+     "job": "head"
+    },
+    {
+     "name": "InnerFlame",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Team Impulse": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring",
+   "players": [
+    "Feng",
+    "beibei",
+    "Pirean",
+    "Mash",
+    "Gate"
+   ],
+   "staff": [
+    {
+     "name": "Jason",
+     "job": "head"
+    }
+   ]
+  },
+  "Team Liquid": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring",
+   "players": [
+    "Lourlo",
+    "Dardoch",
+    "FeniX",
+    "Piglet",
+    "Matt"
+   ],
+   "staff": [
+    {
+     "name": "Locodoco",
+     "job": "head"
+    }
+   ]
+  },
+  "Team SoloMid": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring",
+   "players": [
+    "Hauntzer",
+    "Svenskeren",
+    "Bjergsen",
+    "Doublelift",
+    "YellOwStaR"
+   ],
+   "staff": [
+    {
+     "name": "Parth",
+     "job": "assistant"
+    },
+    {
+     "name": "Jarge",
+     "job": "assistant"
+    },
+    {
+     "name": "Reginald",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Renegades": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring",
+   "players": [
+    "Seraph",
+    "Crumbz",
+    "Ninja",
+    "Freeze",
+    "Hakuho"
+   ],
+   "staff": [
+    {
+     "name": "Hermes",
+     "job": "head"
+    }
+   ]
+  },
+  "NRG Esports": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring",
+   "players": [
+    "Impact",
+    "Moon",
+    "GBM",
+    "Altec",
+    "KonKwon"
+   ],
+   "staff": [
+    {
+     "name": "Hermit",
+     "job": "head"
+    }
+   ]
+  },
+  "Immortals": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring",
+   "players": [
+    "Huni",
+    "Reignover",
+    "Pobelter",
+    "WildTurtle",
+    "Adrian"
+   ],
+   "staff": [
+    {
+     "name": "Dylan",
+     "job": "head"
+    }
+   ]
+  },
+  "Apex Gaming": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Summer",
+   "players": [
+    "Ray",
+    "Shrimp",
+    "Keane",
+    "Apollo",
+    "Xpecial"
+   ],
+   "staff": [
+    {
+     "name": "Saintvicious",
+     "job": "head"
+    }
+   ]
+  },
+  "Phoenix1": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Summer",
+   "players": [
+    "Brandini",
+    "Inori",
+    "Slooshi",
+    "Mash",
+    "Gate"
+   ],
+   "staff": [
+    {
+     "name": "Charlie",
+     "job": "assistant"
+    },
+    {
+     "name": "BonQuash",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Team EnVyUs": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Summer",
+   "players": [
+    "Seraph",
+    "Procxin",
+    "Ninja",
+    "LOD",
+    "Hakuho"
+   ],
+   "staff": [
+    {
+     "name": "Miracle",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Team 8": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring/Promotion",
+   "players": [
+    "CaliTrlolz",
+    "Porpoise",
+    "goldenglue",
+    "Nien",
+    "Dodo"
+   ],
+   "staff": [
+    {
+     "name": "History Teacher",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Enemy": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring/Promotion",
+   "players": [
+    "Flaresz",
+    "Trashy",
+    "InnoX",
+    "otter",
+    "Bodydrop"
+   ],
+   "staff": [
+    {
+     "name": "YoungBuck",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Team Coast": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring/Promotion",
+   "players": [
+    "Cris",
+    "Shrimp",
+    "Pekin Woof",
+    "Mash",
+    "KonKwon"
+   ],
+   "staff": [
+    {
+     "name": "Saintvicious",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Team Imagine": {
+   "league": "NA LCS",
+   "page": "LCS/North America/2016/Spring/Promotion",
+   "players": [
+    "Chunkyfresh",
+    "Moon",
+    "Mancloud",
+    "Steeelback",
+    "Baby"
+   ],
+   "staff": [
+    {
+     "name": "CurryshotGG",
+     "job": "assistant"
+    }
+   ]
+  },
+  "EDward Esports": {
+   "league": "LSPL",
+   "page": "LSPL/2016/Spring",
+   "players": [
+    "AmazingJ",
+    "Baybay",
+    "BaeMe",
+    "Jinjiao",
+    "Road"
+   ],
+   "staff": [
+    {
+     "name": "FireFox",
+     "job": "head"
+    }
+   ]
+  },
+  "Dark Wolves": {
+   "league": "Challengers Korea",
+   "page": "CK/2016/Spring",
+   "players": [
+    "KaKaRoT",
+    "krvavy",
+    "Beast",
+    "Jinny",
+    "Jelly"
+   ],
+   "staff": [
+    {
+     "name": "MorNinG",
+     "job": "head"
+    }
+   ]
+  },
+  "Pathos": {
+   "league": "Challengers Korea",
+   "page": "CK/2016/Spring",
+   "players": [
+    "Biken",
+    "L1sure",
+    "5wl",
+    "Gari",
+    "Mocha"
+   ],
+   "staff": [
+    {
+     "name": "Sickness",
+     "job": "head"
+    },
+    {
+     "name": "34",
+     "job": "assistant"
+    }
+   ]
+  },
+  "SQUARE": {
+   "league": "Challengers Korea",
+   "page": "CK/2016/Spring",
+   "players": [
+    "Falcon",
+    "Bin",
+    "Rupang",
+    "Hdel",
+    "Xian"
+   ],
+   "staff": [
+    {
+     "name": "Captain",
+     "job": "head"
+    }
+   ]
+  },
+  "SBENU Korea": {
+   "league": "Challengers Korea",
+   "page": "CK/2016/Summer",
+   "players": [
+    "Soul",
+    "Flawless",
+    "reM",
+    "Nuclear",
+    "lehends"
+   ],
+   "staff": [
+    {
+     "name": "Park Jae-seok",
+     "job": "head"
+    },
+    {
+     "name": "SaSin",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Ever8 Winners": {
+   "league": "Challengers Korea",
+   "page": "CK/2016/Summer",
+   "players": [
+    "Jay",
+    "Savage",
+    "Cepted",
+    "Teddy",
+    "Jelly"
+   ],
+   "staff": [
+    {
+     "name": "Alvingo",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Virtuoso Gaming": {
+   "league": "Challengers Korea",
+   "page": "CK/2016/Summer",
+   "players": [
+    "Rinb2e",
+    "Krvavy",
+    "Cyclone",
+    "Solder",
+    "Colorless"
+   ],
+   "staff": [
+    {
+     "name": "Clear",
+     "job": "head"
+    },
+    {
+     "name": "M4sin",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Inspire eSports": {
+   "league": "EU CS",
+   "page": "Challenger Series/Europe/2016/Spring",
+   "players": [
+    "Satorius",
+    "Maxlore",
+    "CozQ",
+    "Woolite",
+    "Wendelbo"
+   ],
+   "staff": [
+    {
+     "name": "LeDuck",
+     "job": "head"
+    }
+   ]
+  },
+  "Ember": {
+   "league": "NA CS",
+   "page": "Challenger Series/North America/2016/Spring",
+   "players": [
+    "Solo",
+    "Contractz",
+    "Goldenglue",
+    "LOD",
+    "Stunt"
+   ],
+   "staff": [
+    {
+     "name": "Weldon",
+     "job": "head"
+    },
+    {
+     "name": "CurryshotGG",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Dream Team": {
+   "league": "NA CS",
+   "page": "Challenger Series/North America/2016/Summer",
+   "players": [
+    "Chorong",
+    "Akaadian",
+    "Pekin Woof",
+    "Massacre",
+    "Papa Chau"
+   ],
+   "staff": [
+    {
+     "name": "Inero",
+     "job": "head"
+    }
+   ]
+  }
+ }
+}

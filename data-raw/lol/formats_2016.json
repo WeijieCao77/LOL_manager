@@ -1,0 +1,1309 @@
+{
+ "source": "Liquipedia (CC BY-SA 3.0)，赛事页 Format 一节与信息框",
+ "year": 2016,
+ "pages": {
+  "LPL/2016/Summer": {
+   "group": "LPL",
+   "start": "2016-05-26",
+   "end": "2016-08-26",
+   "prize": "3,500,000",
+   "teams": "12",
+   "location": "Shanghai",
+   "format": "* '''Group Stage'''\n** 2 groups of 6 teams each.\n** Each team plays 16 matches.\n*** Double Round Robin within own group\n*** Single Round Robin against other group\n** All matches are {{Abbr/Bo3}}.\n** {{bgcolortext|byeup|''1st place of each group''}} advance to the Semfinals of the Playoffs.\n** {{bgcolortext|seedup|''2nd place of each group''}} advance to the Quarterfinals of the Playoffs.\n** {{bgcolortext|up|''3rd place of each group''}} advance to Round 1 of the Playoffs, and will start the series with a 1-game advantage.\n** {{bgcolortext|stayup|''4th place of each group''}} advance to Round 1 of the Playoffs.\n** {{bgcolortext|staydown|''5th place of each group''}} will have to play in the [[LPL/2017/Spring/Promotion|Promotion Tournament]], and start in the Qualifying Round.\n** {{bgcolortext|down|''6th place of each group''}} will have to play in the [[LPL/2017/Spring/Promotion|Promotion Tournament]], and start in the Elimination Round.\n* '''Playoffs'''\n** Single Elimination {{Abbr/Bo5}}\n* Winner qualifies for [[World Championship/2016|World Championship 2016]]",
+   "qualifies": [
+    "World Championship/2016"
+   ],
+   "children": [
+    "Group_Stage",
+    "Promotion"
+   ]
+  },
+  "LPL/2016/Spring": {
+   "group": "LPL",
+   "start": "2016-01-14",
+   "end": "2016-04-23",
+   "prize": "3,500,000",
+   "teams": "12",
+   "location": "Shanghai",
+   "format": "* '''Group Stage'''\n** 2 groups of 6 teams each.\n** Each team plays 16 matches.\n*** Double Round Robin within own group\n*** Single Round Robin against other group\n** All matches are {{Abbr/Bo3}}.\n** {{bgcolortext|byeup|''1st place of each group''}} advance to the Semfinals of the Playoffs.\n** {{bgcolortext|seedup|''2nd place of each group''}} advance to the Quarterfinals of the Playoffs.\n** {{bgcolortext|up|''3rd place of each group''}} advance to Round 1 of the Playoffs, and will start the series with a 1-game advantage.\n** {{bgcolortext|stayup|''4th place of each group''}} advance to Round 1 of the Playoffs.\n** {{bgcolortext|staydown|''5th place of each group''}} will have to play in the [[LPL/2017/Spring/Promotion|Promotion Tournament]], and start in the Qualifying Round.\n** {{bgcolortext|down|''6th place of each group''}} will have to play in the [[LPL/2017/Spring/Promotion|Promotion Tournament]], and start in the Elimination Round.\n* '''Playoffs'''\n** Single Elimination {{Abbr/Bo5}}\n* Winner qualifies for [[Mid-Season Invitational/2016|Mid-Season Invitational 2016]]",
+   "qualifies": [
+    "Mid-Season Invitational/2016"
+   ],
+   "children": [
+    "Group_Stage",
+    "Promotion"
+   ]
+  },
+  "LPL/2016/Regional Finals": {
+   "group": "LPL",
+   "start": "2016-08-27",
+   "end": "2016-08-28",
+   "prize": "|sdate=2016-08-27",
+   "teams": "4",
+   "location": "Guangzhou",
+   "format": "* Teams ranked 3rd to 6th from [[LPL/2016/Championship_Points|Championship Points 2016]] participate.\n* Teams will play in a Gauntlet format.\n* All matches are {{Abbr/Bo5}}.\n* Winner qualifies for [[World Championship/2016|World Championship 2016]]",
+   "qualifies": [
+    "World Championship/2016"
+   ],
+   "children": []
+  },
+  "LPL/2016/Championship Points": {
+   "group": "LPL",
+   "start": "2016-01-14",
+   "end": "2016-08-28",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2016/Spring/Promotion": {
+   "group": "LPL",
+   "start": "2015-08-10",
+   "end": "2015-08-13",
+   "prize": "|date=",
+   "teams": "8",
+   "location": "Shanghai",
+   "format": "* '''Group Stage'''\n** Single Elimination, {{Abbr/Bo5}}\n** Winners from each bracket qualify for the LPL",
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2016/Summer/Promotion": {
+   "group": "LPL",
+   "start": "2016-06-14",
+   "end": "2016-06-16",
+   "prize": "|date=",
+   "teams": "6",
+   "location": "Shanghai",
+   "format": "* '''Group Stage'''\n** Single Elimination, {{Abbr/Bo5}}\n*** Bottom team for each LPL group will face each other in an Elimination Match\n** Winners of the Qualifying Round qualify for the LPL",
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2016/Spring/Group Stage": {
+   "group": "LPL",
+   "start": null,
+   "end": "April 10, 2016 - 20:00 {{Abbr/CST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2016/Summer/Group Stage": {
+   "group": "LPL",
+   "start": null,
+   "end": "August 7, 2016 - 20:00 {{Abbr/CST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2016/Summer/Group Stage/Week 6-10": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2016/Spring/Playoffs": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2016/Summer/Playoffs": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2016/Summer/Group Stage/Week 1-5": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2016/Regional Finals/Statistics": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Summer": {
+   "group": "LCK",
+   "start": "2016-05-25",
+   "end": "2016-08-20",
+   "prize": "275,000,000",
+   "teams": "10",
+   "location": "Seoul",
+   "format": "* '''Group Stage'''\n** Double Round Robin {{Abbr/Bo3}}\n*** {{bgcolortext|byeup|''1st place''}} advance to the Finals of the Playoffs.\n*** {{bgcolortext|seedup|''2nd place''}} advance to the Semifinals of the Playoffs.\n*** {{bgcolortext|up|''3rd place''}} advance to the Quarterfinals of the Playoffs.\n*** {{bgcolortext|stayup|''4th and 6th place''}} advance to the Wild Card Round of the Playoffs.\n*** {{bgcolortext|stay|''6th till 8th place''}} qualify for [[LCK/Spring/Spring|Spring split]].\n*** {{bgcolortext|down|''9th and 10th place''}} will have to play in the [[LCK/2017/Spring/Promotion|Spring Promotion Tournament]].\n*'''Playoffs'''\n** Single Elimination King of the Hill.\n*** Wild Card match is {{Abbr/Bo3}}.\n*** Round 1 onwards is {{Abbr/Bo5}}.\n* Winner qualifies for [[World Championship/2016|World Championship 2016]]",
+   "qualifies": [
+    "LCK/Spring/Spring",
+    "World Championship/2016"
+   ],
+   "children": [
+    "Promotion"
+   ]
+  },
+  "LCK/2016/Spring": {
+   "group": "LCK",
+   "start": "2016-01-13",
+   "end": "2016-04-23",
+   "prize": "275,000,000",
+   "teams": "10",
+   "location": "Seoul",
+   "format": "* '''Group Stage'''\n** Double Round Robin {{Abbr/Bo3}}\n*** {{bgcolortext|byeup|''1st place''}} advance to the Finals of the Playoffs.\n*** {{bgcolortext|seedup|''2nd place''}} advance to the Semifinals of the Playoffs.\n*** {{bgcolortext|up|''3rd place''}} advance to the Quarterfinals of the Playoffs.\n*** {{bgcolortext|stayup|''4th and 6th place''}} advance to the Wild Card Round of the Playoffs.\n*** {{bgcolortext|stay|''6th till 8th place''}} qualify for [[LCK/2016/Summer|Summer split]].\n*** {{bgcolortext|down|''9th and 10th place''}} will have to play in the [[LCK/2016/Summer/Promotion|Summer Promotion Tournament]].\n*'''Playoffs'''\n** Single Elimination King of the Hill.\n*** Wild Card match is {{Abbr/Bo3}}.\n*** Round 1 onwards is {{Abbr/Bo5}}.\n* Winner qualifies for [[Mid_Season_Invitational/2016|Mid Season Invitational 2016]]",
+   "qualifies": [
+    "LCK/2016/Summer",
+    "Mid_Season_Invitational/2016"
+   ],
+   "children": [
+    "Promotion"
+   ]
+  },
+  "LCK/2016/Regional Finals": {
+   "group": "LCK",
+   "start": "2016-08-28",
+   "end": "2016-09-03",
+   "prize": "|sdate=2016-08-28",
+   "teams": "4",
+   "location": "Seoul",
+   "format": "* Teams ranked {{Ordinal|3}} to {{Ordinal|6}} from [[LCK/2016/Championship_Points|Championship Points 2016]] participate.\n* Teams will play in a Gauntlet format.\n* All matches are {{Abbr/Bo5}}.\n* Winner qualifies for [[World Championship/2016|World Championship 2016]]",
+   "qualifies": [
+    "World Championship/2016"
+   ],
+   "children": []
+  },
+  "LCK/2016/Championship Points": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Summer/Promotion": {
+   "group": "LCK",
+   "start": "2016-04-28",
+   "end": "2016-04-29",
+   "prize": null,
+   "teams": "4",
+   "location": "Seoul",
+   "format": "* '''Spring Promotion'''\n** Single Elimination {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Spring/Promotion": {
+   "group": "LCK",
+   "start": "2015-09-11",
+   "end": "2015-09-12",
+   "prize": null,
+   "teams": "4",
+   "location": "Seoul",
+   "format": "* '''Spring Promotion'''\n** Single Elimination {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Summer/Group Stage": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Spring/Group Stage": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Spring/Playoffs": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Summer/Playoffs": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Summer/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Spring/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Spring/Playoffs/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Spring/Group Stage/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Summer/Group Stage/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Summer/Playoffs/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Spring/Promotion/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Summer/Promotion/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2016/Regional Finals/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Spring": {
+   "group": "EU LCS",
+   "start": "2016-01-14",
+   "end": "2016-04-17",
+   "prize": "100,000",
+   "teams": "10",
+   "location": "Berlin",
+   "format": "* Group Stage\n** Double Round Robin\n**All matches are {{Abbr/Bo1}}\n**Top 6 advance to playoffs\n**Top 2 receive playoffs byes into the semifinals\n*Playoffs\n** Single Elimination {{Abbr/Bo5}} \n* Winner Qualifies for [[Mid Season Invitational/2016|Mid-Season Invitational 2016]]",
+   "qualifies": [
+    "Mid Season Invitational/2016"
+   ],
+   "children": [
+    "Group Stage"
+   ]
+  },
+  "LCS/Europe/2016/Summer": {
+   "group": "EU LCS",
+   "start": "2016-06-02",
+   "end": "2016-08-28",
+   "prize": "100,000",
+   "teams": "10",
+   "location": "Berlin",
+   "format": "* '''Group Stage'''\n** Double Round Robin\n**All matches are {{Abbr/Bo1}}\n**Top 6 advance to playoffs\n**Top 2 receive playoffs byes into the semifinals\n*'''Playoffs'''\n** Single Elimination {{Abbr/Bo5}} \n* Winner qualifies for [[World_Championship/2016|2016 World Championship]]",
+   "qualifies": [
+    "World_Championship/2016"
+   ],
+   "children": [
+    "Group Stage",
+    "Promotion"
+   ]
+  },
+  "LCS/Europe/2016/Regional Finals": {
+   "group": "EU LCS",
+   "start": "2016-09-03",
+   "end": "2016-09-05",
+   "prize": "|sdate=2016-09-03",
+   "teams": "4",
+   "location": "Berlin",
+   "format": "* 4 teams will play in a Gauntlet format.\n* All matches are {{Abbr/Bo5}}.\n* Winner qualifies for [[World Championship/2016|World Championship 2016]]",
+   "qualifies": [
+    "World Championship/2016"
+   ],
+   "children": []
+  },
+  "LCS/Europe/2016/Championship Points": {
+   "group": "EU LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "",
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Summer/Promotion": {
+   "group": "EU LCS",
+   "start": "2016-03-24",
+   "end": "2016-03-27",
+   "prize": null,
+   "teams": "5",
+   "location": "|venue=",
+   "format": "*Double Elimination {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Spring/Promotion": {
+   "group": "EU LCS",
+   "start": null,
+   "end": null,
+   "prize": "|date=2015-09-05",
+   "teams": "4",
+   "location": "|venue=",
+   "format": "*Qualifying Match {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Summer/Group Stage": {
+   "group": "EU LCS",
+   "start": null,
+   "end": "July 31, 2016 - 16:00 {{Abbr/CEST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Spring/Group Stage": {
+   "group": "EU LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Summer/Playoffs": {
+   "group": "EU LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Spring/Playoffs": {
+   "group": "EU LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Spring/Statistics": {
+   "group": "EU LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Summer/Statistics": {
+   "group": "EU LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Regional Finals/Statistics": {
+   "group": "EU LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Summer/Playoffs/Statistics": {
+   "group": "EU LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Spring/Group Stage/Statistics": {
+   "group": "EU LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Spring/Playoffs/Statistics": {
+   "group": "EU LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/Europe/2016/Summer/Group Stage/Statistics": {
+   "group": "EU LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/North America/2016/Spring": {
+   "group": "NA LCS",
+   "start": "2016-01-16",
+   "end": "2016-04-17",
+   "prize": "100,000",
+   "teams": "10",
+   "location": "Los Angeles",
+   "format": "* '''Group Stage'''\n** Double Round Robin {{Abbr/Bo3}}\n*** {{bgcolortext|seedup|''1st and 2nd place''}} advance to the Semifinals of Playoffs.\n*** {{bgcolortext|up|''3rd till 6th place''}} advance to the Quarterfinals of Playoffs.\n*** {{bgcolortext|stay|''7th and 8th place''}} qualify for Summer split.\n*** {{bgcolortext|down|''9th and 10th place''}} relegate to the Promotion Tournament.\n*'''Playoffs'''\n** Single Elimination {{Abbr/Bo5}}\n* Winner Qualifies for [[Mid-Season Invitational/2016|2016 Mid-Season Invitational]]",
+   "qualifies": [
+    "Mid-Season Invitational/2016"
+   ],
+   "children": []
+  },
+  "LCS/North America/2016/Summer": {
+   "group": "NA LCS",
+   "start": "2016-06-03",
+   "end": "2016-08-28",
+   "prize": "100,000",
+   "teams": "10",
+   "location": "Los Angeles",
+   "format": "* Group Stage\n**Double Round Robin\n**Each team plays 18 matches.\n**All matches are {{Abbr/Bo3}}\n**Top 6 qualifies to the [[LCS/North_America/2016/Summer/Playoffs|Summer Playoffs]]\n*Playoffs\n** Single Elimination {{Abbr/Bo5}} \n* Winner qualifies for [[World_Championship/2016|2016 World Championship]]",
+   "qualifies": [
+    "World_Championship/2016"
+   ],
+   "children": []
+  },
+  "LCS/North America/2016/Regional Finals": {
+   "group": "NA LCS",
+   "start": "2016-09-03",
+   "end": "2016-09-05",
+   "prize": null,
+   "teams": "4",
+   "location": "United States",
+   "format": "* 4 teams will play in a Gauntlet format.\n* All matches are {{Abbr/Bo5}}.\n* Winner qualifies for [[World Championship/2016|World Championship 2016]]",
+   "qualifies": [
+    "World Championship/2016"
+   ],
+   "children": []
+  },
+  "LCS/North America/2016/Championship Points": {
+   "group": "NA LCS",
+   "start": "2016-01-16",
+   "end": "2016-09-05",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "",
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/North America/2016/Summer/Promotion": {
+   "group": "NA LCS",
+   "start": "2016-04-06",
+   "end": "2016-04-08",
+   "prize": null,
+   "teams": "5",
+   "location": "Los Angeles",
+   "format": "* One play-in game\n* Double elimination qualifying round\n** All matches are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/North America/2016/Spring/Promotion": {
+   "group": "NA LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": "4",
+   "location": "Los Angeles",
+   "format": "* Qualifying Match {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/North America/2016/Summer/Group Stage": {
+   "group": "NA LCS",
+   "start": null,
+   "end": "July 31, 2016 - 15:00 {{Abbr/PDT}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [
+    "World_Championship/2016"
+   ],
+   "children": []
+  },
+  "LCS/North America/2016/Spring/Group Stage": {
+   "group": "NA LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "*10 teams will play in a Double Robin Robin Format\n**Top 7 from [[LCS/North_America/2015/Summer|2015 Summer Season]]\n**Two teams from [[LCS/North America/2016/Spring/Promotion|2016 Spring Promotion]]\n**Top team from [[CS/North America/2015/Summer|NA CS 2015 Summer Season]]\n* All matches are {{Abbr/Bo1}}.\n* Top 6 from qualifies to the [[LCS/North America/2016/Spring/Playoffs|2016 Spring Playoffs]]\n* Top 2 teams receive playoff byes into the semifinals\n* Last 3 teams play in the [[LCS/North America/2016/Summer/Promotion|2016 Summer Promotion tournament]]",
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/North America/2016/Spring/Playoffs": {
+   "group": "NA LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/North America/2016/Summer/Playoffs": {
+   "group": "NA LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/North America/2016/Regional Finals/Statistics": {
+   "group": "NA LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LMS/2016/Summer": {
+   "group": "LMS",
+   "start": "2016-06-09",
+   "end": "2016-08-21",
+   "prize": "3,000,000",
+   "teams": "8",
+   "location": "Taipei",
+   "format": null,
+   "qualifies": [],
+   "children": [
+    "Group Stage"
+   ]
+  },
+  "LMS/2016/Spring": {
+   "group": "LMS",
+   "start": "2016-01-14",
+   "end": "2016-04-12",
+   "prize": "3,000,000",
+   "teams": "8",
+   "location": "Taipei",
+   "format": "",
+   "qualifies": [],
+   "children": [
+    "Group Stage"
+   ]
+  },
+  "LMS/2016/Regional Finals": {
+   "group": "LMS",
+   "start": "2016-09-02",
+   "end": "2016-09-04",
+   "prize": "|sdate=2016-09-02",
+   "teams": "4",
+   "location": "Taipei",
+   "format": "* Teams ranked 2nd to 5th from [[LMS/2016/Championship_Points|Championship Points 2016]] participate.\n* All matches are {{Abbr/Bo5}}.\n* Winner qualifies for [[World Championship/2016|World Championship 2016]]",
+   "qualifies": [
+    "World Championship/2016"
+   ],
+   "children": []
+  },
+  "LMS/2016/Summer/Promotion": {
+   "group": "LMS",
+   "start": "2016-05-21",
+   "end": "2016-05-22",
+   "prize": null,
+   "teams": "4",
+   "location": "Taipei",
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LMS/2016/Summer/Group Stage": {
+   "group": "LMS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LMS/2016/Championship Points": {
+   "group": "LMS",
+   "start": "2016-01-14",
+   "end": "2016-09-04",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LMS/2016/Spring/Group Stage": {
+   "group": "LMS",
+   "start": null,
+   "end": "March 28, 2016 - 13:00 {{Abbr/CEST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LMS/2016/Spring/Playoffs": {
+   "group": "LMS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LMS/2016/Regional Finals/Statistics": {
+   "group": "LMS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LMS/2016/Summer/Playoffs": {
+   "group": "LMS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 2": {
+   "group": "CBLOL",
+   "start": "2016-05-19",
+   "end": "2016-07-09",
+   "prize": "160000",
+   "teams": "8",
+   "location": "São Paulo",
+   "format": "*'''Group Stage'''\n**Single round robin.\n**Each match is a {{Abbr/Bo2}}. A win is 3 points, a draw is 1 point, and losing is 0 points.\n**{{Bgcolortext|up|Top 4}} advance to the playoffs.\n**{{Bgcolortext|stay|{{Ordinal|5}} place}} qualified for [[CBLOL/2017/Split 1|2017 Split 1]].\n**{{Bgcolortext|staydown|{{Ordinal|6}} place}} plays in the [[CBLOL/2017/Summer/Promotion|Summer Promotion]].\n**{{Bgcolortext|down|Bottom two}} play a [[CBLOL/2016/Winter/Relegation|relegation match]].\n*'''Relegation'''\n**Bottom two teams from Group Stage play a {{Abbr/Bo3}} match\n**Winner plays in the [[CBLOL/2017/Summer/Promotion|Summer Promotion]].\n**Loser is auto-relegated to [[BRCC/2017/Summer|BRCC]].\n*'''Playoffs'''\n**Single elimination bracket.\n**All matches are {{Abbr/Bo5}}.\n**Winner qualifies to [[International Wildcard Qualifier/2016|International Wildcard Qualifier 2016]].",
+   "qualifies": [
+    "CBLOL/2017/Split 1",
+    "International Wildcard Qualifier/2016"
+   ],
+   "children": [
+    "Promotion"
+   ]
+  },
+  "CBLOL/2016/Split 1": {
+   "group": "CBLOL",
+   "start": "2016-01-16",
+   "end": "2016-04-02",
+   "prize": "150000",
+   "teams": "8",
+   "location": "São Paulo",
+   "format": "*'''Group Stage'''\n**Single Round Robin, {{Abbr/Bo2}}\n**Top 6 advances to the playoffs.\n*** {{bgcolortext|seedup|''1st and 2nd place''}} advance to the Semifinals of the Playoffs.\n*** {{bgcolortext|up|''5th and 6th place''}} advance to Round 1 of the Playoffs.\n*** {{bgcolortext|staydown|''7th and 8th place''}} will play a relegation match.\n**** The winner of the relegation match will play in the [[CBLOL/2016/Split 2/Promotion|Promotion Tournament]]\n**** The loser of the relegation match is auto relegated to [[Circuito Desafiante/2016/Split 2|Circuito Desafiante]]\n*'''Playoffs'''\n**Single Elimination bracket, {{Abbr/Bo5}}.\n*** 3rd place is decided by tie-breaking rules\n****# Total Wins in the Playoffs\n****# Shortest combined game time (for wins)\n****# Team's final placement in the regular season\n*** Loser's of Quarterfinal will play a {{Abbr/Bo3}} to determine 5th place\n**** 6th Place will have to play in the [[CBLOL/2016/Split 2/Promotion|Promotion Tournament]].\n**Winner qualifies to [[International Wildcard Invitational/2016|International Wildcard Invitational 2016]].",
+   "qualifies": [
+    "International Wildcard Invitational/2016"
+   ],
+   "children": [
+    "Promotion"
+   ]
+  },
+  "CBLOL/2016/Split 1/Promotion": {
+   "group": "CBLOL",
+   "start": "2015-11-04",
+   "end": "2015-11-06",
+   "prize": null,
+   "teams": "6",
+   "location": "São Paulo",
+   "format": "* Qualifying Match {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 2/Promotion": {
+   "group": "CBLOL",
+   "start": "2016-04-09",
+   "end": "2016-04-10",
+   "prize": null,
+   "teams": "4",
+   "location": "São Paulo",
+   "format": "* Qualifying Match {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 2/Group Stage": {
+   "group": "CBLOL",
+   "start": null,
+   "end": "June 19, 2016 - 15:00 {{Abbr/BRT}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 1/Group Stage": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 1/Playoffs": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 2/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 1/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 2/Relegation": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "*Single {{Abbr/Bo3}} match\n*Winner qualifies to [[CBLOL/2017/Summer/Promotion|CBLOL Summer - Promotion]]\n*Losers qualifies to [[BRCC/2017/Summer|BRCC Summer]]",
+   "qualifies": [
+    "BRCC/2017/Summer",
+    "CBLOL/2017/Summer/Promotion"
+   ],
+   "children": []
+  },
+  "CBLOL/2016/Split 2/Playoffs": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 2/Promotion/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 1/Playoffs/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 1/Group Stage/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 2/Group Stage/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2016/Split 2/Playoffs/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LSPL/2016/Spring": {
+   "group": "LSPL",
+   "start": "2016-01-18",
+   "end": "2016-04-12",
+   "prize": "600,000",
+   "teams": "16",
+   "location": "|venue=",
+   "format": "*'''Group Stage''' \n** Double round robin\n** All matches are {{Abbr/Bo1}}\n*** <span class=\"bg-up\">Top 4</span> advance to Playoffs\n*** <span class=\"bg-stay\">5th-10th place</span> qualify for [[LSPL/2016/Summer|Summer Season]]\n*** <span class=\"bg-staydown\">11th-14th place</span> qualify for [[LSPL/2016/Summer/Relegations|Relegations]]\n*** <span class=\"bg-down\">15th-16th place</span> are automatically relegated\n\n*'''Playoffs''' \n** Single elimination bracket\n** All matches are {{Abbr/Bo5}}\n*** 3rd place and runner-up qualify for [[LPL/2016/Summer/Promotion|Summer Promotion]]\n*** Winner guarantees a spot in [[LPL/2016/Summer|LPL Summer]]",
+   "qualifies": [
+    "LPL/2016/Summer/Promotion",
+    "LSPL/2016/Summer",
+    "LSPL/2016/Summer/Relegations"
+   ],
+   "children": [
+    "Group_Stage/Week_1-5",
+    "Group_Stage/Week_6-10"
+   ]
+  },
+  "LSPL/2016/Summer": {
+   "group": "LSPL",
+   "start": "2016-05-23",
+   "end": "2016-08-09",
+   "prize": "600,000",
+   "teams": "14",
+   "location": "|venue=",
+   "format": "*'''Group Stage''' \n** Double round robin\n** All matches are {{Abbr/Bo1}}\n*** <span class=\"bg-up\">Top 4</span> advance to Playoffs\n*** <span class=\"bg-stay\">5th-8th place</span> qualify for [[LSPL/2017/Spring|Spring Season]]\n*** <span class=\"bg-staydown\">9th-12th place</span> qualify for [[LSPL/2017/Spring/Relegations|Relegations]]\n*** <span class=\"bg-down\">13th-14th place</span> are automatically relegated\n\n*'''Playoffs''' \n** Single elimination bracket\n** All matches are {{Abbr/Bo5}}\n*** 3rd place and runner-up qualify for [[LPL/2017/Spring/Promotion|Spring Promotion]]\n*** Winner guarantees a spot in [[LPL/2017/Spring|LPL Summer]]",
+   "qualifies": [
+    "LPL/2017/Spring/Promotion",
+    "LSPL/2017/Spring",
+    "LSPL/2017/Spring/Relegations"
+   ],
+   "children": [
+    "Group_Stage/Week_1-5",
+    "Group_Stage/Week_6-10",
+    "Relegations"
+   ]
+  },
+  "LSPL/2016/Summer/Playoffs": {
+   "group": "LSPL",
+   "start": "2016-08-07",
+   "end": "2016-08-09",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LSPL/2016/Summer/Group Stage/Week 1-5": {
+   "group": "LSPL",
+   "start": "2016-05-23",
+   "end": "2016-08-03",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LSPL/2016/Spring/Group Stage/Week 1-5": {
+   "group": "LSPL",
+   "start": "2016-01-18",
+   "end": "2016-04-06",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LSPL/2016/Summer/Group Stage/Week 6-10": {
+   "group": "LSPL",
+   "start": "2016-05-23",
+   "end": "2016-08-03",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LSPL/2016/Spring/Playoffs": {
+   "group": "LSPL",
+   "start": "2016-04-10",
+   "end": "2016-04-12",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LSPL/2016/Spring/Group Stage/Week 6-10": {
+   "group": "LSPL",
+   "start": "2016-01-18",
+   "end": "2016-04-06",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CK/2016/Summer": {
+   "group": "Challengers Korea",
+   "start": "2016-05-30",
+   "end": "2016-08-13",
+   "prize": "60,000,000",
+   "teams": "8",
+   "location": "Seoul",
+   "format": "",
+   "qualifies": [],
+   "children": [
+    "Promotion"
+   ]
+  },
+  "CK/2016/Spring": {
+   "group": "Challengers Korea",
+   "start": "2016-01-18",
+   "end": "2016-04-16",
+   "prize": "60,000,000",
+   "teams": "8",
+   "location": "Seoul",
+   "format": "",
+   "qualifies": [],
+   "children": [
+    "Promotion"
+   ]
+  },
+  "Challenger Series/Europe/2016/Summer": {
+   "group": "EU CS",
+   "start": "2016-06-07",
+   "end": "2016-07-19",
+   "prize": "22,500",
+   "teams": "6",
+   "location": "Berlin",
+   "format": "",
+   "qualifies": [],
+   "children": []
+  },
+  "Challenger Series/Europe/2016/Spring": {
+   "group": "EU CS",
+   "start": "2016-01-26",
+   "end": "2016-03-15",
+   "prize": "22,500",
+   "teams": "6",
+   "location": "Berlin",
+   "format": "",
+   "qualifies": [],
+   "children": []
+  },
+  "Challenger Series/Europe/2016/Summer/Qualifiers": {
+   "group": "EU CS",
+   "start": "2016-05-20",
+   "end": "2016-05-27",
+   "prize": "|sdate=2016-05-20",
+   "teams": "12",
+   "location": null,
+   "format": "",
+   "qualifies": [],
+   "children": []
+  },
+  "Challenger Series/North America/2016/Spring": {
+   "group": "NA CS",
+   "start": "2016-01-27",
+   "end": "2016-03-16",
+   "prize": "21,000",
+   "teams": "6",
+   "location": "|venue=",
+   "format": "* Single Round Robin\n* All matches are {{Abbr/Bo2}}\n* Top 4 qualify for playoffs\n** Top 2 of playoffs qualify for the [[LCS/North_America/2016/Summer/Promotion|LCS Summer Promotion]].",
+   "qualifies": [],
+   "children": []
+  },
+  "Challenger Series/North America/2016/Summer": {
+   "group": "NA CS",
+   "start": "2016-06-08",
+   "end": "2016-07-20",
+   "prize": "21,000",
+   "teams": "6",
+   "location": "|venue=",
+   "format": "* Single Round Robin\n* All matches are {{Abbr/Bo2}}\n* Top 4 qualify for playoffs\n** Top 2 of playoffs qualify for the [[LCS/North_America/2017/Spring/Promotion|LCS Spring Promotion]].",
+   "qualifies": [],
+   "children": []
+  },
+  "Challenger Series/North America/2016/Summer/Qualifier": {
+   "group": "NA CS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": "4",
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Challenger Series/North America/2016/Spring/Qualifier": {
+   "group": "NA CS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": "4",
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Challenger Series/North America/2016/Spring/Group Stage": {
+   "group": "NA CS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Challenger Series/North America/2016/Spring/Playoffs": {
+   "group": "NA CS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Challenger Series/North America/2016/Summer/Group Stage": {
+   "group": "NA CS",
+   "start": null,
+   "end": "}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Challenger Series/North America/2016/Summer/Playoffs": {
+   "group": "NA CS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Challenger Series/North America/2016/Summer/Statistics": {
+   "group": "NA CS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Challenger Series/North America/2016/Spring/Statistics": {
+   "group": "NA CS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Mid-Season Invitational/2016": {
+   "group": "international",
+   "start": "2016-05-04",
+   "end": "2016-05-15",
+   "prize": "450,000",
+   "teams": "6",
+   "location": "Shanghai",
+   "format": "* '''Group Stage''' - ''May 4th - May 8th, 2016''\n**Double Round Robin\n**Each team plays 10 matches\n**All matches are {{Abbr/Bo1}}\n**1st to 4th place will play the Playoffs\n* '''Playoffs''' - ''May 13th - May 15th, 2016''\n** Single Elimination\n** All matches are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "World Championship/2016": {
+   "group": "international",
+   "start": "2016-09-29",
+   "end": "2016-10-29",
+   "prize": "5,070,000",
+   "teams": "16",
+   "location": "San Francisco",
+   "format": "* '''Qualifiers''' - ''August 27th - September 5th, 2016''\n** Five Regional Finals.\n*** The winners of each Regional Final will advance to the World Championship.\n**Two International Wildcard Qualifiers.\n***The winner of each International Wildcard Qualifier will advance to the World Championship.\n* '''Group Stage''' - ''September 29th - October 9th, 2016 in {{Flag|us}} San Francisco''\n** All sixteen teams are divided into four groups where they play a Double Round robin format.\n*** All Matches are played in a {{Abbr/Bo1}}.\n*** The top two teams in each group advance to the Knockout Stage.\n*** The remaining teams are eliminated.\n* '''Knockout Stage''' - ''October 13th - October 29st, 2016 in {{Flag|us}} Chicago, {{Flag|us}} New York, and {{Flag|us}} Los Angeles''\n** Eight teams play in a single elimination bracket over seven days.\n*** All matches are {{Abbr/Bo5}}.",
+   "qualifies": [],
+   "children": [
+    "Group_Stage"
+   ]
+  }
+ }
+}
