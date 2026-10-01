@@ -22,6 +22,7 @@ import { KEPT_GAIN, LISTED_COST, LOYALTY_NEW, RENEWAL_GAIN, TITLE_LOYALTY } from
 import { HEAT_LOSS, HEAT_TITLE, HEAT_WIN, HEAT_WINTER, NEMESIS_HEAT, NEMESIS_PREP, PREP_FLOOR, READ_FULL, DIAL_SAME } from '../src/engine/scouting'
 import { DIFFICULTY } from '../src/engine/difficulty'
 import { TRUSTED } from '../src/engine/season'
+import { MACRO_LATE } from '../src/engine/match'
 
 const panel = readFileSync(new URL('../src/ui/Rules.tsx', import.meta.url), 'utf8')
 
@@ -59,6 +60,9 @@ says(`+${KEPT_GAIN}。前提是他自己没想走`, '挡掉报价给的归属感
 // season.ts: what a trophy is worth to your own name
 says(`赛区冠军 +${TITLE_REP_WORTH.regional}`, '赛区冠军的声望')
 says(`国际冠军 +${TITLE_REP_WORTH.international}`, '国际冠军的声望')
+
+// match.ts: what a point of team 运营 is worth late (it moved 0.3 → 0.38 and the panel kept saying 0.3)
+says(`每高 1 点 +${MACRO_LATE}`, '运营每点的后期加成')
 
 // scouting.ts / difficulty.ts: 对手针对 and the three levels
 const D = DIFFICULTY

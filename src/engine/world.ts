@@ -26,6 +26,8 @@ export interface RawPlayer {
   joined?: string | null
   rounds?: number
   vlr?: { rating: number | null; acs: number | null; rounds: number }
+  /** his real numbers in Oracle's Elixir over the rating years (scripts/lol/build_world.py) */
+  oe?: { games: number; kda: number; dpm: number; gd15: number | null }
   age: number; isIgl: boolean; iglSource?: 'verified' | 'inferred'
   attrs: Attrs; overall: number; potential: number
   form: number; morale: number; fatigue: number; salary: number; value: number

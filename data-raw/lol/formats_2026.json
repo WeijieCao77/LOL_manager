@@ -1,0 +1,3442 @@
+{
+ "source": "Liquipedia (CC BY-SA 3.0)，赛事页 Format 一节与信息框",
+ "year": 2026,
+ "pages": {
+  "LPL/2026/Split 2": {
+   "group": "LPL",
+   "start": "2026-04-04",
+   "end": "2026-06-14",
+   "prize": "2,800,000",
+   "teams": "14",
+   "location": "Shanghai",
+   "format": "* '''Regular Season'''\n** Teams are split into 2 groups based on [[LPL/2026/Split 1|Split 1]] performance\n*** Top 8 teams from Split 1 are placed into Group Ascend\n*** Next 6 teams are placed into Group Nirvana\n** Teams will play a Round Robin within their Groups\n*** Group Ascend will play a ''Double'' Round Robin\n*** Group Nirvana will play a ''Single'' Round Robin\n*** All matches will be {{Abbr/Bo3}} with {{Abbr/Fearless Draft}}\n** In Group Ascend:\n*** <span class=\"bg-up\">Top 4</span> advance to Knockout Stage\n*** <span class=\"bg-stayup\">Next 4</span> advance to Knights Rivals\n** In Group Nirvana:\n*** <span class=\"bg-stayup\">Top 4</span> advance to Knights Rivals\n*** <span class=\"bg-down\">Bottom 2</span> will end their 2026 LPL season immediately\n** Tiebreakers:\n**# Series Wins\n**# Game Difference\n**# Head-to-Head Series Wins\n**# Head-to-Head Game Difference\n**# {{Abbr/Bo3}} Tiebreaker Match, if it affects the team's advancement, seeding in Knights Rivals, or seeding in Knockout Stage\n\n* '''Knights Rivals'''\n** Teams will play a Single {{Abbr/Bo5}} with {{Abbr/Fearless Draft}} based on Regular Season placements\n** 4 winners advance to Knockout Stage\n\n* '''Knockout Stage'''\n** Double Elimination\n*** In order of position in Group Ascend, the 4 directly qualified teams will pick their opponents for Upper Bracket Quarterfinals\n*** All matches are {{Abbr/Bo5}} with {{Abbr/Fearless Draft}}\n\n* <span class=\"mw-customtoggle-Side-Selection\" style=\"border-bottom:1px dotted;\">''Click here for detailed information about First Selection''</span>\n<div class=\"toccolours mw-collapsible mw-collapsed\" id=\"mw-customcollapsible-Side-Selection\" style=\"margin-top:10px;\">\n* '''Regular Season First Selection'''\n** During the first meeting between two teams, Game 1 first selection is decided by a coin flip\n** For the second meeting (for Group Ascend), Game 1 first selection is given to the opposing team\n** Loser of previous game gets first selection for game 2-3\n\n* '''Knights Rivals First Selection'''\n** Teams in Group Ascend will get first selection rights for Game 1\n** Loser of previous game gets first selection for game 2-5\n\n* '''Knockout Stage First Selection'''\n** In Upper Bracket Quarterfinals, the top 4 in Group Ascend will get first selection rights for Game 1\n** For all remaining games, Game 1 first selection is decided by a coin flip\n** Loser of previous game gets first selection for game 2-5\n\n* '''Grand Final First Selection'''\n** The Upper Bracket Final winner will get first ''map selection'' '''AND''' ''side selection'' rights for Game 1\n** Loser of previous game gets first selection for game 2-5\n</div>",
+   "qualifies": [],
+   "children": [
+    "Regular Season",
+    "Regular Season/Week 1-4",
+    "Regular Season/Week 5-7"
+   ]
+  },
+  "LPL/2026/Split 1": {
+   "group": "LPL",
+   "start": "2026-01-14",
+   "end": "2026-03-08",
+   "prize": "1,600,000",
+   "teams": "14",
+   "location": "Shanghai",
+   "format": "* '''Regular Season''' (also known as ''Rumble Stage'')\n** Teams are split into 3 groups based on overall LPL performance in 2025\n*** Top 6 teams are placed into Group Ascend\n*** Next 4 teams are placed into Group Perseverance\n*** Bottom 4 teams are placed into Group Nirvana\n** Teams will play a Double Round-Robin {{Abbr/Bo3}} within their groups\n** In Group Ascend:\n*** <span class=\"bg-byeup\">Top 4</span> advance to Knockout Stage\n*** <span class=\"bg-up\">Bottom 2</span> advance to Knights Rivals Round 1\n** In Group Perseverance:\n*** <span class=\"bg-up\">Top 2</span> advance to Knights Rivals Round 1\n*** <span class=\"bg-stayup\">Bottom 2</span> advance to Knights Rivals Round 2\n** In Group Nirvana:\n*** <span class=\"bg-stayup\">Top 2</span> advance to Knights Rivals Round 2\n*** <span class=\"bg-down\">Bottom 2</span> is eliminated for the split\n** Tiebreakers:\n**# Series Wins\n**# Game Difference\n**# Head-to-Head Series Wins\n**# Head-to-Head Game Difference\n**# {{Abbr/Bo3}} Tiebreaker Match, if it affects the team's advancement, seeding in Knights Rivals, or seeding in Knockout Stage\n\n* '''Knights Rivals'''\n** Hybrid Elimination {{Abbr/Bo5}}\n** 4 winners advance to Knockout Stage\n\n* '''Knockout Stage'''\n** Double Elimination\n*** In order of position in Group Ascend, the 4 directly qualified teams will pick their opponents for Upper Bracket Quarterfinals\n*** All matches are {{Abbr/Bo5}}\n\n* All matches uses {{Abbr/Fearless Draft}}\n* Top 2 teams qualify for [[First_Stand_Tournament/2026|First Stand 2026]].\n\n* <span class=\"mw-customtoggle-Side-Selection\" style=\"border-bottom:1px dotted;\">''Click here for detailed information about First Selection''</span>\n<div class=\"toccolours mw-collapsible mw-collapsed\" id=\"mw-customcollapsible-Side-Selection\" style=\"margin-top:10px;\">\n* '''Regular Season First Selection'''\n** During the first meeting between two teams, Game 1 first selection is decided at random\n** For the second meeting, Game 1 first selection is given to the opposing team\n** Loser of previous game gets first selection for game 2-3\n\n* '''Knights Rivals First Selection'''\n** The higher ranked team in Rumble Stage will get first selection rights for Game 1\n*** Teams in Group Ascend is higher than Group Peserverance, and higher than Group Nirvana\n** Loser of previous game gets first selection for game 2-5\n\n* '''Knockout Stage First Selection'''\n** In Upper Bracket Quarterfinals, the top 4 in Group Ascend will get first selection rights for Game 1\n** For all remaining games, Game 1 first selection is decided by a coin flip\n** Loser of previous game gets first selection for game 2-5\n\n* '''Grand Final First Selection'''\n** The Upper Bracket Final winner will get first ''map selection'' '''AND''' ''side selection'' rights for Game 1\n** Loser of previous game gets first selection for game 2-5\n</div>",
+   "qualifies": [
+    "First_Stand_Tournament/2026"
+   ],
+   "children": [
+    "Regular Season"
+   ]
+  },
+  "LPL/2026/Split 3": {
+   "group": "LPL",
+   "start": "2026-07-22",
+   "end": "2026-09-13",
+   "prize": "4,000,000",
+   "teams": "12",
+   "location": "Shenzhen",
+   "format": "* '''Regular Season'''\n** Teams are split into 2 groups based on [[LPL/2026/Split 2|Split 2]] performance\n*** Top 8 teams from Split 2 are placed into Group Ascend\n*** Next 4 teams are placed into Group Nirvana\n** Teams will play a Double Round Robin within their Groups\n*** All matches will be {{Abbr/Bo3}} with {{Abbr/Fearless Draft}}\n** In Group Ascend:\n*** <span class=\"bg-seedup\">Top 2</span> advance to Season Playoffs - Upper Bracket Semifinals\n*** <span class=\"bg-up\">Next 4</span> advance to Season Playoffs - Upper Bracekt Quarterfinals\n*** <span class=\"bg-stayup\">Bottom 2</span> advance to Knights Rivals\n** In Group Nirvana:\n*** <span class=\"bg-stayup\">Top 2</span> advance to Knights Rivals\n*** <span class=\"bg-down\">Bottom 2</span> will end their 2026 LPL season immediately\n** Tiebreakers:\n**# Series Wins\n**# Game Difference\n**# Head-to-Head Series Wins\n**# Head-to-Head Game Difference\n\n* '''Knights Rivals'''\n** 4 teams will play a Double Elimination {{Abbr/Bo5}} with {{Abbr/Fearless Draft}} based on Regular Season placements\n** Winners advance to Season Playoffs\n\n* '''Season Playoffs'''\n** Double Elimination\n*** Top 2 teams from Group Ascend get a bye to Upper Bracket Semifinals\n*** Next 4 teams from Group Ascend start in Upper Bracket Quarterfinals\n*** 2 winners of Knights Rivals start in Lower Bracket Round 1.\n** All matches are {{Abbr/Bo5}} with {{Abbr/Fearless Draft}}\n\n* <span class=\"mw-customtoggle-Side-Selection\" style=\"border-bottom:1px dotted;\">''Click here for detailed information about First Selection''</span>\n<div class=\"toccolours mw-collapsible mw-collapsed\" id=\"mw-customcollapsible-Side-Selection\" style=\"margin-top:10px;\">\n* '''Regular Season First Selection'''\n** During the first meeting between two teams, Game 1 first selection is decided by a coin flip\n** For the second meeting, Game 1 first selection is given to the opposing team\n** Loser of previous game gets first selection for game 2-3\n\n* '''Knights Rivals Side Selection'''\n** The higher ranked team in Rumble Stage will get side selection rights for Game 1\n*** Teams in Group Ascend is higher than Group Nirvana\n** Loser of previous game picks sides for game 2-5\n\n* '''Season Playoffs Side Selection'''\n** In Upper Bracket Quarterfinals, the higher ranked team in Group Ascend will get first selection rights for Game 1\n** For all remaining games, Game 1 first selection is decided by a coin flip\n** Loser of previous game gets first selection for game 2-5\n\n* '''Grand final Side Selection'''\n** The Upper Bracket Final winner will get all selection rights for Game 1\n** Loser of previous game gets first selection for game 2-5\n</div>",
+   "qualifies": [],
+   "children": [
+    "Regular Season/Week 1-2",
+    "Regular Season/Week 3-5"
+   ]
+  },
+  "LPL/2026/Regional Finals": {
+   "group": "LPL",
+   "start": "2026-09-17",
+   "end": "2026-09-19",
+   "prize": null,
+   "teams": "|previous=LPL/2025/Regional Finals{{!}}Regional Finals 2025",
+   "location": "Shanghai",
+   "format": "* '''Participants'''\n** Up to four teams with highest [[LPL/2026/Championship_Points|Championship Points]] besides the [[LPL/2026/Split 3|LPL Split 3 2026 Champion]] (as the region's {{Ordinal|1}} seed) and the team with the highest Championship Points (as the region's {{Ordinal|2}} seed) will play.\n*** If two teams have the same points, the team with higher Split 3 points will be ranked higher.\n* '''Format'''\n** Four teams compete in a Double Elimination format.\n*** Two teams with higher points begin in the Upper Bracket, the other two in the Lower Bracket.\n*** {{Bgcolortext|bg-proceed|Winner}} of the Upper Bracket qualifies for the [[World Championship/2026|World Championship]] as the region's {{Ordinal|3}} seed.\n*** {{Bgcolortext|bg-proceed|Winner}} of the Lower Bracket qualifies for the [[World Championship/2026|World Championship]] as the region's {{Ordinal|4}} seed.\n** All matches are {{Abbr/Bo5}}.\n** <span class=\"mw-customtoggle-Tiebreaker\" style=\"border-bottom:1px dotted;\">''Click here for bracket's information in different circumstances''</span>\n<div class=\"toccolours mw-collapsible mw-collapsed\" id=\"mw-customcollapsible-Tiebreaker\" style=\"margin-top:10px;\">\n*'''If the region doesn't become MSI top 2 region:'''\n** Three teams compete in a King of the Hill format.\n*** The team with the highest Championship Points begins in the Grand Final match.\n*** The other two teams play in Semi Final match.\n*** {{Bgcolortext|bg-proceed|Winner}} of the Grand final match qualifies for the [[World Championship/2026|World Championship]] as the region's {{Ordinal|3}} seed.\n*'''If the region's team wins MSI, qualify for Split 3 Playoffs but doesn't qualify for Worlds as region's 1st/2nd seed:'''\n** Four teams compete in a King of the Hill format.\n*** MSI Champion begins in the Grand Final match.\n*** The team with the highest Championship Points begins in the Semi Final match.\n*** The other two teams play in Quarter Final match.\n*** {{Bgcolortext|bg-proceed|Winner}} of the Grand final match qualifies for the [[World Championship/2026|World Championship]] as the region's {{Ordinal|3}} seed.\n*** {{Bgcolortext|bg-down|Loser}} of the Grand final match qualifies for the [[World Championship/2026|World Championship]] as the region's {{Ordinal|4}} seed.\n*'''If the region's team wins MSI and qualify for Worlds as region's 1st/2nd seed''' or <br>'''If the region's team wins MSI but doesn't qualify for Split 3 Playoffs''' or <br>'''If the region is the MSI runner-up region''' (applied scenario)''':'''\n** Four teams compete in a Double Elimination format.\n*** Two teams with higher points begin in the Upper Bracket, the other two in the Lower Bracket.\n*** {{Bgcolortext|bg-proceed|Winner}} of the Upper Bracket qualifies for the [[World Championship/2026|World Championship]] as the region's {{Ordinal|3}} seed.\n*** {{Bgcolortext|bg-proceed|Winner}} of the Lower Bracket qualifies for the [[World Championship/2026|World Championship]] as the region's {{Ordinal|4}} seed.\n</div>\n<!--* '''Side Choice Previlege'''\n** In the Upper Bracket Finals & Lower Bracket Semifinals, teams with higher championship points will have the Side Choice Previlege\n** In the Lower Bracket Finals, the Side Choice Previlege will be determined by coin toss.\n** Teams with Side Choice Previlege can choose the side in game 1, after that, the team lost can choose the side in the next game.-->",
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Championship Points": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* The champion of Split 3 will automatically qualify for [[World_Championship/2026|World Championship 2026]] Main Event as the first seed.\n* The team (other than the Split 3 champion) that has accrued the most championship points throughout the 2026 Season will qualify for [[World_Championship/2026|World Championship 2026]] Main Event as the second seed.\n* The third and fourth seed, both determined at the [[LPL/2026/Regional_Finals|Regional Finals]], will also qualify for [[World_Championship/2026|World Championship 2026]] Main Event.\n* If teams are tied by championship points, teams will be ranked based on Split 3 rankings.",
+   "qualifies": [
+    "Demacia_Cup_Global_Invitational/2026",
+    "World_Championship/2026"
+   ],
+   "children": []
+  },
+  "LPL/2026/Split 1/Regular Season": {
+   "group": "LPL",
+   "start": null,
+   "end": "February 6, 2026 - 23:59 {{Abbr/CST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Regular Season'''\n** Teams are split into 3 groups based on overall LPL performance in 2025\n*** Top 6 teams are placed into Group Ascend\n*** Next 4 teams are placed into Group Perseverance\n*** Bottom 4 teams are placed into Group Nirvana\n** Teams will play a Double Round-Robin {{Abbr/Bo3}} within their groups\n** In Group Ascend:\n*** <span class=\"bg-seedup\">Top 4</span> advance to Knockout Stage\n*** <span class=\"bg-up\">Bottom 2</span> advance to Knights Rivals Upper Bracket\n** In Group Perseverance:\n*** <span class=\"bg-up\">Top 2</span> advance to Knights Rivals Upper Bracket\n*** <span class=\"bg-stayup\">Bottom 2</span> advance to Knights Rivals Lower Bracket\n** In Group Nirvana:\n*** <span class=\"bg-stayup\">Top 2</span> advance to Knights Rivals Lower Bracket\n*** <span class=\"bg-down\">Bottom 2</span> is eliminated for the split\n** Tiebreakers:\n**# Series Wins\n**# Game Difference\n**# Head-to-Head Series Wins\n**# Head-to-Head Game Difference\n**# {{Abbr/Bo3}} Tiebreaker Match, if it affects the team's advancement, seeding in Knights Rivals, or seeding in Knockout Stage\n\n* '''Regular Season First Selection'''\n** During the first meeting between two teams, Game 1 first selection is decided at random\n** For the second meeting, Game 1 first selection is given to the opposing team\n** Loser of previous game gets first selection for game 2-3",
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 2/Knockout Stage": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Knights Rivals'''\n** Teams will play a Single {{Abbr/Bo5}} with {{Abbr/Fearless Draft}} based on Regular Season placements\n** 4 winners advance to Knockout Stage\n\n* '''Knockout Stage'''\n** Double Elimination\n*** In order of position in Group Ascend, the 4 directly qualified teams will pick their opponents for Upper Bracket Quarterfinals\n*** All matches are {{Abbr/Bo5}} with {{Abbr/Fearless Draft}}\n\n* '''Knights Rivals First Selection'''\n** Teams in Group Ascend will get first selection rights for Game 1\n** Loser of previous game gets first selection for game 2-5\n\n* '''Knockout Stage First Selection'''\n** In Upper Bracket Quarterfinals, the top 4 in Group Ascend will get first selection rights for Game 1\n** For all remaining games, Game 1 first selection is decided by a coin flip\n** Loser of previous game gets first selection for game 2-5\n\n* '''Grand Final First Selection'''\n** The Upper Bracket Final winner will get first ''map selection'' '''AND''' ''side selection'' rights for Game 1\n** Loser of previous game gets first selection for game 2-5",
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 3/Regular Season/Week 1-2": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 2/Regular Season/Week 1-4": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 2/Regular Season/Week 5-7": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 1/Knockout Stage": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Knights Rivals'''\n** Hybrid Elimination {{Abbr/Bo5}}\n*** <span class=\"bg-up\">Bottom 2 of Group Ascend & Top 2 of Group Perseverance</span> advance to Round 1\n*** <span class=\"bg-stayup\">Bottom 2 of Group Perseverance & Top 2 of Group Nirvana</span> advance to Round 2\n*** The 2 losers of Round 1 and 2 winners of Round 2 will advance to Round 3, where they will be reseeded.\n** 2 winners of Round 1, and 2 winners of Round 3 advance to Knockout Stage\n* '''Knockout Stage'''\n** Double Elimination\n*** In order of position in Group Ascend, the 4 directly qualified teams will pick their opponents for Upper Bracket Quarterfinals\n** All matches are {{Abbr/Bo5}}<br>\n* '''Knights Rivals First Selection'''\n** The higher ranked team in Rumble Stage will get first selection rights for Game 1\n*** Teams in Group Ascend is higher than Group Peserverance, and higher than Group Nirvana\n** Loser of previous game gets first selection for game 2-5\n* '''Knockout Stage First Selection'''\n** In Upper Bracket Quarterfinals, the top 4 in Group Ascend will get first selection rights for Game 1\n** For all remaining games, Game 1 first selection is decided by a coin flip\n** Loser of previous game gets first selection for game 2-5\n* '''Grand Final First Selection'''\n** The Upper Bracket Final winner will get first ''map selection'' '''AND''' ''side selection'' rights for Game 1\n** Loser of previous game gets first selection for game 2-5",
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 3/Regular Season/Week 3-5": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 3/Player Stats": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 3/Playoffs": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Knights Rivals'''\n** 4 teams will play a Double Elimination {{Abbr/Bo5}} with {{Abbr/Fearless Draft}} based on Regular Season placements\n** Winners advance to Season Playoffs\n\n* '''Season Playoffs'''\n** Double Elimination\n*** Top 2 teams from Group Ascend get a bye to Upper Bracket Semifinals\n*** Next 4 teams from Group Ascend start in Upper Bracket Quarterfinals\n*** 2 winners of Knights Rivals start in Lower Bracket Round 1.\n** All matches are {{Abbr/Bo5}} with {{Abbr/Fearless Draft}}\n\n* '''Knights Rivals Side Selection'''\n** The higher ranked team in Rumble Stage will get side selection rights for Game 1\n*** Teams in Group Ascend is higher than Group Nirvana\n** Loser of previous game picks sides for game 2-5\n\n* '''Season Playoffs Side Selection'''\n** In Upper Bracket Quarterfinals, the higher ranked team in Group Ascend will get first selection rights for Game 1\n** For all remaining games, Game 1 first selection is decided by a coin flip\n** Loser of previous game gets first selection for game 2-5\n\n* '''Grand final Side Selection'''\n** The Upper Bracket Final winner will get all selection rights for Game 1\n** Loser of previous game gets first selection for game 2-5",
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 2/Regular Season": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Regular Season'''\n** Teams are split into 2 groups based on [[LPL/2026/Split 1|Split 1]] performance\n** Teams will play a Round Robin within their Groups\n*** Group Ascend will play a ''Double'' Round Robin\n*** Group Nirvana will play a ''Single'' Round Robin\n*** All matches will be {{Abbr/Bo3}} with {{Abbr/Fearless Draft}}\n** In Group Ascend:\n*** {{bgcolortext|up|Top 4}} advance to Knockout Stage\n*** {{bgcolortext|stayup|Next 4}} advance to Knights Rivals\n** In Group Nirvana:\n*** {{bgcolortext|stayup|Top 4}} advance to Knights Rivals\n*** {{bgcolortext|down|Bottom 2}} will end their 2026 LPL season immediately\n** Tiebreakers:\n**# Series Wins\n**# Game Difference\n**# Head-to-Head Series Wins\n**# Head-to-Head Game Difference\n**# {{Abbr/Bo3}} Tiebreaker Match, if it affects the team's advancement, seeding in Knights Rivals, or seeding in Knockout Stage\n\n* '''Regular Season First Selection'''\n** During the first meeting between two teams, Game 1 first selection is decided by a coin flip\n** For the second meeting (for Group Ascend), Game 1 first selection is given to the opposing team\n** Loser of previous game gets first selection for game 2-3",
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 3/Statistics": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 2/Player Stats": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 3/Regular Season": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Regular Season'''\n** Teams are split into 2 groups based on [[LPL/2026/Split 2|Split 2]] performance\n*** Top 8 teams from Split 2 are placed into Group Ascend\n*** Next 4 teams are placed into Group Nirvana\n** Teams will play a Double Round Robin within their Groups\n*** All matches will be {{Abbr/Bo3}} with {{Abbr/Fearless Draft}}\n** In Group Ascend:\n*** <span class=\"bg-seedup\">Top 2</span> advance to Season Playoffs - Upper Bracket Semifinals\n*** <span class=\"bg-up\">Next 4</span> advance to Season Playoffs - Upper Bracket Quarterfinals\n*** <span class=\"bg-stayup\">Bottom 2</span> advance to Knights Rivals\n** In Group Nirvana:\n*** <span class=\"bg-stayup\">Top 2</span> advance to Knights Rivals\n*** <span class=\"bg-down\">Bottom 2</span> will end their 2026 LPL season immediately\n<br>\n* '''Tiebreakers'''\n*# Series Wins\n*# Game Difference\n*# Head-to-Head Series Wins\n*# Head-to-Head Game Difference\n\n* '''Regular Season First Selection'''\n** During the first meeting between two teams, Game 1 first selection is decided by a coin flip\n** For the second meeting, Game 1 first selection is given to the opposing team\n** Loser of previous game gets first selection for game 2-3",
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 2/Statistics": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 1/Player Stats": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 1/Statistics": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 2/Statistics/Regular Season": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 1/Statistics/Regular Season": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 2/Player Stats/Regular Season": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 3/Statistics/Regular Season": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 1/Player Stats/Regular Season": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 3/Player Stats/Regular Season": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 3/Player Stats/Playoffs": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 1/Statistics/Knockout Stage": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 2/Player Stats/Knockout Stage": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 3/Statistics/Playoffs": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 1/Player Stats/Knockout Stage": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LPL/2026/Split 2/Statistics/Knockout Stage": {
+   "group": "LPL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026": {
+   "group": "LCK",
+   "start": "2026-04-01",
+   "end": "2026-09-13",
+   "prize": "|localcurrency=krw",
+   "teams": "10",
+   "location": null,
+   "format": "* '''Rounds 1-2''' - ''April 1<sup>st</sup> - May 31<sup>st</sup>, 2026''\n** Double round-robin\n** All matches are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}\n** {{bgcolortext|stayup|Top 6 teams}} qualify for [[/Road to MSI|Road to MSI]]\n* '''Rounds 3-4''' - ''July 29<sup>th</sup> - August 23<sup>rd</sup>, 2026''\n** 10 teams are split into two groups based on Round 1-2 standings\n*** Top 5 teams from round 1-2 are assigned to '''Legend Group'''\n*** Bottom 5 teams from round 1-2 are assigned to '''Rise Group'''\n** Double round-robin\n** Records from Rounds 1-2 are carried over.\n** All matches are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}\n** {{bgcolortext|byeup|Top 2 teams}} from Legend Group advance to Playoffs Round 2\n** {{bgcolortext|seedup|{{Ordinal|3-4}} teams}} from Legend Group advance to Playoffs Round 1\n** {{bgcolortext|up|Bottom team}} from Legend Group and {{bgcolortext|up|top team}} from Rise Group advance to Play-In Round 1\n** {{bgcolortext|stayup|2nd-3rd teams}} from Rise Group advance to Play-In Round 2\n** {{bgcolortext|stay|Bottom two teams}} from Rise Group are eliminated\n* '''Play-In''' - ''August 26<sup>th</sup> - 28<sup>th</sup>, 2026''\n** Double Elimination\n** Top two teams advance to Playoffs Round 1\n** All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n* '''Playoffs''' - ''August 29<sup>th</sup> - September 13<sup>th</sup>, 2026''\n** Double Elimination\n** All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n** Top 3 teams qualify for [[World Championship/2026|Worlds]]\n*** If [[Hanwha Life Esports]] (the MSI Champion) finishes in the top 3, then the {{Ordinal|4}} place team qualifies for Worlds as the {{Ordinal|4}} seed of LCK",
+   "qualifies": [
+    "/Road to MSI",
+    "World Championship/2026"
+   ],
+   "children": [
+    "Play-In",
+    "Playoffs"
+   ]
+  },
+  "LCK/2026/Cup": {
+   "group": "LCK",
+   "start": "2026-01-14",
+   "end": "2026-03-01",
+   "prize": "|localcurrency=krw",
+   "teams": "10",
+   "location": "Seoul",
+   "format": "* '''Group Battle''' - ''January 14 - February 1''\n** 10 teams are split into two groups\n** Each plays a single-round robin against teams from the opposite group\n*** Teams from each group with the same seed face each other in Week 3 (the 'Super Week')\n** All matches in Weeks 1 and 2 are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}\n** Super Week matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n** Groups gain 1 point for every {{Abbr/Bo3}} win\n** Groups gain 2 points for every {{Abbr/Bo5}} win\n** The group with more points becomes the Winner Group and the other group becomes the Loser Group\n*** {{bgcolortext|byeup|Top 2 teams from the Winner Group}} advance to Round 2 of playoffs\n*** {{bgcolortext|seedup|Top team from the Loser Group}} advances to the Round 1 of playoffs\n*** {{bgcolortext|stayup|Bottom 3 teams from the Winner Group}} and {{bgcolortext|stayup|middle 3 teams of the Loser Group}} advance to the Play-In Stage.\n**** Among the teams advancing to the Play-In Stage, {{bgcolortext|up|2 teams with most wins}} receive byes into Play-In Round 2\n*** {{bgcolortext|stay|Bottom team of the Loser Group}} is eliminated.\n* '''Play-In''' - ''February 6 - 8''\n** Double Elimination\n* '''Playoffs''' - ''February 12 - March 1''\n** Double Elimination\n** All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n** Top two teams qualifiy for [[First Stand Tournament/2026|FST 2026]]",
+   "qualifies": [
+    "First Stand Tournament/2026"
+   ],
+   "children": []
+  },
+  "LCK/2026/Road to MSI": {
+   "group": "LCK",
+   "start": "2026-06-06",
+   "end": "2026-06-14",
+   "prize": null,
+   "teams": "6",
+   "location": null,
+   "format": "* Top 6 teams from [[../Rounds 1-2|Rounds 1-2]] of 2026 season qualify.\n* Top two teams qualify for [[Mid-Season Invitational/2026|MSI]]\n* All matches are {{Abbr/Bo5}}.",
+   "qualifies": [
+    "Mid-Season Invitational/2026"
+   ],
+   "children": [
+    "Rounds 1-2"
+   ]
+  },
+  "LCK/2026/Rounds 1-2": {
+   "group": "LCK",
+   "start": null,
+   "end": "2026-05-31 23:59 +0900",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Double round-robin\n* All matches are {{Abbr/Bo3}}\n* {{bgcolortext|stayup|Top 6 teams}} qualify for [[../Road to MSI|Road to MSI]]",
+   "qualifies": [
+    "../Road to MSI",
+    "LCK/2026/Road to MSI"
+   ],
+   "children": [
+    "Road to MSI"
+   ]
+  },
+  "LCK/2026/Rounds 3-4": {
+   "group": "LCK",
+   "start": null,
+   "end": "2026-08-23 23:59 +0900",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* 10 teams are split into two groups based on Round 1-2 standings\n** Top 5 teams from round 1-2 are assigned to '''Legend Group'''\n** Bottom 5 teams from round 1-2 are assigned to '''Rise Group'''\n* Double round-robin\n* Records from [[../Rounds 1-2|Rounds 1-2]] are carried over.\n* All matches are {{Abbr/Bo3}}\n* {{bgcolortext|byeup|Top 2 teams}} from Legend Group advance to [[../Playoffs|Playoffs]] Round 2\n* {{bgcolortext|seedup|{{Ordinal|3-4}} teams}} from Legend Group advance to [[../Playoffs|Playoffs]] Round 1\n* {{bgcolortext|up|Bottom team}} from Legend Group and {{bgcolortext|up|top team}} from Rise Group advance to [[../Play-In|Play-In]] Round 1\n* {{bgcolortext|stayup|2nd-3rd teams}} from Rise Group advance to [[../Play-In|Play-In]] Round 2\n* {{bgcolortext|stay|Bottom two teams}} from Rise Group are eliminated",
+   "qualifies": [],
+   "children": [
+    "Play-In",
+    "Playoffs",
+    "Rounds 1-2"
+   ]
+  },
+  "LCK/2026/Cup/Group Battle": {
+   "group": "LCK",
+   "start": null,
+   "end": "2026-02-01 23:59 +0900",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* 10 teams are split into two groups\n* Each plays a single-round robin against teams from the opposite group\n** Teams from each group with the same seed face each other in Week 3 (the 'Super Week')\n* All matches in Weeks 1 and 2 are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}\n* Super Week matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n* Groups gain 1 point for every {{Abbr/Bo3}} win\n* Groups gain 2 points for every {{Abbr/Bo5}} win\n* The group with more points becomes the Winner Group and the other group becomes the Loser Group\n** {{bgcolortext|byeup|Top 2 teams from the Winner Group}} advance to Round 2 of playoffs\n** {{bgcolortext|seedup|Top team from the Loser Group}} advances to the Round 1 of playoffs\n** {{bgcolortext|stayup|Bottom 3 teams from the Winner Group}} and {{bgcolortext|stayup|middle 3 teams of the Loser Group}} advance to the Play-In Stage.\n*** Among the teams advancing to the Play-In Stage, {{bgcolortext|up|2 teams with most wins}} receive byes into Play-In Round 2\n** {{bgcolortext|stay|Bottom team of the Loser Group}} is eliminated.",
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Cup/Playoffs": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Double Elimination\n* All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n* Winner and runner-up qualify for [[First Stand Tournament/2026|FST 2026]]",
+   "qualifies": [
+    "First Stand Tournament/2026"
+   ],
+   "children": []
+  },
+  "LCK/2026/Playoffs": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Double Elimination\n* All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n* Top 3 teams qualify for [[World Championship/2026|Worlds]]\n** If [[Hanwha Life Esports]] (the MSI Champion) finishes in the top 3, then the {{Ordinal|4}} place team qualifies for Worlds as the {{Ordinal|4}} seed of LCK",
+   "qualifies": [
+    "World Championship/2026"
+   ],
+   "children": []
+  },
+  "LCK/2026/Cup/Play-In": {
+   "group": "LCK",
+   "start": null,
+   "end": "|team1=dk",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Double Elimination",
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Season Opening": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": "5",
+   "location": "Seoul",
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Play-In": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Double Elimination\n* Top two teams advance to [[../Playoffs|Playoffs]] Round 1\n* All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}",
+   "qualifies": [],
+   "children": [
+    "Playoffs"
+   ]
+  },
+  "LCK/2026/Player Stats": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Cup/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Cup/Player Stats": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Play-In/Player Stats": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Playoffs/Player Stats": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Rounds 3-4/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Play-In/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Rounds 1-2/Player Stats": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Playoffs/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Rounds 3-4/Player Stats": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Rounds 1-2/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Cup/Player Stats/Playoffs": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Cup/Player Stats/Play-In": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Cup/Statistics/Playoffs": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Cup/Player Stats/Group Battle": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Cup/Statistics/Group Battle": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Cup/Statistics/Play-In": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Road to MSI/Player Stats": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Road to MSI/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK/2026/Season Opening/Statistics": {
+   "group": "LCK",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Versus": {
+   "group": "LEC",
+   "start": "2026-01-17",
+   "end": "2026-03-01",
+   "prize": "<!--80,000-->",
+   "teams": "12",
+   "location": "Berlin",
+   "format": "* '''Regular Season''' - ''Janurary 17th - February 8th, 2026''\n** Single Round Robin\n** Each team plays 11 matches\n** All matches are {{Abbr/Bo1}}\n** <span class=\"bg-up\">Top 8 teams</span> advance to the Playoffs\n* '''Playoffs''' - ''February 16th - March 1st, 2026''\n** Top 8 teams from Regular Season\n** Double Elimination Bracket\n** Round 1 and Round 2 matches are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}\n** All other matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n** Winner qualifies for [[First Stand Tournament/2026|First Stand]]",
+   "qualifies": [
+    "First Stand Tournament/2026"
+   ],
+   "children": [
+    "Regular_Season"
+   ]
+  },
+  "LEC/2026/Spring": {
+   "group": "LEC",
+   "start": "2026-03-28",
+   "end": "2026-06-07",
+   "prize": "<!--80,000-->",
+   "teams": "10",
+   "location": "Berlin",
+   "format": "* '''Regular Season''' - ''March 28th - May 10th, 2026''\n** Single Round Robin\n** Each team plays 9 matches\n** All matches are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}\n** Top 6 teams advance to the Playoffs\n*** {{bgcolortext|seedup|Top 4 teams}} get seeded into the Upper Bracket\n*** {{bgcolortext|up|{{Ordinal|5-6}} teams}} get seeded into the Lower Bracket\n** Tiebreakers:\n**# Head-to-head Wins\n**# Head-to-head Game Win Percentage\n**# Strength of Victory score\n**# [[LEC/2026/Versus|LEC Versus Standings]]\n* '''Playoffs''' - ''May 23th - June 07th, 2026''\n** Top 6 teams from Regular Season\n** Double Elimination Bracket\n** All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n** Winner and Runner-up qualify for [[Mid-Season Invitational/2026|MSI]]\n** Winner also qualify for [[Esports World Cup/2026|EWC]]",
+   "qualifies": [
+    "Esports World Cup/2026",
+    "Mid-Season Invitational/2026"
+   ],
+   "children": [
+    "Regular_Season"
+   ]
+  },
+  "LEC/2026/Summer": {
+   "group": "LEC",
+   "start": "2026-07-24",
+   "end": "2026-09-20",
+   "prize": "<!--80,000-->",
+   "teams": "10",
+   "location": "Berlin",
+   "format": "* '''Regular Season''' - ''July 24th - August 30th, 2026''\n** Single Round Robin\n** Each team plays 9 matches\n** All matches are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}\n** Top 6 teams advance to the Playoffs\n*** {{bgcolortext|seedup|Top 4 teams}} get seeded into the Upper Bracket\n*** {{bgcolortext|up|{{Ordinal|5-6}} teams}} get seeded into the Lower Bracket\n** Tiebreakers:\n**# Head-to-head Wins\n**# Head-to-head Game Win Percentage\n**# Strength of Victory score\n**# [[LEC/2026/Spring|LEC Spring Standings]]\n* '''Playoffs''' - ''September 5th - 20th, 2026''\n** Top 6 teams from Regular Season\n** Double Elimination Bracket\n** All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n** Top 3 teams qualify for [[World Championship/2026|World Championship]]",
+   "qualifies": [
+    "World Championship/2026"
+   ],
+   "children": [
+    "Regular_Season"
+   ]
+  },
+  "LEC/2026/Versus/Regular Season": {
+   "group": "LEC",
+   "start": null,
+   "end": "}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Summer/Regular Season": {
+   "group": "LEC",
+   "start": null,
+   "end": "2026-08-30 23:00 {{Abbr/CEST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Regular Season''' - ''July 24th - August 30th, 2026''\n** Single Round Robin\n** Each team plays 9 matches\n** All matches are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}\n** Top 6 teams advance to the Playoffs\n*** {{bgcolortext|seedup|Top 4 teams}} get seeded into the Upper Bracket\n*** {{bgcolortext|up|{{Ordinal|5-6}} teams}} get seeded into the Lower Bracket\n** Tiebreakers:\n**# Head-to-head Wins\n**# Head-to-head Game Win Percentage\n**# Strength of Victory score\n**# [[LEC/2026/Spring|LEC Spring Standings]]",
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Spring/Regular Season": {
+   "group": "LEC",
+   "start": null,
+   "end": "2026-05-10 - 21:00 {{Abbr/CEST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Regular Season'''\n** Single Round Robin\n** Each team plays 9 matches\n** All matches are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}\n** Top 6 teams advance to the Playoffs\n*** {{bgcolortext|seedup|Top 4 teams}} get seeded into the Upper Bracket\n*** {{bgcolortext|up|{{Ordinal|5-6}} teams}} get seeded into the Lower Bracket\n** Tiebreakers:\n**# Head-to-head Wins\n**# Head-to-head Game Win Percentage\n**# Strength of Victory score\n**# [[LEC/2026/Versus|LEC Versus Standings]]",
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Versus/Playoffs": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Spring/Playoffs": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Summer/Showmatch": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": "2",
+   "location": "Paris",
+   "format": "* Matche are {{Abbr/Bo1}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Summer/Playoffs": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Summer/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Summer/Player Stats": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Spring/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Versus/Player Stats": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Spring/Player Stats": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Versus/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Versus/Player Stats/Regular Season": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Versus/Statistics/Playoffs": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Versus/Statistics/Regular Season": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Summer/Regular Season/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Summer/Playoffs/Player Stats": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Spring/Regular Season/Player Stats": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Spring/Regular Season/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Spring/Playoffs/Player Stats": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Spring/Playoffs/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Summer/Playoffs/Statistics": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Versus/Player Stats/Playoffs": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LEC/2026/Summer/Regular Season/Player Stats": {
+   "group": "LEC",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Lock-In": {
+   "group": "LCS",
+   "start": "2026-01-24",
+   "end": "2026-03-01",
+   "prize": "|localcurrency=",
+   "teams": "8",
+   "location": "Los Angeles",
+   "format": "* '''Swiss Stage'''\n**Matches are {{Abbr/Bo3}}, except the last-chance tie-breaker is {{Abbr/Bo1}}\n***{{Bgcolortext|bg-byeup|The 3–0 team}} will choose their opponent from among {{Bgcolortext|bg-proceed|the two worst 2–1 teams}} for the upper bracket.\n***{{Bgcolortext|bg-seedup|The best 2–1 team}} will face the other team.\n***{{Bgcolortext|bg-down|The 0–3 team}} will be eliminated.\n***Among the 1–2 teams, {{Bgcolortext|bg-stayup|the one with the best game record}} will auto-advance as the 5th seed in the lower bracket.\n****{{Bgcolortext|bg-staydown|The remaining two teams}} will compete in a last-chance tie-breaker to claim the 6th seed.\n* '''Playoffs'''\n** Double Elimination, all matches are {{Abbr/Bo5}} \n** Top winner qualifies for [[First Stand Tournament/2026|2026 First Stand Tournament]]\n* All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules",
+   "qualifies": [
+    "First Stand Tournament/2026"
+   ],
+   "children": [
+    "Swiss Stage"
+   ]
+  },
+  "LCS/2026/Spring": {
+   "group": "LCS",
+   "start": "2026-04-04",
+   "end": "2026-06-14",
+   "prize": "|localcurrency=",
+   "teams": "8",
+   "location": "Los Angeles",
+   "format": "* '''Regular Season''' - ''April 4 - May 17''\n**Single Round Robin\n**All matches are {{Abbr/Bo3}}\n*** {{bgcolortext|byeup|Top 4 teams}} advance to the Upper Bracket Semifinals of the playoffs\n*** {{bgcolortext|stay|Next 2 teams}} advance to the Lower Bracket Quarterfinals of the playoffs\n* '''Playoffs''' - ''May 23 - July 24''\n** Double Elimination\n**All matches are {{Abbr/Bo5}}\n** Top two qualify for [[Mid-Season Invitational/2026|2026 Mid-Season Invitational]]\n* All matches are played under {{Abbr/Fearless Draft}} rules",
+   "qualifies": [
+    "Mid-Season Invitational/2026"
+   ],
+   "children": [
+    "Regular Season"
+   ]
+  },
+  "LCS/2026/Summer": {
+   "group": "LCS",
+   "start": "2026-07-25",
+   "end": "2026-10-04",
+   "prize": "|localcurrency=",
+   "teams": "8",
+   "location": null,
+   "format": "* '''Regular Season''' - ''July 25 - September 6''\n**Single Round Robin\n**All matches are {{Abbr/Bo3}}\n*** {{bgcolortext|seedup|Top 2 teams}} advance to the Upper Bracket Semifinals of the playoffs\n*** {{bgcolortext|up|Next 4 teams}} advance to the Upper Bracket Quarterfinals of the playoffs\n* '''Playoffs''' - ''September 12 - October 4''\n** Double Elimination\n**All matches are {{Abbr/Bo5}}\n**Regular Season winner selects which ''side'' of the bracket prior to the start of the Playoffs\n** Top three qualify for [[World Championship/2026|Worlds]]\n** Next two qualify for the [[DCGI/2026|Demacia Cup Global Invitational]]\n* All matches are played under {{Abbr/Fearless Draft}} rules",
+   "qualifies": [
+    "World Championship/2026"
+   ],
+   "children": [
+    "Regular Season"
+   ]
+  },
+  "LCS/2026/Summer/Regular Season": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Spring/Regular Season": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Spring/Playoffs": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* All matches are {{Abbr/Bo5}} \n* Top two qualify for [[Mid-Season Invitational/2026|2026 Mid-Season Invitational]]",
+   "qualifies": [
+    "Mid-Season Invitational/2026"
+   ],
+   "children": []
+  },
+  "LCS/2026/Lock-In/Swiss Stage": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Lock-In/Playoffs": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Summer/Playoffs": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Lock-In/Player Stats": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Lock-In/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Summer/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Spring/Player Stats": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Summer/Player Stats": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Spring/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Lock-In/Statistics/Swiss Stage": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Lock-In/Statistics/Playoffs": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Lock-In/Player Stats/Playoffs": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Lock-In/Player Stats/Swiss Stage": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Spring/Regular Season/Player Stats": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Spring/Playoffs/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Spring/Playoffs/Player Stats": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Summer/Regular Season/Player Stats": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Summer/Playoffs/Player Stats": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Spring/Regular Season/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Summer/Playoffs/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCS/2026/Summer/Regular Season/Statistics": {
+   "group": "LCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 2": {
+   "group": "LCP",
+   "start": "2026-04-04",
+   "end": "2026-06-07",
+   "prize": "80,000",
+   "teams": "8",
+   "location": "Taipei",
+   "format": "* '''Regular Season'''\n**Single Round Robin\n**Each team plays 7 matches\n**All matches are {{Abbr/Bo3}}\n**Top 6 teams advance to the playoffs\n* '''Playoffs'''\n** Hybrid-Double Elimination\n** All matches are {{Abbr/Bo5}}\n** Winners qualify for [[Mid-Season Invitational/2026|MSI]] and [[Esports World Cup/2026|EWC]]\n* All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules.",
+   "qualifies": [
+    "Mid-Season Invitational/2026"
+   ],
+   "children": [
+    "Regular_Season"
+   ]
+  },
+  "LCP/2026/Split 1": {
+   "group": "LCP",
+   "start": "2026-01-16",
+   "end": "2026-03-01",
+   "prize": "80,000",
+   "teams": "8",
+   "location": "Taipei",
+   "format": "* '''Regular Season'''\n**Single Round Robin\n**Each team plays 7 matches\n**All matches are {{Abbr/Bo3}}\n**Top 6 teams advance to the playoffs\n* '''Playoffs'''\n** Hybrid-Double Elimination\n** All matches are {{Abbr/Bo5}} \n** Champion qualifies for [[First Stand Tournament/2026|First Stand]]\n* All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules",
+   "qualifies": [
+    "First Stand Tournament/2026"
+   ],
+   "children": [
+    "Regular_Season"
+   ]
+  },
+  "LCP/2026/Split 3": {
+   "group": "LCP",
+   "start": "2026-07-24",
+   "end": "2026-08-30",
+   "prize": "80,000",
+   "teams": "8",
+   "location": "Taipei",
+   "format": "* '''Swiss Stage'''\n**Matches are {{Abbr/Bo3}}, except for qualification/elimination matches which are {{Abbr/Bo5}}\n**Teams can only be drawn against each other once, unless there's no other possible option left.\n** {{Bgcolortext|bg-proceed|Top four teams}} (those with 3 wins) qualify for Playoffs\n*** The 3-0 and 3-1 teams will play Seeding Matches to determine the top seed coming into the Playoffs\n** <span class=\"mw-customtoggle-Tiebreaker\" style=\"border-bottom:1px dotted;\">''Click here for Swiss's information in different circumstances''</span>\n<div class=\"toccolours mw-collapsible mw-collapsed\" id=\"mw-customcollapsible-Tiebreaker\" style=\"margin-top:10px;\">\n*'''If the 2-1 (drop from 2-0 bracket) team wins against the 1-2 (rise from 0-2 bracket) team:'''\n** The 2-1 team qualify for Seeding Matches. \n** The 1-2 team is eliminated.\n** The 2-2 bracket will continue with 2 remaining teams: \n*** {{Bgcolortext|bg-proceed|Winners}} qualify for Playoffs as 4th seed. \n*** {{Bgcolortext|bg-down|Losers}} are eliminated. \n** The order of Seeding Matches:\n*** Match between 3-1 teams: {{Bgcolortext|bg-down|Losers}} qualify for Playoffs as 3rd seed.\n*** Match between 1-3 teams: {{Bgcolortext|bg-proceed|Winners}} get 5 extra Championship Points.\n*** Match between 3-0 and 3-1 teams: {{Bgcolortext|bg-proceed|Winners}} qualify for Playoffs as 1st seed, {{Bgcolortext|bg-down|Losers}} qualify for Playoffs as 2nd seed.\n<hr>\n*'''If the 2-1 (drop from 2-0 bracket) team loses to the 1-2 (rise from 0-2 bracket) team:'''\n** The 2-2 bracket will continue with 4 remaining teams:\n*** {{Bgcolortext|bg-proceed|Winners}} qualify for Playoffs as 3rd / 4th seed.\n*** {{Bgcolortext|bg-down|Losers}} are eliminated. \n** The order of Seeding Matches:\n*** Match between 2-3 teams: {{Bgcolortext|bg-proceed|Winners}} get 5 extra Championship Points.\n*** Match between 3-0 and 3-1 teams: {{Bgcolortext|bg-proceed|Winners}} qualify for Playoffs as 1st seed, {{Bgcolortext|bg-down|Losers}} qualify for Playoffs as 2nd seed.\n</div>\n* '''Playoffs'''\n** All matches are {{Abbr/Bo5}} \n** Top two teams qualify for [[World Championship/2026|2026 World Championship]]. The third LCP representative will be decided via [[LCP/2026/Championship_Points|LCP 2026 Championship Points]].\n* All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules",
+   "qualifies": [
+    "World Championship/2026"
+   ],
+   "children": [
+    "Swiss Stage"
+   ]
+  },
+  "LCP/2026/Promotion": {
+   "group": "LCP",
+   "start": "2025-10-01",
+   "end": "2025-10-04",
+   "prize": null,
+   "teams": "7",
+   "location": "Taipei",
+   "format": "* ''Format can be changed based on the number of Guest teams participating.''\n* '''Relegation Rules'''\n**A maximum of 2 Guest teams will have to play in [[LCP/2026/Promotion|LCP 2026 Promotion]]:\n*** Any Guest teams qualify for [[World_Championship/2025|Worlds]] will be exempted from the Promotion.\n*** The lowest placed Guest team, regardless of their home region, will be selected to contest for the Free-for-All (FFA) Guest spot.\n*** After FFA, the second Guest team selected to participate in the Promotion for the Regional Merit spot will be based on the following priority:\n**** If the remaining Guest teams consist of more than one Guest team from the same home region (e.g. VCS with Secret Whales and Vikings Esports for the 2025 season), the lower placed Guest team from that home region will compete in the Promotion.\n**** If the remaining Guest teams are from different home regions, the second-lowest placed Guest team in LCP, regardless of home region, will enter the Promotion.\n**** Team(s) from the domestic league competing for the Regional Merit slot will not be contesting for the FFA slot.\n* '''Main Event''' - ''October 1<sup>th</sup> - 4<sup>th</sup>\n** <u>''LCP Guest teams will wait for their opponents at the Grand Final match of each paths.''</u>\n** Regional Merit: \n*** Single Match {{Abbr/Bo5}}, played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules.\n**** {{Bgcolortext|seedup|Winners}} will advance to LCP 2026, while {{Bgcolortext|down|losers}} return to their own domestic league.\n** Free-for-All: \n*** Single Elimination {{Abbr/Bo5}}, played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules.\n**** {{Bgcolortext|seedup|Winners}} will advance to LCP 2026, while {{Bgcolortext|down|the other teams}} return to their own domestic leagues.",
+   "qualifies": [
+    "World_Championship/2025"
+   ],
+   "children": []
+  },
+  "LCP/2026/Promotion/Wild Card Playoffs": {
+   "group": "LCP",
+   "start": "2025-08-28",
+   "end": "2025-08-31",
+   "prize": "10000",
+   "teams": "5",
+   "location": "|venue=",
+   "format": "* '''Group Stage'''\n** {{Abbr/Bo2}} Single Round Robin\n** Top 3 advances to Bracket Stage\n* '''Bracket Stage'''\n** All matches are {{Abbr/Bo5}}\n** 2nd and 3rd place played each other first\n** Winner plays 1st seed to determine the {{bgcolortext|up|Wild Card region champions}} will advance to [[LCP/2026/Promotion|Main Event]].\n** For the Bracket Stage, 1v1 will be used to determine Game 1 Side Selection.\n* All matches use {{Abbr/Fearless Draft}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Championship Points": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 3/Swiss Stage": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 1/Regular Season": {
+   "group": "LCP",
+   "start": null,
+   "end": "February 16, 2026 - 20:30 {{Abbr/CST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 2/Regular Season": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 2/Playoffs": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 1/Playoffs": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 3/Playoffs": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 3/Statistics": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 3/Player Stats": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 1/Statistics": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 2/Statistics": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 1/Player Stats": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 2/Player Stats": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 3/Statistics/Swiss Stage": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 1/Statistics/Regular Season": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 3/Player Stats/Swiss Stage": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 2/Statistics/Regular Season": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 1/Statistics/Playoffs": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Promotion/Statistics": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 3/Player Stats/Playoffs": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 3/Statistics/Playoffs": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 1/Player Stats/Regular Season": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 2/Player Stats/Playoffs": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 1/Player Stats/Playoffs": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 2/Statistics/Playoffs": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Split 2/Player Stats/Regular Season": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Promotion/Player Stats": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCP/2026/Promotion/Wild Card Playoffs/Statistics": {
+   "group": "LCP",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Cup": {
+   "group": "CBLOL",
+   "start": "2026-01-17",
+   "end": "2026-03-01",
+   "prize": "20000",
+   "teams": "8",
+   "location": "São Paulo",
+   "format": "*'''Regular Season'''\n** Single Round Robin {{Abbr/Bo1}}\n*** {{bgcolortext|seedup|''1st and 2nd place''}} advance to the Playoffs, and receive a BYE to the second round\n*** {{bgcolortext|up|''3rd and 4th place''}} advance to the playoffs, and start in round 1\n*** {{bgcolortext|stayup|''5th and 6th place''}} advance to the Play-In, and start in the upper bracket\n*** {{bgcolortext|stayup|''7th and 8th place''}} advance to the Play-In, and start in the lower bracket\n* '''Play-In'''\n** Double Elimination bracket\n** All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules\n** Upper Finals and Lower Semifinals are {{Abbr/Bo3}}\n** Lower Finals are {{Abbr/Bo5}}\n** Finals winners qualify for Playoffs\n*'''Playoffs'''\n** Double Elimination bracket\n** All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules\n** Upper Quarterfinals and Upper Semifinals are {{Abbr/Bo3}}\n** All other matches are {{Abbr/Bo5}}\n** Champions qualify for [[First Stand Tournament/2026|First Stand]]",
+   "qualifies": [
+    "First Stand Tournament/2026"
+   ],
+   "children": [
+    "Regular Season"
+   ]
+  },
+  "CBLOL/2026/Split 1": {
+   "group": "CBLOL",
+   "start": "2026-03-28",
+   "end": "2026-06-06",
+   "prize": "60000",
+   "teams": "8",
+   "location": "São Paulo",
+   "format": "*'''Regular Season'''\n** Single Round Robin\n** All matches are {{Abbr/Bo3}} and use {{Abbr/Fearless Draft}}\n*** {{bgcolortext|seedup|''1st and 2nd place''}} advance to the playoffs and receive a bye to the second round\n*** {{bgcolortext|up|''3rd to 6th place''}} advance to the playoffs and start in round 1\n*** {{bgcolortext|stay|''7th and 8th place''}} are eliminated\n*'''Playoffs'''\n** Double Elimination\n** All matches are {{Abbr/Bo5}} and use {{Abbr/Fearless Draft}}\n*** Champions qualify for the [[Mid-Season Invitational/2026|Mid-Season Invitational]]",
+   "qualifies": [],
+   "children": [
+    "Regular Season"
+   ]
+  },
+  "CBLOL/2026/Split 2": {
+   "group": "CBLOL",
+   "start": "2026-07-25",
+   "end": "2026-10-10",
+   "prize": "60000",
+   "teams": "8",
+   "location": "São Paulo",
+   "format": "*'''Regular Season'''\n** Single Round Robin {{Abbr/Bo3}}\n*** {{bgcolortext|seedup|''1st and 2nd place''}} advance to the Playoffs and receive a bye to the second round\n*** {{bgcolortext|up|''3rd till 6th place''}} advance to the Playoffs and start in round 1\n*** {{bgcolortext|stay|''7th and 8th place''}} are eliminated\n*'''Playoffs'''\n** Double Elimination {{Abbr/Bo5}}\n** Top two teams qualify for [[World Championship/2026|World Championship]]",
+   "qualifies": [
+    "World Championship/2026"
+   ],
+   "children": [
+    "Regular Season"
+   ]
+  },
+  "CBLOL/2026/Split 2/Regular Season": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Cup/Regular Season": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "*'''Regular Season'''\n** Single Round Robin\n** All matches are {{Abbr/Bo1}}\n*** {{bgcolortext|seedup|''1st and 2nd place''}} advance to the Playoffs, and receive a BYE to the second round.\n*** {{bgcolortext|up|''3rd and 4th place''}} advance to the playoffs, and start in round 1.\n*** {{bgcolortext|stayup|''5th and 6th place''}} advance to the Play-In, and start in the upper bracket.\n*** {{bgcolortext|stayup|''7th and 8th place''}} advance to the Play-In, and start in the lower bracket.",
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 1/Regular Season": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 1/Playoffs": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Cup/Playoffs": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 1/Player Stats": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 2/Playoffs": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Cup/Play-In": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Cup/Player Stats": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Cup/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 1/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 2/Player Stats": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 2/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Cup/Statistics/Regular Season": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Cup/Statistics/Play-In": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Cup/Statistics/Playoffs": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Cup/Player Stats/Play-In": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Cup/Player Stats/Playoffs": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Cup/Player Stats/Regular Season": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 2/Regular Season/Player Stats": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 1/Statistics/Regular Season": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 2/Playoffs/Player Stats": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 1/Statistics/Playoffs": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 2/Playoffs/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 2/Regular Season/Statistics": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 1/Player Stats/Regular Season": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "CBLOL/2026/Split 1/Player Stats/Playoffs": {
+   "group": "CBLOL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026": {
+   "group": "LCK CL",
+   "start": "2026-03-30",
+   "end": "2026-09-15",
+   "prize": "87,500,000",
+   "teams": "10",
+   "location": null,
+   "format": "* '''Rounds 1-2'''\n** Double round-robin\n** All matches are {{Abbr/Bo3}}\n* '''Rounds 3-4'''\n** 10 teams are split into two groups based on Round 1-2 standings\n*** Top 5 teams from round 1-2 are assigned to '''Challenge Group'''\n*** Bottom 5 teams from round 1-2 are assigned to '''Trial Group'''\n** Double round-robin\n** Records from Rounds 1-2 are carried over.\n** All matches are {{Abbr/Bo3}}\n** {{bgcolortext|seedup|Top 2 teams}} from Challenge Group advance to Playoffs Round 2\n** {{bgcolortext|up|{{Ordinal|3-4}} teams}} from Challenge Group advance to Playoffs Round 1\n** {{bgcolortext|stayup|Bottom team}} from Challenge Group and {{bgcolortext|stayup|top 3 teams}} from Trial Group advance to Play-In\n** {{bgcolortext|stay|Bottom two teams}} from Trial Group are eliminated\n* '''Play-In'''\n** Double Elimination\n** Top two teams advance to Playoffs Round 1\n** All matches are {{Abbr/Bo5}}\n* '''Playoffs'''\n** Double Elimination\n** All matches are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": [
+    "Play-In",
+    "Playoffs"
+   ]
+  },
+  "LCK CL/2026/Kickoff": {
+   "group": "LCK CL",
+   "start": "2026-01-12",
+   "end": "2026-03-03",
+   "prize": "10,000,000",
+   "teams": "10",
+   "location": "Seoul",
+   "format": "* '''Group Battle''' - ''January 12 - 29''\n** 10 teams are split into two groups\n** Each plays a single-round robin against teams from the opposite group\n*** Teams from each group with the same seed face each other in Week 3 (the 'Super Week')\n** All matches in Weeks 1 and 2 are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}\n** Super Week matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n** Teams gain 1 point for every {{Abbr/Bo3}} win\n** Teams gain 2 points for every {{Abbr/Bo5}} win\n** The group with more points becomes the Winner Group and the other group becomes the Loser Group\n*** {{bgcolortext|byeup|Top 2 teams from the Winner Group}} advance to Round 2 of playoffs\n*** {{bgcolortext|seedup|Top team from the Loser Group}} advances to the Round 1 of playoffs\n*** {{bgcolortext|stayup|Bottom 3 teams from the Winner Group}} and {{bgcolortext|stayup|middle 3 teams of the Loser Group}} advance to the Play-In Stage.\n**** Among the teams advancing to the Play-In Stage, {{bgcolortext|up|2 teams with most points}} receive byes into Play-In Round 2\n*** {{bgcolortext|stay|Bottom team of the Loser Group}} is eliminated.\n* '''Play-In''' - ''February 2 - 4''\n** Double Elimination\n* '''Playoffs''' - ''February 9 - March 3''\n** Double Elimination\n** All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Rounds 1-2": {
+   "group": "LCK CL",
+   "start": null,
+   "end": "2026-05-29 23:59 +0900",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Double round-robin\n* All matches are {{Abbr/Bo3}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Rounds 3-4": {
+   "group": "LCK CL",
+   "start": null,
+   "end": "2026-08-21 23:59 +0900",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* 10 teams are split into two groups based on Round 1-2 standings\n** Top 5 teams from round 1-2 are assigned to '''Challenge Group'''\n** Bottom 5 teams from round 1-2 are assigned to '''Trial Group'''\n* Double round-robin\n* Records from [[../Rounds 1-2|Rounds 1-2]] are carried over.\n* All matches are {{Abbr/Bo3}}\n* {{bgcolortext|seedup|Top 2 teams}} from Challenge Group advance to [[../Playoffs|Playoffs]] Round 2\n* {{bgcolortext|up|{{Ordinal|3-4}} teams}} from Challenge Group advance to [[../Playoffs|Playoffs]] Round 1\n* {{bgcolortext|stayup|Bottom team}} from Challenge Group and {{bgcolortext|stayup|top 3 teams}} from Trial Group advance to [[../Play-In|Play-In]]\n* {{bgcolortext|stay|Bottom two teams}} from Trial Group are eliminated",
+   "qualifies": [],
+   "children": [
+    "Play-In",
+    "Playoffs",
+    "Rounds 1-2"
+   ]
+  },
+  "LCK CL/2026/Kickoff/Group Battle": {
+   "group": "LCK CL",
+   "start": null,
+   "end": "2026-01-29 23:59 +0900",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* 10 teams are split into two groups\n* Each plays a single-round robin against teams from the opposite group\n** Teams from each group with the same seed face each other in Week 3 (the 'Super Week')\n* All matches in Weeks 1 and 2 are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}\n* Super Week matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n* Groups gain 1 point for every {{Abbr/Bo3}} win\n* Groups gain 2 points for every {{Abbr/Bo5}} win\n* The group with more points becomes the Winner Group and the other group becomes the Loser Group\n** {{bgcolortext|byeup|Top 2 teams from the Winner Group}} advance to Round 2 of playoffs\n** {{bgcolortext|seedup|Top team from the Loser Group}} advances to the Round 1 of playoffs\n** {{bgcolortext|stayup|Bottom 3 teams from the Winner Group}} and {{bgcolortext|stayup|middle 3 teams of the Loser Group}} advance to the Play-In Stage.\n*** Among the teams advancing to the Play-In Stage, {{bgcolortext|up|2 teams with most wins}} receive byes into Play-In Round 2\n** {{bgcolortext|stay|Bottom team of the Loser Group}} is eliminated.",
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Kickoff/Playoffs": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Double Elimination\n* All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Playoffs": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Double Elimination\n* All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}",
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Kickoff/Play-In": {
+   "group": "LCK CL",
+   "start": null,
+   "end": "|team1=T1 Esports Academy |round3bg1=up",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Double Elimination",
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Play-In": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Double Elimination\n* Top two teams advance to [[../Playoffs|Playoffs]] Round 1\n* All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}",
+   "qualifies": [],
+   "children": [
+    "Playoffs"
+   ]
+  },
+  "LCK CL/2026/Player Stats": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Statistics": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Kickoff/Player Stats": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Kickoff/Statistics": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Playoffs/Player Stats": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Rounds 1-2/Player Stats": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Play-In/Statistics": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Rounds 3-4/Player Stats": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Play-In/Player Stats": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Rounds 1-2/Statistics": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Playoffs/Statistics": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Kickoff/Play-In/Statistics": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Kickoff/Group Battle/Statistics": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Kickoff/Playoffs/Statistics": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LCK CL/2026/Rounds 3-4/Statistics": {
+   "group": "LCK CL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Invitational": {
+   "group": "LFL",
+   "start": "2026-01-21",
+   "end": "2026-03-06",
+   "prize": null,
+   "teams": "20",
+   "location": "|format=",
+   "format": "* '''Group Stage'''\n** 20 teams drawn in 5 groups of 4 teams\n** {{bgcolortext|up|''Top 2 teams''}} of each group are qualified to '''Super Group'''\n** GSL-style format\n** All matches are {{Abbr/Bo1}}\n* '''Super Group'''\n** 1st to 6th place will play the '''Playoffs'''\n*** {{bgcolortext|seedup|''1st and 2nd place''}} are seeded into Upper Bracket Final\n*** {{bgcolortext|up|''3rd to 6th place''}} are seeded into Lower Bracket Semifinal\n** All matches are {{Abbr/Bo1}} in a Single Round Robin.\n* '''Playoffs'''\n** Double Elimination\n** All matches are {{Abbr/Bo5}} using {{Abbr|Hard Fearless|A champion picked once cannot be played by either team for the rest of the series.}}",
+   "qualifies": [],
+   "children": [
+    "Group Stage",
+    "Super_Group"
+   ]
+  },
+  "LFL/2026/Spring": {
+   "group": "LFL",
+   "start": "2026-04-08",
+   "end": "2026-06-03",
+   "prize": null,
+   "teams": "10",
+   "location": "|format=",
+   "format": "* '''Group Stage''' - ''April 8th - May 1st, 2026''\n** Single Round Robin\n** Each team plays 9 matches\n** All matches are {{Abbr/Bo1}}\n** <span class=\"bg-up\">Top 8 teams</span> advance to the Playoffs\n* '''Playoffs'''\n** Top 8 teams from Regular Season\n** Double Elimination Bracket\n** Round 1 and Round 2 matches are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}\n** All other matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n** Top 2 teams qualify for [[EMEA Masters/2026/Spring|EMEA Masters Spring]]",
+   "qualifies": [
+    "EMEA Masters/2026/Spring"
+   ],
+   "children": [
+    "Group Stage"
+   ]
+  },
+  "LFL/2026/Summer": {
+   "group": "LFL",
+   "start": "2026-07-21",
+   "end": "2026-09-02",
+   "prize": null,
+   "teams": "10",
+   "location": "|format=",
+   "format": "",
+   "qualifies": [],
+   "children": [
+    "Group Stage"
+   ]
+  },
+  "LFL/2026/Promotion Tournament": {
+   "group": "LFL",
+   "start": "2025-09-16",
+   "end": "2025-09-18",
+   "prize": "|localcurrency=",
+   "teams": "3",
+   "location": null,
+   "format": "* Three teams:\n** Last place from the [[LFL/2025/Championship_Points|LFL 2025 Season]]\n** Playoffs' winner of the [[LFL/Division_2/2025/Summer|LFL Division 2 Summer 2025]]\n** Highest ranked team from the [[LFL/Division_2/2025/Championship_Points|LFL Division 2 2025 Season]]\n* Winner qualifies for the [[LFL/2026/Invitational|LFL 2026 Season]]",
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Championship Points": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Summer/Group Stage": {
+   "group": "LFL",
+   "start": null,
+   "end": "2026-08-06 23:00 {{Abbr/CEST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Invitational/Super Group": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Spring/Group Stage": {
+   "group": "LFL",
+   "start": null,
+   "end": "2026-05-01 23:00 {{Abbr/CEST}}",
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Spring/Playoffs": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Invitational/Group Stage": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Summer/Playoffs": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Invitational/Playoffs": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Invitational/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Invitational/Player Stats": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Summer/Player Stats": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Summer/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Spring/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Spring/Player Stats": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Invitational/Group Stage/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Invitational/Super Group/Player Stats": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Invitational/Super Group/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Invitational/Group Stage/Player Stats": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Invitational/Playoffs/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Invitational/Playoffs/Player Stats": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Summer/Playoffs/Player Stats": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Summer/Playoffs/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Spring/Playoffs/Player Stats": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Spring/Group Stage/Player Stats": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Summer/Group Stage/Player Stats": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "LFL/2026/Summer/Group Stage/Statistics": {
+   "group": "LFL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring": {
+   "group": "NACL",
+   "start": "2026-03-27",
+   "end": "2026-06-05",
+   "prize": "40000",
+   "teams": "10",
+   "location": null,
+   "format": "* '''Regular Season:'''\n** Single Round Robin\n** All matches are {{Abbr/Bo3}}\n** {{Bgcolortext|up|Top 6 teams}} advance to [[North American Challengers League/2026/Spring/Playoffs|Playoffs]]\n** {{Bgcolortext|down|The {{Ordinal|9|sup=yes}} and {{Ordinal|10|sup=yes}}}} will face relegation in the [[North American Challengers League/2026/Summer/Promotion Tournament|Promotion Tournament]]\n* '''Playoffs'''\n** Double Elimination\n** Top 2 teams from regular season are seeded into the second round\n** First place in the regular season gets to pick their side of the bracket\n** Rounds 1-2 are {{Abbr/Bo3}},  the remaining games are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": [
+    "Playoffs"
+   ]
+  },
+  "North American Challengers League/2026/Summer": {
+   "group": "NACL",
+   "start": "2026-07-16",
+   "end": "2026-09-11",
+   "prize": "40000",
+   "teams": "10",
+   "location": null,
+   "format": "* '''Regular Season:'''\n** Teams are divided in two groups\n** Top two teams from [[North American Challengers League/2026/Spring|NACL 2026 Spring]] ([[Conviction]] and [[CCG Esports]]) draft teams into their group\n** All teams play against the teams in the opposite group\n** All matches are {{Abbr/Bo3}}\n** {{Bgcolortext|seedup|Top 3 teams}} advance to [[North American Challengers League/2026/Split_1/Playoffs|Playoffs Round 1]] \n** {{Bgcolortext|up|Bottom 2 teams}} advance to the [[North American Challengers League/2026/Split_1/Playoffs|Last-Chance Qualifier]]\n* '''Last-Chance Qualifier'''\n** 4th and 5th teams in each group qualify\n** Winner makes playoffs, loser is eliminated\n** Matches are {{Abbr/Bo5}}\n* '''Playoffs'''\n** 8 teams qualify\n** Double elimination",
+   "qualifies": [],
+   "children": [
+    "Regular_Season"
+   ]
+  },
+  "North American Challengers League/2026/Summer/Promotion Tournament": {
+   "group": "NACL",
+   "start": "2026-06-17",
+   "end": "2026-06-20",
+   "prize": null,
+   "teams": "6",
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Promotion Tournament/Open Qualifier": {
+   "group": "NACL",
+   "start": "2025-08-23",
+   "end": "2025-09-08",
+   "prize": null,
+   "teams": "48",
+   "location": null,
+   "format": "",
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Summer/Promotion Tournament/Open Qualifier": {
+   "group": "NACL",
+   "start": "2026-05-16",
+   "end": "2026-05-30",
+   "prize": null,
+   "teams": "41",
+   "location": null,
+   "format": "* Double Elimination\n* All matches are {{Abbr/Bo3}}\n* Full bracket is determined based on total participants",
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Promotion Tournament": {
+   "group": "NACL",
+   "start": "2025-09-15",
+   "end": "2025-09-18",
+   "prize": null,
+   "teams": "6",
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Pre-Split Qualifier": {
+   "group": "NACL",
+   "start": "2026-02-21",
+   "end": "2026-03-08",
+   "prize": null,
+   "teams": "56",
+   "location": null,
+   "format": "* Double Elimination Bracket\n* Winner qualifies for [[North American Challengers League/2026/Spring|NACL 2026 Spring]].",
+   "qualifies": [
+    "North American Challengers League/2026/Spring"
+   ],
+   "children": []
+  },
+  "North American Challengers League/2026/Summer/Regular Season": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* Teams are divided in two groups\n* Top two teams from [[North American Challengers League/2026/Spring|NACL 2026 Spring]] ([[Conviction]] and [[CCG Esports]]) draft teams into their group\n* All teams play against the teams in the opposite group\n* All matches are {{Abbr/Bo3}}\n* {{Bgcolortext|seedup|Top 3 teams}} advance to [[North American Challengers League/2026/Split_1/Playoffs|Playoffs Round 1]] \n* {{Bgcolortext|up|Bottom 2 teams}} advance to the [[North American Challengers League/2026/Split_1/Playoffs|Last-Chance Qualifier]]",
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Regular Season": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Regular Season:'''\n** Single Round Robin\n** All matches are {{Abbr/Bo3}}\n** {{Bgcolortext|up|Top 6 teams}} advance to [[North American Challengers League/2026/Split_1/Playoffs|Playoffs]]\n** {{Bgcolortext|down|The {{Ordinal|9|sup=yes}} and {{Ordinal|10|sup=yes}}}} will face relegation in the [[North American Challengers League/2026/Split_2/Promotion Tournament|Promotion Tournament]]",
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Playoffs": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Playoffs'''\n** Double Elimination\n** Top 2 teams from regular season are seeded into the second round\n** First place in the regular season gets to pick their side of the bracket\n** Rounds 1-2 are {{Abbr/Bo3}},  the remaining games are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Summer/Playoffs": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Last-Chance Qualifier'''\n** 4th and 5th teams in each group qualify\n** Winner makes playoffs, loser is eliminated\n** Matches are {{Abbr/Bo3}}\n* '''Playoffs'''\n** 8 teams qualify\n** Double elimination",
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Statistics": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Player Stats": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Summer/Player Stats": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Summer/Statistics": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Regular Season/Player Stats": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Playoffs/Player Stats": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Regular Season/Statistics": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Playoffs/Statistics": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Promotion Tournament/Statistics": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Summer/Regular Season/Statistics": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Summer/Playoffs/Player Stats": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Summer/Regular Season/Player Stats": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Summer/Playoffs/Statistics": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Summer/Promotion Tournament/Player Stats": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Spring/Promotion Tournament/Player Stats": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "North American Challengers League/2026/Summer/Promotion Tournament/Statistics": {
+   "group": "NACL",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2026/Spring": {
+   "group": "PCS",
+   "start": "2026-04-27",
+   "end": "2026-06-03",
+   "prize": "|liquipediatier=2",
+   "teams": "10",
+   "location": null,
+   "format": "* Double Elimination\n* All matches are {{Abbr/Bo3}} with {{Abbr/Fearless Draft}}, except the Lower Final and Grand Final are {{Abbr/Bo5}} with {{Abbr/Fearless Draft}}",
+   "qualifies": [],
+   "children": [
+    "Open Qualifier"
+   ]
+  },
+  "PCS/2026/Summer": {
+   "group": "PCS",
+   "start": "2026-08-03",
+   "end": "2026-09-06",
+   "prize": "|liquipediatier=2",
+   "teams": "8",
+   "location": null,
+   "format": "* Double Elimination\n** All matches are {{Abbr/Bo3}} with {{Abbr/Fearless Draft}}\n*** Except the Lower Semifinals, Lower Final and Grand Final are {{Abbr/Bo5}} with {{Abbr/Fearless Draft}}\n* Winners qualify for [[LCP/2027/Promotion|Promotion]]\n** If either {{Team|CTBC Flying Oyster Academy}} or {{Team|Ground Zero Academy}} win the tournament, they will not be eligible to participate in the Promotion. Instead, the team with the next best record will take their place.",
+   "qualifies": [
+    "LCP/2027/Promotion"
+   ],
+   "children": [
+    "Open Qualifier"
+   ]
+  },
+  "PCS/2026/Spring/Open Qualifier": {
+   "group": "PCS",
+   "start": "2026-04-13",
+   "end": "2026-04-21",
+   "prize": "|liquipediatier=2|liquipediatiertype=Qualifier",
+   "teams": "8",
+   "location": null,
+   "format": "* Swiss System\n* All matches are {{Abbr/Bo3}} with {{Abbr/Fearless Draft}}\n* Top 4 teams qualify for the Spring Knockout Stage\n* Next 2 teams qualify for the Spring Play-In Stage",
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2026/Summer/Open Qualifier": {
+   "group": "PCS",
+   "start": "2026-07-20",
+   "end": "2026-07-22",
+   "prize": "|liquipediatier=2|liquipediatiertype=Qualifier",
+   "teams": "4",
+   "location": null,
+   "format": "* Double Elimination\n* All matches are {{Abbr/Bo3}} with {{Abbr/Fearless Draft}}\n* All 4 teams qualify for the [[PCS/2026/Summer|Summer Season]] with their seeding from this tournament respectively",
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2026/Spring/Player Stats": {
+   "group": "PCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "PCS/2026/Spring/Statistics": {
+   "group": "PCS",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1": {
+   "group": "Circuito Desafiante",
+   "start": "2026-03-30",
+   "end": "2026-06-07",
+   "prize": null,
+   "teams": "10",
+   "location": null,
+   "format": "* '''Group Stage''' - ''March 30 - April 22''\n** Single Round Robin {{Abbr/Bo1}}\n** {{bgcolortext|seedup|Top 6 teams}} advance to Playoffs\n*** {{bgcolortext|byeup|Top 2 teams}} advance to Round 2 of Playoffs\n** {{bgcolortext|up|7th and 8th place}} advance to the Play-In, and start in the upper bracket\n** {{bgcolortext|stayup|9th and 10th place}} advance to the Play-In, and start in the lower bracket\n* '''Play-In''' - ''April 27 - 28''\n** Double Elimination bracket\n** All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules\n** Lower Finals are {{Abbr/Bo5}}\n** All other matches are {{Abbr/Bo3}}\n** Winner of the upper bracket qualifier for the Playoffs as seed 7\n** Winner of the lower bracket qualifier for the Playoffs as seed 8\n* '''Playoffs''' - ''May 4 - June 7''\n** Double Elimination bracket\n** All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules\n** Upper Quarterfinals and Semifinals are {{Abbr/Bo3}}\n** All other matches are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": [
+    "Group Stage"
+   ]
+  },
+  "Circuito Desafiante/2026/Split 2": {
+   "group": "Circuito Desafiante",
+   "start": "2026-07-20",
+   "end": "2026-09-14",
+   "prize": null,
+   "teams": "10",
+   "location": null,
+   "format": "* '''Group Stage''' - ''July 20<sup>th</sup> - August 12<sup>th</sup>''\n** Single Round Robin\n** All matches are {{Abbr/Bo3}}\n** {{bgcolortext|seedup|Top 6 teams}} advance directly to Playoffs\n** {{bgcolortext|up|7th and 8th place}} advance to the Play-In, and start in the upper bracket\n** {{bgcolortext|stayup|9th and 10th place}} advance to the Play-In, and start in the lower bracket\n* '''Playoffs''' - ''August 17<sup>th</sup> - September 14<sup>th</sup>''\n** Double Elimination bracket\n** All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules\n** Upper Quarterfinals and Semifinals are {{Abbr/Bo3}}\n** All other matches are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": [
+    "Regular Season"
+   ]
+  },
+  "Circuito Desafiante/2026/Split 1/Open Qualifier": {
+   "group": "Circuito Desafiante",
+   "start": "2026-02-20",
+   "end": "2026-03-01",
+   "prize": null,
+   "teams": "31",
+   "location": null,
+   "format": "* Double Elimination bracket\n** Maximum of 64 teams\n** All matches are played under {{Abbr|Fearless Draft}} rules\n** Lower Final and Grand Final are {{Abbr/Bo5}}\n** All other matches are {{Abbr/Bo3}}",
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 2/Regular Season": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Group Stage''' - ''July 20<sup>th</sup> - August 12<sup>th</sup>''\n** Single Round Robin\n** All matches are {{Abbr/Bo3}}\n** {{bgcolortext|seedup|Top 6 teams}} advance directly to Playoffs\n** {{bgcolortext|up|7th and 8th place}} advance to the Play-In, and start in the upper bracket\n** {{bgcolortext|stayup|9th and 10th place}} advance to the Play-In, and start in the lower bracket",
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Group Stage": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Group Stage''' - ''March 30 - April 22''\n** Single Round Robin {{Abbr/Bo1}}\n** {{bgcolortext|seedup|Top 6 teams}} advance to Playoffs\n*** {{bgcolortext|byeup|Top 2 teams}} advance to Round 2 of Playoffs\n** {{bgcolortext|up|7th and 8th place}} advance to the Play-In, and start in the upper bracket\n** {{bgcolortext|stayup|9th and 10th place}} advance to the Play-In, and start in the lower bracket",
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Playoffs": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Playoffs''' - ''May 4 - June 7''\n** Double Elimination bracket\n** All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules\n** Upper Quarterfinals and Semifinals are {{Abbr/Bo3}}\n** All other matches are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Promotion Tournament/Open Qualifier": {
+   "group": "Circuito Desafiante",
+   "start": "2025-08-21",
+   "end": "2025-09-05",
+   "prize": null,
+   "teams": "23",
+   "location": null,
+   "format": "",
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 2/Playoffs": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Playoffs''' - ''August 17<sup>th</sup> - September 14<sup>th</sup>''\n** Double Elimination bracket\n** All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules\n** Upper Quarterfinals and Semifinals are {{Abbr/Bo3}}\n** All other matches are {{Abbr/Bo5}}",
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Promotion Tournament": {
+   "group": "Circuito Desafiante",
+   "start": "2025-09-15",
+   "end": "2025-09-19",
+   "prize": null,
+   "teams": "4",
+   "location": null,
+   "format": "* All matches are {{Abbr/Bo3}}\n* 1 Team qualify for [[Circuito Desafiante/2026/Split 1|Circuito Desafiante 2026 Split 1]].",
+   "qualifies": [
+    "Circuito Desafiante/2026/Split 1"
+   ],
+   "children": [
+    "Open Qualifier"
+   ]
+  },
+  "Circuito Desafiante/2026/Split 2/Promotion Tournament/Open Qualifier": {
+   "group": "Circuito Desafiante",
+   "start": "2026-05-08",
+   "end": "2026-05-24",
+   "prize": null,
+   "teams": "33",
+   "location": null,
+   "format": "* Double Elimination bracket\n** Maximum of 64 teams\n** All matches are played under {{Abbr|Fearless Draft}} rules\n** Lower Final and Grand Final are {{Abbr/Bo5}}\n** All other matches are {{Abbr/Bo3}}\n\n<!--==Broadcast==\n===Talent===\n\n===Streams===",
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 2/Promotion Tournament": {
+   "group": "Circuito Desafiante",
+   "start": "2026-06-02",
+   "end": "2026-06-09",
+   "prize": null,
+   "teams": "4",
+   "location": null,
+   "format": "* All matches are {{Abbr/Bo3}}\n* 1 Team qualify for [[Circuito Desafiante/2026/Split 2|Circuito Desafiante 2026 Split 2]].",
+   "qualifies": [
+    "Circuito Desafiante/2026/Split 2"
+   ],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Play-In": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Play-In''' - ''April 27 - 28''\n** Double Elimination bracket\n** All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules\n** Lower Finals are {{Abbr/Bo5}}\n** All other matches are {{Abbr/Bo3}}\n** Winner of the upper bracket qualifier for the Playoffs as seed 7\n** Winner of the lower bracket qualifier for the Playoffs as seed 8",
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 2/Play-In": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": "* '''Play-In''' - ''August 11 - August 12''\n** Double Elimination bracket\n** All matches are played under {{Abbr|Fearless Draft|No champion can be played more than once during the entire series.}} rules\n** Lower Finals are {{Abbr/Bo5}}\n** All other matches are {{Abbr/Bo3}}\n** Winner of the upper bracket qualifier for the Playoffs as seed 7\n** Winner of the lower bracket qualifier for the Playoffs as seed 8",
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Statistics": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Player Stats": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 2/Statistics": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 2/Player Stats": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Play-In/Statistics": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Playoffs/Statistics": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Group Stage/Statistics": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Group Stage/Player Stats": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Playoffs/Player Stats": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 1/Play-In/Player Stats": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 2/Regular Season/Statistics": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 2/Playoffs/Player Stats": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 2/Playoffs/Statistics": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "Circuito Desafiante/2026/Split 2/Regular Season/Player Stats": {
+   "group": "Circuito Desafiante",
+   "start": null,
+   "end": null,
+   "prize": null,
+   "teams": null,
+   "location": null,
+   "format": null,
+   "qualifies": [],
+   "children": []
+  },
+  "First Stand Tournament/2026": {
+   "group": "international",
+   "start": "2026-03-16",
+   "end": "2026-03-22",
+   "prize": "1,000,000",
+   "teams": "8",
+   "location": "São Paulo",
+   "format": "*'''Group Stage''' - ''March 16<sup>th</sup> – 20<sup>th</sup>''\n** Two ''[[starcraft2:Dual Tournament Format|GSL-Style Groups]]''.\n** All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n** {{bgcolortext|up|Top 2 teams}} in each group advance to [[{{FULLPAGENAME}}/Knockout Stage|Knockout Stage]]\n** {{bgcolortext|down|Bottom 2 teams}} in each group are eliminated.\n* '''Knockout Stage''' - ''March 21<sup>st</sup> – 22<sup>nd</sup>''\n** Single elimination\n** All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}\n** Winning region earns a second bye into the bracket stage of [[Mid-Season Invitational/2026|MSI 2026]].\n===First Stand 2026 Draw Show===\n* '''Group Stage'''\n** Draw will be held at the end of the [[LPL/2026/Split 1|LPL Split 1 finals]].\n*** Host & Guests for draw: {{player|Candice|flag=cn}}, {{player|Tian|flag=cn}} and {{player|Crisp|flag=cn}}<ref>{{cite web|url=https://weibo.com/5756404150/QupMt8RVq|title=2026全球先锋赛小组赛抽签仪式嘉宾公布|trans_title=2026 First Stand Group Stage Draw Ceremony Guests Announced|author=[[LPL]]|language={{flag|cn}} Chinese}}</ref> ([https://youtu.be/BKe3Zj-UsWQ Click here for Draw Show VOD])\n** <span class=\"mw-customtoggle-Group-Draw\" style=\"border-bottom:1px dotted;\">''Click here for detailed information about Group Stage Draw show''</span>\n<div class=\"toccolours mw-collapsible mw-collapsed\" id=\"mw-customcollapsible-Group-Draw\" style=\"margin-top:10px;\">\n* Teams are splited into 3 seed pools to ensure quality groups. The seed pools are determined based on performance at regional leagues in 2026 Split 1.\n** 8 teams are splited into 3 pools:\n*** '''Pool 1''' will consist of LCK1 (''GEN''), LPL1 (''BLG'')\n*** '''Pool 2''' will consist of LCP1 (''TSW''), LEC1 (''G2''), LCS1 (''LYON''), and CBLOL1 (''LOUD'').\n*** '''Pool 3''' will consist of LCK2 (''BFX''), LPL2 (''JDG'')\n* Pool 1 teams will face Pool 3 teams, while Pool 2 teams will face Pool 2 teams in the first round.\n* Each region can only have one team in each groups.\n</div>",
+   "qualifies": [],
+   "children": []
+  },
+  "Mid-Season Invitational/2026": {
+   "group": "international",
+   "start": "2026-06-28",
+   "end": "2026-07-12",
+   "prize": "2,000,000",
+   "teams": "11",
+   "location": "Daejeon",
+   "format": "* '''Qualification'''\n** The top two teams from each region except CBLOL (10 total) plus the top team from CBLOL participate in MSI. \n** The 1st seed of each region and 2nd seed of [[LPL/2026/Split 2|LPL]] (the winning region of [[First Stand Tournament/2026|FST 2026]]) will get a bye into the Bracket Stage, while the other 4 teams will start from Play-In.\n\n* '''Play-In''' - ''June 28 – July 1''\n** 4 teams play in a Double Elimination bracket\n** Teams are seeded based on the results from [[First Stand Tournament/2026|FST 2026]]\n** Winner advances to the Bracket Stage\n** All matches are {{Abbr/Bo5}} with {{Abbr/Fearless Draft}}\n\n* '''Bracket Stage''' - ''July 3rd - 12th''\n** 8 teams play in a double elimination bracket\n** All matches are {{Abbr/Bo5}} with {{Abbr/Fearless Draft}}\n** The winner of MSI qualifies for [[World Championship/2026|Worlds]] if they reach their regional playoffs in Split 3 and the 2nd place region gets a 4th seed for its domestic league at Worlds.\n\n* '''Patch Information'''\n** All matches are played in [[Patch 26.13]]\n\n===MSI 2026 Draw Show===\n* '''Bracket Stage'''\n** <span class=\"mw-customtoggle-Swiss-Draw\" style=\"border-bottom:1px dotted;\">''Click here for detailed information about Bracket Stage Draw show''</span>\n<div class=\"toccolours mw-collapsible mw-collapsed\" id=\"mw-customcollapsible-Swiss-Draw\" style=\"margin-top:10px;\">\n* Teams are splited into 4 seed pools to ensure quality groups. The seed pools are determined based on performance at [[First Stand Tournament/2026|FST 2026]].\n** 8 teams are splited into 4 pools\n*** '''Pool 1''' will consist of LPL1 (''BLG''), LEC1 (''G2'')\n*** '''Pool 2''' will consist of LCK1 (''HLE''), and LCS1 (''LYON'').\n*** '''Pool 3''' will consist of LCP1 (''TSW''), and CBLOL1 (''FUR'').\n*** '''Pool 4''' will consist of LPL2 (''TES'') and Play-Ins Winner (''T1'').\n* Pool 1 teams will face Pool 4 teams, while Pool 2 teams will face Pool 3 teams in the first round.\n* Each region can only have one team in each half of the upper bracket.\n** As a result, ''BLG'' is guaranteed to play the Play-Ins winner, and ''G2'' is guaranteed to play ''TES''\n</div>",
+   "qualifies": [
+    "World Championship/2026"
+   ],
+   "children": []
+  },
+  "World Championship/2026": {
+   "group": "international",
+   "start": "2026-10-15",
+   "end": "2026-11-14",
+   "prize": "5,000,000",
+   "teams": "19",
+   "location": null,
+   "format": "* '''Play-In''' - ''October 15th - 18th''\n** Four teams play in a Double Elimination bracket.\n** Winner qualifies into Swiss Stage.\n** All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}.\n** {{Abbr/Right of First Selection}} for Game 1:\n**# Upper and Lower Bracket matches: Will be determined by Draw Order.\n**# Qualifying Match: Is replaced by {{Abbr/Right of Dual Selection}}; the winner of Upper Bracket Final will earn this.\n* '''Swiss Stage''' - ''October 23rd - 26th, 28th - 31st''\n** Sixteen teams play in a 5 round Swiss format. \n** Teams that reach {{Bgcolortext|up|3 wins}} advance to Knockout Stage.\n** Teams that reach {{Bgcolortext|down|3 losses}} are eliminated.\n** Elimination and advancement matches are {{Abbr/Bo3}} using {{Abbr/Fearless Draft}}; all other matches are {{Abbr/Bo1}}.\n** {{Abbr/Right of First Selection}} for Game 1:\n**# Will be granted to the team with a higher regional seed.\n**# If both teams have the same regional seed, the Right will be determined by Draw Order.\n* '''Knockout Stage''' - ''November 3rd - 8th, November 14th''\n** Eight teams play in a Single Elimination bracket.\n** All matches are {{Abbr/Bo5}} using {{Abbr/Fearless Draft}}.\n** {{Abbr/Right of First Selection}} for Game 1:\n*** Quaterfinals:\n***# Will be granted to the team with the better match record from the Swiss Stage.\n***# If both teams have the same match record, the Right will be determined by Draw Order.\n*** Semifinals & Finals: Will be determined by coinflip.\n* '''Patch Information''' \n** The tournament will be played on '''[[Patch 26.20]]'''.\n<!--\n===Worlds 2026 Draw Shows===\n* Play-In Draw Show will be held...?\n* Swiss Stage Draw Shows will be held after the completion of the Play-In and each Round of play.\n** ''Click links below to watch the Swiss Stage Draw Show videos:''\n*** [https://youtu.be/??? Round 1] (Guest for the Draw: {{Player|TBA|flag=}})\n*** [https://youtu.be/??? Round 2] (Guest for the Draw: {{Player|TBA|flag=}})\n*** [https://youtu.be/??? Round 3] (Guest for the Draw: {{Player|TBA|flag=}})\n*** [https://youtu.be/??? Round 4] (Guest for the Draw: {{Player|TBA|flag=}})\n*** [https://youtu.be/??? Round 5] (Guest for the Draw: {{Player|TBA|flag=}})\n** <span class=\"mw-customtoggle-Swiss-Draw\" style=\"border-bottom:1px dotted;\">''Click here for detailed information about Swiss Stage Draw Shows''</span>\n<div class=\"toccolours mw-collapsible mw-collapsed\" id=\"mw-customcollapsible-Swiss-Draw\" style=\"margin-top:10px;\">\n* For only Round 1 Draw, the participants are split into 4 seed pools to ensure quality matchups.\n** 16 teams are split into 4 pools:\n*** '''Pool 1''' will consist of LCK1 (GEN), LPL1 (AL), LCS1 (''TBD'') and LEC1 (G2).\n*** '''Pool 2''' will consist of LCP1 (TSW), CBLOL1 (''TBD''), LCK2 (HLE) and LPL2 (BLG).\n*** '''Pool 3''' will consist of LCS2 (''TBD''), LEC2 (MKOI), LCK3 (T1) and LPL3 (TES).\n*** '''Pool 4''' will consist of LCP2 (CFO), LCK4 (DK), LPL4 (IG) and Play-In Winner (''TBD'').\n** '''Pool 1''' teams will face '''Pool 4''' teams, while '''Pool 2''' teams will face '''Pool 3''' teams in Round 1.\n** No team will meet a team from their own region in Round 1.\n* After each Round except Round 5, a Draw is conducted to match teams with the same record for the next Round. \n* Each team will face an opponent only once throughout the Swiss Stage.\n</div>\n* Quarterfinal matchups will be decided by an on-stage Draw following the final match of the Swiss Stage. \n** ''Click [https://youtu.be/??? here] to watch the Knockout Stage Draw Show video'' (Guest for the Draw: {{Player|TBA|flag=}})\n** Each 3-0 team is placed on opposite sides of the bracket.\n** In the Draw, teams that advanced with a 3-0 record will be matched against teams that advanced with a 3-2 record.\n** The remaining teams will then be matched against one another.\n-->",
+   "qualifies": [],
+   "children": [
+    "Swiss Stage"
+   ]
+  }
+ }
+}

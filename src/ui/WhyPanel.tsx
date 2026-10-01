@@ -12,31 +12,23 @@ import { useGame } from './ctx'
  * with the ones you can actually act on named.
  */
 
-/**
- * `fix` may depend on our own value, because the same row can mean two very
- * different things. The IGL row read "首发里没有 IGL 罚分很重" whether or not
- * you had one — telling a manager whose caller was on the field to go and find
- * a caller. The engine writes exactly -4 there when the five contains nobody
- * with the armband, so the two cases are distinguishable.
- */
+/** `fix` may depend on our own value, because the same row can mean two different things. */
 const FACTORS: {
   key: keyof EdgeBreakdown
   label: string
   fix: string | ((mine: number) => string)
 }[] = [
   { key: 'base', label: '选手个人能力', fix: '阵容硬实力，靠转会和训练补' },
-  { key: 'map', label: '战术磨合度', fix: '在训练里安排「跑图」练这张图，或在 BP 时避开它' },
-  { key: 'chem', label: '团队默契', fix: '更衣室关系与协同/沟通属性，双排练和集训能改善' },
+  { key: 'map', label: '战术磨合度', fix: '在训练页安排「战术训练」，全队磨合度会慢慢涨上来' },
+  { key: 'chem', label: '团队默契', fix: '更衣室关系与协同属性，双排练和集训能改善' },
   // comp's advice is filled in from the lineup that actually played — see
   // compFix below. Reading it off the number was how the panel came to tell
   // XLG to find a missing role when all four were covered.
   { key: 'comp', label: '阵容位置搭配', fix: '' },
   {
     key: 'igl',
-    label: '指挥（IGL）',
-    fix: (v) => (v <= -3.9
-      ? '首发里没有指挥，攻防各扣 4 分。把队里的 IGL 放进首发'
-      : '让指挥属性更高的人来指挥，或用「教练复盘」练 IGL 的指挥'),
+    label: '团队运营',
+    fix: '五人按运营分担 40 / 25 / 15 / 10 / 10，队长拿最大的一份，只加到后期。把袖标交给运营最高的人，或用「教练复盘」练运营',
   },
   {
     key: 'shortHanded',
@@ -44,12 +36,12 @@ const FACTORS: {
     fix: '首发不满五人，每缺一人都是巨大劣势。先把阵容补到五人',
   },
   { key: 'coach', label: '教练与战术素养', fix: '换个战术更好的主教练，或点满「战术」天赋' },
-  { key: 'utility', label: '道具运用', fix: '战术里的「道具」滑杆，以及选手的道具属性；双控场阵容从这一项拿得最多' },
-  { key: 'tacticsAtk', label: '战术设置（进攻端）', fix: '这张图的节奏与侵略性滑杆，双决斗阵容往右拉才吃得到' },
-  { key: 'tacticsDef', label: '战术设置（防守端）', fix: '节奏与侵略性调高会削弱防守；双哨卫阵容往左拉才厚' },
-  { key: 'style', label: '阵容风格', fix: '双决斗偏攻、双哨卫偏守、双控场两头都吃。在预案里换一套五个英雄' },
-  { key: 'matchup', label: '针对对手', fix: '对双哨卫放慢节奏，对双决斗别把侵略性拉满，对双控场道具拉高。赛前预案里能看到对手阵容' },
-  { key: 'familiarity', label: '阵容熟练度', fix: '同一套五个英雄多打几场、跑图时练它；临时换阵容会从零开始' },
+  { key: 'utility', label: '视野运用', fix: '战术里的「视野」滑杆和全队的意识；团战阵容从这一项拿得最多' },
+  { key: 'tacticsAtk', label: '战术设置（前期）', fix: '节奏与侵略性往右拉，前期更强；前期阵容才吃得到' },
+  { key: 'tacticsDef', label: '战术设置（后期）', fix: '节奏与侵略性调高会削弱后期；运营阵容往左拉才稳' },
+  { key: 'style', label: '阵容风格', fix: '前期阵容前期强、运营阵容后期强、团战阵容两头都吃。在预案里换一套英雄' },
+  { key: 'matchup', label: '针对对手', fix: '对运营阵容别急着提节奏、视野拉高；对前期阵容别把侵略性拉满、中局应变拉高；对团战阵容视野和节奏都往上。赛前能看到对手阵容' },
+  { key: 'familiarity', label: '打法熟练度', fix: '同一种打法多打几局、战术训练时练它；临时换打法会从中立开始' },
   { key: 'prep', label: '对手针对准备', fix: '你的打法被研究透了。换一种打法（前期 / 团战 / 运营），或把滑杆拨动 10 以上' },
 ]
 

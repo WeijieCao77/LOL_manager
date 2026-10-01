@@ -221,17 +221,6 @@ function Detail({ entry, onBack }: { entry: Entry; onBack: () => void }) {
               {placements.length > 0 && <span className="trait">{placements.length} 项赛事记录</span>}
               {tenures.length > 0 && <span className="trait">{tenures.length} 段队伍经历</span>}
             </div>
-            {d?.vlr && (
-              <a
-                className="tiny"
-                style={{ display: 'inline-block', marginTop: 10 }}
-                href={`https://www.vlr.gg/player/${d.vlr}/`}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                vlr.gg 资料 ↗
-              </a>
-            )}
           </div>
         </div>
       </Panel>
@@ -245,11 +234,11 @@ function Detail({ entry, onBack }: { entry: Entry; onBack: () => void }) {
               <b className="mono tiny" style={{ width: 20, textAlign: 'right' }}>{player.attrs[k]}</b>
             </div>
           ))}
-          {player.vlr?.rating != null && (
+          {player.oe && (
             <p className="tiny faint" style={{ marginTop: 12, marginBottom: 0, lineHeight: 1.7 }}>
-              按 vlr.gg 数据换算：Rating {player.vlr.rating}
-              {player.vlr.acs != null && ` · ACS ${player.vlr.acs}`}
-              {player.vlr.rounds ? ` · ${player.vlr.rounds} 回合` : ''}。
+              按 Oracle&apos;s Elixir 逐场数据换算：{player.oe.games} 局 · KDA {player.oe.kda}
+              {' '}· 分均伤害 {player.oe.dpm}
+              {player.oe.gd15 != null && ` · 15 分钟经济差 ${player.oe.gd15 > 0 ? '+' : ''}${player.oe.gd15}`}。
             </p>
           )}
           {!!player.agentPool?.length && (
@@ -315,7 +304,7 @@ function Detail({ entry, onBack }: { entry: Entry; onBack: () => void }) {
           {!records ? (
             <p className="empty">读取中…</p>
           ) : placements.length === 0 ? (
-            <p className="empty">vlr.gg 没有参赛记录。</p>
+            <p className="empty">还没有收录他的赛事记录。</p>
           ) : (
             byYear.map(([year, list]) => (
               <div key={year} style={{ marginBottom: 12 }}>

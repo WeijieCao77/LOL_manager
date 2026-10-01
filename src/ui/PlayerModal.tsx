@@ -11,7 +11,7 @@ import { NO_ACTIONS_LEFT, spendAction } from '../engine/actions'
 import { logActivity } from '../engine/agenda'
 import { persuadeStay } from '../engine/season'
 import { useAction } from './useAction'
-import { appointIgl } from '../engine/world'
+import { WORLD_PLAYERS, appointIgl } from '../engine/world'
 import { callerOf } from '../engine/roster'
 import { ratingOf } from '../engine/match'
 import { expectedSalary, statLine } from '../engine/player'
@@ -240,14 +240,16 @@ export default function PlayerModal(
               </div>
             )
           })()}
-          {p.vlr?.rating != null && (
-            <div className="tiny faint center" style={{ lineHeight: 1.7 }}>
-              属性来源 · vlr.gg 2026 赛季<br />
-              Rating {p.vlr.rating.toFixed(2)}
-              {p.vlr.acs != null && <> · ACS {p.vlr.acs.toFixed(0)}</>}
-              {' '}· {p.vlr.rounds} 回合
-            </div>
-          )}
+          {(() => {
+            // the real numbers stay in the world file, not in the save
+            const oe = WORLD_PLAYERS.find((x) => x.id === p.id)?.oe
+            return oe && (
+              <div className="tiny faint center" style={{ lineHeight: 1.7 }}>
+                属性来源 · Oracle&apos;s Elixir 逐场数据<br />
+                {oe.games} 局 · KDA {oe.kda} · 分均伤害 {oe.dpm}
+              </div>
+            )
+          })()}
         </div>
       </div>
 

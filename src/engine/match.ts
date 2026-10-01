@@ -49,7 +49,7 @@ import type {
 /** how the five share 运营: the most of it counts for most (see buildLineup) */
 const MACRO_SHARE = [0.4, 0.25, 0.15, 0.1, 0.1]
 /** strength points, in the second half of the game only, per point of team 运营 above 62 */
-const MACRO_LATE = 0.38
+export const MACRO_LATE = 0.38
 
 const KILL_WEIGHT: Record<Role, number> = {
   下路: 1.2, 中单: 1.12, 上单: 0.98, 打野: 0.95, 辅助: 0.62,

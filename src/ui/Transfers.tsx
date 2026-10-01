@@ -552,8 +552,8 @@ export default function Transfers() {
                     <Face id={p.id} /><b>{p.ign}</b>
                     {p.isIgl && (
                       <span className="tag" style={{ marginLeft: 6 }}
-                        title={p.iglSource === 'inferred' ? '队长：比赛里他的运营占全队最大的一份' : '队长'}>
-                        {p.iglSource === 'inferred' ? '队长' : 'IGL'}
+                        title="队长：比赛里他的运营占全队最大的一份">
+                        队长
                       </span>
                     )}
                     {game.importLimit && isImport(p, me) && (
