@@ -139,6 +139,9 @@ export const importsIn = (team: Team, five: Player[]): number => {
  * same position first, else the best resident there is. With no resident to
  * bring in the five stays as it is (a club must field somebody).
  */
+/** what playing a man out of position costs, in rating points, when choosing whom to bench */
+const ROLE_HOLE = 15
+
 export function legalFive(team: Team, five: Player[], bench: Player[], rate: (p: Player) => number): Player[] {
   const out = five.slice()
   const natives = bench.filter((p) => !out.includes(p) && !isImport(p, team)).sort((a, b) => rate(b) - rate(a))
@@ -147,11 +150,17 @@ export function legalFive(team: Team, five: Player[], bench: Player[], rate: (p:
     const cur = importsIn(team, out)
     const imports = out.filter((p) => isImport(p, team) && importsIn(team, out.filter((x) => x !== p)) < cur).sort((a, b) => rate(a) - rate(b))
     if (!imports.length) break
-    const sameRole = imports.find((p) => natives.some((n) => n.role === p.role))
-    const drop = sameRole ?? imports[0]
-    const inn = natives.find((n) => n.role === drop.role) ?? natives[0]
-    out[out.indexOf(drop)] = inn
-    natives.splice(natives.indexOf(inn), 1)
+    // the swap that costs least: each import against his best replacement, a
+    // resident of his own position counted at full value, anyone else at a
+    // position's worth less (a hole in the five costs more than a few points)
+    let best: { drop: Player; inn: Player; loss: number } | null = null
+    for (const drop of imports) {
+      const inn = natives.find((n) => n.role === drop.role) ?? natives[0]
+      const loss = rate(drop) - rate(inn) + (inn.role === drop.role ? 0 : ROLE_HOLE)
+      if (!best || loss < best.loss) best = { drop, inn, loss }
+    }
+    out[out.indexOf(best!.drop)] = best!.inn
+    natives.splice(natives.indexOf(best!.inn), 1)
   }
   return out
 }
@@ -162,4 +171,14 @@ export function fiveBlock(team: Team, five: Player[]): string | null {
   return n > STARTER_IMPORT_MAX
     ? `首发最多 ${STARTER_IMPORT_MAX} 名外援（非本赛区居民），现在是 ${n} 名：${five.filter((p) => isImport(p, team)).map((p) => p.ign).join('、')}${americasPass(team, five.filter((p) => isImport(p, team))) ? '（其中一名美洲选手按本土算）' : ''}。`
     : null
+}
+
+/**
+ * Would an AI club be buying a man it can field? A third import can only sit
+ * behind the other two (the starters rule), so a club that already holds two
+ * does not shop for another — real clubs do not buy a star to bench him.
+ */
+export const aiCanField = (state: GameState, teamId: string, p: Player): boolean => {
+  const team = state.teams[teamId]
+  return !team || !isImport(p, team) || importCount(state, teamId) < STARTER_IMPORT_MAX
 }

@@ -3,6 +3,7 @@
  * mid-career money (league share), AI clubs benching their own signings,
  * and retirements that arrive with no warning and leave no trace.
  */
+import { aiCanField } from '../src/engine/imports'
 import { createNewGame } from '../src/engine/world'
 import { squadOf } from '../src/engine/roster'
 import { WORLD_TEAMS } from '../src/engine/teams'
@@ -91,8 +92,9 @@ const mk = (): GameState => {
   g.day = TRANSFER_WINDOWS[0][0]
   const ai = Object.values(g.teams).find((t) =>
     t.id !== g.myTeam && t.tier === 1 && t.starters.length === 5)!
+  // a signing the club can field: at most two non-residents start (imports.ts), so a third import is a bench signing
   const star = Object.values(g.players)
-    .filter((p) => p.teamId && p.teamId !== ai.id && p.teamId !== g.myTeam)
+    .filter((p) => p.teamId && p.teamId !== ai.id && p.teamId !== g.myTeam && aiCanField(g, ai.id, p))
     .sort((a, b) => b.overall - a.overall)[0]!
   const worst = Math.min(...ai.starters.map((id) => g.players[id]!.overall))
   if (star.overall <= worst) fail('测试前提不成立：转会目标应强于现有首发')

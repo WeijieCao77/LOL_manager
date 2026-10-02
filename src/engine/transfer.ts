@@ -4,7 +4,7 @@ import { contractLength, expectedSalary, marketValue, refreshValue } from './pla
 import { autoStarters, ensureCaller } from './world'
 import { squadOf, wageBill } from './roster'
 import { SQUAD_ROLE_CN, defaultContract } from './types'
-import { importBlock } from './imports'
+import { aiCanField, importBlock } from './imports'
 import { skillMod } from './manager'
 import { trustOf, trustOnDeparture, TRUST_START } from './trust'
 import { KEPT_GAIN, RENEWAL_GAIN, loyaltyOnJoin, loyaltyOnListed, shiftLoyalty } from './loyalty'
@@ -589,7 +589,7 @@ export function aiTransferTick(state: GameState, rng: Rng, notes?: string[]): vo
       const target = agents
         .filter((p) => !need || p.role === need.role || rng.chance(0.3))
         .filter((p) => expectedSalary(p, team.tier) < Math.max(40000, room * 0.25))
-        .filter((p) => !importBlock(state, team.id, p))
+        .filter((p) => !importBlock(state, team.id, p) && aiCanField(state, team.id, p))
         .sort((a, b) => b.overall - a.overall)[0]
       if (target) {
         const salary = Math.round(expectedSalary(target, team.tier) * rng.range(1.0, 1.15))
@@ -625,7 +625,7 @@ export function aiTransferTick(state: GameState, rng: Rng, notes?: string[]): vo
           // nobody pays a transfer fee for a man who has said this season is
           // his last — his announcement is public
           !p.retiring &&
-          !importBlock(state, team.id, p) &&
+          !importBlock(state, team.id, p) && aiCanField(state, team.id, p) &&
           (p.listed || p.morale < 45 || rng.chance(nemesis ? 0.4 : 0.05)),
       )
       // half credit for room to grow: a 84-rated 19-year-old with 92 potential
