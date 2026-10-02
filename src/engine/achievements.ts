@@ -26,7 +26,7 @@
  * only the last 200 lines.
  */
 import { CHAMPIONS, INTL_TITLES, MASTERS_1, MASTERS_2, climbed } from './endings'
-import { finalYearOf } from './eras'
+import { finalYearOf, seasonsOf } from './eras'
 import { REGIONAL_TITLE } from './leagueNames'
 import { isImport } from './imports'
 import { squadOf } from './roster'
@@ -144,7 +144,8 @@ export function factsOf(state: GameState): Facts {
     // 第一赛段 plus both Stages is every tier-1 trophy the region has to give
     regionalSweeps: [...regBy.values()].filter((got) => got.size >= 3).length,
     clubs: new Set((state.tenures ?? []).map((t) => t.teamId)).size || 1,
-    seasons: state.year - 2026 + 1,
+    // counted from the career's own first year (a 2016 career is in its third season in 2018)
+    seasons: seasonsOf(state),
   }
 }
 
@@ -153,7 +154,9 @@ const won = (f: Facts, pred: (t: string) => boolean) => f.honours.some((h) => pr
 
 /** Regions the account has ever managed in, from the clubs it has held. */
 export function regionsManaged(clubs: string[]): string[] {
-  return [...new Set(clubs.map((id) => HOME_CLUBS[id]?.region).filter((r): r is string => !!r))]
+  // a club of a career started in the past is recorded as `2016:T5@LEC` — its id is not the 2026 world's
+  const regionOf = (id: string) => (id.includes('@') ? id.split('@')[1] : HOME_CLUBS[id]?.region)
+  return [...new Set(clubs.map(regionOf).filter((r): r is string => !!r))]
 }
 
 export const ACHIEVEMENTS: Achievement[] = [
@@ -311,9 +314,11 @@ export const ACHIEVEMENTS: Achievement[] = [
     // players age into it over a decade.
     key: 'veteran', scope: 'run', group: '养成', title: '老而弥坚',
     brief: '让一名 32 岁以上的选手留在首发五人里',
+    // kept, not inherited: a club that opens with a 32-year-old in its five
+    // (several European regional sides do) hands nothing out on day one
     test: (s, f) => {
       const starters = new Set(s.teams[s.myTeam]?.starters ?? [])
-      return f.squad.some((p) => p.age >= 32 && starters.has(p.id))
+      return f.seasons >= 2 && f.squad.some((p) => p.age >= 32 && starters.has(p.id))
     },
   },
   {

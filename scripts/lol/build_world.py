@@ -70,6 +70,8 @@ WORLD_LEAGUES = {
         # 二级：没有升级，人会被一级队挖走。LDL 2026 年没有办（docs/调研-外援名额与居民规则.md 第五节）
         ('LCKC', 'LCK', 2, 'LCK CL'), ('NACL', 'LCS', 2, 'NACL'), ('LFL', 'LEC', 2, 'LFL'),
         ('PCS', 'LCP', 2, 'PCS'), ('CD', 'CBLOL', 2, 'Circuito Desafiante'),
+        # 欧洲的其他地区联赛（ERL），排在最后，已有的队和人编号不变
+        ('PRM', 'LEC', 2, 'Prime League'), ('LES', 'LEC', 2, 'LES'), ('NLC', 'LEC', 2, 'NLC'), ('TCL', 'LEC', 2, 'TCL'),
     ],
     # 历史入口。赛区键沿用今天的六条线（引擎里的 LEC / LCS / LCP 就是当年的 EU LCS / NA LCS / LMS、PCS），
     # 显示名用当年的叫法。2016 年还有升降级。
@@ -143,8 +145,11 @@ LINEAGE = {
     'NLC': ('LEC', -13), 'EM': ('LEC', -9), 'EUM': ('LEC', -9),
 }
 TIER2_DROP = {'LCKC': -13, 'NACL': -12, 'LFL': -10, 'PCS': -6, 'CD': -9,
+              # 其他 ERL：与 LINEAGE 里同一套落差
+              'PRM': -11, 'LES': -11, 'NLC': -13, 'TCL': -11,
               # 历史入口的次级联赛：同一套落差（LSPL ≈ LDL，CK ≈ LCK CL，EU/NA CS ≈ ERL / NACL）
               'LSPL': -11, 'CK': -13, 'EU CS': -11, 'NA CS': -12, 'LDL': -11, 'LCSA': -13, 'CBLOLA': -10}
+PLACEHOLDER_NAMES = {'TBD', 'TBA', 'N/A', 'NA', '?', ''}
 TIER2_MAX = 10         # 二级联赛最多收几支队：OE 的同一个联赛代码下常混着更低一级的队
 
 INTERNATIONAL = {'MSI', 'WLDs', 'FST', 'EWC'}
@@ -488,11 +493,54 @@ def experience(Y):
     return exp
 
 
+def stable_ids(world, prev):
+    """
+    Give every club and person the id the previous build gave them.
+
+    Ids are handed out in build order — clubs by league, then each club's men,
+    then the free agents — so a league added to WORLD_LEAGUES shifted every
+    free agent's number, and photos (dossier.json), crests and the 2026 saves'
+    by-id corrections would have landed on somebody else. A club is matched on
+    Oracle's Elixir's name (the organisation across renames), a person on
+    ign|position (the key history.json uses). Anyone new takes the next free
+    number after the previous build's last.
+    """
+    tkey = lambda t: t.get('oeName') or t['name']
+    old_t = {tkey(t): t['id'] for t in prev['teams']}
+    old_p = {p.get('hkey') or f"{p['ign']}|?": p['id'] for p in prev['players']}
+    nxt = lambda ids, c: max([int(i[1:]) for i in ids] + [0]) + 1
+    t_next, p_next = nxt(old_t.values(), 'T'), nxt(old_p.values(), 'P')
+    tmap, pmap, used_t, used_p = {}, {}, set(), set()
+    for t in world['teams']:
+        i = old_t.get(tkey(t))
+        if i is None or i in used_t:
+            i = f'T{t_next}'; t_next += 1
+        tmap[t['id']] = i; used_t.add(i)
+    for p in world['players']:
+        i = old_p.get(p.get('hkey') or f"{p['ign']}|?")
+        if i is None or i in used_p:
+            i = f'P{p_next}'; p_next += 1
+        pmap[p['id']] = i; used_p.add(i)
+    for t in world['teams']:
+        t['id'] = tmap[t['id']]
+        t['roster'] = [pmap[x] for x in t['roster']]
+    for p in world['players']:
+        p['id'] = pmap[p['id']]
+        if p.get('teamId'):
+            p['teamId'] = tmap[p['teamId']]
+    world['teams'].sort(key=lambda t: int(t['id'][1:]))
+    world['players'].sort(key=lambda p: int(p['id'][1:]))
+    moved = sum(1 for k, v in tmap.items() if k != v) + sum(1 for k, v in pmap.items() if k != v)
+    print(f'编号沿用上一版：{len(old_t)} 队 / {len(old_p)} 人对上，新增 {t_next - nxt(old_t.values(), "T")} 队 / '
+          f'{p_next - nxt(old_p.values(), "P")} 人；{moved} 个编号与按顺序发号不同', file=sys.stderr)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--year', type=int, default=2026)
     ap.add_argument('--history', action='store_true', help='历史入口：能力只用开局年之前的比赛评，不偷看未来')
     ap.add_argument('--out', default=None)
+    ap.add_argument('--fresh-ids', action='store_true', help='不沿用上一版的编号（照片、队标、存档都按编号存，慎用）')
     args = ap.parse_args()
     Y = args.year
     if Y not in WORLD_LEAGUES:
@@ -790,7 +838,8 @@ def main():
             # OE's own name for the club (it carries a club's modern name back through the years): the key
             # the historical entries follow a club by
             oeName=next((k for k, v in TEAM_NAMES.items() if v == tname), tname),
-            budget=int(round(wage * 1.3 + (rating - 60) * (60000 if tier == 1 else 8000), -3)),
+            # a weak regional side still opens able to pay half a season's wages, never in the red
+            budget=int(max(round(wage * 0.5, -3), round(wage * 1.3 + (rating - 60) * (60000 if tier == 1 else 8000), -3))),
             reputation=0,   # 按联赛内排名定，见下面 league_reputation
             roster=roster, coach=None, facilities=max(30, min(95, rating + rng.randrange(-6, 7) + (0 if tier == 1 else -12))),
         ))
@@ -820,8 +869,10 @@ def main():
                     best, overlap = row, n
             if not best or overlap < 3:
                 continue
-            heads = [x['name'] for x in best['staff'] if x['job'] == 'head']
-            others = [x['name'] for x in best['staff'] if x['job'] == 'assistant']
+            # a placeholder on the page ("TBD") is nobody: the club has no head coach on record
+            real = [x for x in best['staff'] if x['name'].strip().upper() not in PLACEHOLDER_NAMES]
+            heads = [x['name'] for x in real if x['job'] == 'head']
+            others = [x['name'] for x in real if x['job'] == 'assistant']
             if not heads and others:
                 heads, others = others[:1], others[1:]
             if not heads:
@@ -851,7 +902,7 @@ def main():
         seen_an = set()
         for club, row in sorted(lp.items()):
             for x in row['staff']:
-                if x['job'] != 'analyst' or x['name'] in seen_an or x['name'] in coach_names:
+                if x['job'] != 'analyst' or x['name'] in seen_an or x['name'] in coach_names or x['name'].strip().upper() in PLACEHOLDER_NAMES:
                     continue
                 seen_an.add(x['name'])
                 rng = random.Random(f'analyst:{x["name"]}')
@@ -944,6 +995,10 @@ def main():
         ),
         teams=teams_out, players=players_out,
     )
+    # ---- ids stay where they were: photos, crests and saves are filed under them
+    prev_path = os.path.join(REPO, 'data-build', f'world_{Y}.json')
+    if os.path.exists(prev_path) and not args.fresh_ids:
+        stable_ids(world, json.load(open(prev_path, encoding='utf-8')))
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     json.dump(world, open(out_path, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 

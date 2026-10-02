@@ -44,6 +44,25 @@
    "LFL/2026/Spring",
    "LFL/2026/Summer"
   ],
+  "Prime League": [
+   "Prime League/2026/Winter",
+   "Prime League/2026/Spring",
+   "Prime League/2026/Summer"
+  ],
+  "LES": [
+   "LES/2026/Winter",
+   "LES/2026/Spring"
+  ],
+  "NLC": [
+   "NLC/2026/Winter",
+   "NLC/2026/Spring",
+   "NLC/2026/Summer"
+  ],
+  "TCL": [
+   "TCL/2026/Winter",
+   "TCL/2026/Spring",
+   "TCL/2026/Summer"
+  ],
   "PCS": [
    "PCS/2026/Spring",
    "PCS/2026/Summer"
@@ -2268,6 +2287,860 @@
    "staff": [
     {
      "name": "Nisqy",
+     "job": "head"
+    }
+   ]
+  },
+  "BIG": {
+   "league": "Prime League",
+   "page": "Prime League/2026/Winter",
+   "players": [
+    "Irrelevant",
+    "Habubu",
+    "Reeker",
+    "Fun K3y",
+    "Kaiser"
+   ],
+   "staff": [
+    {
+     "name": "Don Arts",
+     "job": "assistant"
+    },
+    {
+     "name": "Pandar",
+     "job": "assistant"
+    }
+   ]
+  },
+  "E WIE EINFACH E-SPORTS": {
+   "league": "Prime League",
+   "page": "Prime League/2026/Winter",
+   "players": [
+    "Vizicsacsi",
+    "Afroboi",
+    "Relative",
+    "Noz2k",
+    "Wildenbruch"
+   ],
+   "staff": [
+    {
+     "name": "Kxng",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Eintracht Frankfurt": {
+   "league": "Prime League",
+   "page": "Prime League/2026/Winter",
+   "players": [
+    "Mietek",
+    "D4nKa",
+    "Sencux",
+    "Notiko",
+    "Farfetch"
+   ],
+   "staff": [
+    {
+     "name": "TBD",
+     "job": "head"
+    },
+    {
+     "name": "TBD",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Kaufland Hangry Knights": {
+   "league": "Prime League",
+   "page": "Prime League/2026/Winter",
+   "players": [
+    "Venour",
+    "Lurox",
+    "Abbedagge",
+    "Exofeng",
+    "Pyrka"
+   ],
+   "staff": [
+    {
+     "name": "Leggifant",
+     "job": "assistant"
+    }
+   ]
+  },
+  "ROSSMANN Centaurs": {
+   "league": "Prime League",
+   "page": "Prime League/2026/Winter",
+   "players": [
+    "CPM",
+    "Pasu",
+    "Fooneses",
+    "Devn",
+    "Smarty"
+   ],
+   "staff": [
+    {
+     "name": "TBD",
+     "job": "head"
+    },
+    {
+     "name": "TBD",
+     "job": "assistant"
+    }
+   ]
+  },
+  "TeamOrangeGaming": {
+   "league": "Prime League",
+   "page": "Prime League/2026/Winter",
+   "players": [
+    "Zorenous",
+    "Woldjo",
+    "Sajator",
+    "Ryuk",
+    "Lilipp"
+   ],
+   "staff": [
+    {
+     "name": "DeadShadow",
+     "job": "head"
+    },
+    {
+     "name": "Aqsept",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Unicorns of Love Sexy Edition": {
+   "league": "Prime League",
+   "page": "Prime League/2026/Winter",
+   "players": [
+    "Fornoreason",
+    "White",
+    "Kanin",
+    "DenVoksne",
+    "Twiizt"
+   ],
+   "staff": [
+    {
+     "name": "Sheepy",
+     "job": "assistant"
+    }
+   ]
+  },
+  "AOMA Esports Prime": {
+   "league": "Prime League",
+   "page": "Prime League/2026/Winter",
+   "players": [
+    "Smurfegutten",
+    "Dome",
+    "Artoria",
+    "Xay",
+    "Urban"
+   ],
+   "staff": [
+    {
+     "name": "PeaNuTz",
+     "job": "assistant"
+    },
+    {
+     "name": "dragoist",
+     "job": "assistant"
+    },
+    {
+     "name": "Danno",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Eintracht Spandau": {
+   "league": "Prime League",
+   "page": "Prime League/2026/Winter",
+   "players": [
+    "JNX",
+    "Xagog",
+    "PowerOfEvil",
+    "Keduii",
+    "seaz"
+   ],
+   "staff": [
+    {
+     "name": "x4NTY",
+     "job": "head"
+    }
+   ]
+  },
+  "G2 NORD": {
+   "league": "Prime League",
+   "page": "Prime League/2026/Winter",
+   "players": [
+    "Shelfmade",
+    "Markoon",
+    "Toasty",
+    "Rin",
+    "Tockimo"
+   ],
+   "staff": [
+    {
+     "name": "Nico",
+     "job": "head"
+    },
+    {
+     "name": "Seryy",
+     "job": "assistant"
+    }
+   ]
+  },
+  "VfB eSports": {
+   "league": "Prime League",
+   "page": "Prime League/2026/Spring",
+   "players": [
+    "Sven",
+    "Zwickl",
+    "Luke",
+    "Tazaku",
+    "Jakobobbi"
+   ],
+   "staff": [
+    {
+     "name": "StormFury",
+     "job": "head"
+    }
+   ]
+  },
+  "VfB Esports": {
+   "league": "Prime League",
+   "page": "Prime League/2026/Summer",
+   "players": [
+    "Sven",
+    "Zwickl",
+    "Luke",
+    "Tazaku",
+    "Jakobobbi"
+   ],
+   "staff": [
+    {
+     "name": "StormFury",
+     "job": "head"
+    },
+    {
+     "name": "GreenThor",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Barça eSports": {
+   "league": "LES",
+   "page": "LES/2026/Winter",
+   "players": [
+    "Selenex",
+    "Koldo",
+    "Macaquiño",
+    "Legolas",
+    "Oscure"
+   ],
+   "staff": [
+    {
+     "name": "Jandro",
+     "job": "head"
+    },
+    {
+     "name": "AoD",
+     "job": "assistant"
+    }
+   ]
+  },
+  "GIANTX Pride": {
+   "league": "LES",
+   "page": "LES/2026/Winter",
+   "players": [
+    "ManoloGap",
+    "Th3Antonio",
+    "Miniduke",
+    "Flakked",
+    "Attila"
+   ],
+   "staff": [
+    {
+     "name": "F1RE",
+     "job": "head"
+    }
+   ]
+  },
+  "KOI Fénix": {
+   "league": "LES",
+   "page": "LES/2026/Winter",
+   "players": [
+    "Slayer",
+    "Time",
+    "Fresskowy",
+    "13",
+    "Myrtus"
+   ],
+   "staff": [
+    {
+     "name": "Disgrace",
+     "job": "head"
+    }
+   ]
+  },
+  "Los Heretics": {
+   "league": "LES",
+   "page": "LES/2026/Winter",
+   "players": [
+    "Mihile",
+    "Daglas",
+    "Mercy",
+    "Lure",
+    "Batuuu"
+   ],
+   "staff": [
+    {
+     "name": "Kamikaze",
+     "job": "head"
+    }
+   ]
+  },
+  "UCAM Esports Club": {
+   "league": "LES",
+   "page": "LES/2026/Winter",
+   "players": [
+    "Kozi",
+    "bluerzor",
+    "ESCIK",
+    "Andariel",
+    "iLevi",
+    "Diogoambf"
+   ],
+   "staff": [
+    {
+     "name": "Crusher",
+     "job": "head"
+    },
+    {
+     "name": "Gaio",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Universitat de Barcelona": {
+   "league": "LES",
+   "page": "LES/2026/Winter",
+   "players": [
+    "Skiller99",
+    "Ivama",
+    "Pauporter",
+    "Adrianlanei",
+    "Simpy"
+   ],
+   "staff": [
+    {
+     "name": "Xixauxas",
+     "job": "head"
+    }
+   ]
+  },
+  "Falke Esports": {
+   "league": "LES",
+   "page": "LES/2026/Winter",
+   "players": [
+    "Ethe",
+    "Naau",
+    "Midnight",
+    "Abner",
+    "Rito"
+   ],
+   "staff": [
+    {
+     "name": "Murci",
+     "job": "head"
+    }
+   ]
+  },
+  "LUA Gaming": {
+   "league": "LES",
+   "page": "LES/2026/Winter",
+   "players": [
+    "Dani",
+    "Pegaso",
+    "Hydra",
+    "Kaii",
+    "TIMR"
+   ],
+   "staff": [
+    {
+     "name": "SLiezzan",
+     "job": "head"
+    }
+   ]
+  },
+  "Bulldog Esports": {
+   "league": "NLC",
+   "page": "NLC/2026/Winter",
+   "players": [
+    "Leks",
+    "Noodle",
+    "Hunt",
+    "Syzyfek",
+    "kaSing",
+    "GertrudeThePony"
+   ],
+   "staff": [
+    {
+     "name": "KrejnŻuraw",
+     "job": "head"
+    },
+    {
+     "name": "Serek",
+     "job": "assistant"
+    }
+   ]
+  },
+  "DMG Esports": {
+   "league": "NLC",
+   "page": "NLC/2026/Winter",
+   "players": [
+    "Goldmen",
+    "Lulas",
+    "Fantomisto",
+    "Faetski",
+    "Calmsky"
+   ],
+   "staff": [
+    {
+     "name": "Pavelov",
+     "job": "head"
+    }
+   ]
+  },
+  "Lundqvist Lightside": {
+   "league": "NLC",
+   "page": "NLC/2026/Winter",
+   "players": [
+    "Elijah",
+    "Clears",
+    "MathisV",
+    "Royeq",
+    "Soul"
+   ],
+   "staff": [
+    {
+     "name": "Haze",
+     "job": "head"
+    },
+    {
+     "name": "CptMario",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Ruddy Esports": {
+   "league": "NLC",
+   "page": "NLC/2026/Winter",
+   "players": [
+    "MrTucker",
+    "Rohit",
+    "Krabbypatty",
+    "Ranksor",
+    "Wasey",
+    "Mikklar",
+    "pykene",
+    "L1ght",
+    "Bobik",
+    "Painful",
+    "tyb",
+    "Ranksor",
+    "Sebrej"
+   ],
+   "staff": [
+    {
+     "name": "Westside",
+     "job": "head"
+    },
+    {
+     "name": "White Snow",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Verdant": {
+   "league": "NLC",
+   "page": "NLC/2026/Winter",
+   "players": [
+    "Bobista",
+    "Mafro",
+    "Furuy",
+    "Mishigu",
+    "Guggu"
+   ],
+   "staff": [
+    {
+     "name": "Dont Ban Nida",
+     "job": "head"
+    },
+    {
+     "name": "Eragon",
+     "job": "assistant"
+    },
+    {
+     "name": "novyy",
+     "job": "assistant"
+    },
+    {
+     "name": "Rice",
+     "job": "analyst"
+    }
+   ]
+  },
+  "LEO": {
+   "league": "NLC",
+   "page": "NLC/2026/Winter",
+   "players": [
+    "Mansterninja",
+    "Cast",
+    "Furby",
+    "RustySniper",
+    "Don Ponk",
+    "Slice"
+   ],
+   "staff": [
+    {
+     "name": "Path",
+     "job": "head"
+    },
+    {
+     "name": "BlueBerry",
+     "job": "assistant"
+    },
+    {
+     "name": "Rycer",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Arctic Pandas": {
+   "league": "NLC",
+   "page": "NLC/2026/Winter",
+   "players": [
+    "Nille",
+    "dibu",
+    "simpli",
+    "Kehvo",
+    "Boltox"
+   ],
+   "staff": [
+    {
+     "name": "Hiiva",
+     "job": "head"
+    }
+   ]
+  },
+  "Deer Gaming": {
+   "league": "NLC",
+   "page": "NLC/2026/Winter",
+   "players": [
+    "Virtuoso",
+    "Exile",
+    "Scuffed",
+    "Yakkey",
+    "uden"
+   ],
+   "staff": [
+    {
+     "name": "Fykling",
+     "job": "head"
+    },
+    {
+     "name": "Lunatic",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Bardicted to U": {
+   "league": "NLC",
+   "page": "NLC/2026/Summer",
+   "players": [
+    "SirVicta",
+    "Alexx",
+    "Squiddly",
+    "MKL",
+    "NoDu",
+    "Nord"
+   ],
+   "staff": [
+    {
+     "name": "Snoken",
+     "job": "head"
+    }
+   ]
+  },
+  "Rich Gang Esports": {
+   "league": "NLC",
+   "page": "NLC/2026/Summer",
+   "players": [
+    "Akrantor",
+    "lifetime",
+    "Xeronics",
+    "Behner",
+    "Redstrike"
+   ],
+   "staff": [
+    {
+     "name": "Aska",
+     "job": "head"
+    },
+    {
+     "name": "Freezer",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Brod & Friends": {
+   "league": "NLC",
+   "page": "NLC/2026/Summer",
+   "players": [
+    "Berone",
+    "Tweek",
+    "Achranos",
+    "Syn",
+    "Akkers"
+   ],
+   "staff": [
+    {
+     "name": "Teatime",
+     "job": "head"
+    }
+   ]
+  },
+  "Absolved": {
+   "league": "NLC",
+   "page": "NLC/2026/Summer",
+   "players": [
+    "Cormac",
+    "Cast",
+    "Emil",
+    "Bloodlust",
+    "Beanlord",
+    "Wormsoil"
+   ],
+   "staff": [
+    {
+     "name": "Danno",
+     "job": "head"
+    }
+   ]
+  },
+  "Dark Passage": {
+   "league": "TCL",
+   "page": "TCL/2026/Winter",
+   "players": [
+    "Sukru",
+    "Kireas",
+    "Ksaez",
+    "Neramin",
+    "Atat"
+   ],
+   "staff": [
+    {
+     "name": "Six0x",
+     "job": "head"
+    }
+   ]
+  },
+  "Boostgate Esports": {
+   "league": "TCL",
+   "page": "TCL/2026/Winter",
+   "players": [
+    "Cha0s",
+    "AzizYildirm",
+    "Yikesuo",
+    "Mean",
+    "Varin"
+   ],
+   "staff": [
+    {
+     "name": "Real Homie",
+     "job": "head"
+    },
+    {
+     "name": "Shiguro",
+     "job": "assistant"
+    },
+    {
+     "name": "Rui",
+     "job": "assistant"
+    },
+    {
+     "name": "Çayır",
+     "job": "analyst"
+    }
+   ]
+  },
+  "Bushido Wildcats": {
+   "league": "TCL",
+   "page": "TCL/2026/Winter",
+   "players": [
+    "StarScreen",
+    "Elramir",
+    "Alix",
+    "Kenal",
+    "Lekcyc"
+   ],
+   "staff": [
+    {
+     "name": "Edward",
+     "job": "head"
+    },
+    {
+     "name": "Boch",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Misa Esports": {
+   "league": "TCL",
+   "page": "TCL/2026/Winter",
+   "players": [
+    "Ragner",
+    "113",
+    "SlowQ",
+    "Hype",
+    "Way"
+   ],
+   "staff": [
+    {
+     "name": "Japone",
+     "job": "head"
+    },
+    {
+     "name": "Mojito",
+     "job": "assistant"
+    },
+    {
+     "name": "HirumaY",
+     "job": "assistant"
+    },
+    {
+     "name": "Nalkya",
+     "job": "assistant"
+    }
+   ]
+  },
+  "SU Esports": {
+   "league": "TCL",
+   "page": "TCL/2026/Winter",
+   "players": [
+    "Dionelux",
+    "XnS",
+    "Fade",
+    "Gravepast",
+    "Carry"
+   ],
+   "staff": [
+    {
+     "name": "Tasdin",
+     "job": "head"
+    }
+   ]
+  },
+  "PCIFIC Esports": {
+   "league": "TCL",
+   "page": "TCL/2026/Winter",
+   "players": [
+    "Ersin",
+    "Kurama",
+    "FireAscept",
+    "Kakarot",
+    "Joexy"
+   ],
+   "staff": [
+    {
+     "name": "Chonocleas",
+     "job": "head"
+    }
+   ]
+  },
+  "S2G Esports": {
+   "league": "TCL",
+   "page": "TCL/2026/Winter",
+   "players": [
+    "DnDn",
+    "Bonnie",
+    "Kofte",
+    "Scorth",
+    "Mersa"
+   ],
+   "staff": [
+    {
+     "name": "Zetsu",
+     "job": "head"
+    },
+    {
+     "name": "astr0less",
+     "job": "assistant"
+    },
+    {
+     "name": "Waves",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Team Phoenix (Turkish team)": {
+   "league": "TCL",
+   "page": "TCL/2026/Winter",
+   "players": [
+    "ZD1",
+    "Fluffy",
+    "MelyaP",
+    "Ardaffler",
+    "Rutzou",
+    "turtle",
+    "Dashkai",
+    "Wuis"
+   ],
+   "staff": [
+    {
+     "name": "Mecrenas",
+     "job": "head"
+    },
+    {
+     "name": "Wuju",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Ozarox Esports": {
+   "league": "TCL",
+   "page": "TCL/2026/Spring",
+   "players": [
+    "StarScreen",
+    "Cape",
+    "Fade",
+    "Gravepast",
+    "MonkaS"
+   ],
+   "staff": [
+    {
+     "name": "Zetsu",
+     "job": "head"
+    },
+    {
+     "name": "Waves",
+     "job": "assistant"
+    }
+   ]
+  },
+  "Shark Attack": {
+   "league": "TCL",
+   "page": "TCL/2026/Summer",
+   "players": [
+    "Sangrod",
+    "NightyNN",
+    "Hades",
+    "Stansfield",
+    "Revanche"
+   ],
+   "staff": [
+    {
+     "name": "Twenty7",
      "job": "head"
     }
    ]

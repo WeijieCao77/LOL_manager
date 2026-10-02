@@ -139,10 +139,10 @@ export const compKey = (stage: string, region?: Region) => (region ? `${stage}:$
 
 function makeComp(
   state: GameState, stage: StageKey, name: string, teams: string[],
-  region?: Region, tier?: Tier,
+  region?: Region, tier?: Tier, key?: string,
 ): Competition {
   const comp: Competition = {
-    key: compKey(stage, region),
+    key: key ?? compKey(stage, region),
     name,
     region,
     tier,
@@ -174,6 +174,46 @@ const tier2Of = (state: GameState, region: Region) =>
   Object.values(state.teams)
     .filter((t) => t.region === region && t.tier === 2)
     .map((t) => t.id)
+
+/**
+ * A region's second tiers, one competition per league.
+ *
+ * Europe has several regional leagues (LFL, Prime League, LES, NLC, TCL); the
+ * other regions one each. Each league plays its own two halves on the
+ * region's second-tier days. The league that came first in the world file
+ * keeps the region's plain key (`challengers1:LEC`), the rest add their name
+ * (`challengers1:LEC~Prime League`), so everything that reads the region's
+ * second tier by its key still finds one, and secondTierComp finds the one a
+ * club actually plays in.
+ */
+function makeSecondTiers(
+  state: GameState, region: Region, t2: string[], days: Record<'challengers1' | 'challengers2', [number, number]>, rng: Rng,
+): void {
+  const byLeague = new Map<string, string[]>()
+  for (const id of t2) {
+    const lg = state.teams[id]?.league || `${region} 次级联赛`
+    byLeague.set(lg, [...(byLeague.get(lg) ?? []), id])
+  }
+  // the first league in the world file is the region's own second tier
+  const order = [...byLeague.entries()].sort((a, b) => idNum(a[1][0]) - idNum(b[1][0]))
+  order.forEach(([lg, ids], i) => {
+    if (ids.length < 2) return
+    // 「LFL 次级联赛 · 上半年」: the league's own name, and the words the honours are read by
+    const label = lg.includes('次级联赛') ? lg : `${lg} 次级联赛`
+    for (const [stage, half] of [['challengers1', '上半年'], ['challengers2', '下半年']] as const) {
+      const key = i === 0 ? compKey(stage, region) : `${compKey(stage, region)}~${lg}`
+      const c = makeComp(state, stage, `${label} · ${half}`, ids, region, 2, key)
+      state.fixtures.push(...scheduleRegularSeason(c, stage, ...days[stage], 3, rng, '常规赛'))
+    }
+  })
+}
+const idNum = (id: string) => Number(id.replace(/\D/g, '')) || 0
+
+/** The second-tier competition of this stage that a club plays in (its league's), if any. */
+export function secondTierComp(state: GameState, stage: 'challengers1' | 'challengers2', teamId: string): Competition | undefined {
+  const region = state.teams[teamId]?.region
+  return Object.values(state.comps).find((c) => c.stage === stage && c.region === region && c.tier === 2 && c.teams.includes(teamId))
+}
 
 /** Build every fixture that can be known before a ball is thrown. */
 export function setupSeason(state: GameState, notes?: string[]): void {
@@ -208,12 +248,7 @@ export function setupSeason(state: GameState, notes?: string[]): void {
     if (book.lockin) {
       const s1 = makeComp(state, 'stage1', region === LEGACY_2023_DOMESTIC ? '中国进化赛' : `${region} 联赛`, t1, region, 1)
       state.fixtures.push(...scheduleRegularSeason(s1, 'stage1', ...LD.stage1, 3, rng, '常规赛', Math.max(1, t1.length - 1)))
-      if (t2.length >= 2) {
-        const c1 = makeComp(state, 'challengers1', `${region} 次级联赛 · 上半年`, t2, region, 2)
-        state.fixtures.push(...scheduleRegularSeason(c1, 'challengers1', ...LD.challengers1, 3, rng, '常规赛'))
-        const c2 = makeComp(state, 'challengers2', `${region} 次级联赛 · 下半年`, t2, region, 2)
-        state.fixtures.push(...scheduleRegularSeason(c2, 'challengers2', ...LD.challengers2, 3, rng, '常规赛'))
-      }
+      makeSecondTiers(state, region, t2, LD, rng)
       continue
     }
 
@@ -231,12 +266,7 @@ export function setupSeason(state: GameState, notes?: string[]): void {
         c.format = 'program'
         c.program = era === 2026 ? `${region}:${slot}` : `${eraTag(era)}:${region}:${slot}`
       }
-      if (t2.length >= 2) {
-        const c1 = makeComp(state, 'challengers1', `${region} 次级联赛 · 上半年`, t2, region, 2)
-        state.fixtures.push(...scheduleRegularSeason(c1, 'challengers1', ...LD.challengers1, 3, rng, '常规赛'))
-        const c2 = makeComp(state, 'challengers2', `${region} 次级联赛 · 下半年`, t2, region, 2)
-        state.fixtures.push(...scheduleRegularSeason(c2, 'challengers2', ...LD.challengers2, 3, rng, '常规赛'))
-      }
+      makeSecondTiers(state, region, t2, LD, rng)
       continue
     }
 
@@ -249,12 +279,7 @@ export function setupSeason(state: GameState, notes?: string[]): void {
       s1.grouped = true
       const s2 = makeComp(state, 'stage2', `${region} 第三赛段`, t1, region, 1)
       s2.grouped = true
-      if (t2.length >= 2) {
-        const c1 = makeComp(state, 'challengers1', `${region} 次级联赛 · 上半年`, t2, region, 2)
-        state.fixtures.push(...scheduleRegularSeason(c1, 'challengers1', ...LEAGUE_DAYS.challengers1, 3, rng, '常规赛'))
-        const c2 = makeComp(state, 'challengers2', `${region} 次级联赛 · 下半年`, t2, region, 2)
-        state.fixtures.push(...scheduleRegularSeason(c2, 'challengers2', ...LEAGUE_DAYS.challengers2, 3, rng, '常规赛'))
-      }
+      makeSecondTiers(state, region, t2, LEAGUE_DAYS, rng)
       continue
     }
 
@@ -274,13 +299,7 @@ export function setupSeason(state: GameState, notes?: string[]): void {
 
     // ---- 次级联赛: two splits, running alongside the tier-1 calendar
     // even a two-club 次级联赛 league is playable now that small leagues cycle
-    if (t2.length >= 2) {
-      const c1 = makeComp(state, 'challengers1', `${region} 次级联赛 · 上半年`, t2, region, 2)
-      state.fixtures.push(...scheduleRegularSeason(c1, 'challengers1', ...LEAGUE_DAYS.challengers1, 3, rng, '常规赛'))
-
-      const c2 = makeComp(state, 'challengers2', `${region} 次级联赛 · 下半年`, t2, region, 2)
-      state.fixtures.push(...scheduleRegularSeason(c2, 'challengers2', ...LEAGUE_DAYS.challengers2, 3, rng, '常规赛'))
-    }
+    makeSecondTiers(state, region, t2, LEAGUE_DAYS, rng)
   }
   if (book.lockin) createLockIn(state)
   // a programmed stage that waits on nothing is drawn up now, so the first day
@@ -1361,8 +1380,8 @@ function judgedCompKey(state: GameState, stage: StageKey): string | null {
   if (rulebookOf(state).lockin && stage !== 'stage1') return null
   if (me.tier === 1) return `${stage}:${me.region}`
   // the two 次级联赛 splits conclude around 第二赛段 and 第三赛段
-  if (stage === 'stage1') return `challengers1:${me.region}`
-  if (stage === 'stage2') return `challengers2:${me.region}`
+  if (stage === 'stage1') return secondTierComp(state, 'challengers1', me.id)?.key ?? `challengers1:${me.region}`
+  if (stage === 'stage2') return secondTierComp(state, 'challengers2', me.id)?.key ?? `challengers2:${me.region}`
   return null   // 第一赛段 has no 次级联赛 equivalent
 }
 
@@ -1650,13 +1669,17 @@ export function settleClubReputation(state: GameState, notes: string[]): void {
       if (!clubs.length) continue
       // the league order: the second 次级联赛 split's finish for tier 2
       // (that is the one 次级联赛总决赛 reads), champ points for VCT
-      const chal = tier === 2 ? state.comps[compKey('challengers2', region)] : undefined
-      const order = chal?.finished.length
-        ? [...chal.finished, ...clubs.filter((t) => !chal.finished.includes(t.id)).map((t) => t.id)]
-        : clubs.map((t) => t.id).sort(byPoints(state))
+      const orderFor = (t: Team): string[] => {
+        // a second-tier club is judged in its own league (several in Europe), on that league's second half
+        const chal = tier === 2 ? secondTierComp(state, 'challengers2', t.id) : undefined
+        const peers = chal ? clubs.filter((c) => chal.teams.includes(c.id)) : clubs
+        return chal?.finished.length
+          ? [...chal.finished, ...peers.filter((c) => !chal.finished.includes(c.id)).map((c) => c.id)]
+          : peers.map((c) => c.id).sort(byPoints(state))
+      }
       for (const t of clubs) {
         const before = t.reputation
-        const target = deservedReputation(t, order)
+        const target = deservedReputation(t, orderFor(t))
         t.reputation = clamp(before + (target - before) * CLUB_REP.pull, 20, 99)
         if (t.id === state.myTeam && Math.round(t.reputation) !== Math.round(before)) {
           const up = t.reputation > before

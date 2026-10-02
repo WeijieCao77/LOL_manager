@@ -272,7 +272,7 @@ export default function ManagerGame({ onHome, testSaves = false }: { onHome: () 
         // are not the same event, and only one of them is stickiness.
         track('career_resume', {
           day: g.day, year: g.year, stage: g.stage,
-          seasons: g.year - 2026,
+          seasons: g.year - startYearOf(g),
           conf: Math.round(g.boardConfidence),
           over: !!g.gameOver,
         })

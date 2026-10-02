@@ -4,6 +4,7 @@ import { createNewGame } from '../src/engine/world'
 import { WORLD_TEAMS } from '../src/engine/teams'
 import { renewContract, resolveMyOffer, askingPrice, clubAcceptsFee, makeOffer } from '../src/engine/transfer'
 import { awardPrize } from '../src/engine/finance'
+import { prizeTable } from '../src/engine/prizes'
 import { defaultContract, type TransferOffer } from '../src/engine/types'
 import { advanceDay, setupSeason } from '../src/engine/season'
 import { Rng } from '../src/engine/rng'
@@ -149,11 +150,13 @@ test('prize ledger reconciles to the actual balance for zero, mixed and full neg
       ...defaultContract(100_000, 2), bonusShare: mode === 'zero' ? 0 : mode === 'max' ? 35 : i * 5,
     } })
     const balance = g.finances.balance, budget = team.budget, n = g.finances.log.length
-    awardPrize(g, 'champions', [g.myTeam])
+    const worlds = { key: 'champions', name: '全球总决赛', stage: 'champions', teams: [g.myTeam], standings: {}, finished: [g.myTeam] } as never
+    awardPrize(g, worlds, [g.myTeam])
     const net = g.finances.balance - balance
     assert.equal(g.finances.log.slice(n).reduce((sum, entry) => sum + entry.amount, 0), net)
     assert.equal(team.budget - budget, net)
-    assert.equal(g.finances.log[n].amount, 1_500_000)
+    // Worlds 2026 pays its champion 40% of $5M (prizes.ts)
+    assert.equal(g.finances.log[n].amount, prizeTable(g, worlds)[0])
   }
 })
 console.log(`PASS ${checks} career contract/finance regression groups`)

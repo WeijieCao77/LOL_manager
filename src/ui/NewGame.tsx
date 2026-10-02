@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, Fragment } from 'react'
 import { DEFAULT_START_YEAR, ERA_CN, HISTORICAL_YEARS, loadWorld } from '../engine/eras'
 import { eraOf, relegatesIn } from '../engine/programsHist'
 import { leagueLabel } from '../engine/leagueNames'
@@ -95,9 +95,14 @@ export default function NewGame({ onHome,
   const byTier = useMemo(() => {
     const inRegion = worldTeams.filter((t) => t.region === region)
       .sort((a, b) => (squadStrength[b.id] ?? 0) - (squadStrength[a.id] ?? 0))
+    const firstOf = new Map<string, number>()
+    worldTeams.forEach((t, i) => { if (!firstOf.has(t.league)) firstOf.set(t.league, i) })
+    const leagueRank = (t: { league: string }) => firstOf.get(t.league) ?? 0
     return {
       1: inRegion.filter((t) => t.tier === 1),
-      2: inRegion.filter((t) => t.tier === 2),
+      // Europe has several second tiers: grouped by league, in the world file's order, strongest first within each
+      2: inRegion.filter((t) => t.tier === 2).sort((a, b) => leagueRank(a) - leagueRank(b)
+        || (squadStrength[b.id] ?? 0) - (squadStrength[a.id] ?? 0)),
     }
   }, [region, squadStrength, worldTeams])
 
@@ -313,11 +318,15 @@ export default function NewGame({ onHome,
                     </span>
                   </div>
                   <div className="team-pick">
-                {byTier[tier].map((t) => {
+                {byTier[tier].map((t, i, list) => {
                   const ok = available(t)
                   const top = lockedTop.has(t.id)
+                  // a heading where a new second-tier league starts (LFL, Prime League, LES…)
+                  const head = tier === 2 && new Set(list.map((x) => x.league)).size > 1 && (i === 0 || list[i - 1].league !== t.league)
                   return (
-                    <button key={t.id}
+                    <Fragment key={t.id}>
+                    {head && <div className="tiny faint" style={{ gridColumn: '1 / -1', marginTop: i ? 6 : 0 }}>{t.league}</div>}
+                    <button
                       className={`team-card${teamId === t.id ? ' sel' : ''}${ok ? '' : ' locked'}`}
                       disabled={!ok}
                       title={top ? '联赛顶尖球队，需要靠成绩解锁' : ok ? '' : '声望不足以接手这支球队'}
@@ -337,6 +346,7 @@ export default function NewGame({ onHome,
                         {!ok && <span className="tiny">{top ? '🔒 顶级' : '🔒 声望不足'}</span>}
                       </div>
                     </button>
+                    </Fragment>
                   )
                 })}
                   </div>

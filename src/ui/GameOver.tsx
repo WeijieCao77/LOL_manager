@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { finalYearOf } from '../engine/eras'
+import { finalYearOf, seasonsOf, startYearOf } from '../engine/eras'
 import { useGame } from './ctx'
 import {
   DYNASTY_ENDINGS, ENDINGS, ENDING_COUNT, INTL_TITLES, STORY_ENDINGS,
@@ -18,6 +18,10 @@ import { ORIGINS } from '../engine/manager'
  * asked to do, what you actually won, and how long you lasted. Being sacked is
  * the half of a career story the game was missing.
  */
+/** a club as the lifetime record keeps it: the 2026 world's id, or a past world's with its year and region */
+const clubRecordKey = (game: { startYear?: number; teams: Record<string, { region: string }> }, id: string): string =>
+  startYearOf(game) < 2026 ? `${startYearOf(game)}:${id}@${game.teams[id]?.region ?? ''}` : id
+
 export default function GameOver({ onRestart }: { onRestart: () => void }) {
   const { game } = useGame()
   const club = game.teams[game.myTeam]
@@ -69,8 +73,9 @@ export default function GameOver({ onRestart }: { onRestart: () => void }) {
         titles: r.titles + game.honours.length,
         worldTitles: r.worldTitles + worlds,
         bestHaul: Math.max(r.bestHaul, game.honours.length),
-        seasons: r.seasons + (game.year - 2026 + 1),
-        clubs: [...r.clubs, ...(game.tenures ?? []).map((t) => t.teamId), game.myTeam],
+        seasons: r.seasons + seasonsOf(game),
+        // a past world numbers its clubs on its own: recorded with its year and region (regionsManaged)
+        clubs: [...r.clubs, ...[...(game.tenures ?? []).map((t) => t.teamId), game.myTeam].map((id) => clubRecordKey(game, id))],
       } : undefined,
     }, id, { announce: false })
     // only keys this build still knows about — see the note in Achievements.tsx
@@ -79,7 +84,7 @@ export default function GameOver({ onRestart }: { onRestart: () => void }) {
     // reaching 2036 — the whole point of the ten-year rewrite — was invisible.
     track('game_over', {
       finished: game.finished ? 1 : 0,
-      seasons: game.year - 2026 + 1,
+      seasons: seasonsOf(game),
       honours: game.honours.length,
       dynasty: endingOf(game).dynasty?.key ?? '',
       story: endingOf(game).story?.key ?? '',

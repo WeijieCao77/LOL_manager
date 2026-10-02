@@ -100,7 +100,8 @@ const isChampions = (t: string) => t === CHAMPIONS
 /** A tier-1 regional trophy: a 第一赛段 or one of the two Stages. */
 // any year's name for the league and its stages (leagueNames.ts)
 const isRegional = (t: string) => REGIONAL_TITLE.test(t)
-const isChallengers = (t: string) => /^次级联赛 /.test(t)
+// 「LFL 次级联赛 · 上半年」, 「LPL 次级联赛 · 下半年」: the league comes first
+const isChallengers = (t: string) => /次级联赛/.test(t)
 const isAscension = (t: string) => /^晋级一级联赛/.test(t)
 
 export interface Facts {

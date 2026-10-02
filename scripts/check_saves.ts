@@ -28,7 +28,7 @@ const store = new Map<string, string>()
   get length() { return store.size },
 }
 const { saveGame, loadGame, listSaves, exportSave, importSave, autosave,
-        loadAutosave, protectAutosaveFrom } = await import('../src/engine/save')
+        loadAutosave, protectAutosaveFrom, packState } = await import('../src/engine/save')
 
 let bad = 0
 const check = (name: string, ok: boolean, detail = '') => {
@@ -154,7 +154,8 @@ const mk = (seed: number) => {
   const rng = new Rng(12)
   let guard = 0
   while (!g.gameOver && guard++ < 260 && g.day < 250) advanceDay(g, rng)
-  const kb = Math.round(JSON.stringify(g).length / 1024)
+  // what localStorage actually holds: the packed, deflated string (saveCodec.ts)
+  const kb = Math.round(packState(g).length / 1024)
   check('a late-season save stays under quota', kb < 2600,
     `${kb}KB @ D${g.day}（此前同点 ~5000KB，浏览器约 2.5MB 字符额度）`)
   const mineKept = g.fixtures.filter((f) => f.played && f.day < g.day - 14 &&
