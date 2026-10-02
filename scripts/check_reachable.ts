@@ -35,7 +35,8 @@ import { pitchSponsor, signSponsor } from '../src/engine/commercial'
 import { contractLength, expectedSalary } from '../src/engine/player'
 import { Rng } from '../src/engine/rng'
 import { ACHIEVEMENTS, LIFE_ACHIEVEMENTS, RUN_ACHIEVEMENTS, earnedNow, earnedLifetime } from '../src/engine/achievements'
-import { CHAMPIONS, ENDINGS, endingsFor } from '../src/engine/endings'
+import { CHAMPIONS, ENDINGS, INTL_TITLES, endingsFor } from '../src/engine/endings'
+import { REGIONAL_TITLE } from '../src/engine/leagueNames'
 import { PRIZE } from '../src/engine/finance'
 // real clubs for the three-club career: a second-tier start, then a first-tier one — the
 // climb (从次级联赛走上来, 升班马) is read off which tier the clubs on the record are in
@@ -253,11 +254,13 @@ function vocabulary() {
   const all = [...seen.titles]
   return {
     all,
-    intl: all.filter((t) => /国际赛|全球总决赛/i.test(t) && !/次级联赛/i.test(t)),
-    masters: all.filter((t) => /国际赛/i.test(t)),
-    champions: all.filter((t) => /全球总决赛/i.test(t) && !/次级联赛/i.test(t) && !/国际赛/i.test(t)),
-    regional: all.filter((t) => /第一赛段$/.test(t) || /Stage \d$/.test(t)),
-    challengers: all.filter((t) => /^次级联赛/.test(t)),
+    // classified the way the endings classify them (endings.ts INTL_TITLES, leagueNames.ts REGIONAL_TITLE):
+    // League's internationals are First Stand, MSI and Worlds, none of which says 国际赛
+    intl: all.filter((t) => (INTL_TITLES as readonly string[]).includes(t)),
+    masters: all.filter((t) => (INTL_TITLES as readonly string[]).includes(t) && t !== CHAMPIONS),
+    champions: all.filter((t) => t === CHAMPIONS),
+    regional: all.filter((t) => REGIONAL_TITLE.test(t)),
+    challengers: all.filter((t) => /次级联赛/.test(t)),
     ascension: all.filter((t) => /晋级/.test(t)),
   }
 }
