@@ -278,10 +278,17 @@ const median = (xs: number[]) => {
     `${x.start.toFixed(1)}→${x.end.toFixed(1)} cohort +${x.cohortGain.toFixed(2)} youth ${(x.share * 100).toFixed(0)}%`
   const calmDetail = calm.map(line).join(' · ')
 
-  check(`the men who opened in the AI top ten grow +2.0 to +3.6 in two seasons (${calm[0].young}/50 are 23-and-under with ${calm[0].room.toFixed(1)} points of room)`,
-    median(calm.map((x) => x.cohortGain)) >= 2.0 && median(calm.map((x) => x.cohortGain)) <= 3.6, calmDetail)
-  check('those youngsters realise 40-60% of their headroom',
-    median(calm.map((x) => x.share)) >= 0.40 && median(calm.map((x) => x.share)) <= 0.60, calmDetail)
+  // League's own numbers (src/data/history.json, the per-year ratings 2016–2024):
+  // the year's top ten tier-one players are on average 2.9 points LOWER two
+  // years later (median of nine cohorts; part of that is a rating's noise
+  // regressing), and a 23-and-under among the top fifty realises a mean 32% of
+  // his headroom in two years (n = 83). VALORANT's bands (+2.0 to +3.6, 40–60%)
+  // were its own tuning and do not describe this game. The sim has no rating
+  // noise, so its top ten may sit above the real −2.9, but must not inflate.
+  check(`the men who opened in the AI top ten change by −3.0 to +2.0 in two seasons (real: −2.9; ${calm[0].young}/50 are 23-and-under with ${calm[0].room.toFixed(1)} points of room)`,
+    median(calm.map((x) => x.cohortGain)) >= -3.0 && median(calm.map((x) => x.cohortGain)) <= 2.0, calmDetail)
+  check('those youngsters realise 22-45% of their headroom (real: 32%)',
+    median(calm.map((x) => x.share)) >= 0.22 && median(calm.map((x) => x.share)) <= 0.45, calmDetail)
   // The rule is that two seasons do not inflate the top of the league — the
   // ten-season check below allows 94, so 92.5 for two is the same statement
   // with room in it. A single seed used to be enough to fail this at 91.72
