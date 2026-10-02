@@ -41,7 +41,6 @@ const mk = (tag = 'BLG', seed = 20260905): GameState => {
   setupSeason(g)
   return g
 }
-const MAPS_OFF_POOL = (g: GameState) => MAPS.filter((m) => !poolFor(g).includes(m))
 const ai = (g: GameState, pick?: (t: Team) => boolean) =>
   Object.values(g.teams).find((t) => t.id !== g.myTeam && (!pick || pick(t)))!
 
@@ -147,16 +146,18 @@ const ai = (g: GameState, pick?: (t: Team) => boolean) =>
   const g2 = mk()
   const t2 = ai(g2, (t) => t.tier === 2)
   t2.reputation = 75             // a relegated side's old name
-  const order = Object.values(g2.teams).filter((t) => t.region === t2.region && t.tier === 2).map((t) => t.id)
+  // the engine's winter order for a second tier with no split finished: points, then rating
+  const order = Object.values(g2.teams).filter((t) => t.region === t2.region && t.tier === 2)
+    .sort((x, y) => y.champPoints - x.champPoints || y.rating - x.rating).map((t) => t.id)
   const target = deservedReputation(t2, order)
   settleClubReputation(g2, [])
-  check('a second-division club carrying a VCT name loses a third of the gap each winter',
+  check('a second-division club carrying a tier-one name loses a third of the gap each winter',
     target < 60 && Math.abs(t2.reputation - (75 + (target - 75) * CLUB_REP.pull)) < 1e-6, `deserved ${target.toFixed(1)}, now ${t2.reputation.toFixed(1)}`)
   const t1 = ai(g2, (t) => t.tier === 1 && t.rating >= 80)
   t1.reputation = 50
   const order1 = Object.values(g2.teams).filter((t) => t.region === t1.region && t.tier === 1).sort((a, b) => b.rating - a.rating).map((t) => t.id)
   const up = deservedReputation(t1, order1)
-  check('a strong VCT side at 50 is pulled up toward the seventies', up >= 68, `deserved ${up.toFixed(1)}`)
+  check('a strong tier-one side at 50 is pulled up toward the seventies', up >= 68, `deserved ${up.toFixed(1)}`)
 }
 
 // ---- AI clubs run the team sessions the manager runs, when they need them
@@ -164,21 +165,21 @@ const ai = (g: GameState, pick?: (t: Team) => boolean) =>
   const g = mk()
   const rng = new Rng(4)
   const club = ai(g, (t) => t.tier === 1 && squadOf(g, t.id).length >= 5)
-  // a hole in the five: nobody covers 哨卫
-  for (const p of squadOf(g, club.id)) { p.roles = ['决斗者', '先锋', '控场']; p.role = '决斗者'; p.agentPro = {} }
+  // a hole in the five: nobody covers 辅助
+  for (const p of squadOf(g, club.id)) { p.roles = ['上单', '打野', '中单', '下路']; p.role = '上单'; p.agentPro = {} }
   const d1 = aiDrillFor(g, club)
-  // 现在练的是一个具体英雄，所以看的是这个英雄属不属于缺的那个位置
-  check('a five with no sentinel puts a learner on a sentinel agent',
-    d1.kind === 'agent' && AGENT_ROLE[d1.picks[0].agent] === '哨卫', JSON.stringify(d1))
-  // the pool's weakest map gets run
-  for (const p of squadOf(g, club.id)) { p.roles = ['决斗者', '先锋', '控场', '哨卫'] }
+  // 练的是一个具体英雄，所以看的是这个英雄属不属于缺的那个位置
+  check('a five with no support puts a learner on a support champion',
+    d1.kind === 'agent' && AGENT_ROLE[d1.picks[0].agent] === '辅助', JSON.stringify(d1))
+  // League has one map: an uncomfortable Rift gets a map week
+  for (const p of squadOf(g, club.id)) { p.roles = ['上单', '打野', '中单', '下路', '辅助'] }
   const pool = poolFor(g)
-  for (const m of pool) club.mapPrefs[m] = 80
-  club.mapPrefs[pool[3]] = 30
+  check('the pool is the one map', pool.length === 1 && pool[0] === MAPS[0], pool.join(','))
+  club.mapPrefs[pool[0]] = 30
   const d2 = aiDrillFor(g, club)
-  check('an uncomfortable pool map gets a map week', d2.kind === 'map' && (d2.map === pool[3] || d2.map2 === pool[3]), JSON.stringify(d2))
-  // comfortable everywhere on a non-map week: the coach takes them through the tape
-  club.mapPrefs[pool[3]] = 80
+  check('an uncomfortable map gets a map week', d2.kind === 'map' && d2.map === pool[0], JSON.stringify(d2))
+  // comfortable on a non-map week: the coach takes them through the tape
+  club.mapPrefs[pool[0]] = 80
   g.day = 7 * (Math.floor(g.day / 7) + 1)
   if (Math.floor(g.day / 7) % 3 === 0) g.day += 7
   const d3 = aiDrillFor(g, club)
@@ -186,15 +187,14 @@ const ai = (g: GameState, pick?: (t: Team) => boolean) =>
   // the week actually moves the numbers
   g.day = 7 * AI_TEAM_SESSION_EVERY * 3   // a session week
   g.stage = 'stage1'
-  const pool1 = poolFor(g)                 // the pool turns over with the stage
-  for (const m of pool1) club.mapPrefs[m] = 80
+  const pool1 = poolFor(g)
+  check('the pool is still the one map later in the year', pool1.length === 1 && pool1[0] === MAPS[0], pool1.join(','))
   club.mapPrefs[pool1[0]] = 40
-  club.mapPrefs[pool1[1]] = 40
   for (const p of squadOf(g, club.id)) p.fatigue = 20
   const xp0 = squadOf(g, club.id).reduce((s, p) => s + (p.xp.teamwork ?? 0) + (p.xp.awareness ?? 0), 0)
   aiClubWeek(g, club, rng)
   const xp1 = squadOf(g, club.id).reduce((s, p) => s + (p.xp.teamwork ?? 0) + (p.xp.awareness ?? 0), 0)
-  check('a map week raises comfort on the two maps run', club.mapPrefs[pool1[0]] > 40 && club.mapPrefs[pool1[1]] > 40, `${club.mapPrefs[pool1[0]].toFixed(1)}, ${club.mapPrefs[pool1[1]].toFixed(1)}`)
+  check('a map week raises comfort on the map', club.mapPrefs[pool1[0]] > 40, `${club.mapPrefs[pool1[0]].toFixed(1)}`)
   check('and the squad banks teamwork and awareness', xp1 > xp0, `${xp0.toFixed(1)} → ${xp1.toFixed(1)}`)
   // the off week is an off week
   const g4 = mk()
@@ -202,10 +202,10 @@ const ai = (g: GameState, pick?: (t: Team) => boolean) =>
   g4.day = 7 * (AI_TEAM_SESSION_EVERY * 3 + 1)
   g4.stage = 'stage1'
   const before4 = { ...c4.mapPrefs }
-  const xp4 = squadOf(g4, c4.id).reduce((s, p) => s + (p.xp.teamwork ?? 0) + (p.xp.awareness ?? 0) + (p.xp.communication ?? 0), 0)
+  const xp4 = squadOf(g4, c4.id).reduce((s, p) => s + (p.xp.teamwork ?? 0) + (p.xp.awareness ?? 0) + (p.xp.macro ?? 0), 0)
   for (const p of squadOf(g4, c4.id)) p.fatigue = 20
   aiClubWeek(g4, c4, new Rng(1))
-  const xp5 = squadOf(g4, c4.id).reduce((s, p) => s + (p.xp.teamwork ?? 0) + (p.xp.awareness ?? 0) + (p.xp.communication ?? 0), 0)
+  const xp5 = squadOf(g4, c4.id).reduce((s, p) => s + (p.xp.teamwork ?? 0) + (p.xp.awareness ?? 0) + (p.xp.macro ?? 0), 0)
   check(`every ${AI_TEAM_SESSION_EVERY === 2 ? 'other' : AI_TEAM_SESSION_EVERY + 'th'} week is scrims and travel: no session`,
     JSON.stringify(before4) === JSON.stringify(c4.mapPrefs) && xp4 === xp5)
 }
@@ -241,40 +241,43 @@ const ai = (g: GameState, pick?: (t: Team) => boolean) =>
   check("the manager's own club is never built for him", aiFacilityUpgrade(g2, g2.teams[g2.myTeam]) === 0)
 }
 
-// ---- comfort fades on a map nobody has touched for a month
+// ---- comfort fades on the map when nobody has touched it for a month
 {
   const g = mk()
   const me = g.teams[g.myTeam]
   const rng = new Rng(8)
-  const pool = poolFor(g)
-  const idle = pool[0]
-  const played = pool[1]
-  me.mapPrefs[idle] = 80
-  me.mapPrefs[played] = 80
-  me.mapPrefs[pool[2]] = MAP_DECAY_FLOOR - 5
+  const rift = poolFor(g)[0]
+  me.mapPrefs[rift] = 80
   // the clock starts on the first weekly look; nothing fades for four weeks
   g.day = 7
   weeklyTick(g, rng)
-  check('the first weekly look starts every map\'s clock without docking anything', me.mapPrefs[idle] === 80 && me.mapSeen?.[idle] === 7)
+  check('the first weekly look starts the clock without docking anything', me.mapPrefs[rift] === 80 && me.mapSeen?.[rift] === 7)
   for (let d = 14; d <= MAP_DECAY_AFTER; d += 7) { g.day = d; weeklyTick(g, rng) }
-  check('nothing fades inside the month', me.mapPrefs[idle] === 80, `${me.mapPrefs[idle]}`)
-  // a map played this week is kept sharp; the untouched one slips
+  check('nothing fades inside the month', me.mapPrefs[rift] === 80, `${me.mapPrefs[rift]}`)
   const notes: string[] = []
   g.day = MAP_DECAY_AFTER + 7
-  markMapSeen(me, played, g.day - 1)
   notes.push(...weeklyTick(g, rng))
-  check('a map untouched for five weeks loses its weekly step', Math.abs(me.mapPrefs[idle] - (80 - MAP_DECAY_PER_WEEK)) < 1e-9, `${me.mapPrefs[idle]}`)
-  check('a map played this week does not', me.mapPrefs[played] === 80, `${me.mapPrefs[played]}`)
+  check('untouched for five weeks: it loses its weekly step', Math.abs(me.mapPrefs[rift] - (80 - MAP_DECAY_PER_WEEK)) < 1e-9, `${me.mapPrefs[rift]}`)
   check('and the manager is told the week it starts', notes.some((n) => n.includes('开始回落')), notes.filter((n) => n.includes('回落')).join(' | '))
-  check('a map already at neutral is left alone', me.mapPrefs[pool[2]] === MAP_DECAY_FLOOR - 5)
+  // played this week: kept sharp
+  const g2 = mk()
+  const me2 = g2.teams[g2.myTeam]
+  me2.mapPrefs[rift] = 80
+  g2.day = 7; weeklyTick(g2, rng)
+  g2.day = MAP_DECAY_AFTER + 7
+  markMapSeen(me2, rift, g2.day - 1)
+  weeklyTick(g2, rng)
+  check('a map played this week does not fade', me2.mapPrefs[rift] === 80, `${me2.mapPrefs[rift]}`)
+  // at neutral it is left alone, and the slide stops there
+  const g3 = mk()
+  const me3 = g3.teams[g3.myTeam]
+  me3.mapPrefs[rift] = MAP_DECAY_FLOOR - 5
+  g3.day = 7; weeklyTick(g3, rng)
+  for (let w = 0; w < 10; w++) { g3.day += 7; weeklyTick(g3, rng) }
+  check('a map already below neutral is left alone', me3.mapPrefs[rift] === MAP_DECAY_FLOOR - 5)
+  me.mapPrefs[rift] = 80
   for (let w = 0; w < 80; w++) { g.day += 7; weeklyTick(g, rng) }
-  check('the slide stops at neutral, never below', me.mapPrefs[idle] === MAP_DECAY_FLOOR, `${me.mapPrefs[idle]}`)
-  // every club fades the same way, so the world does not end up knowing every map perfectly
-  const foe = ai(g, (t) => t.tier === 1)
-  const benched = MAPS_OFF_POOL(g)
-  check('an AI club\'s benched maps have all faded to neutral by then',
-    benched.length > 0 && benched.every((m) => (foe.mapPrefs[m] ?? 50) <= MAP_DECAY_FLOOR + 1e-9),
-    benched.map((m) => `${m} ${foe.mapPrefs[m]}`).join(', '))
+  check('the slide stops at neutral, never below', me.mapPrefs[rift] === MAP_DECAY_FLOOR, `${me.mapPrefs[rift]}`)
 }
 
 console.log(bad ? `\n${bad} failed` : '\nall held')

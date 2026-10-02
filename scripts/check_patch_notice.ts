@@ -70,7 +70,7 @@ const patchNews = (g: GameState) => g.news.filter((n) => n.text.startsWith('🔧
   check('同一天同一赛段再来一次不会再滚', JSON.stringify(g.patch) === before && g.patchLog!.length === 1 && patchNews(g).length === 1)
 
   settleCompetition(g, fakeComp(g, 'masters2', '国际赛 London'), [])
-  check('第二站大师赛是另一个版本，历史有两条', g.patch!.id !== p.id && g.patchLog!.length === 2 && g.patch!.after === '冠军赛起')
+  check('第二站大师赛是另一个版本，历史有两条', g.patch!.id !== p.id && g.patchLog!.length === 2 && g.patch!.after === '第三赛段起')
   settleCompetition(g, fakeComp(g, 'champions', '全球总决赛 Shanghai'), [])
   check('冠军赛之后是大改，写明下赛季起', g.patch!.big && g.patch!.after === `${g.year + 1} 赛季起`)
   check('地区赛不换版本', (() => { const n = g.patchLog!.length; settleCompetition(g, fakeComp(g, 'stage1', '赛区第一赛段'), []); return g.patchLog!.length === n })())

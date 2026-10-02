@@ -21,8 +21,11 @@ for (const f of g.fixtures) {
 }
 let bad = 0
 for (const [comp, per] of Object.entries(counts)) {
+  // groups of different sizes play different numbers of games by design (LPL 2026
+  // Split 1: Ascend six, Perseverance and Nirvana four): fair means equal within a group
+  const groups = g.comps[comp]?.groups ?? [Object.keys(per)]
   const v = [...new Set(Object.values(per))].sort((a, b) => a - b)
-  const ok = v.length === 1
+  const ok = groups.every((grp) => new Set(grp.filter((id) => per[id] !== undefined).map((id) => per[id])).size <= 1)
   if (!ok) bad++
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${comp.padEnd(18)} ${String(Object.keys(per).length).padStart(2)} 队, 每队 ${v.join('/')} 场`)
 }

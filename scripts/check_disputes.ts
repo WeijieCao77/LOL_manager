@@ -42,6 +42,9 @@ const mk = (seed = 20260913): GameState => {
   const g = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'BLG')!.id, '审计', seed)
   setupSeason(g)
   g.day = 40
+  // BLG's real roster is exactly five; the bench options need a sixth man (the five-man case is built below)
+  const free = Object.values(g.players).find((x) => !x.teamId)!
+  free.teamId = g.myTeam; g.teams[g.myTeam].roster.push(free.id)
   return g
 }
 const clone = (g: GameState): GameState => JSON.parse(JSON.stringify(g))
@@ -187,7 +190,8 @@ check('SEASON_DAYS 和 clock 的一年一致', SEASON_DAYS === 364)
   check('暂不介入：记录标为忽略，不扣费', h.disputes![0].status === 'ignored')
   const k = mk()
   const dk = open(k)
-  // a free agent in, so the release is legal
+  // a free agent in, so the release is legal (a League roster can be exactly five)
+  { const free = Object.values(k.players).find((x) => !x.teamId)!; free.teamId = k.myTeam; k.teams[k.myTeam].roster.push(free.id) }
   releasePlayer(k, k.players[pair(k)[1]])
   tickDisputes(k, [])
   check('当事人离队后记录关闭', k.disputes![0].status === 'closed' && disputeBlock(k, dk.id, 'talk', pair(k)[0]) !== null)

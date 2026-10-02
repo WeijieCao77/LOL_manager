@@ -72,6 +72,8 @@ const comp = (g: GameState, stage: Competition['stage'], name: string, champ: st
   const p = g.players[me.starters[0]]
   const other = Object.values(g.teams).find((t) => t.id !== g.myTeam && t.tier === 1)!
   const before = p.clubHist!.length
+  // a reserve first: a League roster can be exactly five, and a sale down to four is refused
+  { const free = Object.values(g.players).find((x) => !x.teamId)!; free.teamId = g.myTeam; g.teams[g.myTeam].roster.push(free.id) }
   doTransfer(g, p, other.id, 0, defaultContract(p.salary, 2))
   check('转会后冠军仍写原俱乐部', titleClub(g, p.titles![0]) === me.name && p.titles![0].team === g.myTeam)
   check('转会开了新的效力一行，旧的一行收口', p.clubHist!.length === before + 1 && p.clubHist![before - 1].team === g.myTeam && p.clubHist![before].team === other.id)

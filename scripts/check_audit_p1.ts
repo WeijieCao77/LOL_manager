@@ -65,8 +65,15 @@ const mk = (tag = 'BLG'): GameState => {
   const g = mk()
   const me = g.teams[g.myTeam]
   const starter = g.players[me.starters[0]]
+  // a League roster can be exactly five, and a sale that leaves four is refused (canSell):
+  // give the club a reserve first, so the sale is the thing under test
+  while (squadOf(g, g.myTeam).length < 6) {
+    const free = Object.values(g.players).find((x) => !x.teamId && x.role === starter.role)!
+    free.teamId = g.myTeam; me.roster.push(free.id)
+  }
   const buyer = Object.values(g.teams).find((t) => t.id !== g.myTeam && t.roster.length < 7)!
-  doTransfer(g, starter, buyer.id, 0, defaultContract(50000, 2))
+  const sold = doTransfer(g, starter, buyer.id, 0, defaultContract(50000, 2))
+  check('the sale goes through', sold)
   check('the starting five is five again after a sale', me.starters.length === 5, `${me.starters.length} 人`)
   check('and the sold man is not in it', !me.starters.includes(starter.id))
   const released = g.players[me.starters[4]]

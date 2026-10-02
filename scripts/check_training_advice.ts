@@ -25,7 +25,8 @@ import { advanceDay, setupSeason } from '../src/engine/season'
 import { importSave, exportSave } from '../src/engine/save'
 import { squadOf } from '../src/engine/roster'
 import { AI_POLISH_STOP, ATTR_MAX, REST_AT, aiTrainingFocus, recommendedTrainingFocus, trainingAdvice, weeklyTick } from '../src/engine/training'
-import { ATTR_KEYS } from '../src/engine/types'
+import { ATTR_CN, ATTR_KEYS, ROLES } from '../src/engine/types'
+import { ROLE_WEIGHT } from '../src/engine/player'
 import type { Attrs, GameState, Player } from '../src/engine/types'
 import { Rng } from '../src/engine/rng'
 
@@ -47,15 +48,17 @@ const fit = (over: Partial<Player>): Player => ({
   ...base, fatigue: 10, injuredUntil: 0, potential: 95, overall: 80, attrs: attrsAll(70), isIgl: false, ...over,
 })
 
-// ---- the report: 枪法 full, the rest not
+// ---- the report: the main number full, the rest not (a 下路's 操作)
 {
-  const p = fit({ role: '决斗者', attrs: { ...attrsAll(70), aim: ATTR_MAX } })
+  const w = ROLE_WEIGHT['下路']
+  const next = (ATTR_KEYS.filter((k) => k !== 'mechanics').sort((a, b) => w[b] - w[a]))[0]
+  const p = fit({ role: '下路', attrs: { ...attrsAll(70), mechanics: ATTR_MAX } })
   const a = trainingAdvice(p)
-  check('决斗者枪法 99：不再推荐枪法', a.focus !== 'aim', a.focus)
-  check('改推荐权重次之的反应', a.focus === 'reaction', a.focus)
-  check('理由写明枪法已满、改练什么', /枪法已到 99/.test(a.reason) && /反应/.test(a.reason), a.reason)
-  const q = fit({ role: '决斗者', attrs: { ...attrsAll(70), aim: 98 } })
-  check('枪法 98 还能涨一点，照旧推荐枪法（97 那条线没了）', trainingAdvice(q).focus === 'aim')
+  check('下路操作 99：不再推荐操作', a.focus !== 'mechanics', a.focus)
+  check(`改推荐权重次之的${ATTR_CN[next]}`, a.focus === next, a.focus)
+  check('理由写明操作已满、改练什么', /操作已到 99/.test(a.reason) && a.reason.includes(ATTR_CN[next]), a.reason)
+  const q = fit({ role: '下路', attrs: { ...attrsAll(70), mechanics: 98 } })
+  check('操作 98 还能涨一点，照旧推荐操作（97 那条线没了）', trainingAdvice(q).focus === 'mechanics')
 }
 
 // ---- nothing left to grow, potential full, tired, hurt
@@ -77,13 +80,17 @@ const fit = (over: Partial<Player>): Player => ({
 
 // ---- positions and the caller
 {
-  const roles = ['决斗者', '先锋', '控场', '哨卫', '自由人'] as const
+  const roles = ROLES
   const picks = roles.map((role) => trainingAdvice(fit({ role })).focus)
-  check('五个位置各有自己的首选', picks[0] === 'aim' && picks[1] !== 'aim' && picks[2] === 'utility' && picks[3] === 'awareness', picks.join(','))
-  const igl = fit({ isIgl: true, attrs: { ...attrsAll(ATTR_MAX), igl: 60 } })
-  check('指挥只剩指挥能练时推荐指挥', trainingAdvice(igl).focus === 'igl')
-  const not = fit({ isIgl: false, attrs: { ...attrsAll(ATTR_MAX), igl: 60 } })
-  check('非指挥的指挥不算可练项：休息', trainingAdvice(not).focus === 'rest')
+  // each position's heaviest attribute in its rating (player.ts ROLE_WEIGHT)
+  const want = roles.map((role) => ATTR_KEYS.slice().sort((a, b) => ROLE_WEIGHT[role][b] - ROLE_WEIGHT[role][a])[0])
+  check('五个位置各按自己最吃的属性推荐', picks.every((x, i) => x === want[i]) && new Set(picks).size >= 3,
+    roles.map((r, i) => `${r}${ATTR_CN[picks[i] as keyof typeof ATTR_CN] ?? picks[i]}`).join(' '))
+  // nobody is designated the shotcaller in League (决定 D 运营): 运营 is everyone's to train
+  const cap = fit({ isIgl: true, attrs: { ...attrsAll(ATTR_MAX), macro: 60 } })
+  check('只剩运营能练时推荐运营（队长）', trainingAdvice(cap).focus === 'macro')
+  const not = fit({ isIgl: false, attrs: { ...attrsAll(ATTR_MAX), macro: 60 } })
+  check('不是队长也照样练运营', trainingAdvice(not).focus === 'macro')
   check('recommendedTrainingFocus 就是 advice.focus', roles.every((role) => recommendedTrainingFocus(fit({ role })) === trainingAdvice(fit({ role })).focus))
 }
 
@@ -91,19 +98,19 @@ const fit = (over: Partial<Player>): Player => ({
 {
   const h = mk()
   const p = squadOf(h, h.myTeam)[0]
-  p.attrs.aim = ATTR_MAX; p.potential = 99; p.fatigue = 0; p.xp = {}
-  h.training[p.id] = 'aim'
+  p.attrs.mechanics = ATTR_MAX; p.potential = 99; p.fatigue = 0; p.xp = {}
+  h.training[p.id] = 'mechanics'
   weeklyTick(h, new Rng(3))
-  check('手动练已满的枪法：进度条不动、枪法不涨', (p.xp.aim ?? 0) === 0 && p.attrs.aim === ATTR_MAX, `xp ${p.xp.aim}`)
-  check('手动选择没被推进覆盖', h.training[p.id] === 'aim')
+  check('手动练已满的操作：进度条不动、操作不涨', (p.xp.mechanics ?? 0) === 0 && p.attrs.mechanics === ATTR_MAX, `xp ${p.xp.mechanics}`)
+  check('手动选择没被推进覆盖', h.training[p.id] === 'mechanics')
   const ai = Object.values(h.teams).find((t) => t.id !== h.myTeam)!
   const q = h.players[ai.roster[0]]
-  q.attrs = { ...attrsAll(70), aim: ATTR_MAX }; q.role = '决斗者'; q.potential = 95; q.overall = 80; q.fatigue = 0
+  q.attrs = { ...attrsAll(70), mechanics: ATTR_MAX }; q.role = '下路'; q.potential = 95; q.overall = 80; q.fatigue = 0
   weeklyTick(h, new Rng(4))
-  check('AI 俱乐部的计划也不会落在已满的属性上', h.training[q.id] !== 'aim' && h.training[q.id] !== 'rest', String(h.training[q.id]))
+  check('AI 俱乐部的计划也不会落在已满的属性上', h.training[q.id] !== 'mechanics' && h.training[q.id] !== 'rest', String(h.training[q.id]))
   // AI clubs stop polishing at 97 — the line their ten-season balance was tuned on — while the manager's club reads 99
-  const s = fit({ role: '决斗者', attrs: { ...attrsAll(70), aim: AI_POLISH_STOP } })
-  check(`AI 的同一套判断在 ${AI_POLISH_STOP} 停手，经理自己的队到 ${ATTR_MAX}`, aiTrainingFocus(s) !== 'aim' && trainingAdvice(s).focus === 'aim')
+  const s = fit({ role: '下路', attrs: { ...attrsAll(70), mechanics: AI_POLISH_STOP } })
+  check(`AI 的同一套判断在 ${AI_POLISH_STOP} 停手，经理自己的队到 ${ATTR_MAX}`, aiTrainingFocus(s) !== 'mechanics' && trainingAdvice(s).focus === 'mechanics')
 }
 
 // ---- an old save with fields missing still gets advice

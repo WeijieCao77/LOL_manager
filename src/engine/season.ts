@@ -591,8 +591,9 @@ export function applyPatch(state: GameState, big: boolean, notes: string[] = [],
   const name = big ? `${state.year} 休赛期大改` : `${state.year} 赛中调整`
   // what the patch is FOR: the phase that follows the event just settled —
   // never the event itself, whose matches were played on the old numbers
-  const after = stage === 'masters1' ? '第二赛段起'
-    : stage === 'masters2' ? '第三赛段起'
+  // named by this year's own calendar: 第二赛段 / 第三赛段 in 2026, 夏季赛 before 2025
+  const after = stage === 'masters1' ? `${stageName('stage1', state)}起`
+    : stage === 'masters2' ? `${stageName('stage2', state)}起`
     : stage === 'champions' ? `${state.year + 1} 赛季起`
     : '下一阶段起'
   state.patch = { ...rollPatch(state.patch, pool, state.day, name, big, rng), id, year: state.year, after }

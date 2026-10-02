@@ -444,6 +444,10 @@ export function activePool(seed: number, phase: PoolPhase = 0): string[] {
   const order = rng.shuffle(MAPS.slice() as string[])
   const pool = order.slice(0, 7)
   const bench = order.slice(7)
+  // League has one map and no bench to rotate from: swapping in bench[-1] put
+  // `undefined` in the pool from First Stand on, and every reader of the pool
+  // (patches, the per-map plan) quietly found nothing
+  if (!bench.length) return pool.sort()
   for (let ph = 1; ph <= phase; ph++) {
     const swaps = 1 + rng.int(0, 1)
     for (let i = 0; i < swaps; i++) {

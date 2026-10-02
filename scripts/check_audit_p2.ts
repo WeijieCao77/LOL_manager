@@ -134,18 +134,17 @@ const mk = (tag = 'BLG'): GameState => {
     bad.length === 0, `${bad.length} 处本可以换健康球员`)
 }
 
-// ---- a 12-12 scrim is a draw, not a defeat
+// ---- a scrim game ends with a winner: League has no draws (Valorant's 12-12 scrim had one)
 {
   const g = mk()
   const foe = Object.values(g.teams).find((t) => t.id !== g.myTeam)!
-  const sim = new MatchSim(g, g.myTeam, foe.id, 1, new Rng(1), true)
-  sim.nextMap()
-  const m = sim.current!
-  ;(m as unknown as { a: number; b: number }).a = 12
-  ;(m as unknown as { a: number; b: number }).b = 12
-  sim.closeMap()
-  check('a 12-12 scrim is nobody\'s win',
-    sim.wonA === 0 && sim.wonB === 0, `大比分 ${sim.wonA}-${sim.wonB}`)
+  let decided = 0
+  for (let s = 1; s <= 20; s++) {
+    const sim = new MatchSim(g, g.myTeam, foe.id, 1, new Rng(s), true)
+    const r = sim.runOut()
+    if (r.mapsWonA + r.mapsWonB === 1) decided++
+  }
+  check('every scrim game has exactly one winner', decided === 20, `${decided}/20`)
 }
 
 // ---- changing clubs leaves nothing behind

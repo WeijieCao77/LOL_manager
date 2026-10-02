@@ -126,6 +126,8 @@ const iso = (d: Date) => d.toISOString().slice(0, 10)
   ks[0].birth = `1998-${iso(gameDate({ year: k.year, day: 3 })).slice(5)}`
   step(k, 3)
   const ek = birthdayFor(k, ks[0].id)!
+  // a reserve first: a League roster can be exactly five, and a release down to four is refused
+  { const free = Object.values(k.players).find((x) => !x.teamId)!; free.teamId = k.myTeam; k.teams[k.myTeam].roster.push(free.id) }
   releasePlayer(k, ks[0])
   tickBirthdays(k, [])
   check('离队后记录关闭，不能再付', ek.status === 'closed' && !handleBirthday(k, ek.id, 'gift').ok)
