@@ -37,7 +37,7 @@ import { Rng } from '../src/engine/rng'
 import { ACHIEVEMENTS, LIFE_ACHIEVEMENTS, RUN_ACHIEVEMENTS, earnedNow, earnedLifetime } from '../src/engine/achievements'
 import { CHAMPIONS, ENDINGS, INTL_TITLES, endingsFor } from '../src/engine/endings'
 import { REGIONAL_TITLE } from '../src/engine/leagueNames'
-import { PRIZE } from '../src/engine/finance'
+import { prizeTable } from '../src/engine/prizes'
 // real clubs for the three-club career: a second-tier start, then a first-tier one — the
 // climb (从次级联赛走上来, 升班马) is read off which tier the clubs on the record are in
 const T2_CLUB = WORLD_TEAMS.find((t) => t.tier === 2)!.id
@@ -319,7 +319,7 @@ for (const a of RUN_ACHIEVEMENTS) {
   g.finances.balance = Math.max(M('balance'), 0)
   if (M('income')) g.finances.log = [{ day: 1, label: '采集到的最大单笔进账', amount: M('income') }]
   // a world title the engine wrote pays the engine's own first prize
-  if (v.all.includes(CHAMPIONS)) g.finances.log.push({ day: 2, label: '全球总决赛冠军奖金', amount: PRIZE.champions[0] })
+  if (v.all.includes(CHAMPIONS)) g.finances.log.push({ day: 2, label: '全球总决赛冠军奖金', amount: prizeTable({ year: 2026 }, { stage: 'champions' } as never)[0] })
   team.facilities = Math.max(M('facilities'), team.facilities)
   g.startFacilities = Math.max(0, team.facilities - Math.max(M('facilityGain'), 0))
   g.boardConfidence = Math.max(M('confidence'), g.boardConfidence)

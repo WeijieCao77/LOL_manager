@@ -17,6 +17,7 @@
 import { createNewGame } from '../src/engine/world'
 import { WORLD_TEAMS } from '../src/engine/teams'
 import { advanceDay, continuePastFive, setupSeason, HEADLESS } from '../src/engine/season'
+import { PRIZE_SOURCE } from '../src/engine/finance'
 import type { GameState, Region } from '../src/engine/types'
 
 HEADLESS.noDismissal = true
@@ -32,6 +33,7 @@ const k = (n: number) => `${Math.round(n / 1000)}k`
 
 const g: GameState = createNewGame(WORLD_TEAMS.find((t) => t.tag === 'BLG')!.id, '审计', SEED)
 setupSeason(g)
+console.log(`奖金表：${PRIZE_SOURCE}`)
 const start = new Map(Object.values(g.teams).map((t) => [t.id, t.budget]))
 const year0 = g.year
 let guard = 0

@@ -626,7 +626,7 @@ export function settleCompetition(state: GameState, comp: Competition, notes: st
     return
   }
 
-  awardPrize(state, comp.stage, comp.finished)
+  awardPrize(state, comp, comp.finished)
 
   // the LCQ is a door, not a stage: no points for it
   const pts = rulebookOf(state).lockin && comp.stage === 'stage2' ? undefined : CHAMP_POINTS[comp.stage]

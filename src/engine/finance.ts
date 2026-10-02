@@ -1,26 +1,15 @@
 import { squadOf, wageBill } from './roster'
 import { skillMod } from './manager'
 import { weeklyStipend } from './leagueShare'
-import type { GameState, StageKey } from './types'
+import type { Competition, GameState } from './types'
+import { prizeTable } from './prizes'
+export { PRIZE_SOURCE } from './prizes'
 
-/** Prize money by competition and placement (USD). */
-// Raised across the board after the group's "赚不到钱" week: a 次级联赛
-// title paid $40k against a season's wage bill, and winning the biggest event
-// in the game paid one million — trophies should move a balance sheet.
-export const PRIZE: Record<string, number[]> = {
-  kickoff: [260000, 150000, 90000, 55000, 30000, 30000, 15000, 15000],
-  stage1: [380000, 220000, 135000, 85000, 55000, 38000, 25000, 25000],
-  stage2: [380000, 220000, 135000, 85000, 55000, 38000, 25000, 25000],
-  masters1: [500000, 280000, 180000, 120000, 70000, 70000, 45000, 45000],
-  masters2: [500000, 280000, 180000, 120000, 70000, 70000, 45000, 45000],
-  champions: [1500000, 750000, 420000, 280000, 160000, 160000, 100000, 100000],
-  challengers1: [90000, 52000, 32000, 20000, 12000, 12000, 6000, 6000],
-  challengers2: [130000, 75000, 45000, 30000, 18000, 18000, 10000, 10000],
-}
-
-export function awardPrize(state: GameState, stage: StageKey, order: string[]): void {
-  const table = PRIZE[stage]
-  if (!table) return
+/** Prize money: what each event really paid, by year, region and place (prizes.ts). */
+export function awardPrize(state: GameState, comp: Competition, order: string[]): void {
+  // what this event really paid (prizes.ts), by year, region and place
+  const table = prizeTable(state, comp)
+  if (!table.length) return
   order.forEach((teamId, i) => {
     const amount = table[i] ?? 0
     if (!amount) return
@@ -38,7 +27,7 @@ export function awardPrize(state: GameState, stage: StageKey, order: string[]): 
     team.seasonPrize += net
     if (teamId === state.myTeam) {
       state.finances.balance += net
-      state.finances.log.push({ day: state.day, label: `奖金 · ${stage} 第${i + 1}名`, amount })
+      state.finances.log.push({ day: state.day, label: `奖金 · ${comp.name} 第${i + 1}名`, amount })
       if (share > 0) {
         state.finances.log.push({ day: state.day, label: '选手奖金分成', amount: -share })
       }

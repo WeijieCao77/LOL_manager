@@ -14,7 +14,7 @@ import { setupSeason } from '../src/engine/season'
 import {
   dropSponsor, pitchSponsor, resolveSponsorTalks, signSponsor, SPONSOR_MAX, streamWeek,
 } from '../src/engine/commercial'
-import { PRIZE } from '../src/engine/finance'
+import { prizeTable } from '../src/engine/prizes'
 import { Rng } from '../src/engine/rng'
 import type { GameState } from '../src/engine/types'
 
@@ -99,9 +99,23 @@ const mk = (): GameState => {
 }
 
 // ---- trophies move a balance sheet
-check('a 次级联赛 title is worth winning', PRIZE.challengers1[0] >= 80000 && PRIZE.challengers2[0] >= 120000,
-  `${PRIZE.challengers1[0]} / ${PRIZE.challengers2[0]}`)
-check('全球总决赛 pays like the biggest event in the game', PRIZE.champions[0] >= 1500000)
+// ---- what the real events paid (prizes.ts, 决定 D77)
+{
+  const at = (year: number, stage: string, region?: string) => prizeTable({ year }, { stage, region } as never)
+  check('Worlds 2026 pays its champion 40% of $5M', at(2026, 'champions')[0] === 2_000_000, `${at(2026, 'champions')[0]}`)
+  check('Worlds 2016 pays $2.03M, MSI 2016 its real $250k', at(2016, 'champions')[0] === 2_028_000 && at(2016, 'masters2')[0] === 250_000,
+    `${at(2016, 'champions')[0]} / ${at(2016, 'masters2')[0]}`)
+  check('an LPL Split 3 title is CNY 1.7M of its 4.0M', Math.abs(at(2026, 'stage2', 'LPL')[0] - 1_700_000 / 7.1) < 2, `${at(2026, 'stage2', 'LPL')[0]}`)
+  check('an LCP split is a small pool: $80k in all', Math.abs(at(2026, 'stage1', 'LCP').reduce((a, b) => a + b, 0) - 80_000) < 5)
+  for (const year of [2016, 2022, 2026]) {
+    const regional = Math.max(...(['LPL', 'LCK', 'LEC', 'LCS', 'LCP', 'CBLOL'] as const).map((r) => at(year, 'stage2', r)[0] ?? 0))
+    // Worlds is always the biggest; MSI is not always above a league title (MSI 2022's whole pool was $250k)
+    check(`${year}: Worlds pays more than MSI and any league title`,
+      at(year, 'champions')[0] > at(year, 'masters2')[0] && at(year, 'champions')[0] > regional,
+      `${at(year, 'champions')[0]} > ${at(year, 'masters2')[0]}, ${regional}`)
+  }
+  check('a qualifier pays nothing', prizeTable({ year: 2026 }, { stage: 'stage2', region: 'LPL', minor: true } as never).length === 0)
+}
 
 console.log(bad ? `\n${bad} failed` : '\nall held')
 process.exit(bad ? 1 : 0)
